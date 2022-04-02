@@ -18,12 +18,12 @@ services:
       - "6379:6379"
     volumes:
       - ./redis/data:/data/db
-  postgreSql:
-    container_name: cAndD_postgreSql
+  postgresql:
+    container_name: cAndD_postgresql
     build:
-      context: ./postgreSql
+      context: ./postgresql
       dockerfile: Dockerfile
     ports:
       - "5432:5432"
     volumes:
-      - ./postgreSql/data:/data/db      
+      - ./postgresql/data:/data/db      
