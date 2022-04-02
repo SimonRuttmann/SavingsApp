@@ -9,3 +9,21 @@ services:
       - "27017:27017"
     volumes:
       - ./mongodb/data:/data/db
+  redis:
+    container_name: cAndD_redis
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data/db
+  postgreSql:
+    container_name: cAndD_postgreSql
+    build:
+      context: ./postgreSql
+      dockerfile: Dockerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgreSql/data:/data/db      
