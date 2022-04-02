@@ -4,7 +4,14 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 #Frontend
-./frontend/node_modules/
+/frontend/node_modules/
+
+#Backend
+
+#Volumes
+/backend/mongodb/data/
+/backend/postgresql/data/
+/backend/redis/data/
 
 # Node artifact files
 node_modules/
