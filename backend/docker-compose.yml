@@ -27,3 +27,50 @@ services:
       - "5432:5432"
     volumes:
       - ./postgresql/data:/data/db      
+  # databaseservice:
+  #   container_name: database_service
+  #   restart: on-failure
+  #   build:
+  #     context: ./databaseservice
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  # userservice:
+  #   container_name: user_service
+  #   restart: on-failure
+  #   build:
+  #     context: ./userservice
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"    
+  # contentservice:
+  #   container_name: content_service
+  #   restart: on-failure
+  #   build:
+  #     context: ./contentservice
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  # inflationservice:
+  #   container_name: inflation_service
+  #   restart: on-failure
+  #   build:
+  #     context: ./inflationservice
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  # chatservice:
+  #   container_name: chat_service
+  #   restart: on-failure
+  #   build:
+  #     context: ./chatservice
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"    
+  # advertismentservice:
+  #   container_name: advertisment_service
+  #   restart: on-failure
+  #   build:
+  #     context: ./advertismentservice
+  #     dockerfile: Dockerfile
+      
