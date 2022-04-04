@@ -26,15 +26,15 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./postgresql/data:/data/db      
-  # databaseservice:
-  #   container_name: database_service
-  #   restart: on-failure
-  #   build:
-  #     context: ./databaseservice
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
+      - ./postgresql/data:/data/db
+  advertismentservice:
+    container_name: advertisment_service
+    restart: on-failure
+    build:
+      context: advertisementService2
+      dockerfile: Dockerfile
+    ports:
+      - "8010:8080"
   # userservice:
   #   container_name: user_service
   #   restart: on-failure
@@ -67,10 +67,13 @@ services:
   #     dockerfile: Dockerfile
   #   ports:
   #     - "8080:8080"    
-  # advertismentservice:
-  #   container_name: advertisment_service
+
+  # databaseservice:
+  #   container_name: database_service
   #   restart: on-failure
   #   build:
-  #     context: ./advertismentservice
+  #     context: ./databaseservice
   #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
       
