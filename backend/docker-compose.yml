@@ -31,43 +31,44 @@ services:
     container_name: advertisment_service
     restart: on-failure
     build:
-      context: advertisementService2
+      context: ./advertisementservice
       dockerfile: Dockerfile
     ports:
       - "8010:8080"
-  # userservice:
-  #   container_name: user_service
-  #   restart: on-failure
-  #   build:
-  #     context: ./userservice
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"    
-  # contentservice:
-  #   container_name: content_service
-  #   restart: on-failure
-  #   build:
-  #     context: ./contentservice
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  # inflationservice:
-  #   container_name: inflation_service
-  #   restart: on-failure
-  #   build:
-  #     context: ./inflationservice
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  # chatservice:
-  #   container_name: chat_service
-  #   restart: on-failure
-  #   build:
-  #     context: ./chatservice
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"    
+  userservice:
+    container_name: user_service
+    restart: on-failure
+    build:
+      context: ./userservice
+      dockerfile: Dockerfile
+    ports:
+      - "8011:8080"
+  contentservice:
+    container_name: content_service
+    restart: on-failure
+    build:
+      context: ./contentservice
+      dockerfile: Dockerfile
+    ports:
+      - "8012:8080"
+  inflationservice:
+    container_name: inflation_service
+    restart: on-failure
+    build:
+      context: ./inflationservice
+      dockerfile: Dockerfile
+    ports:
+      - "8013:8080"
+  #chatservice:
+  #  container_name: chat_service
+  #  restart: on-failure
+  #  build:
+  #    context: ./chatservice
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - "8014:8080"
 
+  # Probably not needed
   # databaseservice:
   #   container_name: database_service
   #   restart: on-failure
