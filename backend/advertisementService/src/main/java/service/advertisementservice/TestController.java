@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     @GetMapping("/")
     public String index(){
-            return "Hallo meine angepasste Welt";
+            return "Hallo meine angepasste Welt des AdServices";
     }
 
 }
