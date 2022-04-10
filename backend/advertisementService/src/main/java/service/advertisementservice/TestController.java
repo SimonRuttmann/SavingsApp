@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     @GetMapping("/")
     public String index(){
-            return "Moin moin meine Freunde der Nacht";
+            return "Hallo meine angepasste Welt";
     }
 
 }
