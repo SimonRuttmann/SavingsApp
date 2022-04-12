@@ -27,6 +27,7 @@ dist/
 *.log
 
 # Package files
+*.iml
 *.jar
 
 # Maven
