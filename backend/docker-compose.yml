@@ -59,6 +59,15 @@ services:
   #    dockerfile: Dockerfile
   #  ports:
   #    - "8013:8080"
+  keycloak:
+    container_name: cAndD_keycloak_service
+    build:
+      context: ./keycloakService
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8080"
+    volumes:
+      - ./postgresql/data:/data/db
   #chatservice:
   #  container_name: chat_service
   #  restart: on-failure
