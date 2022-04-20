@@ -1,11 +1,11 @@
 FROM quay.io/keycloak/keycloak:17.0.1 as builder
 
-
 ENV KEYCLOAK_ADMIN=admin
 ENV KEYCLOAK_ADMIN_PASSWORD=admin
 
 ENV KC_METRICS_ENABLED=true
 ENV KC_FEATURES=token-exchange
+
 
 #not Correct yet!!!!
 #enable for external DB
@@ -32,4 +32,3 @@ ENV KEYCLOAK_PASSWORD: admin
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev"]
 
 EXPOSE 8090:8080
-
