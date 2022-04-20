@@ -67,7 +67,7 @@ services:
     ports:
       - "8090:8080"
     volumes:
-      - ./postgresql/data:/data/db
+      - ./postgresql/data:/data/keycloak
   #chatservice:
   #  container_name: chat_service
   #  restart: on-failure
