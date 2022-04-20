@@ -51,7 +51,7 @@ services:
     ports:
       - "8090:8080"
     volumes:
-      - ./postgresql/data:/data/db
+      - ./postgresql/data:/data/keycloak
   contentservice:
     container_name: content_service
     restart: on-failure
