@@ -1,5 +1,6 @@
 FROM quay.io/keycloak/keycloak:17.0.1 as builder
 
+
 ENV KEYCLOAK_ADMIN=admin
 ENV KEYCLOAK_ADMIN_PASSWORD=admin
 
@@ -27,8 +28,8 @@ ENV KEYCLOAK_USER: admin
 ENV KEYCLOAK_PASSWORD: admin
 
 
-
-EXPOSE 8015:8080
-
 #just Dev mode, Check later "start" version for produktion mode
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev"]
+
+EXPOSE 8090:8080
+
