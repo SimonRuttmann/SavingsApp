@@ -1,6 +1,8 @@
 FROM postgres:latest
 
-ENV POSTGRES_PASSWORD rootpassword
+ENV POSTGRES_DB: keycloak
+ENV POSTGRES_USER: keycloak
+ENV POSTGRES_PASSWORD: rootpassword
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 ENV POSTGRES_DB userdata
 
