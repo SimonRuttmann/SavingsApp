@@ -15,10 +15,8 @@ public class DataJobs {
         /// TODO: 18.04.2022 Replace placeholder uri with real one
         // Query to calculate inflation price (with real values)
         // https://www.statbureau.org/calculate-inflation-price-jsonp?jsoncallback=jQuery1112038048534897455344_1650559210757&country=germany&start=2012%2F1%2F1&end=2012%2F12%2F1&amount=100&format=true&_=1650559210763
-        //
-        //Probably the right URI
-        // https://www.statbureau.org/get-data-json?jsoncallback=jQuery1112038048534897455344_1650559210757&country=germany
-        String uri = "http://localhost:8010/global";
+
+        String uri = "https://www.statbureau.org/get-data-json?jsoncallback=jQuery1112038048534897455344_1650559210757&country=germany";
         RestTemplate restTemplate = new RestTemplate();
 
         data = restTemplate.getForObject(uri,String.class);

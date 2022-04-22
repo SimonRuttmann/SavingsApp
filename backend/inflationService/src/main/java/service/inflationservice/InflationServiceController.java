@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class InflationService {
+public class InflationServiceController {
     @Autowired DataJobs dataJobs;
 
     @GetMapping("/inflationrate")
