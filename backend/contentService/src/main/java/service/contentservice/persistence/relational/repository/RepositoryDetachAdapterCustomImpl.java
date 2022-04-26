@@ -13,9 +13,13 @@ public class RepositoryDetachAdapterCustomImpl<T> implements RepositoryDetachAda
 
     @Override
     public void detach(T o) {
+        if(isDetached(o)) return;
         entityManager.detach(o);
     }
 
     @Override
     public void attach(T o) {entityManager.merge(o); }
+
+    @Override
+    public boolean isDetached(T o) { return entityManager.contains(o); }
 }
