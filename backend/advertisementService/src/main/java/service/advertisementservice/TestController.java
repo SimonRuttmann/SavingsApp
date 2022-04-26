@@ -16,6 +16,11 @@ public class TestController {
        return modelAndView;
     }
 
+    @GetMapping("/unauthorized")
+    public String unauthorized(){
+        return "Sie sind nicht angemeldet";
+    }
+
     //Returns data for three diagramms
     @GetMapping("/global")
     public String diagrammData(){
