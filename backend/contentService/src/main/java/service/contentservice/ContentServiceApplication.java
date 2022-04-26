@@ -10,11 +10,11 @@ import service.contentservice.persistence.relational.repository.PersonRepository
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class ContentServiceApplication implements CommandLineRunner{
 
-    @Autowired
-    private IDocumentRepository repository;
+   // @Autowired
+   // private IDocumentRepository repository;
 
-    @Autowired
-    private PersonRepository personRepository;
+   // @Autowired
+   // private PersonRepository personRepository;
     public static void main(String[] args) {
         SpringApplication.run(ContentServiceApplication.class, args);
     }
