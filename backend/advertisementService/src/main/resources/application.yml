@@ -30,3 +30,10 @@
 #      securityCollections:
 #        - name: API
 #          patterns: ['/todos/*']
+
+keycloak:
+  auth-server-url: http://localhost:8090/auth
+  realm: haushaltsapp
+  resource: ad
+  public-client: true
+  bearer-only: true
