@@ -21,6 +21,7 @@
         <module>contentservice</module>
         <module>inflationservice</module>
         <module>userservice</module>
+        <module>chatService</module>
     </modules>
 
     <dependencies>
