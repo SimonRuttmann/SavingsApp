@@ -2,10 +2,7 @@ package service.contentservice.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import service.contentservice.persistence.relational.entity.Group;
-import service.contentservice.persistence.relational.entity.Invitation;
-import service.contentservice.persistence.relational.entity.InvitationStatus;
-import service.contentservice.persistence.relational.entity.Person;
+import service.contentservice.persistence.relational.entity.*;
 import service.contentservice.persistence.relational.repository.GroupRepository;
 import service.contentservice.persistence.relational.repository.InvitationRepository;
 import service.contentservice.persistence.relational.repository.PersonRepository;
@@ -36,11 +33,28 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     @Transactional
+    public Person getPersonById(Long id){
+        Optional<Person> person = personRepository.findById(id);
+        if(person.isEmpty()) return null;
+        personRepository.detach(person.get());
+        return person.get();
+    }
+
+    @Override
+    @Transactional
+    public Group getGroupById(Long id){
+        Optional<Group> group = groupRepository.findById(id);
+        if(group.isEmpty()) return null;
+        groupRepository.detach(group.get());
+        return group.get();
+    }
+    @Override
+    @Transactional
     public Collection<Group> getGroupsOfPersonId(Long id){
 
         Optional<Person> person = personRepository.findById(id);
 
-        if(person.isEmpty()) return new HashSet<>();
+        if(person.isEmpty()) return null;
 
         var value = person.get().getGroups();
         personRepository.detach(person.get());
@@ -54,7 +68,7 @@ public class DatabaseService implements IDatabaseService {
 
         Optional<Group> group =  groupRepository.findById(id);
 
-        if(group.isEmpty()) return new HashSet<>();
+        if(group.isEmpty()) return null;
 
         var value = group.get().getMembers();
         groupRepository.detach(group.get());
@@ -67,13 +81,12 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     @Transactional
-    public void addPersonToGroup(Person person, Group group){
+    public Pair<Person, Group> addPersonToGroup(Long personId, Long groupId){
 
-        personRepository.attach(person);
-        groupRepository.attach(group);
+        Person person = personRepository.getById(personId);
+        Group group = groupRepository.getById(groupId);
 
-        person.getGroups().add(group);
-        group.getMembers().add(person);
+        person.addGroup(group);
 
         personRepository.saveAndFlush(person);
         groupRepository.saveAndFlush(group);
@@ -81,96 +94,118 @@ public class DatabaseService implements IDatabaseService {
         personRepository.detach(person);
         groupRepository.detach(group);
 
+        return new Pair<>(person, group);
     }
 
     @Override
     @Transactional
-    public void removePersonFromGroup(Person person, Group group){
+    public Pair<Person, Group> removePersonFromGroup(Long personId, Long groupId){
 
-        personRepository.attach(person);
-        groupRepository.attach(group);
+        Person person = personRepository.getById(personId);
+        Group group = groupRepository.getById(groupId);
 
-        person.getGroups().remove(group);
-        group.getMembers().remove(person);
-        person.setUsername("ala");
+        person.removeGroup(group);
 
         personRepository.saveAndFlush(person);
         groupRepository.saveAndFlush(group);
 
-        groupRepository.detach(group);
         personRepository.detach(person);
+        groupRepository.detach(group);
 
+        return new Pair<>(person, group);
     }
 
     //Invitations
 
     @Override
     @Transactional
-    public void addInvitation(Person person, Group group) {
+    public Invitation addInvitation(Long personId, Long groupId) {
 
-        personRepository.attach(person);
-        groupRepository.attach(group);
+        Optional<Person> optPerson = personRepository.findById(personId);
+        Optional<Group> optGroup = groupRepository.findById(groupId);
+
+        if(optGroup.isEmpty() || optPerson.isEmpty()) return null;
+        Person person = optPerson.get();
+        Group group = optGroup.get();
 
         Invitation invitation = new Invitation();
         invitation.setInvitationStatus(InvitationStatus.OPEN);
 
+        invitation.getId().setDate(new Date());
         invitation.setInvitedPerson(person);
         invitation.setRequestedGroup(group);
 
+        group.getInvitations().add(invitation);
+        person.getInvitations().add(invitation);
+
         invitationRepository.saveAndFlush(invitation);
+        personRepository.saveAndFlush(person);
+        groupRepository.saveAndFlush(group);
 
         invitationRepository.detach(invitation);
-        groupRepository.detach(group);
         personRepository.detach(person);
+        groupRepository.detach(group);
+
+        return invitation;
     }
 
     @Override
     @Transactional
-    public void declineInvitation(Invitation invitation) {
+    public Invitation declineInvitation(InvitationCompoundId invitationCompoundId) {
 
-        invitationRepository.attach(invitation);
+        Optional<Invitation> optInvitation = invitationRepository.findById(invitationCompoundId);
+
+        if(optInvitation.isEmpty()) return null;
+        Invitation invitation = optInvitation.get();
 
         invitation.setInvitationStatus(InvitationStatus.DECLINED);
         invitationRepository.saveAndFlush(invitation);
 
         invitationRepository.detach(invitation);
+        return invitation;
     }
 
     @Override
     @Transactional
-    public void acceptInvitation(Invitation invitation) {
+    public Invitation acceptInvitation(InvitationCompoundId invitationCompoundId) {
 
-        invitationRepository.attach(invitation);
+        Optional<Invitation> optInvitation = invitationRepository.findById(invitationCompoundId);
+
+        if(optInvitation.isEmpty()) return null;
+        Invitation invitation = optInvitation.get();
 
         invitation.setInvitationStatus(InvitationStatus.ACCEPTED);
         invitationRepository.saveAndFlush(invitation);
 
         invitationRepository.detach(invitation);
+        return invitation;
     }
 
     //Remove
 
     @Override
     @Transactional
-    public void removePerson(Person person){
+    public void removePerson(Long id){
 
-         personRepository.attach(person);
+         Person person = personRepository.getById(id);
 
-         person.getGroups().forEach(group -> removePersonFromGroup(person, group));
+         person.getGroups().forEach(group -> group.removeMember(person));
          person.getInvitations().forEach(inv -> inv.getRequestedGroup().getInvitations().remove(inv));
 
+         invitationRepository.deleteAll(person.getInvitations());
          personRepository.delete(person);
     }
 
     @Override
     @Transactional
-    public void removeGroup(Group group){
+    public void removeGroup(Long id){
 
-        groupRepository.attach(group);
+        Group group = groupRepository.getById(id);
 
-        group.getMembers().forEach(person -> person.getGroups().remove(group));
-        group.getInvitations().forEach(inv -> inv.getRequestedGroup().getInvitations().remove(inv));
+        group.getMembers().forEach(person -> person.removeGroup(group));
+        group.getInvitations().forEach(inv -> inv.getInvitedPerson().getInvitations().remove(inv));
 
+        invitationRepository.deleteAll(group.getInvitations());
         this.groupRepository.delete(group);
     }
 
