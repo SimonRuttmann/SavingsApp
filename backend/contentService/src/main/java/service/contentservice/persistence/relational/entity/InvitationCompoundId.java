@@ -1,7 +1,8 @@
 package service.contentservice.persistence.relational.entity;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 @Embeddable
@@ -11,7 +12,9 @@ public class InvitationCompoundId implements Serializable {
 
     private Long groupCompoundId;
 
-
+    @Column(name="date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
     public InvitationCompoundId() {}
 
     public InvitationCompoundId(Long userCompoundId, Long groupCompoundId) {
@@ -19,6 +22,10 @@ public class InvitationCompoundId implements Serializable {
         this.groupCompoundId = groupCompoundId;
     }
 
+
+    public Date getDate() {return date;}
+
+    public void setDate(Date date) {this.date = date;}
 
     public Long getPersonCompoundId() {return personCompoundId;}
     public void setPersonCompoundId(Long userId) {this.personCompoundId = userId;}
