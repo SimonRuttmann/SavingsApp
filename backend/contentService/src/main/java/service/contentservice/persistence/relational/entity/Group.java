@@ -50,11 +50,27 @@ public class Group {
     @ManyToMany (mappedBy = "groups", fetch = FetchType.EAGER)
     Set<Person> members = new HashSet<>();
 
+    public void addMember(Person person){
+        if(person == null) return;
+        if(this.members.contains(person)) return;
+
+        this.members.add(person);
+        person.addGroup(this);
+    }
+
+    public void removeMember(Person person){
+        if(person == null) return;
+        if(!this.members.contains(person)) return;
+
+        this.members.remove(person);
+    }
+
+
     /**
      * Many to many mapping by using the InvitationPersistence table to add additional attributes
      * Mapped by InvitationPersistence.requestedGroup
      */
-    @OneToMany (mappedBy="requestedGroup")
+    @OneToMany (mappedBy="requestedGroup", fetch = FetchType.EAGER)
     Set<Invitation> invitations = new HashSet<>();
 
     public Long getId() {return id;}
@@ -81,5 +97,13 @@ public class Group {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "id=" + id +
+                ", groupName='" + groupName + '\''+
+                '}';
     }
 }
