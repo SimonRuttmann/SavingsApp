@@ -65,11 +65,26 @@ public class Person {
     Set<Group> groups = new HashSet<>();
 
 
+    public void addGroup(Group group){
+        if(group == null) return;
+        if(this.groups.contains(group)) return;
+
+        this.groups.add(group);
+        group.addMember(this);
+    }
+
+    public void removeGroup(Group group){
+        if(group == null) return;
+        if(!this.groups.contains(group)) return;
+
+        this.groups.remove(group);
+    }
+
     /**
      * Many to many mapping by using the InvitationPersistence table to add additional attributes
      * Mapped by InvitationPersistence.invitedPersonId
      */
-    @OneToMany (mappedBy="invitedPerson")
+    @OneToMany (mappedBy="invitedPerson", fetch = FetchType.EAGER)
     Set<Invitation> invitations = new HashSet<>();
 
     public Long getId() { return id;}
@@ -98,5 +113,16 @@ public class Person {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", groups=" + groups +
+                ", invitations=" + invitations +
+                '}';
     }
 }
