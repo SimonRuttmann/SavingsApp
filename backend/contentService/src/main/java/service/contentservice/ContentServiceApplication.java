@@ -4,22 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import service.contentservice.entity2.DocumentEntity;
-import service.contentservice.entity2.IDocumentRepository;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import service.contentservice.persistence.relational.repository.PersonRepository;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class ContentServiceApplication implements CommandLineRunner{
 
-    @Autowired
-    private IDocumentRepository repository;
+   // @Autowired
+   // private IDocumentRepository repository;
 
+   // @Autowired
+   // private PersonRepository personRepository;
     public static void main(String[] args) {
         SpringApplication.run(ContentServiceApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-
+/*
         repository.deleteAll();
 
         // save a couple of customers
@@ -45,6 +47,15 @@ public class ContentServiceApplication implements CommandLineRunner{
             System.out.println(customer);
         }
 
+        Person user1 = new Person("albe","albe@albe");
+        Person persistedUser = personRepository.saveAndFlush(user1);
+        System.out.println("Received Id: " + persistedUser.getId());
+        Person queriedUser = personRepository.findById(persistedUser.getId()).orElseThrow();
+        System.out.println(queriedUser.getUsername() + queriedUser.getEmail() + queriedUser.getId());
+
+ */
     }
+
+
 
 }
