@@ -2,6 +2,12 @@ package service.contentservice.persistence.relational.entity;
 
 import javax.persistence.*;
 
+/**
+ * Defines the table invitation_persistence,
+ * realising the M:N mapping between group and person with additional attributes
+ * Therefore the primary key is created due to member pk, group pk and a creation date
+ * @see InvitationCompoundId
+ */
 @Entity
 @Table(
         name="invitation_persistence",

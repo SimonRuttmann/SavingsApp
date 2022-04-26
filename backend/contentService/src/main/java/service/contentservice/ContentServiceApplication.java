@@ -5,9 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import service.contentservice.entity2.DocumentEntity;
-import service.contentservice.entity2.IDocumentRepository;
-import service.contentservice.persistence.relational.entity.Person;
 import service.contentservice.persistence.relational.repository.PersonRepository;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
@@ -24,7 +21,7 @@ public class ContentServiceApplication implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-
+/*
         repository.deleteAll();
 
         // save a couple of customers
@@ -55,6 +52,10 @@ public class ContentServiceApplication implements CommandLineRunner{
         System.out.println("Received Id: " + persistedUser.getId());
         Person queriedUser = personRepository.findById(persistedUser.getId()).orElseThrow();
         System.out.println(queriedUser.getUsername() + queriedUser.getEmail() + queriedUser.getId());
+
+ */
     }
+
+
 
 }
