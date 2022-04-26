@@ -1,6 +1,7 @@
 package service.advertisementservice;
 
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,11 +19,19 @@ public class AdvertisementServiceService {
         return jsonObject.toJSONString();
     }
 
+    // TODO: 26.04.2022 Naming
     private String getData1(){
         String value = "721";
         return value;
     }
+
+    @Autowired
+    StudentRepository studentRepository;
     private String getData2(){
+        Student student = new Student(
+                "Eng2015001", "John Doe", Student.Gender.MALE, 1);
+        studentRepository.save(student);
+
         String value = null;
         return value;
     }
