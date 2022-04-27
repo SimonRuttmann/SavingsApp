@@ -5,11 +5,12 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
+import service.contentservice.validation.IValidatable;
 
 import java.util.Objects;
 
 @Document()
-public class Category {
+public class Category implements IValidatable {
 
     @Id
     @Field(targetType = FieldType.OBJECT_ID)

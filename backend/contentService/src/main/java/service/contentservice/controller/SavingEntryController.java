@@ -4,7 +4,9 @@ import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import service.contentservice.persistence.documentbased.SavingEntry;
+import service.contentservice.validation.SavingEntryValidator;
 
+import java.util.Comparator;
 
 
 @RestController
@@ -86,9 +88,11 @@ public class SavingEntryController {
     //get entry
     @GetMapping("/{groupId}/entry/{entryId}")
     public String getSavingEntry(
-            @PathVariable(value="groupId") Integer groupId){
+            @PathVariable(value="groupId") Integer groupId,
+            @PathVariable(value="entryId") Integer entryId){
 
-        return "";
+
+        return "-- " + groupId + " -- " + entryId + " --";
     }
 
 
@@ -106,15 +110,35 @@ public class SavingEntryController {
 
 
     //Creates entry (saving entry)
+
+    /**
+     * {
+     *   "savingId": 1,
+     *   "name": "abc",
+     *   "costBalance": null,
+     *   "category": null,
+     *   "creationDate": null,
+     *   "creator": null,
+     *   "description": null
+     * }
+     *
+     * @param groupId
+     * @param savingEntry
+     * @return
+     */
     @PostMapping(
             value="/{groupId}/entry",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public String addSavingEntry(
+    public SavingEntry addSavingEntry(
             @PathVariable(value="groupId") Integer groupId,
             @RequestBody SavingEntry savingEntry){
 
-        return "";
+        System.out.println(savingEntry);
+
+
+        var response = savingEntry;
+        return response;
     }
 
 

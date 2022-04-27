@@ -1,4 +1,3 @@
 package service.contentservice.validation;
 
-public class ValidateCategory {
-}
+public interface IValidatable { }

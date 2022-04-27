@@ -1,5 +1,7 @@
 package service.contentservice.persistence.relational.entity;
 
+import service.contentservice.validation.IValidatable;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -11,7 +13,7 @@ import java.util.Set;
         catalog = "userdata",
         schema = "public"
 )
-public class Group {
+public class Group implements IValidatable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
