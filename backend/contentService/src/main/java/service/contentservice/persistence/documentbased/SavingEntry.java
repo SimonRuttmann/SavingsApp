@@ -5,12 +5,13 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
+import service.contentservice.validation.IValidatable;
 
 import java.util.Date;
 import java.util.Objects;
 
 @Document()
-public class SavingEntry {
+public class SavingEntry implements IValidatable {
 
     @Id
     @Field(targetType = FieldType.INT64)
@@ -39,6 +40,9 @@ public class SavingEntry {
 
     @Field(targetType = FieldType.STRING)
     public String description;
+
+    public SavingEntry() {
+    }
 
     public SavingEntry(
             String name, Double costBalance, Category category,
