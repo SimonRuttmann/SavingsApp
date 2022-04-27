@@ -1,11 +1,14 @@
-package service.inflationservice;
+package service.inflationservice.service;
 
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class DataJobs {
+public class InflationServiceService {
     private String data = null;
 
     //Scheduled to run once on call and then every 10 days after server startup at 0:00
@@ -22,7 +25,23 @@ public class DataJobs {
         data = restTemplate.getForObject(uri,String.class);
     }
 
-    public String getData() {
+    public String getLatestInflationData(){
+        JSONParser parser = new JSONParser();
+
+        Object obj = null;
+        try {
+            obj = parser.parse(getAllInflationData());
+            JSONArray json = (JSONArray)obj;
+            return json.get(0).toString();
+
+        }catch (ParseException e){
+            return "Json could not be parsed";
+        }catch (Exception e){
+            return "Unknown error";
+        }
+    }
+
+    public String getAllInflationData() {
         if(data == null) getApiData();
         return data ;
     }
