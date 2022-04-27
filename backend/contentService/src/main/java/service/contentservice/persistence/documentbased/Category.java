@@ -1,22 +1,16 @@
 package service.contentservice.persistence.documentbased;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
+import service.contentservice.persistence.DocumentbasedGeneratableIdentifiable;
 import service.contentservice.validation.IValidatable;
 
 import java.util.Objects;
 
-@Document()
-public class Category implements IValidatable {
 
-    @Id
-    @Field(targetType = FieldType.OBJECT_ID)
-    public String id;
-
-
+public class Category extends DocumentbasedGeneratableIdentifiable implements IValidatable {
     @Field(targetType = FieldType.STRING)
     public String name;
 
@@ -24,16 +18,7 @@ public class Category implements IValidatable {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Category)) return false;
-        Category category = (Category) o;
-        return Objects.equals(id, category.id);
+    public Category() {
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

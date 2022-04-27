@@ -1,37 +1,45 @@
 package service.contentservice.persistence.documentbased;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Document()
+@Document(collation = "groupDocuments")
 public class GroupDocument {
 
     @Id
     @Field(targetType = FieldType.OBJECT_ID)
-    public String documentId;
-
-
+    public ObjectId id;
     @Indexed
     @Field(targetType = FieldType.INT64)
     public Long groupId;
 
 
-    @DBRef
+    @Field(targetType = FieldType.BOOLEAN)
+    public boolean isUserGroup;
+
+
     @Field(targetType = FieldType.ARRAY)
-    public List<SavingEntry> savingEntries;
+    public List<SavingEntry> savingEntries = new ArrayList<>();
 
 
-    @DBRef
     @Field(targetType = FieldType.ARRAY)
-    public List<Category> categories;
+    public List<Category> categories = new ArrayList<>();;
 
+
+    public GroupDocument() { }
+
+
+    @PersistenceConstructor
     public GroupDocument(Long groupId, List<SavingEntry> savingEntries, List<Category> categories) {
         this.groupId = groupId;
         this.savingEntries = savingEntries;
@@ -43,11 +51,11 @@ public class GroupDocument {
         if (this == o) return true;
         if (!(o instanceof GroupDocument)) return false;
         GroupDocument that = (GroupDocument) o;
-        return Objects.equals(documentId, that.documentId);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(documentId);
+        return Objects.hash(id);
     }
 }

@@ -1,8 +1,8 @@
 package service.contentservice.persistence.documentbased;
 
+
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import service.contentservice.validation.IValidatable;
@@ -10,13 +10,12 @@ import service.contentservice.validation.IValidatable;
 import java.util.Date;
 import java.util.Objects;
 
-@Document()
+//@Document()
 public class SavingEntry implements IValidatable {
 
     @Id
-    @Field(targetType = FieldType.INT64)
-    public Long savingId;
-
+    @Field(targetType = FieldType.OBJECT_ID)
+    public ObjectId id;
 
     @Field(targetType = FieldType.STRING)
     public String name;
@@ -26,7 +25,6 @@ public class SavingEntry implements IValidatable {
     public Double costBalance;
 
 
-    @DBRef
     public Category category;
 
 
@@ -60,11 +58,13 @@ public class SavingEntry implements IValidatable {
         if (this == o) return true;
         if (!(o instanceof SavingEntry)) return false;
         SavingEntry that = (SavingEntry) o;
-        return Objects.equals(savingId, that.savingId);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(savingId);
+        return Objects.hash(id);
     }
+
+
 }
