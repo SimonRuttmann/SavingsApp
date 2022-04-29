@@ -13,17 +13,17 @@ public class SavingEntryValidator implements IValidator<SavingEntry> {
 
         if(toValidate == null) return false;
 
-        if(withId && toValidate.savingId == null) return false;
-        if(!withId && toValidate.savingId != null) return false;
+    //    if(withId && toValidate.savingId == null) return false;
+       // if(!withId && toValidate.savingId != null) return false;
 
         if(toValidate.name == null) return false;
         if(toValidate.name.isBlank()) return false;
 
         if(toValidate.costBalance == null) return false;
 
-        if(toValidate.category == null) return false;
-        if(!ValidatorFactory.getInstance().getValidator(Category.class).
-                validate(toValidate.category, withId)) return false;
+      //  if(toValidate.category == null) return false;
+     //   if(!ValidatorFactory.getInstance().getValidator(Category.class).
+     //           validate(toValidate.category, withId)) return false;
 
         //Description is optional
 

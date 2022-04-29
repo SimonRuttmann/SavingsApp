@@ -1,21 +1,15 @@
 package service.contentservice.persistence.documentbased;
 
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
+import service.contentservice.persistence.EmbeddedDocumentIdentifier;
 import service.contentservice.validation.IValidatable;
 
 import java.util.Date;
 import java.util.Objects;
 
-//@Document()
-public class SavingEntry implements IValidatable {
-
-    @Id
-    @Field(targetType = FieldType.OBJECT_ID)
-    public ObjectId id;
+public class SavingEntry extends EmbeddedDocumentIdentifier implements IValidatable {
 
     @Field(targetType = FieldType.STRING)
     public String name;
@@ -58,12 +52,12 @@ public class SavingEntry implements IValidatable {
         if (this == o) return true;
         if (!(o instanceof SavingEntry)) return false;
         SavingEntry that = (SavingEntry) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(getId(), that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 
 

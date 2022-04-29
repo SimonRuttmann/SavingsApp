@@ -1,5 +1,6 @@
 package service.contentservice;
 
+import org.checkerframework.checker.units.qual.C;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import service.contentservice.persistence.documentbased.Category;
@@ -12,8 +13,10 @@ public class ValidatorTests {
         var validator = ValidatorFactory.getInstance().getValidator(Category.class);
 
 
-        Assertions.assertTrue(validator.validate(new Category("abc"), false));
-        Assertions.assertFalse(validator.validate(new Category("abc"), true));
+        Category category = new Category();
+        category.name = "abc";
+        Assertions.assertTrue(validator.validate(category, false));
+        Assertions.assertFalse(validator.validate(category, true));
 
     }
 
