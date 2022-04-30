@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class GroupDocumentService implements IGroupDocumentService{
 
+    private final MongoOperations mongo;
+
     @Autowired
-    private MongoOperations mongo;
-    //@Autowired
-    //public GroupDocumentService(MongoOperations mongo) {
-    //    this.mongo = mongo;
-    //}
+    public GroupDocumentService(MongoOperations mongo) {
+        this.mongo = mongo;
+    }
 
     private Query getDocumentQuery(GroupDocumentIdentifier identifier){
 
@@ -29,11 +29,11 @@ public class GroupDocumentService implements IGroupDocumentService{
         String id = "id";
 
         Query query = new Query();
-        query.addCriteria(Criteria.
+        query.addCriteria(  Criteria.
                             where(id).
                             is(identifier.getGroupId()));
 
-        query.addCriteria(Criteria.
+        query.addCriteria(  Criteria.
                             where(isUserGroup).
                             is(identifier.isUserGroup()));
 
@@ -53,13 +53,21 @@ public class GroupDocumentService implements IGroupDocumentService{
     @Override
     public GroupDocument createDocument(GroupDocument groupDocument) {
 
-
         var document = getGroupDocument(groupDocument.groupId, groupDocument.isUserGroup);
         if(document != null) return null;
 
         groupDocument.setIdIfNotExists();
         groupDocument.categories.forEach(IEmbeddedDocumentIdentifier::setIdIfNotExists);
         groupDocument.savingEntries.forEach(IEmbeddedDocumentIdentifier::setIdIfNotExists);
+
+        return mongo.save(groupDocument);
+    }
+
+    @Override
+    public GroupDocument updateGroupDocument(GroupDocumentIdentifier identifier, GroupDocument groupDocument) {
+
+        var document = getGroupDocument(identifier);
+        if(document == null) return null;
 
         return mongo.save(groupDocument);
     }
@@ -87,6 +95,22 @@ public class GroupDocumentService implements IGroupDocumentService{
     }
 
     @Override
+    public Category getCategory(GroupDocumentIdentifier identifier, ObjectId categoryId) {
+
+        var document = getGroupDocument(identifier);
+        if(document == null) return null;
+
+        var searchedCategory = document.
+                categories.
+                stream().
+                filter(category ->  category.getId().equals(categoryId)).
+                findFirst();
+
+        if(searchedCategory.isEmpty()) return null;
+        return searchedCategory.get();
+    }
+
+    @Override
     public Category updateCategory(GroupDocumentIdentifier identifier, Category category) {
 
         var document = getGroupDocument(identifier);
@@ -98,8 +122,8 @@ public class GroupDocumentService implements IGroupDocumentService{
         document.categories.add(category);
 
         document.savingEntries.forEach(savingEntry -> {
-            if (savingEntry.category.getId().equals(category.getId()))
-                savingEntry.category = category;
+            if (savingEntry.getCategory().getId().equals(category.getId()))
+                savingEntry.setCategory(category);
         });
 
         mongo.save(document);
@@ -113,10 +137,14 @@ public class GroupDocumentService implements IGroupDocumentService{
         var document = getGroupDocument(identifier);
         if(document == null) return;
 
-        var removedCategories = document.categories.removeIf(category -> category.getId().equals(categoryId));
+        var removedCategories = document.
+                                        categories.
+                                        removeIf( category ->
+                                                  category.getId().equals(categoryId));
+
         if(!removedCategories) return;
 
-        document.savingEntries.removeIf(savingEntry -> savingEntry.category.getId().equals(categoryId));
+        document.savingEntries.removeIf(savingEntry -> savingEntry.getCategory().getId().equals(categoryId));
 
         mongo.save(document);
     }
@@ -129,7 +157,7 @@ public class GroupDocumentService implements IGroupDocumentService{
 
         savingEntry.setIdIfNotExists();
 
-        var knownCategories = resolveKnownCategories(document, savingEntry.category.getId());
+        var knownCategories = resolveKnownCategories(document, savingEntry.getCategory().getId());
         if(knownCategories.size() != 1) return null;
 
         document.savingEntries.add(savingEntry);
@@ -138,16 +166,37 @@ public class GroupDocumentService implements IGroupDocumentService{
         return savingEntry;
     }
 
+
+    @Override
+    public SavingEntry getSavingEntry(GroupDocumentIdentifier identifier, ObjectId savingEntryId) {
+
+        var document = getGroupDocument(identifier);
+        if(document == null) return null;
+
+        var entry = document.
+                savingEntries.
+                stream().
+                filter(savingEntry ->  savingEntry.getId().equals(savingEntryId)).
+                findFirst();
+
+        if(entry.isEmpty()) return null;
+        return entry.get();
+    }
+
     @Override
     public SavingEntry updateSavingEntry(GroupDocumentIdentifier identifier, SavingEntry savingEntry) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return null;
 
-        var knownCategories = resolveKnownCategories(document, savingEntry.category.getId());
+        var knownCategories = resolveKnownCategories(document, savingEntry.getCategory().getId());
         if(knownCategories.size() != 1) return null;
 
-        var containsSavingEntry = document.savingEntries.removeIf(entry -> entry.getId().equals(savingEntry.getId()));
+        var containsSavingEntry =   document.
+                                            savingEntries.
+                                            removeIf( entry ->
+                                                      entry.getId().equals(savingEntry.getId()));
+
         if(!containsSavingEntry) return null;
 
         document.savingEntries.add(savingEntry);
@@ -169,7 +218,11 @@ public class GroupDocumentService implements IGroupDocumentService{
         var document = getGroupDocument(identifier);
         if(document == null) return;
 
-        var removedEntry = document.savingEntries.removeIf(savingEntry -> savingEntry.getId() == savingEntryId);
+        var removedEntry =  document.
+                                    savingEntries.
+                                    removeIf( savingEntry ->
+                                              savingEntry.getId().equals(savingEntryId));
+
         if(!removedEntry) return;
 
         mongo.save(document);
