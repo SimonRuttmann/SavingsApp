@@ -13,10 +13,10 @@ import java.util.Set;
         catalog = "userdata",
         schema = "public"
 )
-public class Group implements IValidatable {
+public class Group {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
             name="Id",
             unique = true,
