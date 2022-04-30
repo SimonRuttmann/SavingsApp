@@ -1,12 +1,11 @@
 package service.contentservice.validation;
 
+import service.contentservice.businessmodel.account.PersonDTO;
 import service.contentservice.persistence.relational.entity.Person;
 
-import java.util.List;
-
-public class PersonValidator implements IValidator<Person>{
+public class PersonValidator implements IValidator<PersonDTO>{
     @Override
-    public boolean validate(Person toValidate, boolean withId) {
+    public boolean validate(PersonDTO toValidate, boolean withId) {
 
         if(toValidate == null) return false;
 
