@@ -11,7 +11,7 @@ public abstract class EmbeddedDocumentIdentifier implements IEmbeddedDocumentIde
 
     @Id
     @Field(targetType = FieldType.OBJECT_ID)
-    private ObjectId id;
+    protected ObjectId id;
 
     @Override
     public void setIdIfNotExists() {
@@ -24,6 +24,10 @@ public abstract class EmbeddedDocumentIdentifier implements IEmbeddedDocumentIde
         return id;
     }
 
+    @Override
+    public void setId(ObjectId id){
+        this.id = id;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
