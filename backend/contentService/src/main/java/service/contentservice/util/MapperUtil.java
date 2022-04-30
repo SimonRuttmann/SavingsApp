@@ -1,9 +1,11 @@
 package service.contentservice.util;
 
+import service.contentservice.businessmodel.account.PersonDTO;
 import service.contentservice.businessmodel.content.CategoryDTO;
 import service.contentservice.businessmodel.content.SavingEntryDTO;
 import service.contentservice.persistence.documentbased.Category;
 import service.contentservice.persistence.documentbased.SavingEntry;
+import service.contentservice.persistence.relational.entity.Person;
 
 public class MapperUtil {
 
@@ -43,5 +45,14 @@ public class MapperUtil {
         savingEntryDto.setDescription(savingEntry.getDescription());
         savingEntryDto.setCreationDate(savingEntry.getCreationDate());
         return savingEntryDto;
+    }
+
+
+    public static PersonDTO PersonToDTO(Person person){
+        PersonDTO dto = new PersonDTO();
+        dto.setId(person.getId());
+        dto.setEmail(person.getEmail());
+        dto.setUsername(person.getUsername());
+        return dto;
     }
 }
