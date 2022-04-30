@@ -1,5 +1,6 @@
 package service.contentservice.persistence;
 
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import service.contentservice.persistence.documentbased.Category;
 import service.contentservice.persistence.documentbased.GroupDocument;
@@ -9,23 +10,23 @@ import service.contentservice.persistence.documentbased.SavingEntry;
 public interface IGroupDocumentService {
 
     GroupDocument getGroupDocument(GroupDocumentIdentifier identifier);
-
     GroupDocument createDocument(GroupDocument groupDocument);
 
-    void deleteDocument(GroupDocumentIdentifier identifier);
+    GroupDocument updateGroupDocument(GroupDocumentIdentifier identifier, GroupDocument groupDocument);
+    boolean deleteDocument(GroupDocumentIdentifier identifier);
 
 
-    boolean insertCategory(GroupDocumentIdentifier identifier, Category category);
+    Category insertCategory(GroupDocumentIdentifier identifier, Category category);
 
-    boolean updateCategory(GroupDocumentIdentifier identifier, Category category);
-
-    void deleteCategory(GroupDocumentIdentifier identifier, Long categoryId);
+    Category getCategory(GroupDocumentIdentifier identifier, ObjectId categoryId);
+    Category updateCategory(GroupDocumentIdentifier identifier, Category category);
+    void deleteCategory(GroupDocumentIdentifier identifier, ObjectId categoryId);
 
 
     SavingEntry addSavingEntry(GroupDocumentIdentifier identifier, SavingEntry savingEntry);
 
+    SavingEntry getSavingEntry(GroupDocumentIdentifier identifier, ObjectId savingEntryId);
     SavingEntry updateSavingEntry(GroupDocumentIdentifier identifier, SavingEntry savingEntry);
-
-    void deleteSavingEntry(GroupDocumentIdentifier identifier, Long savingEntryId);
+    void deleteSavingEntry(GroupDocumentIdentifier identifier, ObjectId savingEntryId);
 
 }
