@@ -5,11 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import service.contentservice.businessmodel.content.CategoryDTO;
+import service.contentservice.businessmodel.content.GeneralGroupInformationDTO;
 import service.contentservice.businessmodel.content.processing.*;
 import service.contentservice.persistence.IGroupDocumentService;
 import service.contentservice.persistence.documentbased.Category;
 import service.contentservice.persistence.documentbased.GroupDocument;
 import service.contentservice.persistence.documentbased.SavingEntry;
+import service.contentservice.persistence.relational.entity.Group;
 import service.contentservice.persistence.relational.entity.Person;
 import service.contentservice.services.IDatabaseService;
 import service.contentservice.services.ValidateAndResolveDocumentService;
@@ -37,9 +40,36 @@ public class ProcessingController {
     }
 
     @GetMapping("/{groupId}")
-    public String getGeneralGroupInformation(@PathVariable Integer groupId){
-        if(groupId == null) return
-        return "";
+    public ResponseEntity<GeneralGroupInformationDTO> getGeneralGroupInformation(
+            @PathVariable Long groupId){
+
+        //Validate input
+        var identifier = new ValidateAndResolveDocumentService<GeneralGroupInformationDTO>().
+                validateAndResolveIdentifier(groupId == null, groupId, databaseService);
+
+        if(identifier.isInvalid()) return identifier.getException();
+
+        var groupInfo = new GeneralGroupInformationDTO();
+
+        //Add all users of the group and the group name
+        if(!identifier.getValue().isUserGroup()) {
+
+            Collection<Person> persons = databaseService.getPersonsOfGroupId(groupId);
+            persons.forEach(person -> groupInfo.addPersonToGroupInfo(MapperUtil.PersonToDTO(person)));
+
+            Group group = databaseService.getGroupById(groupId);
+            if (group == null)
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+            groupInfo.setGroupName(group.getGroupName());
+        }
+        //The "group" is a user group, meaning there is no name and no other users
+        else{
+            var person = databaseService.getPersonById(groupId);
+            groupInfo.addPersonToGroupInfo(MapperUtil.PersonToDTO(person));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(groupInfo);
     }
 
     /**
