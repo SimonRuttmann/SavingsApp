@@ -9,29 +9,77 @@ import service.contentservice.validation.IValidatable;
 import java.util.Date;
 import java.util.Objects;
 
-public class SavingEntry extends EmbeddedDocumentIdentifier implements IValidatable {
+public class SavingEntry extends EmbeddedDocumentIdentifier {
 
     @Field(targetType = FieldType.STRING)
-    public String name;
+    private String name;
 
 
     @Field(targetType = FieldType.DOUBLE)
-    public Double costBalance;
+    private Double costBalance;
 
 
-    public Category category;
+    private Category category;
 
 
     @Field(targetType = FieldType.DATE_TIME)
-    public Date creationDate;
+    private Date creationDate;
 
 
     @Field(targetType = FieldType.STRING)
-    public String creator;
+    private String creator;
 
 
     @Field(targetType = FieldType.STRING)
-    public String description;
+    private String description;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Double getCostBalance() {
+        return costBalance;
+    }
+
+    public void setCostBalance(Double costBalance) {
+        this.costBalance = costBalance;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public SavingEntry() {
     }
