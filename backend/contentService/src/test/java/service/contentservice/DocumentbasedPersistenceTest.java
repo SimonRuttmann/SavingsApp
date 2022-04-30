@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 public class DocumentbasedPersistenceTest {
@@ -37,20 +36,20 @@ public class DocumentbasedPersistenceTest {
         Category categoryWash = new Category("wash");
 
         SavingEntry savingEntry1 = new SavingEntry();
-        savingEntry1.creator = "Hans";
-        savingEntry1.name="Donuts";
-        savingEntry1.costBalance= -1000.51;
-        savingEntry1.creationDate = new Date();
-        savingEntry1.description = "My cat is eating too much!";
-        savingEntry1.category = categoryPet;
+        savingEntry1.setCreator("Hans");
+        savingEntry1.setName("Donuts");
+        savingEntry1.setCostBalance(-1000.51);
+        savingEntry1.setCreationDate(new Date());
+        savingEntry1.setDescription("My cat is eating too much!");
+        savingEntry1.setCategory(categoryPet);
 
         SavingEntry savingEntry2 = new SavingEntry();
-        savingEntry2.creator = "Hans";
-        savingEntry2.name="Donuts";
-        savingEntry2.costBalance= -1.52;
-        savingEntry2.creationDate = new Date();
-        savingEntry2.description = "I am eating too less!";
-        savingEntry2.category = categoryWash;
+        savingEntry2.setCreator("Hans");
+        savingEntry2.setName("Donuts");
+        savingEntry2.setCostBalance(-1.52);
+        savingEntry2.setCreationDate(new Date());
+        savingEntry2.setDescription("I am eating too less!");
+        savingEntry2.setCategory(categoryWash);
 
         GroupDocument groupDocument = new GroupDocument();
         groupDocument.groupId = 1L;
