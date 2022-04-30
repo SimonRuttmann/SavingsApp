@@ -17,4 +17,5 @@ public class GroupDocumentIdentifier {
     public boolean isUserGroup() {
         return isUserGroup;
     }
+
 }
