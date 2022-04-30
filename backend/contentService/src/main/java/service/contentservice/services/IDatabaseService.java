@@ -5,6 +5,7 @@ import service.contentservice.persistence.relational.entity.Group;
 import service.contentservice.persistence.relational.entity.Invitation;
 import service.contentservice.persistence.relational.entity.InvitationCompoundId;
 import service.contentservice.persistence.relational.entity.Person;
+import service.contentservice.util.Pair;
 
 import java.util.Collection;
 

@@ -1,8 +1,11 @@
-package service.contentservice.services;
+package service.contentservice.util;
 
 import java.util.Objects;
 
 public class Pair<T, W> {
+
+    public Pair() {
+    }
 
     public Pair(T first, W second) {
         this.first = first;
