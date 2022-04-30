@@ -1,12 +1,10 @@
 package service.contentservice.validation;
 
-import service.contentservice.persistence.relational.entity.Group;
+import service.contentservice.businessmodel.account.GroupDTO;
 
-import java.util.List;
-
-public class GroupValidator implements IValidator<Group>{
+public class GroupValidator implements IValidator<GroupDTO>{
     @Override
-    public boolean validate(Group toValidate, boolean withId) {
+    public boolean validate(GroupDTO toValidate, boolean withId) {
 
         if(toValidate == null) return false;
 

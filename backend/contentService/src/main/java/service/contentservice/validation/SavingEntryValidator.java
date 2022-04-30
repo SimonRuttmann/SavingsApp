@@ -1,34 +1,35 @@
 package service.contentservice.validation;
 
+import service.contentservice.businessmodel.content.CategoryDTO;
+import service.contentservice.businessmodel.content.SavingEntryDTO;
 import service.contentservice.persistence.documentbased.Category;
-import service.contentservice.persistence.documentbased.SavingEntry;
 
-import java.util.Comparator;
-import java.util.List;
-
-public class SavingEntryValidator implements IValidator<SavingEntry> {
+public class SavingEntryValidator implements IValidator<SavingEntryDTO> {
 
     @Override
-    public boolean validate(SavingEntry toValidate, boolean withId) {
+    public boolean validate(SavingEntryDTO toValidate, boolean withId) {
 
         if(toValidate == null) return false;
 
-    //    if(withId && toValidate.savingId == null) return false;
-       // if(!withId && toValidate.savingId != null) return false;
+        if(withId && toValidate.getId() == null) return false;
+        if(!withId && toValidate.getId() != null) return false;
 
-        if(toValidate.name == null) return false;
-        if(toValidate.name.isBlank()) return false;
+        if(toValidate.getName() == null) return false;
+        if(toValidate.getName().isBlank()) return false;
 
-        if(toValidate.costBalance == null) return false;
+        if(toValidate.getCostBalance() == null) return false;
 
-      //  if(toValidate.category == null) return false;
-     //   if(!ValidatorFactory.getInstance().getValidator(Category.class).
-     //           validate(toValidate.category, withId)) return false;
+        if(toValidate.getCategory() == null) return false;
+        if(!ValidatorFactory.
+                getInstance().
+                getValidator(CategoryDTO.class).
+                validate(toValidate.getCategory(), withId))
+            return false;
 
         //Description is optional
 
-        if(toValidate.creator == null) return false;
-        return !toValidate.creator.isBlank();
+        if(toValidate.getCreator() == null) return false;
+        return !toValidate.getCreator().isBlank();
 
     }
 
