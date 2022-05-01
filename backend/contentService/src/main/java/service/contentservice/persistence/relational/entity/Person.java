@@ -1,5 +1,7 @@
 package service.contentservice.persistence.relational.entity;
 
+import service.contentservice.validation.IValidatable;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,7 +16,7 @@ import java.util.Set;
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
             name="Id",
             unique = true,
