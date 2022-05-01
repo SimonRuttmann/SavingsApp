@@ -11,7 +11,9 @@ public class AdvertisementServiceController {
     @Autowired
     AdvertisementServiceService advertisementServiceService;
 
-    //Returns index.html
+    /**
+     * @return returns the guest homepage index.html
+     */
     @GetMapping("/*")
     public ModelAndView index(){
        ModelAndView modelAndView= new ModelAndView();
@@ -19,7 +21,14 @@ public class AdvertisementServiceController {
        return modelAndView;
     }
 
-    //Returns data for three diagramms
+    /**
+     * @return a json with three datapoints
+     * {
+     * "Diagramm1": send Messages,
+     * "Diagramm2": registered Items,
+     * "Diagramm3": amount of users
+     * }
+     */
     @GetMapping("/global")
     public String diagrammData(){
         return advertisementServiceService.fetchData();
