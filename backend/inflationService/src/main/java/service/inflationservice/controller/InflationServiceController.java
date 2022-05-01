@@ -10,6 +10,9 @@ public class InflationServiceController {
     @Autowired
     InflationServiceService inflationServiceService;
 
+    /**
+     * @return json with inflationdata for the latest published month
+     */
     @GetMapping("/inflationrate")
     public String getLastInflationRate(){
         return inflationServiceService.getLatestInflationData();
