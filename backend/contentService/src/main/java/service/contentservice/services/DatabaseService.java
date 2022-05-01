@@ -6,6 +6,7 @@ import service.contentservice.persistence.relational.entity.*;
 import service.contentservice.persistence.relational.repository.GroupRepository;
 import service.contentservice.persistence.relational.repository.InvitationRepository;
 import service.contentservice.persistence.relational.repository.PersonRepository;
+import service.contentservice.util.Pair;
 
 import javax.transaction.Transactional;
 import java.util.*;
