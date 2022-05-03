@@ -14,7 +14,7 @@ public class InflationServiceController {
      * @return json with inflationdata for the latest published month
      */
     @GetMapping("/inflationrate")
-    public String getLastInflationRate(){
+    public Double getLastInflationRate(){
         return inflationServiceService.getLatestInflationData();
     }
 }
