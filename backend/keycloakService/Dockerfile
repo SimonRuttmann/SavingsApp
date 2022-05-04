@@ -6,7 +6,6 @@ ENV KEYCLOAK_ADMIN_PASSWORD=admin
 ENV KC_METRICS_ENABLED=true
 ENV KC_FEATURES=token-exchange
 
-
 #not Correct yet!!!!
 #enable for external DB
 ENV KC_DB=postgres
