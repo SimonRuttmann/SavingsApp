@@ -1,10 +1,27 @@
 package service.userservice.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import service.contentservice.persistence.IGroupDocumentService;
+import service.contentservice.services.IDatabaseService;
+import service.userservice.service.KeycloakService;
 
 @RestController
 @RequestMapping("/userservice")
 public class UserServiceController {
+
+    private final KeycloakService keycloakService;
+
+
+    @Autowired
+    public UserServiceController(KeycloakService keycloakService) {
+        this.keycloakService = keycloakService;
+    }
+
+    @GetMapping("/keycloak/{userId}")
+    public String getKeycloakUser(@PathVariable String userId){
+        return keycloakService.getPersonById(userId);
+    }
 
 
     @PostMapping("/request/invite")
