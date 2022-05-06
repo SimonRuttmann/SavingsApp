@@ -13,6 +13,8 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
   keycloak:
     image: quay.io/keycloak/keycloak:legacy
     environment:
@@ -30,3 +32,9 @@ services:
       - "8090:8080"
     depends_on:
       - postgres
+  userservice:
+    build:
+      context: ../userService
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
