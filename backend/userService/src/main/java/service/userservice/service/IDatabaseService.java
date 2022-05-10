@@ -1,14 +1,16 @@
 package service.userservice.service;
 
 import org.springframework.stereotype.Component;
-import service.userservice.persistence.entity.Group;
-import service.userservice.persistence.entity.Invitation;
-import service.userservice.persistence.entity.InvitationCompoundId;
-import service.userservice.persistence.entity.Person;
+import service.userservice.persistence.entity.userdata.Group;
+import service.userservice.persistence.entity.userdata.Invitation;
+import service.userservice.persistence.entity.userdata.InvitationCompoundId;
+import service.userservice.persistence.entity.userdata.Person;
 import service.userservice.util.Pair;
 
 
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * This class defines database calls to the tables Person and Groups
@@ -39,26 +41,29 @@ import java.util.Collection;
 @Component
 public interface IDatabaseService {
 
-     Person getPersonById(Long id);
+     Person getPersonById(UUID id);
 
      Group getGroupById(Long id);
-     Collection<Group> getGroupsOfPersonId(Long id);
+     Collection<Group> getGroupsOfPersonId(UUID id);
 
-     Pair<Person, Group> addPersonToGroup(Long personId, Long groupId);
+     Pair<Person, Group> addPersonToGroup(UUID personId, Long groupId);
 
-     Invitation addInvitation(Long personId, Long groupId);
+     Invitation addInvitation(UUID personId, Long groupId);
 
      Invitation declineInvitation(InvitationCompoundId invitationCompoundId);
 
      Invitation acceptInvitation(InvitationCompoundId invitationCompoundId);
 
-     Pair<Person, Group> removePersonFromGroup(Long personId, Long groupId);
+     List<Invitation> getAllInvitations(UUID userId);
+
+     Pair<Person, Group> removePersonFromGroup(UUID personId, Long groupId);
 
      Person savePerson(Person person);
 
-     void removePerson(Long id);
+     void removePerson(UUID id);
 
      Collection<Person> getPersonsOfGroupId(Long id);
+
 
      Group saveGroup(Group group);
 

@@ -1,17 +1,16 @@
 package service.userservice.service;
 
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import service.userservice.persistence.entity.*;
-import service.userservice.persistence.repository.GroupRepository;
-import service.userservice.persistence.repository.InvitationRepository;
-import service.userservice.persistence.repository.PersonRepository;
+import service.userservice.persistence.entity.userdata.*;
+import service.userservice.persistence.repository.userdata.GroupRepository;
+import service.userservice.persistence.repository.userdata.InvitationRepository;
+import service.userservice.persistence.repository.userdata.PersonRepository;
 import service.userservice.util.Pair;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class DatabaseService implements IDatabaseService {
@@ -36,7 +35,7 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     @Transactional
-    public Person getPersonById(Long id){
+    public Person getPersonById(UUID id){
         Optional<Person> person = personRepository.findById(id);
         if(person.isEmpty()) return null;
         personRepository.detach(person.get());
@@ -53,7 +52,7 @@ public class DatabaseService implements IDatabaseService {
     }
     @Override
     @Transactional
-    public Collection<Group> getGroupsOfPersonId(Long id){
+    public Collection<Group> getGroupsOfPersonId(UUID id){
 
         Optional<Person> person = personRepository.findById(id);
 
@@ -84,7 +83,7 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     @Transactional
-    public Pair<Person, Group> addPersonToGroup(Long personId, Long groupId){
+    public Pair<Person, Group> addPersonToGroup(UUID personId, Long groupId){
 
         Person person = personRepository.getById(personId);
         Group group = groupRepository.getById(groupId);
@@ -100,9 +99,10 @@ public class DatabaseService implements IDatabaseService {
         return new Pair<>(person, group);
     }
 
+    // TODO warum wird hier nicht geprüft ob die person existiert
     @Override
     @Transactional
-    public Pair<Person, Group> removePersonFromGroup(Long personId, Long groupId){
+    public Pair<Person, Group> removePersonFromGroup(UUID personId, Long groupId){
 
         Person person = personRepository.getById(personId);
         Group group = groupRepository.getById(groupId);
@@ -122,7 +122,7 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     @Transactional
-    public Invitation addInvitation(Long personId, Long groupId) {
+    public Invitation addInvitation(UUID personId, Long groupId) {
 
         Optional<Person> optPerson = personRepository.findById(personId);
         Optional<Group> optGroup = groupRepository.findById(groupId);
@@ -184,11 +184,18 @@ public class DatabaseService implements IDatabaseService {
         return invitation;
     }
 
+    @Override
+    public List<Invitation> getAllInvitations(UUID userId) {
+        List<Invitation> invitationList = invitationRepository.findByInvitedPersonAndInvitationStatus(userId, InvitationStatus.OPEN);
+        if (invitationList.isEmpty()) return null;
+        return invitationList;
+    }
+
     //Remove
 
     @Override
     @Transactional
-    public void removePerson(Long id){
+    public void removePerson(UUID id){
 
          Person person = personRepository.getById(id);
 

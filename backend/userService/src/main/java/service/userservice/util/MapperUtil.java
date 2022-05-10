@@ -2,7 +2,7 @@ package service.userservice.util;
 
 
 import service.userservice.businessmodel.account.PersonDTO;
-import service.userservice.persistence.entity.Person;
+import service.userservice.persistence.entity.userdata.Person;
 
 public class MapperUtil {
 
