@@ -1,12 +1,11 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import "./styles.css"
 import {Button, ButtonGroup, Card, CardGroup} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import data from "bootstrap/js/src/dom/data";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-
 
 const writingStyle = {
     textAlign: "center",
@@ -19,39 +18,56 @@ const buttonStyle = {
     marginbottom: "5%",
 }
 
-export default function GuestSite() {
-    var AmountOfMessages = 15;
-    var AmountOfEntries = 10;
-    var AmountOfUsers = 33;
-    return (
-        <>
-            <ButtonGroup style={buttonStyle}>
-                <Button variant="secondary">Login</Button>
-                <Button variant="secondary">Register</Button>
-            </ButtonGroup>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <Card style={writingStyle}>
-                <Card.Text>Hier steht ein Slogan für wundervolle Menschen.</Card.Text>
-            </Card>
-            <br/>
-            <CardGroup>
-                <Card>
-                    <h5>{AmountOfMessages}</h5>
-                </Card>
-                <Card>
-                    <h5>{AmountOfEntries}</h5>
-                </Card>
-                <Card>
-                    <h5>{AmountOfUsers}</h5>
-                </Card>
-            </CardGroup>
-            <br/>
-            <Card style={writingStyle}>
-                <Card.Text>Hier beschrieben wir eine schöne App für schöne Leute.</Card.Text>
-            </Card>
-        </>
-    )
+const state = {
+    Diagramm2: '0',
+    Diagramm3: '0',
+    Diagramm1: '0'
 }
+
+const GuestSite = ({setGuestSite}) => {
+
+    // componentDidMount() {
+    //     fetch('http://localhost:8080/global')
+    //         .then(response => response.json())
+    //         .then(data => this.setState(data))
+    // }
+
+        return (
+            <>
+                <ButtonGroup style={buttonStyle}>
+                    <Button variant="secondary" onClick={() => setGuestSite(false)}>Login</Button>
+                    <Button variant="secondary">Register</Button>
+                </ButtonGroup>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <Card style={writingStyle}>
+                    <Card.Text>Hier steht ein Slogan für wundervolle Menschen.</Card.Text>
+                </Card>
+                <br/>
+                <br/>
+                <br/>
+                <CardGroup>
+                    <Card style={writingStyle}>
+                        <h4>{state.Diagramm1}</h4>
+                        <h6>Nachrichten wurden bereits versendet.</h6>
+                    </Card>
+                    <Card style={writingStyle}>
+                        <h4>{state.Diagramm2}</h4>
+                        <h6>Einträge wurden bereits erstellt.</h6>
+                    </Card>
+                    <Card style={writingStyle}>
+                        <h4>{state.Diagramm3}</h4>
+                        <h6>registrierte User.</h6>
+                    </Card>
+                </CardGroup>
+                <br/>
+                <br/>
+                <br/>
+                <Card style={writingStyle}>
+                    <Card.Text>Hier beschrieben wir eine schöne App für schöne Leute.</Card.Text>
+                </Card>
+            </> )
+}
+export default GuestSite
