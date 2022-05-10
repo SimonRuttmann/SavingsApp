@@ -28,15 +28,15 @@ public class TestController {
     }
 
     private String getData1(){
-        String value = null;
+        String value = "500";
         return value;
     }
     private String getData2(){
-        String value = null;
+        String value = "431";
         return value;
     }
     private String getData3(){
-        String value = null;
+        String value = "761";
         return value;
     }
 }
