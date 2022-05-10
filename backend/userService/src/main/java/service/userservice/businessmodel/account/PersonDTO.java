@@ -5,20 +5,21 @@ package service.userservice.businessmodel.account;
 import service.userservice.validation.IValidatable;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class PersonDTO implements IValidatable {
 
-    private Long id;
+    private UUID id;
 
     private String username;
 
     private String email;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -41,7 +42,7 @@ public class PersonDTO implements IValidatable {
     public PersonDTO() {
     }
 
-    public PersonDTO(Long id, String username, String email) {
+    public PersonDTO(UUID id, String username, String email) {
         this.id = id;
         this.username = username;
         this.email = email;
