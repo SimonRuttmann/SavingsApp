@@ -5,7 +5,7 @@
   "resource": "content",
   "verify-token-audience": true,
   "credentials": {
-    "secret": "1iOHmMUvwu3QgeQGLlntR3oClebWlwHd"
+    "secret": "iHq3JFmArgpWuWPCXGzYNpYzHaNqTERd"
   },
   "confidential-port": 0,
   "policy-enforcer": {}

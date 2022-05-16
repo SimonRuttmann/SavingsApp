@@ -8,7 +8,7 @@ ENV KC_FEATURES=token-exchange
 
 #not Correct yet!!!!
 #enable for external DB
-ENV KC_DB=postgres
+ENV KC_DB=keycloak
 
 # change these values to point to a running postgres instance
 ENV KC_DB_URL=jdbc:postgresql://localhost:5432/keycloak
