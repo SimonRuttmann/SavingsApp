@@ -1,5 +1,8 @@
 package service.userservice.persistence.entity.userdata;
 
+import service.userservice.businessmodel.account.InvitationDTO;
+import service.userservice.businessmodel.account.InvitationStatusDTO;
+
 import javax.persistence.*;
 
 /**
@@ -85,5 +88,20 @@ public class Invitation {
 
     public void setInvitationStatus(InvitationStatus invitationStatus) {
         this.invitationStatus = invitationStatus;
+    }
+
+    public InvitationDTO toInvitationDto() {
+        return new InvitationDTO(
+                this.requestedGroup.getId(),
+                this.requestedGroup.getGroupName()
+        );
+    }
+
+    public InvitationStatusDTO toInvitationStatusDto() {
+        return new InvitationStatusDTO(
+                this.invitationStatus,
+                this.requestedGroup.getGroupName(),
+                this.requestedGroup.getId()
+        );
     }
 }

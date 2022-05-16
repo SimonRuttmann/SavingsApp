@@ -88,7 +88,7 @@ public class Group {
     public void setInvitations(Set<Invitation> invitations) {this.invitations = invitations;}
 
 
-    public GroupDTO toDTO(){
+    public GroupDTO toGroupDTO(){
         return new GroupDTO(
                 this.id,
                 this.groupName
