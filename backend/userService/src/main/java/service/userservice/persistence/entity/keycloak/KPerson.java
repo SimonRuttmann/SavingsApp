@@ -29,4 +29,14 @@ public class KPerson {
 
     public String getId() { return id;}
 
+    public KPerson() {}
+
+    public KPerson(String id, String email ) {
+        this.id = id;
+        this.email = email;
+
+    }
+
+
+
 }

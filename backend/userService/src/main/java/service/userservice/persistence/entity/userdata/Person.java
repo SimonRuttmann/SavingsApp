@@ -1,5 +1,8 @@
 package service.userservice.persistence.entity.userdata;
 
+import service.userservice.businessmodel.account.PersonDTO;
+
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -103,6 +106,14 @@ public class Person {
 
     public Set<Invitation> getInvitations() {return invitations;}
     public void setInvitations(Set<Invitation> invitations) {this.invitations = invitations;}
+
+    public PersonDTO toPersonDTO() {
+        return new PersonDTO(
+                this.id,
+                this.username,
+                this.email
+        );
+    }
 
     @Override
     public boolean equals(Object o) {

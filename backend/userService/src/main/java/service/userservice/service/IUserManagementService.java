@@ -1,9 +1,7 @@
 package service.userservice.service;
 
 import service.userservice.businessmodel.account.*;
-import service.userservice.persistence.entity.userdata.Group;
 import service.userservice.persistence.entity.userdata.Invitation;
-import service.userservice.persistence.entity.userdata.Person;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -13,20 +11,26 @@ import java.util.UUID;
 
 public interface IUserManagementService {
 
+    //Person
+    PersonDTO register(RegisterPersonDTO registerDto);
+    PersonDTO getUser(UUID userId);
+    Collection<GroupDTO> getAllGroupsOfPerson(UUID personId);
+    PersonDTO deleteUser(UUID userId);
 
-    Person register(RegisterPersonDTO registerDto);
-    
-    Invitation invite(InviteDTO newInvitation);
-    List<Invitation> getInvitations(HttpServletRequest request);
-    Invitation acceptInvitation(HttpServletRequest request, Long groupId);
-    Invitation declineInvitation(HttpServletRequest request, Long groupId);
-
-
-
-
-    Group registerGroup(HttpServletRequest request, RegisterGroupDTO registerDto);
-    Collection<Person> getAllUserfromGroup(Long groupId);
-    Collection<Group> getAllGroupsOfPerson(UUID personId);
+    //Group
+    GroupDTO registerGroup(HttpServletRequest request, RegisterGroupDTO registerDto);
+    GroupDTO getGroup(Long groupId);
+    Collection<PersonDTO> getAllUserfromGroup(Long groupId);
     GroupDTO leaveGroup(HttpServletRequest request, Long groupId);
+    GroupDTO deleteGroup(Long groupId);
+
+    //Invitation
+    InvitationStatusDTO invite(InviteDTO newInvitation);
+    List<InvitationDTO> getInvitations(HttpServletRequest request);
+    InvitationStatusDTO acceptInvitation(HttpServletRequest request, Long groupId);
+    InvitationStatusDTO declineInvitation(HttpServletRequest request, Long groupId);
+
+
+
 }
 

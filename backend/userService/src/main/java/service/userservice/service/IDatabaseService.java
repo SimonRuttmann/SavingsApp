@@ -3,7 +3,6 @@ package service.userservice.service;
 import org.springframework.stereotype.Component;
 import service.userservice.persistence.entity.userdata.Group;
 import service.userservice.persistence.entity.userdata.Invitation;
-import service.userservice.persistence.entity.userdata.InvitationCompoundId;
 import service.userservice.persistence.entity.userdata.Person;
 import service.userservice.util.Pair;
 
@@ -50,9 +49,9 @@ public interface IDatabaseService {
 
      Invitation addInvitation(UUID personId, Long groupId);
 
-     Invitation declineInvitation(InvitationCompoundId invitationCompoundId);
+     Invitation declineInvitation(UUID userId, Long groupId);
 
-     Invitation acceptInvitation(InvitationCompoundId invitationCompoundId);
+     Invitation acceptInvitation(UUID userId, Long groupId);
 
      List<Invitation> getAllInvitations(UUID userId);
 
@@ -70,4 +69,5 @@ public interface IDatabaseService {
      void removeGroup(Long id);
 
      Invitation saveInvitation(Invitation invitation);
+     void checkIfPersonIsMember(UUID personId, Long groupId);
 }
