@@ -1,4 +1,6 @@
 version: '3.3'
+
+
 services: 
   mongodb:
     container_name: cAndD_mongodb
@@ -18,15 +20,15 @@ services:
       - "6379:6379"
     volumes:
       - ./redis/data:/data/db
-  postgresql:
-    container_name: cAndD_postgresql
-    build:
-      context: ./postgresql
-      dockerfile: Dockerfile
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./postgresql/data:/data/db
+#  postgresql:
+#    container_name: cAndD_postgresql
+#    build:
+#      context: ./postgresql
+#      dockerfile: Dockerfile
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - ./postgresql/data:/data/db
   #advertismentservice:
   #  container_name: advertisment_service
   #  restart: on-failure
@@ -35,14 +37,20 @@ services:
   #    dockerfile: Dockerfile
   #  ports:
   #    - "8010:8080"
-  #userservice:
-  #  container_name: user_service
-  #  restart: on-failure
-  #  build:
-  #    context: ./userservice
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8011:8080"
+  userservice:
+    container_name: cAndD_user_service
+    #restart: on-failure
+    build:
+      context: ./userservice
+      dockerfile: Dockerfile
+    ports:
+      - "8011:8011"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/keycloak
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+
+
   #contentservice:
   #  container_name: content_service
   #  restart: on-failure
@@ -60,14 +68,35 @@ services:
   #  ports:
   #    - "8013:8080"
   keycloak:
-    container_name: cAndD_keycloak_service
-    build:
-      context: ./keycloakService
-      dockerfile: Dockerfile
+    container_name: cAndD_keycloak
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: postgres
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
     ports:
       - "8090:8080"
+    depends_on:
+      - postgres
+  postgres:
+    container_name: cAndD_postgresKeycloak
+    image: postgres
     volumes:
-      - ./postgresql/data:/data/db
+      #- postgres_data:/var/lib/postgresql/data
+      - ./postgresql/keycloakData:/data/db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
   #chatservice:
   #  container_name: chat_service
   #  restart: on-failure
