@@ -1,6 +1,11 @@
 package service.contentservice.controller.content;
 
 
+import documentDatabaseService.documentbased.service.IGroupDocumentService;
+import dtoAndValidation.dto.content.CategoryDTO;
+import dtoAndValidation.util.MapperUtil;
+import dtoAndValidation.validation.ValidateAndResolveDocumentService;
+import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
