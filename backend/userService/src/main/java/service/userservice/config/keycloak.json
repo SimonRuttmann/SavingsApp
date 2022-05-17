@@ -1,0 +1,12 @@
+{
+  "realm": "haushaltsapp",
+  "auth-server-url": "http://localhost:8090/auth/",
+  "ssl-required": "external",
+  "resource": "userservice",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "vh0aUqwsYzyZOrEXZ2uUmVy4jmVYMX0B"
+  },
+  "confidential-port": 0,
+  "policy-enforcer": {}
+}
