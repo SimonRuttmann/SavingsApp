@@ -1,5 +1,6 @@
-package relationalDatabaseService.service;
+package service.userservice;
 
+import dtoAndValidation.dto.user.*;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,16 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 
-import service.userservice.businessmodel.account.*;
-import service.userservice.persistence.entity.userdata.Group;
-import service.userservice.persistence.entity.userdata.Invitation;
-import service.userservice.persistence.entity.userdata.InvitationCompoundId;
-import service.userservice.persistence.entity.userdata.Person;
-
-import service.userservice.persistence.repository.userdata.InvitationRepository;
-import service.userservice.persistence.repository.userdata.PersonRepository;
-import service.userservice.util.Pair;
-import service.userservice.validation.InviteValidator;
+import relationalDatabaseService.model.Group;
+import relationalDatabaseService.model.Invitation;
+import relationalDatabaseService.model.Pair;
+import relationalDatabaseService.model.Person;
+import relationalDatabaseService.service.DatabaseService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;

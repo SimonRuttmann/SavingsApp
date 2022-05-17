@@ -23,6 +23,7 @@
         <module>userservice</module>
         <module>chatService</module>
         <module>documentDatabaseService</module>
+        <module>relationalDatabaseService</module>
     </modules>
 
     <dependencies>

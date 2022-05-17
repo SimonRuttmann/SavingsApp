@@ -6,7 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import service.contentservice.persistence.relational.repository.PersonRepository;
+
 
 //@SpringBootApplication()//exclude = SecurityAutoConfiguration.class)
 @SpringBootApplication(exclude = {
