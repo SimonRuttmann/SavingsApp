@@ -10,8 +10,10 @@ import org.springframework.web.server.ResponseStatusException;
 import service.userservice.businessmodel.account.*;
 import service.userservice.persistence.entity.userdata.Group;
 import service.userservice.persistence.entity.userdata.Invitation;
+import service.userservice.persistence.entity.userdata.InvitationCompoundId;
 import service.userservice.persistence.entity.userdata.Person;
 
+import service.userservice.persistence.repository.userdata.InvitationRepository;
 import service.userservice.persistence.repository.userdata.PersonRepository;
 import service.userservice.service.IUserManagementService;
 import service.userservice.util.Pair;
@@ -23,13 +25,10 @@ import java.util.*;
 @Service
 public class UserManagementService implements IUserManagementService {
 
-    private final PersonRepository personRepository;
     private final DatabaseService databaseService;
 
-
     @Autowired
-    public UserManagementService(PersonRepository personRepository, DatabaseService databaseService) {
-        this.personRepository = personRepository;
+    public UserManagementService(DatabaseService databaseService) {
         this.databaseService = databaseService;
     }
 
@@ -141,14 +140,15 @@ public class UserManagementService implements IUserManagementService {
                 listDto.add(invitation.toInvitationDto());
             });
         }
-
+        listDto.sort(Comparator.comparing(InvitationDTO::getCreatedOn));
         return listDto;
     }
 
     @Override
     public InvitationStatusDTO acceptInvitation(HttpServletRequest request, Long groupId) {
         UUID userId = getUserId(request);
-        //InvitationCompoundId invitationCompoundId = new InvitationCompoundId(userId, groupId);
+
+
         Invitation invitation = databaseService.acceptInvitation(userId, groupId);
         if (invitation == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Invitation is not found");
         databaseService.addPersonToGroup(userId, groupId);

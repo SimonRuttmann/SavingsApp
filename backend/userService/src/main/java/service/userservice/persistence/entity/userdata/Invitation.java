@@ -93,7 +93,8 @@ public class Invitation {
     public InvitationDTO toInvitationDto() {
         return new InvitationDTO(
                 this.requestedGroup.getId(),
-                this.requestedGroup.getGroupName()
+                this.requestedGroup.getGroupName(),
+                this.getId().getDate()
         );
     }
 
