@@ -3,7 +3,7 @@ package relationalDatabaseService.service;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import service.userservice.persistence.entity.userdata.Person;
+import relationalDatabaseService.model.Person;
 
 
 import java.util.Optional;

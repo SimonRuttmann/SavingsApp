@@ -1,11 +1,11 @@
 package documentDatabaseService.documentbased.model;
 
+import documentDatabaseService.documentbased.service.EmbeddedDocumentIdentifier;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
-import service.contentservice.persistence.EmbeddedDocumentIdentifier;
 
 import java.util.ArrayList;
 import java.util.List;

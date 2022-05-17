@@ -1,7 +1,6 @@
-package relationalDatabaseService.service;
+package service.userservice;
 
-import service.userservice.businessmodel.account.*;
-import service.userservice.persistence.entity.userdata.Invitation;
+import dtoAndValidation.dto.user.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;

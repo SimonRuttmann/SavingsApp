@@ -1,7 +1,5 @@
 package relationalDatabaseService.model;
 
-import service.userservice.businessmodel.account.InvitationDTO;
-import service.userservice.businessmodel.account.InvitationStatusDTO;
 
 import javax.persistence.*;
 
@@ -90,19 +88,4 @@ public class Invitation {
         this.invitationStatus = invitationStatus;
     }
 
-    public InvitationDTO toInvitationDto() {
-        return new InvitationDTO(
-                this.requestedGroup.getId(),
-                this.requestedGroup.getGroupName(),
-                this.getId().getDate()
-        );
-    }
-
-    public InvitationStatusDTO toInvitationStatusDto() {
-        return new InvitationStatusDTO(
-                this.invitationStatus,
-                this.requestedGroup.getGroupName(),
-                this.requestedGroup.getId()
-        );
-    }
 }

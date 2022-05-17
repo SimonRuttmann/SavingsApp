@@ -1,11 +1,11 @@
 package service.userservice.controller;
 
+import dtoAndValidation.dto.user.InvitationDTO;
+import dtoAndValidation.dto.user.InvitationStatusDTO;
+import dtoAndValidation.dto.user.InviteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.userservice.businessmodel.account.InvitationStatusDTO;
-import service.userservice.businessmodel.account.InvitationDTO;
-import service.userservice.businessmodel.account.InviteDTO;
-import service.userservice.service.IUserManagementService;
+import service.userservice.IUserManagementService;
 import service.userservice.service.imp.KeycloakService;
 
 import javax.servlet.http.HttpServletRequest;

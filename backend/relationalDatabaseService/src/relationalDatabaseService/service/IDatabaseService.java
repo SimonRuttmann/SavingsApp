@@ -1,10 +1,10 @@
 package relationalDatabaseService.service;
 
 import org.springframework.stereotype.Component;
-import service.userservice.persistence.entity.userdata.Group;
-import service.userservice.persistence.entity.userdata.Invitation;
-import service.userservice.persistence.entity.userdata.Person;
-import service.userservice.util.Pair;
+import relationalDatabaseService.model.Group;
+import relationalDatabaseService.model.Invitation;
+import relationalDatabaseService.model.Pair;
+import relationalDatabaseService.model.Person;
 
 
 import java.util.Collection;

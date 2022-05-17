@@ -1,10 +1,9 @@
 package documentDatabaseService.documentbased.model;
 
 
+import documentDatabaseService.documentbased.service.EmbeddedDocumentIdentifier;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
-import service.contentservice.persistence.EmbeddedDocumentIdentifier;
-import service.contentservice.validation.IValidatable;
 
 import java.util.Date;
 import java.util.Objects;
