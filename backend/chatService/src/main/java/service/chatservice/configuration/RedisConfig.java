@@ -9,6 +9,9 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import service.chatservice.model.ChatMessage;
 
+/**
+ * Basic redis configuration for websocketlistener to redis sub/pub and connection to the redis server itself
+ */
 @Configuration
 public class RedisConfig {
 
@@ -19,6 +22,9 @@ public class RedisConfig {
         return container;
     }
 
+    /**
+     * Is called automatically, connects to the redis server and defines a Serializer to transfer objects
+     */
     @Bean
     public RedisTemplate<String, ChatMessage> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, ChatMessage> redisTemplate = new RedisTemplate<>();

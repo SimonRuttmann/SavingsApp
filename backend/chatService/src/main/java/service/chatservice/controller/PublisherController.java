@@ -8,16 +8,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import service.chatservice.model.ChatMessagePayload;
-import service.chatservice.service.ChatService;
 import service.chatservice.service.RedisPublisher;
 
+/**
+ * Defines communication endpoints for publishing over api or websocket.
+ */
 @RestController
 public class PublisherController {
     @Autowired
     private RedisPublisher redisPublisher;
-
-    @Autowired
-    private ChatService chatService;
 
     @PostMapping(path = "chat/message",
             consumes = MediaType.APPLICATION_JSON_VALUE)
