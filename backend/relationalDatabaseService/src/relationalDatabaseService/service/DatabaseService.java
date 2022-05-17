@@ -4,11 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
-import service.userservice.persistence.entity.userdata.*;
-import service.userservice.persistence.repository.userdata.GroupRepository;
-import service.userservice.persistence.repository.userdata.InvitationRepository;
-import service.userservice.persistence.repository.userdata.PersonRepository;
-import service.userservice.util.Pair;
+import relationalDatabaseService.model.*;
 import javax.transaction.Transactional;
 import java.util.*;
 

@@ -1,6 +1,5 @@
 package relationalDatabaseService.model;
 
-import service.userservice.businessmodel.account.GroupDTO;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -87,13 +86,6 @@ public class Group {
     public Set<Invitation> getInvitations() {return invitations;}
     public void setInvitations(Set<Invitation> invitations) {this.invitations = invitations;}
 
-
-    public GroupDTO toGroupDTO(){
-        return new GroupDTO(
-                this.id,
-                this.groupName
-        );
-    }
 
     @Override
     public boolean equals(Object o) {
