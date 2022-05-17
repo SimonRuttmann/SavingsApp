@@ -8,11 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.contentservice.businessmodel.content.CategoryDTO;
 import service.contentservice.persistence.IGroupDocumentService;
-import service.contentservice.persistence.documentbased.Category;
-import service.contentservice.persistence.documentbased.GroupDocument;
+import documentDatabaseService.documentbased.model.Category;
+import documentDatabaseService.documentbased.model.GroupDocument;
 import service.contentservice.services.IDatabaseService;
 import service.contentservice.services.ValidateAndResolveDocumentService;
-import service.contentservice.util.DocObjectIdUtil;
+import documentDatabaseService.documentbased.model.DocObjectIdUtil;
 import service.contentservice.util.MapperUtil;
 import service.contentservice.validation.ValidatorFactory;
 
