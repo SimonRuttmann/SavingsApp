@@ -31,6 +31,6 @@ public interface IUserManagementService {
     InvitationStatusDTO declineInvitation(HttpServletRequest request, Long groupId);
 
 
-
+    Boolean checkIfPersonIsMember(UUID personId, Long groupId);
 }
 

@@ -165,6 +165,11 @@ public class UserManagementService implements IUserManagementService {
         return invitation.toInvitationStatusDto();
     }
 
+    @Override
+    public Boolean checkIfPersonIsMember(UUID personId, Long groupId) {
+        return databaseService.checkIfPersonIsMember(personId, groupId);
+    }
+
 
     private UUID getUserId(HttpServletRequest request){
         KeycloakAuthenticationToken principal = (KeycloakAuthenticationToken) request.getUserPrincipal();

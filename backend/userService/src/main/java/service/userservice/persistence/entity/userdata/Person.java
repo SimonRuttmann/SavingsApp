@@ -1,5 +1,6 @@
 package service.userservice.persistence.entity.userdata;
 
+import org.hibernate.annotations.Type;
 import service.userservice.businessmodel.account.PersonDTO;
 
 
@@ -27,6 +28,7 @@ public class Person {
             length = 255,
             columnDefinition="uuid"
     )
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
     @Column(

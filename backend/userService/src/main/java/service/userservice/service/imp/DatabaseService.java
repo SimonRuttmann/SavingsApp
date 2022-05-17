@@ -112,7 +112,9 @@ public class DatabaseService implements IDatabaseService {
         Group group = groupRepository.getById(groupId);
         if(person == null || group == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "this group and/or person do not exist.");
         // check if person is in the group
-        checkIfPersonIsMember(personId, groupId);
+        Boolean check = checkIfPersonIsMember(personId, groupId);
+        if(check == false) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "the user with id "+personId+" is not member of group with Id "+groupId);
+
 
 
         person.removeGroup(group);
@@ -277,12 +279,14 @@ public class DatabaseService implements IDatabaseService {
     }
 
     @Override
-    public void checkIfPersonIsMember(UUID personId, Long groupId) {
+    public Boolean checkIfPersonIsMember(UUID personId, Long groupId) {
+        boolean answer = false;
         var person = getPersonById(personId);
-        person.getGroups().forEach(group -> {
-            if(group.getId() == groupId) return;
-        });
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "the user with id "+personId+" is not member of group with Id "+groupId);
+        for (Group group:person.getGroups()
+             ) {
+            if(group.getId() == groupId)  answer = true;
+        }
+        return answer;
     }
 
 }

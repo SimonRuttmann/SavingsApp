@@ -5,7 +5,7 @@
   "resource": "userservice",
   "verify-token-audience": true,
   "credentials": {
-    "secret": "ggvzdTbqq44KcAOx55k2Tb0pkanXD8OH"
+    "secret": "vh0aUqwsYzyZOrEXZ2uUmVy4jmVYMX0B"
   },
   "confidential-port": 0,
   "policy-enforcer": {}
