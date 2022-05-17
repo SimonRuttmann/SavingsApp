@@ -1,6 +1,6 @@
 package dtoAndValidation.validation;
 
-import service.contentservice.businessmodel.content.processing.FilterInformationDTO;
+import dtoAndValidation.dto.processing.FilterInformationDTO;
 
 public class FilterInformationValidator implements IValidator<FilterInformationDTO> {
 

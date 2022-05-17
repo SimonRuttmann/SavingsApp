@@ -1,6 +1,6 @@
 package dtoAndValidation.dto.processing;
 
-import service.contentservice.businessmodel.content.SavingEntryDTO;
+import dtoAndValidation.dto.content.SavingEntryDTO;
 
 import java.util.ArrayList;
 import java.util.List;

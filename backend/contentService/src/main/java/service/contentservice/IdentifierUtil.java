@@ -1,8 +1,10 @@
-package documentDatabaseService.documentbased.model;
+package service.contentservice;
 
-import service.contentservice.persistence.relational.entity.Group;
-import service.contentservice.persistence.relational.entity.Person;
-import service.contentservice.services.IDatabaseService;
+
+import dtoAndValidation.util.Pair;
+import relationalDatabaseService.model.Group;
+import relationalDatabaseService.model.Person;
+import relationalDatabaseService.service.IDatabaseService;
 
 public class IdentifierUtil {
 

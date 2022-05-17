@@ -1,9 +1,9 @@
 package dtoAndValidation.validation;
 
+import documentDatabaseService.documentbased.service.GroupDocumentIdentifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import service.contentservice.persistence.GroupDocumentIdentifier;
-import service.contentservice.util.ValidatedValue;
+import relationalDatabaseService.service.IDatabaseService;
 
 @Service
 public interface IValidateAndResolveDocumentService<T> {

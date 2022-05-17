@@ -1,10 +1,16 @@
 package service.contentservice.controller.content;
 
+import documentDatabaseService.documentbased.service.IGroupDocumentService;
+import dtoAndValidation.dto.content.SavingEntryDTO;
+import dtoAndValidation.util.MapperUtil;
+import dtoAndValidation.validation.ValidateAndResolveDocumentService;
+import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import relationalDatabaseService.service.IDatabaseService;
 import service.contentservice.businessmodel.content.SavingEntryDTO;
 import service.contentservice.persistence.IGroupDocumentService;
 import documentDatabaseService.documentbased.model.GroupDocument;

@@ -1,11 +1,13 @@
 package dtoAndValidation.util;
 
-import service.contentservice.businessmodel.account.PersonDTO;
-import service.contentservice.businessmodel.content.CategoryDTO;
-import service.contentservice.businessmodel.content.SavingEntryDTO;
+import documentDatabaseService.documentbased.model.DocObjectIdUtil;
+import dtoAndValidation.dto.content.CategoryDTO;
+import dtoAndValidation.dto.content.SavingEntryDTO;
+import dtoAndValidation.dto.user.PersonDTO;
+import relationalDatabaseService.model.Person;
 import documentDatabaseService.documentbased.model.Category;
 import documentDatabaseService.documentbased.model.SavingEntry;
-import service.contentservice.persistence.relational.entity.Person;
+
 
 public class MapperUtil {
 

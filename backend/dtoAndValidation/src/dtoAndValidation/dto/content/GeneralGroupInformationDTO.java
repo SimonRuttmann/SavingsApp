@@ -1,6 +1,6 @@
 package dtoAndValidation.dto.content;
 
-import service.contentservice.businessmodel.account.PersonDTO;
+import dtoAndValidation.dto.user.PersonDTO;
 
 import java.util.List;
 
