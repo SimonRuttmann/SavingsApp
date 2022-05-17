@@ -22,6 +22,7 @@
         <module>inflationservice</module>
         <module>userservice</module>
         <module>chatService</module>
+        <module>inMemoryDatabaseService</module>
         <module>documentDatabaseService</module>
         <module>relationalDatabaseService</module>
         <module>dtoAndValidation</module>
