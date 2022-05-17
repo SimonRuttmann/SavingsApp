@@ -8,15 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.chatservice.service.ChatService;
 import service.chatservice.service.RedisDBService;
-import service.chatservice.service.RedisSubscriber;
 
+/**
+ * Defines endpoints for subscribing
+ */
 @Slf4j
 @RestController
 @RequestMapping(path = "/chat")
 public class SubscriberController {
-
-    @Autowired
-    private RedisSubscriber redisSubscriber;
 
     @Autowired
     private ChatService chatService;
