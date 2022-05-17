@@ -2,16 +2,9 @@ package service.userservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.userservice.businessmodel.account.*;
-import service.userservice.persistence.entity.userdata.Group;
-import service.userservice.persistence.entity.userdata.Invitation;
-import service.userservice.persistence.entity.userdata.Person;
 import service.userservice.service.IUserManagementService;
 import service.userservice.service.imp.KeycloakService;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @RestController

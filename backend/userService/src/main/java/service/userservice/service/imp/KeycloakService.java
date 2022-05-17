@@ -2,8 +2,8 @@ package service.userservice.service.imp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import service.userservice.persistence.entity.keycloak.KPerson;
-import service.userservice.persistence.repository.keycloak.KeycloakRepository;
+import service.userservice.persistence.KPerson;
+import service.userservice.persistence.KeycloakRepository;
 
 import java.util.Optional;
 
