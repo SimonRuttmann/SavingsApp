@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import service.userservice.businessmodel.account.InvitationStatusDTO;
 import service.userservice.businessmodel.account.InvitationDTO;
 import service.userservice.businessmodel.account.InviteDTO;
-import service.userservice.persistence.entity.userdata.Invitation;
-import service.userservice.persistence.entity.userdata.InvitationStatus;
 import service.userservice.service.IUserManagementService;
 import service.userservice.service.imp.KeycloakService;
 
