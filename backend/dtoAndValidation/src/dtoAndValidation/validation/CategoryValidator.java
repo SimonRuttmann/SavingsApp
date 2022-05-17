@@ -1,6 +1,6 @@
 package dtoAndValidation.validation;
 
-import service.contentservice.businessmodel.content.CategoryDTO;
+import dtoAndValidation.dto.content.CategoryDTO;
 
 public class CategoryValidator implements IValidator<CategoryDTO>{
 

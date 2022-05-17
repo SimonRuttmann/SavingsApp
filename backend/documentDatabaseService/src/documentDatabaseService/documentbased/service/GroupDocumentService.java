@@ -23,7 +23,7 @@ public class GroupDocumentService implements IGroupDocumentService{
         this.mongo = mongo;
     }
 
-    private Query getDocumentQuery(GroupDocumentIdentifier identifier){
+    private Query getDocumentQuery(Long identifier){
 
         String isUserGroup = "isUserGroup";
         String id = "id";
@@ -31,20 +31,14 @@ public class GroupDocumentService implements IGroupDocumentService{
         Query query = new Query();
         query.addCriteria(  Criteria.
                             where(id).
-                            is(identifier.getGroupId()));
-
-        query.addCriteria(  Criteria.
-                            where(isUserGroup).
-                            is(identifier.isUserGroup()));
+                            is(identifier));
 
         return query;
     }
 
-    private GroupDocument getGroupDocument(Long groupId, boolean isUserDocument){
-        return getGroupDocument(new GroupDocumentIdentifier(groupId, isUserDocument));
-    }
+
     @Override
-    public GroupDocument getGroupDocument(GroupDocumentIdentifier identifier) {
+    public GroupDocument getGroupDocument(Long identifier) {
 
         return mongo.findOne(getDocumentQuery(identifier),
                              GroupDocument.class);
@@ -53,7 +47,7 @@ public class GroupDocumentService implements IGroupDocumentService{
     @Override
     public GroupDocument createDocument(GroupDocument groupDocument) {
 
-        var document = getGroupDocument(groupDocument.groupId, groupDocument.isUserGroup);
+        var document = getGroupDocument(groupDocument.groupId);
         if(document != null) return null;
 
         groupDocument.setIdIfNotExists();
@@ -64,7 +58,7 @@ public class GroupDocumentService implements IGroupDocumentService{
     }
 
     @Override
-    public GroupDocument updateGroupDocument(GroupDocumentIdentifier identifier, GroupDocument groupDocument) {
+    public GroupDocument updateGroupDocument(Long identifier, GroupDocument groupDocument) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return null;
@@ -73,15 +67,15 @@ public class GroupDocumentService implements IGroupDocumentService{
     }
 
     @Override
-    public boolean deleteDocument(GroupDocumentIdentifier identifier) {
+    public boolean deleteDocument(Long identifier) {
 
-        return mongo.remove(getDocumentQuery(identifier),
-                            GroupDocument.class).
-                            wasAcknowledged();
+         mongo.remove(getDocumentQuery(identifier),
+                            GroupDocument.class);
+        return true;
     }
 
     @Override
-    public Category insertCategory(GroupDocumentIdentifier identifier, Category category) {
+    public Category insertCategory(Long identifier, Category category) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return null;
@@ -95,7 +89,7 @@ public class GroupDocumentService implements IGroupDocumentService{
     }
 
     @Override
-    public Category getCategory(GroupDocumentIdentifier identifier, ObjectId categoryId) {
+    public Category getCategory(Long identifier, ObjectId categoryId) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return null;
@@ -111,7 +105,7 @@ public class GroupDocumentService implements IGroupDocumentService{
     }
 
     @Override
-    public Category updateCategory(GroupDocumentIdentifier identifier, Category category) {
+    public Category updateCategory(Long identifier, Category category) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return null;
@@ -132,7 +126,7 @@ public class GroupDocumentService implements IGroupDocumentService{
     }
 
     @Override
-    public void deleteCategory(GroupDocumentIdentifier identifier, ObjectId categoryId) {
+    public void deleteCategory(Long identifier, ObjectId categoryId) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return;
@@ -150,7 +144,7 @@ public class GroupDocumentService implements IGroupDocumentService{
     }
 
     @Override
-    public SavingEntry addSavingEntry(GroupDocumentIdentifier identifier, SavingEntry savingEntry) {
+    public SavingEntry addSavingEntry(Long identifier, SavingEntry savingEntry) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return null;
@@ -168,7 +162,7 @@ public class GroupDocumentService implements IGroupDocumentService{
 
 
     @Override
-    public SavingEntry getSavingEntry(GroupDocumentIdentifier identifier, ObjectId savingEntryId) {
+    public SavingEntry getSavingEntry(Long identifier, ObjectId savingEntryId) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return null;
@@ -184,7 +178,7 @@ public class GroupDocumentService implements IGroupDocumentService{
     }
 
     @Override
-    public SavingEntry updateSavingEntry(GroupDocumentIdentifier identifier, SavingEntry savingEntry) {
+    public SavingEntry updateSavingEntry(Long identifier, SavingEntry savingEntry) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return null;
@@ -213,7 +207,7 @@ public class GroupDocumentService implements IGroupDocumentService{
                 collect(Collectors.toList());
     }
     @Override
-    public void deleteSavingEntry(GroupDocumentIdentifier identifier, ObjectId savingEntryId) {
+    public void deleteSavingEntry(Long identifier, ObjectId savingEntryId) {
 
         var document = getGroupDocument(identifier);
         if(document == null) return;

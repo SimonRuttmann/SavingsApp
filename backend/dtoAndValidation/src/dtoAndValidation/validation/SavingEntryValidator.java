@@ -1,7 +1,7 @@
 package dtoAndValidation.validation;
 
-import service.contentservice.businessmodel.content.CategoryDTO;
-import service.contentservice.businessmodel.content.SavingEntryDTO;
+import dtoAndValidation.dto.content.CategoryDTO;
+import dtoAndValidation.dto.content.SavingEntryDTO;
 
 public class SavingEntryValidator implements IValidator<SavingEntryDTO> {
 

@@ -5,6 +5,7 @@ import dtoAndValidation.validation.IValidatable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class FilterInformationDTO implements IValidatable {
 
@@ -16,7 +17,7 @@ public class FilterInformationDTO implements IValidatable {
 
     private Date endDate;
 
-    private List<Long> personIds;
+    private List<UUID> personIds;
 
     private List<String> categoryIds;
 
@@ -61,11 +62,11 @@ public class FilterInformationDTO implements IValidatable {
         this.endDate = endDate;
     }
 
-    public List<Long> getPersonIds() {
+    public List<UUID> getPersonIds() {
         return personIds;
     }
 
-    public void setPersonIds(List<Long> personIds) {
+    public void setPersonIds(List<UUID> personIds) {
         this.personIds = personIds;
     }
 
@@ -81,7 +82,7 @@ public class FilterInformationDTO implements IValidatable {
     }
 
     public FilterInformationDTO(SortParameters sortParameter, Date startDate, Date endDate,
-                                List<Long> personIds, List<String> categoryIds, Long groupId) {
+                                List<UUID> personIds, List<String> categoryIds, Long groupId) {
         this.sortParameter = sortParameter;
         this.startDate = startDate;
         this.endDate = endDate;
