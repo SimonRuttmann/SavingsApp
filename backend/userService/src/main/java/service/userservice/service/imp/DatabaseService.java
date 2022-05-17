@@ -10,7 +10,7 @@ import service.userservice.persistence.repository.userdata.InvitationRepository;
 import service.userservice.persistence.repository.userdata.PersonRepository;
 import service.userservice.service.IDatabaseService;
 import service.userservice.util.Pair;
-
+import mo
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -176,10 +176,9 @@ public class DatabaseService implements IDatabaseService {
         if(invitations.isEmpty()) return null;
         Invitation invitation = invitations.get(0);
 
-        //invitation.setInvitationStatus(InvitationStatus.DECLINED);
-        //invitationRepository.saveAndFlush(invitation);
-        invitationRepository.delete(invitation);
-        invitationRepository.detach(invitation);
+        invitation.setInvitationStatus(InvitationStatus.DECLINED);
+        invitationRepository.saveAndFlush(invitation);
+
         return invitation;
     }
 
@@ -194,12 +193,15 @@ public class DatabaseService implements IDatabaseService {
         var invitations = invitationRepository.findByInvitedPersonAndRequestedGroup(person, group);
 
         if(invitations.isEmpty()) return null;
+        invitations.forEach(invitation -> {
+            invitation.setInvitationStatus(InvitationStatus.ACCEPTED);
+            invitationRepository.saveAndFlush(invitation);
+
+            invitationRepository.detach(invitation);
+        });
         Invitation invitation = invitations.get(0);
 
-        invitation.setInvitationStatus(InvitationStatus.ACCEPTED);
-        invitationRepository.saveAndFlush(invitation);
 
-        invitationRepository.detach(invitation);
         return invitation;
     }
 
