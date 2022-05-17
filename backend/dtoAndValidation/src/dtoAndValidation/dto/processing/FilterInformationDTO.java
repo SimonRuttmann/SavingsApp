@@ -1,6 +1,7 @@
 package dtoAndValidation.dto.processing;
 
-import service.contentservice.validation.IValidatable;
+
+import dtoAndValidation.validation.IValidatable;
 
 import java.util.Date;
 import java.util.List;
