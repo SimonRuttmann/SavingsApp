@@ -6,6 +6,6 @@ module relationalDatabaseService {
     requires java.transaction;
     requires spring.data.jpa;
     requires spring.web;
-    exports relationalDatabaseService;
     exports relationalDatabaseService.model;
+    exports relationalDatabaseService.service;
 }

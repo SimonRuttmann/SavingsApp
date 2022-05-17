@@ -12,15 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import relationalDatabaseService.service.IDatabaseService;
-import service.contentservice.businessmodel.content.CategoryDTO;
-import service.contentservice.persistence.IGroupDocumentService;
 import documentDatabaseService.documentbased.model.Category;
 import documentDatabaseService.documentbased.model.GroupDocument;
-import service.contentservice.services.IDatabaseService;
-import service.contentservice.services.ValidateAndResolveDocumentService;
 import documentDatabaseService.documentbased.model.DocObjectIdUtil;
-import service.contentservice.util.MapperUtil;
-import service.contentservice.validation.ValidatorFactory;
 
 import java.util.ArrayList;
 import java.util.List;

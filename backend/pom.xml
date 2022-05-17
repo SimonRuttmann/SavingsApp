@@ -24,6 +24,7 @@
         <module>chatService</module>
         <module>documentDatabaseService</module>
         <module>relationalDatabaseService</module>
+        <module>dtoAndValidation</module>
     </modules>
 
     <dependencies>
