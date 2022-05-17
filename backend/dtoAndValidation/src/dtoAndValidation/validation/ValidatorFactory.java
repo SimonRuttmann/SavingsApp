@@ -1,10 +1,10 @@
 package dtoAndValidation.validation;
 
-import service.contentservice.businessmodel.account.GroupDTO;
-import service.contentservice.businessmodel.account.PersonDTO;
-import service.contentservice.businessmodel.content.CategoryDTO;
-import service.contentservice.businessmodel.content.SavingEntryDTO;
-import service.contentservice.businessmodel.content.processing.FilterInformationDTO;
+import dtoAndValidation.dto.content.CategoryDTO;
+import dtoAndValidation.dto.content.SavingEntryDTO;
+import dtoAndValidation.dto.processing.FilterInformationDTO;
+import dtoAndValidation.dto.user.GroupDTO;
+import dtoAndValidation.dto.user.PersonDTO;
 
 import java.util.Map;
 
