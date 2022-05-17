@@ -1,0 +1,3 @@
+module dtoAndValidation {
+    exports dtoAndValidation;
+}
