@@ -69,5 +69,5 @@ public interface IDatabaseService {
      void removeGroup(Long id);
 
      Invitation saveInvitation(Invitation invitation);
-     void checkIfPersonIsMember(UUID personId, Long groupId);
+     Boolean checkIfPersonIsMember(UUID personId, Long groupId);
 }
