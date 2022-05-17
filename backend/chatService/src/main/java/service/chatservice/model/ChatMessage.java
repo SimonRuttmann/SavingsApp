@@ -9,12 +9,11 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import java.io.Serial;
 import java.io.Serializable;
 
-
-@Getter
-@NoArgsConstructor
 /**
  * Data persistence object generated from ChatMessagePayload objects
  */
+@Getter
+@NoArgsConstructor
 public class ChatMessage implements Serializable {
     @Serial
     private static final long serialVersionUID = 34789214329287934L;
