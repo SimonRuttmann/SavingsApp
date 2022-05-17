@@ -9,24 +9,24 @@ import documentDatabaseService.documentbased.model.SavingEntry;
 @Service
 public interface IGroupDocumentService {
 
-    GroupDocument getGroupDocument(GroupDocumentIdentifier identifier);
+    GroupDocument getGroupDocument(Long identifier);
     GroupDocument createDocument(GroupDocument groupDocument);
 
-    GroupDocument updateGroupDocument(GroupDocumentIdentifier identifier, GroupDocument groupDocument);
-    boolean deleteDocument(GroupDocumentIdentifier identifier);
+    GroupDocument updateGroupDocument(Long identifier, GroupDocument groupDocument);
+    boolean deleteDocument(Long identifier);
 
 
-    Category insertCategory(GroupDocumentIdentifier identifier, Category category);
+    Category insertCategory(Long identifier, Category category);
 
-    Category getCategory(GroupDocumentIdentifier identifier, ObjectId categoryId);
-    Category updateCategory(GroupDocumentIdentifier identifier, Category category);
-    void deleteCategory(GroupDocumentIdentifier identifier, ObjectId categoryId);
+    Category getCategory(Long identifier, ObjectId categoryId);
+    Category updateCategory(Long identifier, Category category);
+    void deleteCategory(Long identifier, ObjectId categoryId);
 
 
-    SavingEntry addSavingEntry(GroupDocumentIdentifier identifier, SavingEntry savingEntry);
+    SavingEntry addSavingEntry(Long identifier, SavingEntry savingEntry);
 
-    SavingEntry getSavingEntry(GroupDocumentIdentifier identifier, ObjectId savingEntryId);
-    SavingEntry updateSavingEntry(GroupDocumentIdentifier identifier, SavingEntry savingEntry);
-    void deleteSavingEntry(GroupDocumentIdentifier identifier, ObjectId savingEntryId);
+    SavingEntry getSavingEntry(Long identifier, ObjectId savingEntryId);
+    SavingEntry updateSavingEntry(Long identifier, SavingEntry savingEntry);
+    void deleteSavingEntry(Long identifier, ObjectId savingEntryId);
 
 }

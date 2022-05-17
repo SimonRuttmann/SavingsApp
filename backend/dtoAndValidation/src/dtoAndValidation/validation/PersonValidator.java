@@ -1,7 +1,6 @@
 package dtoAndValidation.validation;
 
-import service.contentservice.businessmodel.account.PersonDTO;
-import service.contentservice.persistence.relational.entity.Person;
+import dtoAndValidation.dto.user.PersonDTO;
 
 public class PersonValidator implements IValidator<PersonDTO>{
     @Override

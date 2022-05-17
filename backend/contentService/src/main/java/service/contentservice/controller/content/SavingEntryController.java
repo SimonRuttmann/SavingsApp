@@ -3,24 +3,15 @@ package service.contentservice.controller.content;
 import documentDatabaseService.documentbased.service.IGroupDocumentService;
 import dtoAndValidation.dto.content.SavingEntryDTO;
 import dtoAndValidation.util.MapperUtil;
-import dtoAndValidation.validation.ValidateAndResolveDocumentService;
 import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import relationalDatabaseService.service.IDatabaseService;
-import service.contentservice.businessmodel.content.SavingEntryDTO;
-import service.contentservice.persistence.IGroupDocumentService;
 import documentDatabaseService.documentbased.model.GroupDocument;
 import documentDatabaseService.documentbased.model.SavingEntry;
-import service.contentservice.services.IDatabaseService;
-import service.contentservice.services.ValidateAndResolveDocumentService;
 import documentDatabaseService.documentbased.model.DocObjectIdUtil;
-import service.contentservice.util.MapperUtil;
-import service.contentservice.validation.ValidatorFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,12 +23,10 @@ public class SavingEntryController {
 
     private final IGroupDocumentService groupDocumentService;
 
-    private final IDatabaseService databaseService;
 
     @Autowired
-    public SavingEntryController(IGroupDocumentService groupDocumentService, IDatabaseService databaseService) {
+    public SavingEntryController(IGroupDocumentService groupDocumentService) {
         this.groupDocumentService = groupDocumentService;
-        this.databaseService = databaseService;
     }
 
     /**
@@ -52,14 +41,12 @@ public class SavingEntryController {
             @PathVariable(value="savingEntryId") String entryId){
 
         //Validate input
-        var identifier = new ValidateAndResolveDocumentService<SavingEntryDTO>().validateAndResolveIdentifier(
-                groupId == null || entryId == null || entryId.isBlank(), groupId, databaseService);
-
-        if(identifier.isInvalid()) return identifier.getException();
+        if(groupId == null || entryId == null || entryId.isBlank())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         //Get savingEntry
         SavingEntry savingEntry = groupDocumentService.getSavingEntry(
-                identifier.getValue(), DocObjectIdUtil.toObjectId(entryId));
+                groupId, DocObjectIdUtil.toObjectId(entryId));
 
         if(savingEntry == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -83,14 +70,11 @@ public class SavingEntryController {
             @PathVariable(value="groupId") Long groupId){
 
         //Validate input
-        var identifier = new ValidateAndResolveDocumentService<List<SavingEntryDTO>>().validateAndResolveIdentifier(
-                groupId == null, groupId, databaseService);
-
-        if(identifier.isInvalid()) return identifier.getException();
+        if(groupId == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         //Get saving entry
-        GroupDocument groupDocument = groupDocumentService.getGroupDocument(
-                identifier.getValue());
+        GroupDocument groupDocument = groupDocumentService.getGroupDocument(groupId);
 
         if(groupDocument == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -124,14 +108,12 @@ public class SavingEntryController {
         //Validate input
         var validator = ValidatorFactory.getInstance().getValidator(SavingEntryDTO.class);
 
-        var identifier = new ValidateAndResolveDocumentService<SavingEntryDTO>().validateAndResolveIdentifier(
-                !validator.validate(savingEntry, true) || groupId == null, groupId, databaseService);
-
-        if(identifier.isInvalid()) return identifier.getException();
+        if(!validator.validate(savingEntry, true) || groupId == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         //Update SavingEntry
         SavingEntry updatedSavingEntry = groupDocumentService.updateSavingEntry(
-                identifier.getValue(), MapperUtil.DTOToSavingEntry(savingEntry));
+                groupId, MapperUtil.DTOToSavingEntry(savingEntry));
 
         if(updatedSavingEntry == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -161,16 +143,15 @@ public class SavingEntryController {
 
         //Validate input
         var validator = ValidatorFactory.getInstance().getValidator(SavingEntryDTO.class);
+        if(!validator.validate(savingEntry, false) || groupId == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        var identifier = new ValidateAndResolveDocumentService<SavingEntryDTO>().validateAndResolveIdentifier(
-                !validator.validate(savingEntry, false) || groupId == null, groupId, databaseService);
-
-        if(identifier.isInvalid()) return identifier.getException();
 
         //Insert SavingEntry
         SavingEntry insertSavingEntry = groupDocumentService.addSavingEntry(
-                identifier.getValue(), MapperUtil.DTOToSavingEntry(savingEntry));
+                groupId, MapperUtil.DTOToSavingEntry(savingEntry));
 
+        //TODO
         if(insertSavingEntry == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -195,14 +176,13 @@ public class SavingEntryController {
             @PathVariable(value="savingEntryId") String savingEntryId){
 
         //Validate input
-        var identifier = new ValidateAndResolveDocumentService<SavingEntryDTO>().validateAndResolveIdentifier(
-                groupId == null || savingEntryId == null || savingEntryId.isBlank(), groupId, databaseService);
+        if(groupId == null || savingEntryId == null || savingEntryId.isBlank())
+            return new ResponseEntity<SavingEntryDTO>(HttpStatus.BAD_REQUEST);
 
-        if(identifier.isInvalid()) return identifier.getException();
 
         //Delete SavingEntry
         groupDocumentService.deleteSavingEntry(
-                identifier.getValue(), DocObjectIdUtil.toObjectId(savingEntryId));
+                groupId, DocObjectIdUtil.toObjectId(savingEntryId));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

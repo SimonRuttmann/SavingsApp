@@ -1,6 +1,7 @@
 package dtoAndValidation.validation;
 
-import service.contentservice.businessmodel.account.GroupDTO;
+
+import dtoAndValidation.dto.user.GroupDTO;
 
 public class GroupValidator implements IValidator<GroupDTO>{
     @Override

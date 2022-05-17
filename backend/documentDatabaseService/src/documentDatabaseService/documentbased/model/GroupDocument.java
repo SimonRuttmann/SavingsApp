@@ -19,11 +19,6 @@ public class GroupDocument extends EmbeddedDocumentIdentifier {
     public Long groupId;
 
 
-    @Indexed
-    @Field(targetType = FieldType.BOOLEAN)
-    public boolean isUserGroup;
-
-
     @Field(targetType = FieldType.ARRAY)
     public List<SavingEntry> savingEntries = new ArrayList<>();
 

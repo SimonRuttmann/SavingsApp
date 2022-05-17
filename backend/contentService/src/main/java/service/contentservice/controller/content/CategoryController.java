@@ -4,14 +4,12 @@ package service.contentservice.controller.content;
 import documentDatabaseService.documentbased.service.IGroupDocumentService;
 import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.util.MapperUtil;
-import dtoAndValidation.validation.ValidateAndResolveDocumentService;
 import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import relationalDatabaseService.service.IDatabaseService;
 import documentDatabaseService.documentbased.model.Category;
 import documentDatabaseService.documentbased.model.GroupDocument;
 import documentDatabaseService.documentbased.model.DocObjectIdUtil;
@@ -25,12 +23,9 @@ public class CategoryController {
 
     private final IGroupDocumentService groupDocumentService;
 
-    private final IDatabaseService databaseService;
-
     @Autowired
-    public CategoryController(IGroupDocumentService groupDocumentService, IDatabaseService databaseService) {
+    public CategoryController(IGroupDocumentService groupDocumentService) {
         this.groupDocumentService = groupDocumentService;
-        this.databaseService = databaseService;
     }
 
 
@@ -46,14 +41,12 @@ public class CategoryController {
             @PathVariable(value="categoryId") String categoryId){
 
         //Validate input
-        var identifier = new ValidateAndResolveDocumentService<CategoryDTO>().validateAndResolveIdentifier(
-                groupId == null || categoryId == null || categoryId.isBlank(), groupId, databaseService);
-
-        if(identifier.isInvalid()) return identifier.getException();
+        if(groupId == null || categoryId == null || categoryId.isBlank())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         //Get category
         Category category = groupDocumentService.getCategory(
-                identifier.getValue(),
+                groupId,
                 DocObjectIdUtil.toObjectId(categoryId));
 
         if(category == null)
@@ -79,14 +72,12 @@ public class CategoryController {
             @PathVariable(value="groupId") Long groupId){
 
         //Validate input
-        var identifier = new ValidateAndResolveDocumentService<List<CategoryDTO>>().validateAndResolveIdentifier(
-                groupId == null, groupId, databaseService);
+        if(groupId == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        if(identifier.isInvalid()) return identifier.getException();
 
         //Get categories
-        GroupDocument groupDocument = groupDocumentService.getGroupDocument(
-               identifier.getValue());
+        GroupDocument groupDocument = groupDocumentService.getGroupDocument(groupId);
 
         if(groupDocument == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -119,14 +110,12 @@ public class CategoryController {
         //Validate input
         var validator = ValidatorFactory.getInstance().getValidator(CategoryDTO.class);
 
-        var identifier = new ValidateAndResolveDocumentService<CategoryDTO>().validateAndResolveIdentifier(
-                !validator.validate(category, true) || groupId == null, groupId, databaseService);
-
-        if(identifier.isInvalid()) return identifier.getException();
+        if(!validator.validate(category, true) || groupId == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         //Update category
         Category updatedCategory = groupDocumentService.updateCategory(
-                 identifier.getValue(), MapperUtil.DTOToCategory(category));
+                groupId, MapperUtil.DTOToCategory(category));
 
         if(updatedCategory == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -157,14 +146,12 @@ public class CategoryController {
         //Validate input
         var validator = ValidatorFactory.getInstance().getValidator(CategoryDTO.class);
 
-        var identifier = new ValidateAndResolveDocumentService<CategoryDTO>().validateAndResolveIdentifier(
-                !validator.validate(category, true) || groupId == null, groupId, databaseService);
-
-        if(identifier.isInvalid()) return identifier.getException();
+        if(!validator.validate(category, true) || groupId == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         //Insert category
         Category insertCategory = groupDocumentService.insertCategory(
-                identifier.getValue(), MapperUtil.DTOToCategory(category));
+                groupId, MapperUtil.DTOToCategory(category));
 
         if(insertCategory == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -190,14 +177,12 @@ public class CategoryController {
             @PathVariable(value="categoryId") String categoryId){
 
         //Validate input
-        var identifier = new ValidateAndResolveDocumentService<CategoryDTO>().validateAndResolveIdentifier(
-                groupId == null || categoryId == null || categoryId.isBlank(), groupId, databaseService);
-
-        if(identifier.isInvalid()) return identifier.getException();
+        if(groupId == null || categoryId == null || categoryId.isBlank())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         //Delete category
         groupDocumentService.deleteCategory(
-                identifier.getValue(), DocObjectIdUtil.toObjectId(categoryId));
+                groupId, DocObjectIdUtil.toObjectId(categoryId));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

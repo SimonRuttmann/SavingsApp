@@ -4,7 +4,6 @@ import documentDatabaseService.documentbased.service.IGroupDocumentService;
 import dtoAndValidation.dto.content.GeneralGroupInformationDTO;
 import dtoAndValidation.dto.processing.*;
 import dtoAndValidation.util.MapperUtil;
-import dtoAndValidation.validation.ValidateAndResolveDocumentService;
 import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,19 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import relationalDatabaseService.model.Group;
 import relationalDatabaseService.model.Person;
 import relationalDatabaseService.service.IDatabaseService;
-import service.contentservice.businessmodel.content.GeneralGroupInformationDTO;
-import service.contentservice.businessmodel.content.processing.*;
-import service.contentservice.persistence.IGroupDocumentService;
 import documentDatabaseService.documentbased.model.Category;
 import documentDatabaseService.documentbased.model.GroupDocument;
 import documentDatabaseService.documentbased.model.SavingEntry;
-import service.contentservice.persistence.relational.entity.Group;
-import service.contentservice.persistence.relational.entity.Person;
-import service.contentservice.services.IDatabaseService;
-import service.contentservice.services.ValidateAndResolveDocumentService;
 import documentDatabaseService.documentbased.model.DocObjectIdUtil;
-import service.contentservice.util.MapperUtil;
-import service.contentservice.validation.ValidatorFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -52,30 +42,20 @@ public class ProcessingController {
             @PathVariable Long groupId){
 
         //Validate input
-        var identifier = new ValidateAndResolveDocumentService<GeneralGroupInformationDTO>().
-                validateAndResolveIdentifier(groupId == null, groupId, databaseService);
-
-        if(identifier.isInvalid()) return identifier.getException();
+        if(groupId == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         var groupInfo = new GeneralGroupInformationDTO();
 
         //Add all users of the group and the group name
-        if(!identifier.getValue().isUserGroup()) {
+        Collection<Person> persons = databaseService.getPersonsOfGroupId(groupId);
+        persons.forEach(person -> groupInfo.addPersonToGroupInfo(MapperUtil.PersonToDTO(person)));
 
-            Collection<Person> persons = databaseService.getPersonsOfGroupId(groupId);
-            persons.forEach(person -> groupInfo.addPersonToGroupInfo(MapperUtil.PersonToDTO(person)));
+        Group group = databaseService.getGroupById(groupId);
+        if (group == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-            Group group = databaseService.getGroupById(groupId);
-            if (group == null)
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-            groupInfo.setGroupName(group.getGroupName());
-        }
-        //The "group" is a user group, meaning there is no name and no other users
-        else{
-            var person = databaseService.getPersonById(groupId);
-            groupInfo.addPersonToGroupInfo(MapperUtil.PersonToDTO(person));
-        }
+        groupInfo.setGroupName(group.getGroupName());
 
         return ResponseEntity.status(HttpStatus.OK).body(groupInfo);
     }
@@ -100,16 +80,15 @@ public class ProcessingController {
 
         var validator = ValidatorFactory.getInstance().getValidator(FilterInformationDTO.class);
 
-        //Validate input
-        var identifier = new ValidateAndResolveDocumentService<ProcessResultContainerDTO>().validateAndResolveIdentifier(
-                !validator.validate(filterInformation, false) || groupId == null, groupId, databaseService);
+        if(!validator.validate(filterInformation, false) || groupId == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        if(identifier.isInvalid()) return identifier.getException();
+        //Validate input
 
 
         //Resolve categories
         Set<Category> categories;
-        GroupDocument groupDocument = groupDocumentService.getGroupDocument(identifier.getValue());
+        GroupDocument groupDocument = groupDocumentService.getGroupDocument(groupId);
 
         if(groupDocument == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -125,21 +104,17 @@ public class ProcessingController {
 
         //Resolve persons
         Set<Person> allowedPersons;
-        if(!identifier.getValue().isUserGroup()) {
 
-            Collection<Person> persons = databaseService.getPersonsOfGroupId(identifier.getValue().getGroupId());
 
-            allowedPersons =
+        Collection<Person> persons = databaseService.getPersonsOfGroupId(groupId);
+
+        allowedPersons =
                     persons.
                     stream().
                     filter(p ->
                             filterInformation.getPersonIds().contains(p.getId())).
                     collect(Collectors.toSet());
-        }
-        else{
-            allowedPersons = new HashSet<>();
-            allowedPersons.add(databaseService.getPersonById(identifier.getValue().getGroupId()));
-        }
+
 
         Set<String> personNames = allowedPersons.stream().map(Person::getUsername).collect(Collectors.toSet());
 
