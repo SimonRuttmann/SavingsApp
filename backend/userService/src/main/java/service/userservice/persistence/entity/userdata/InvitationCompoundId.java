@@ -1,5 +1,7 @@
 package service.userservice.persistence.entity.userdata;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
@@ -11,7 +13,7 @@ import java.util.UUID;
 
 @Embeddable
 public class InvitationCompoundId implements Serializable {
-
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID personCompoundId;
 
     private Long groupCompoundId;
