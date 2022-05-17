@@ -4,6 +4,8 @@ import documentDatabaseService.documentbased.service.IGroupDocumentService;
 import dtoAndValidation.dto.content.SavingEntryDTO;
 import dtoAndValidation.util.MapperUtil;
 import dtoAndValidation.validation.ValidatorFactory;
+import inMemoryDatabaseService.model.AtomicIntegerModel;
+import inMemoryDatabaseService.service.IRedisDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,10 +25,11 @@ public class SavingEntryController {
 
     private final IGroupDocumentService groupDocumentService;
 
-
+    private final IRedisDatabaseService redisDatabaseService;
     @Autowired
-    public SavingEntryController(IGroupDocumentService groupDocumentService) {
+    public SavingEntryController(IGroupDocumentService groupDocumentService, IRedisDatabaseService redisDatabaseService) {
         this.groupDocumentService = groupDocumentService;
+        this.redisDatabaseService = redisDatabaseService;
     }
 
     /**
@@ -151,9 +154,10 @@ public class SavingEntryController {
         SavingEntry insertSavingEntry = groupDocumentService.addSavingEntry(
                 groupId, MapperUtil.DTOToSavingEntry(savingEntry));
 
-        //TODO
         if(insertSavingEntry == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        redisDatabaseService.incrementValue(AtomicIntegerModel.REGISTEREDITEMS);
 
         //Return dto
         SavingEntryDTO SavingEntryDTO = MapperUtil.SavingEntryToDTO(insertSavingEntry);
