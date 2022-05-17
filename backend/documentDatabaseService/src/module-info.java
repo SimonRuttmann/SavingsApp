@@ -1,3 +1,4 @@
 module documentDatabaseService {
-    exports documentDatabaseService;
+    exports documentDatabaseService.documentbased.service;
+    exports documentDatabaseService.documentbased.model;
 }
