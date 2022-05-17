@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import relationalDatabaseService.service.IDatabaseService;
 import service.contentservice.businessmodel.content.CategoryDTO;
 import service.contentservice.persistence.IGroupDocumentService;
 import documentDatabaseService.documentbased.model.Category;
