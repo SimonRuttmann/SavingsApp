@@ -4,10 +4,12 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.support.atomic.RedisAtomicInteger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 //Service returns nothing in string if an error occured
 @Service
@@ -44,5 +46,18 @@ public class AdvertisementServiceService {
         string = string.replace("]","");
 
         return string;
+    }
+
+
+    RedisAtomicInteger atomicSendMessages = new RedisAtomicInteger("sendMessages", template.getConnectionFactory(),0);
+    RedisAtomicInteger atomicRegistItems = new RedisAtomicInteger("registItems", template.getConnectionFactory(),0);
+    RedisAtomicInteger atomicCountUser = new RedisAtomicInteger("countUser", template.getConnectionFactory(),0);
+
+    private void incrementValue(AtomicIntegerModel key){
+        switch(key){
+            case AtomicIntegerModel. -> atomicSendMessages.incrementAndGet();
+            case "registItems" -> atomicRegistItems.incrementAndGet();
+            case "countUser" -> atomicCountUser.incrementAndGet();
+        }
     }
 }
