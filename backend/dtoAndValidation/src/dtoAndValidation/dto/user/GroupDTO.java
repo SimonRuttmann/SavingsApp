@@ -2,7 +2,9 @@ package dtoAndValidation.dto.user;
 
 
 
-import service.userservice.validation.IValidatable;
+
+
+import dtoAndValidation.validation.IValidatable;
 
 import java.util.Objects;
 
