@@ -10,7 +10,6 @@ import service.userservice.persistence.repository.userdata.InvitationRepository;
 import service.userservice.persistence.repository.userdata.PersonRepository;
 import service.userservice.service.IDatabaseService;
 import service.userservice.util.Pair;
-import mo
 import javax.transaction.Transactional;
 import java.util.*;
 
