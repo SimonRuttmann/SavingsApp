@@ -248,4 +248,15 @@ public class DatabaseService implements IDatabaseService {
         return value;
     }
 
+    @Override
+    public Boolean checkIfPersonIsMember(UUID personId, Long groupId) {
+        boolean answer = false;
+        var person = getPersonById(personId);
+        for (Group group:person.getGroups()
+        ) {
+            if(group.getId() == groupId)  answer = true;
+        }
+        return answer;
+    }
+
 }
