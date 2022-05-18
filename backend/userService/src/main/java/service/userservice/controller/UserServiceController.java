@@ -33,9 +33,10 @@ public class UserServiceController {
         return keycloakService.getPersonById(userId);
     }
 
-    @GetMapping("check/user/{personId}/group/{groupId}")
-    public Boolean checkIfPersonIsMember(@PathVariable UUID personId, @PathVariable Long groupId){
-        return userManagementService.checkIfPersonIsMember(personId,groupId);
+    @GetMapping("check/group/{groupId}")
+    public Boolean checkIfPersonIsMember( @PathVariable Long groupId){
+
+        return true;
     }
 
 

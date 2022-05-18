@@ -8,6 +8,7 @@ import service.contentservice.persistence.relational.entity.Person;
 import service.contentservice.util.Pair;
 
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  * This class defines database calls to the tables Person and Groups
@@ -64,4 +65,5 @@ public interface IDatabaseService {
      void removeGroup(Long id);
 
      Invitation saveInvitation(Invitation invitation);
+     Boolean checkIfPersonIsMember(UUID personId, Long groupId);
 }
