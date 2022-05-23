@@ -1,4 +1,4 @@
-package inMemoryDatabaseService.model;
+package model;
 
 public enum AtomicIntegerModel {
     SENDMESSAGES,

@@ -1,11 +1,9 @@
-package inMemoryDatabaseService.service;
+package service;
 
-import inMemoryDatabaseService.model.AtomicIntegerModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.data.redis.support.atomic.RedisAtomicInteger;
 
 import javax.annotation.Resource;
 
@@ -13,14 +11,15 @@ import javax.annotation.Resource;
 @Service
 public class RedisDatabaseService implements IRedisDatabaseService{
     @Autowired
-    RedisTemplate<String,String> template;
+    RedisTemplate<String,String> redisTemplate;
 
     @Resource(name="redisTemplate")
     private SetOperations<String,String> setOperations;
 
-    private RedisAtomicInteger atomicSendMessages = new RedisAtomicInteger("sendMessages", template.getConnectionFactory(),0);
-    private RedisAtomicInteger atomicRegistItems = new RedisAtomicInteger("registItems", template.getConnectionFactory(),0);
-    private RedisAtomicInteger atomicCountUser = new RedisAtomicInteger("countUser", template.getConnectionFactory(),0);
+    /*
+    private RedisAtomicInteger atomicSendMessages = new RedisAtomicInteger("sendMessages", redisTemplate.getConnectionFactory(),0);
+    private RedisAtomicInteger atomicRegistItems = new RedisAtomicInteger("registItems", redisTemplate.getConnectionFactory(),0);
+    private RedisAtomicInteger atomicCountUser = new RedisAtomicInteger("countUser", redisTemplate.getConnectionFactory(),0);
 
     public void incrementValue(AtomicIntegerModel key){
         switch(key){
@@ -30,6 +29,7 @@ public class RedisDatabaseService implements IRedisDatabaseService{
         }
     }
 
+*/
     public String getSingleSetValue(String key){
         try{
             String string = setOperations.members(key).toString();
