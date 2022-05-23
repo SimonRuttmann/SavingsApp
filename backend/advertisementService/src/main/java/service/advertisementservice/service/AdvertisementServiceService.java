@@ -1,9 +1,9 @@
 package service.advertisementservice.service;
 
-import inMemoryDatabaseService.service.RedisDatabaseService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import service.RedisDatabaseService;
 
 import java.util.HashMap;
 

@@ -3,7 +3,7 @@ module inMemoryDatabaseService {
     requires spring.beans;
     requires spring.data.redis;
     requires java.annotation;
-    exports inMemoryDatabaseService.model;
-    exports inMemoryDatabaseService.service;
 
+    exports service;
+    exports model;
 }
