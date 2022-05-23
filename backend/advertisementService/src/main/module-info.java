@@ -1,3 +1,0 @@
-module advertisementservice {
-    requires inMemoryDatabaseService;
-}
