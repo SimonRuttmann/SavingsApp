@@ -4,11 +4,11 @@ package service.contentservice.model;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import documentDatabaseService.documentbased.service.IGroupDocumentService;
-import documentDatabaseService.documentbased.model.Category;
-import documentDatabaseService.documentbased.model.GroupDocument;
-import documentDatabaseService.documentbased.model.IGroupDocumentRepository;
-import documentDatabaseService.documentbased.model.SavingEntry;
+import main.java.service.IGroupDocumentService;
+import main.java.model.Category;
+import main.java.model.GroupDocument;
+import main.java.model.IGroupDocumentRepository;
+import main.java.model.SavingEntry;
 import org.junit.jupiter.api.Test;
 
 

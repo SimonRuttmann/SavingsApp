@@ -1,8 +1,8 @@
 package service.userservice.controller;
 
-import dtoAndValidation.dto.user.InvitationDTO;
-import dtoAndValidation.dto.user.InvitationStatusDTO;
-import dtoAndValidation.dto.user.InviteDTO;
+import main.java.dtoAndValidation.dto.user.InvitationDTO;
+import main.java.dtoAndValidation.dto.user.InvitationStatusDTO;
+import main.java.dtoAndValidation.dto.user.InviteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.userservice.IUserManagementService;
