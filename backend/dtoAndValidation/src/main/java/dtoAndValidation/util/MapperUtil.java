@@ -5,7 +5,11 @@ import documentDatabaseModule.model.DocObjectIdUtil;
 import documentDatabaseModule.model.SavingEntry;
 import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.content.SavingEntryDTO;
+import dtoAndValidation.dto.user.GroupDTO;
+import dtoAndValidation.dto.user.InvitationDTO;
 import dtoAndValidation.dto.user.PersonDTO;
+import relationalDatabaseModule.model.Group;
+import relationalDatabaseModule.model.Invitation;
 import relationalDatabaseModule.model.Person;
 
 
@@ -57,4 +61,20 @@ public class MapperUtil {
         dto.setUsername(person.getUsername());
         return dto;
     }
+
+    public static GroupDTO GroupToDTO(Group group){
+        GroupDTO groupDTO = new GroupDTO();
+        groupDTO.setId(group.getId());
+        groupDTO.setGroupName(group.getGroupName());
+        return groupDTO;
+    }
+
+    public static InvitationDTO InvitationToDTO(Invitation invitation){
+        return new InvitationDTO(
+                invitation.getInvitationStatus(),
+                invitation.getRequestedGroup().getId(),
+                invitation.getRequestedGroup().getGroupName(),
+                invitation.getId().getDate());
+    }
+
 }

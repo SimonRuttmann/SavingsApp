@@ -1,9 +1,11 @@
 package service.userservice;
 
-import main.java.dtoAndValidation.dto.user.*;
+import dtoAndValidation.dto.user.*;
+
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -24,10 +26,10 @@ public interface IUserManagementService {
     GroupDTO deleteGroup(Long groupId);
 
     //Invitation
-    InvitationStatusDTO invite(InviteDTO newInvitation);
+    InvitationDTO invite(InviteDTO newInvitation);
     List<InvitationDTO> getInvitations(HttpServletRequest request);
-    InvitationStatusDTO acceptInvitation(HttpServletRequest request, Long groupId);
-    InvitationStatusDTO declineInvitation(HttpServletRequest request, Long groupId);
+    InvitationDTO acceptInvitation(HttpServletRequest request, Long groupId);
+    InvitationDTO declineInvitation(HttpServletRequest request, Long groupId);
 
 
     Boolean checkIfPersonIsMember(UUID personId, Long groupId);

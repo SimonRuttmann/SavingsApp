@@ -1,8 +1,10 @@
 package dtoAndValidation.dto.user;
 
+import dtoAndValidation.validation.IValidatable;
+
 import java.util.UUID;
 
-public class RegisterPersonDTO {
+public class RegisterPersonDTO implements IValidatable {
 
     public UUID id;
     public String email;

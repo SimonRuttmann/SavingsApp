@@ -25,6 +25,7 @@
         <module>documentDatabaseService</module>
         <module>relationalDatabaseService</module>
         <module>dtoAndValidation</module>
+        <module>userService</module>
     </modules>
 
     <dependencies>
@@ -52,6 +53,15 @@
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>2.6.3</version>
         </dependency>
     </dependencies>
 </project>
