@@ -1,4 +1,4 @@
-package service.contentservice.controller.content;
+package contentservice.content;
 
 import documentDatabaseModule.model.Category;
 import documentDatabaseModule.model.DocObjectIdUtil;

@@ -1,4 +1,4 @@
-package service.userservice.persistence;
+package userservice.persistence;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

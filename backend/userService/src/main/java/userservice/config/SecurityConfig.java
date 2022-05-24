@@ -1,4 +1,4 @@
-package service.contentservice.config;
+package userservice.config;
 
 
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
@@ -54,7 +54,8 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PATCH).hasAnyRole("user")
                 .antMatchers(HttpMethod.DELETE).hasAnyRole("user")
                 .antMatchers(HttpMethod.PUT).hasAnyRole("user")
-                .antMatchers("/group/**").hasAnyRole("user")
+                .antMatchers("/userservice/**").hasAnyRole("user")
+                .antMatchers("/swagger-ui/**").permitAll()
                 .anyRequest().permitAll();
         http.csrf().disable();
     }

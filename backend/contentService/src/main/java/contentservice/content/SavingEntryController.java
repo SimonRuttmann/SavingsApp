@@ -1,4 +1,4 @@
-package service.contentservice.controller.content;
+package contentservice.content;
 
 import documentDatabaseModule.model.DocObjectIdUtil;
 import documentDatabaseModule.model.GroupDocument;

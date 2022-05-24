@@ -1,4 +1,4 @@
-package service.contentservice;
+package contentservice;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

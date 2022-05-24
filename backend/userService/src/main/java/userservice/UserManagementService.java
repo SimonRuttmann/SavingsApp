@@ -1,4 +1,4 @@
-package service.userservice;
+package userservice;
 
 import dtoAndValidation.dto.user.*;
 import dtoAndValidation.util.MapperUtil;
