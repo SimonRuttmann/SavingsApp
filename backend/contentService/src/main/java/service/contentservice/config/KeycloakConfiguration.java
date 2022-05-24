@@ -1,4 +1,4 @@
-package contentservice.config;
+package service.contentservice.config;
 
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.springframework.context.annotation.Bean;
