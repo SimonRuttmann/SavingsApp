@@ -1,9 +1,9 @@
-package userservice.controller;
+package service.userservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import userservice.IUserManagementService;
-import userservice.imp.KeycloakService;
+import service.userservice.IUserManagementService;
+import service.userservice.imp.KeycloakService;
 
 import java.util.UUID;
 

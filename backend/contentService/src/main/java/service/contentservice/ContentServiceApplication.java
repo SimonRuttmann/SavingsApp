@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 //@SpringBootApplication()//exclude = SecurityAutoConfiguration.class)
 @ComponentScan(basePackages = {"service", "documentDatabaseModule", "relationalDatabaseModule"})
-@EnableJpaRepositories("relationalDatabaseModule.service")
-@EntityScan("relationalDatabaseModule.model")
+@EnableJpaRepositories("relationalDatabaseModule")
+@EntityScan("relationalDatabaseModule")
 @SpringBootApplication()
 public class ContentServiceApplication implements CommandLineRunner{
 

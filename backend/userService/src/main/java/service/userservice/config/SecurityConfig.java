@@ -1,4 +1,4 @@
-package userservice.config;
+package service.userservice.config;
 
 
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
