@@ -11,7 +11,9 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>documentDatabaseService</name>
     <description>documentDatabaseService</description>
+
     <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
