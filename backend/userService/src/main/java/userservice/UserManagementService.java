@@ -2,6 +2,7 @@ package userservice;
 
 import dtoAndValidation.dto.user.*;
 import dtoAndValidation.util.MapperUtil;
+import model.AtomicIntegerModel;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,12 @@ import relationalDatabaseModule.service.DatabaseService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import service.RedisDatabaseService;
+
 @Service
 public class UserManagementService implements IUserManagementService {
+    @Autowired
+    private RedisDatabaseService redisDataBaseService;
 
     private final DatabaseService databaseService;
 
@@ -32,6 +37,7 @@ public class UserManagementService implements IUserManagementService {
     public PersonDTO register(PersonDTO registerDto) {
         Person newPerson = new Person(registerDto.getId(), registerDto.getUsername(), registerDto.getEmail());
         var p =  databaseService.savePerson(newPerson);
+        redisDataBaseService.incrementValue(AtomicIntegerModel.COUNTUSERS);
         return MapperUtil.PersonToDTO(p);
     }
 
