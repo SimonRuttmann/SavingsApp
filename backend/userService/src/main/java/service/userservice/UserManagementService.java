@@ -1,18 +1,18 @@
 package service.userservice;
 
-import main.java.dtoAndValidation.dto.user.*;
+import dtoAndValidation.dto.user.*;
+import dtoAndValidation.util.MapperUtil;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-
-import main.java.model.Group;
-import main.java.model.Invitation;
-import main.java.model.Pair;
-import main.java.model.Person;
-import main.java.service.DatabaseService;
+import relationalDatabaseModule.model.Group;
+import relationalDatabaseModule.model.Invitation;
+import relationalDatabaseModule.model.Pair;
+import relationalDatabaseModule.model.Person;
+import relationalDatabaseModule.service.DatabaseService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -31,14 +31,15 @@ public class UserManagementService implements IUserManagementService {
     @Override
     public PersonDTO register(RegisterPersonDTO registerDto) {
         Person newPerson = new Person(registerDto.id, registerDto.username, registerDto.email);
-        return databaseService.savePerson(newPerson).toPersonDTO();
+        var p =  databaseService.savePerson(newPerson);
+        return MapperUtil.PersonToDTO(p);
     }
 
     @Override
     public PersonDTO getUser(UUID userId) {
         Person person = databaseService.getPersonById(userId);
         if (person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id"+userId+" don't exists");
-        return person.toPersonDTO();
+        return MapperUtil.PersonToDTO(person);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class UserManagementService implements IUserManagementService {
         if (groups == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "the user with id "+personId+" is not in the db");
 
         groups.forEach( group -> {
-            groupsDto.add(group.toGroupDTO());
+            groupsDto.add(MapperUtil.GroupToDTO(group));
         });
         return groupsDto;
     }
@@ -59,7 +60,7 @@ public class UserManagementService implements IUserManagementService {
         if (person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id"+ userId +" don't exists");
 
         databaseService.removePerson(userId);
-        return person.toPersonDTO();
+        return MapperUtil.PersonToDTO(person);
     }
 
     // Group
@@ -70,14 +71,14 @@ public class UserManagementService implements IUserManagementService {
         Group savedGroup = databaseService.saveGroup(newGroup);
         // add the creator-user to group
         databaseService.addPersonToGroup(userId, savedGroup.getId());
-        return savedGroup.toGroupDTO();
+        return MapperUtil.GroupToDTO(savedGroup);
     }
 
     @Override
     public GroupDTO getGroup(Long groupId) {
         Group group = databaseService.getGroupById(groupId);
         if(group == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group with id "+groupId+" don't exists.");
-        return group.toGroupDTO();
+        return MapperUtil.GroupToDTO(group);
     }
 
     @Override
@@ -87,7 +88,7 @@ public class UserManagementService implements IUserManagementService {
         if (members == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "the group with id "+groupId+" is not in the db");
 
         members.forEach( member -> {
-            personsDTO.add(member.toPersonDTO());
+            personsDTO.add(MapperUtil.PersonToDTO(member));
         });
 
         return personsDTO;
@@ -97,7 +98,7 @@ public class UserManagementService implements IUserManagementService {
     public GroupDTO leaveGroup(HttpServletRequest request, Long groupId) {
         UUID userId = getUserId(request);
         Pair<Person, Group> pair = databaseService.removePersonFromGroup(userId, groupId);
-        return pair.getSecond().toGroupDTO();
+        return MapperUtil.GroupToDTO(pair.getSecond());
     }
 
     @Override
@@ -106,23 +107,20 @@ public class UserManagementService implements IUserManagementService {
         if(group == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group with id "+groupId+" don't exists.");
 
         databaseService.removeGroup(groupId);
-        return group.toGroupDTO();
+        return MapperUtil.GroupToDTO(group);
     }
 
     //Invitaion
     @Override
-    public InvitationStatusDTO invite(InviteDTO newInvitation) {
+    public InvitationDTO invite(InviteDTO newInvitation) {
 
-
-        //Validate
-        var identifier = new InviteValidator().validate(newInvitation, false);
 
         //Check also if userId and groupID exists
         Invitation invitation = databaseService.addInvitation(newInvitation.userId, newInvitation.groupId);
 
         if (invitation == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user or group can not be find");
 
-        return invitation.toInvitationStatusDto();
+        return MapperUtil.InvitationToDTO(invitation);
     }
 
     @Override
@@ -132,7 +130,7 @@ public class UserManagementService implements IUserManagementService {
         List<Invitation> invitations = databaseService.getAllInvitations(userId);
         if(invitations != null) {
             invitations.forEach(invitation -> {
-                listDto.add(invitation.toInvitationDto());
+                listDto.add(MapperUtil.InvitationToDTO(invitation));
             });
         }
         listDto.sort(Comparator.comparing(InvitationDTO::getCreatedOn));
@@ -140,7 +138,7 @@ public class UserManagementService implements IUserManagementService {
     }
 
     @Override
-    public InvitationStatusDTO acceptInvitation(HttpServletRequest request, Long groupId) {
+    public InvitationDTO acceptInvitation(HttpServletRequest request, Long groupId) {
         UUID userId = getUserId(request);
 
 
@@ -148,16 +146,16 @@ public class UserManagementService implements IUserManagementService {
         if (invitation == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Invitation is not found");
         databaseService.addPersonToGroup(userId, groupId);
 
-        return invitation.toInvitationStatusDto();
+        return MapperUtil.InvitationToDTO(invitation);
     }
 
     @Override
-    public InvitationStatusDTO declineInvitation(HttpServletRequest request, Long groupId) {
+    public InvitationDTO declineInvitation(HttpServletRequest request, Long groupId) {
         UUID userId = getUserId(request);
         //InvitationCompoundId invitationCompoundId = new InvitationCompoundId(userId, groupId);
         Invitation invitation = databaseService.declineInvitation(userId, groupId);
         if (invitation == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Invitation is not found");
-        return invitation.toInvitationStatusDto();
+        return MapperUtil.InvitationToDTO(invitation);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package service.userservice.controller;
 
-import main.java.dtoAndValidation.dto.user.GroupDTO;
-import main.java.dtoAndValidation.dto.user.PersonDTO;
-import main.java.dtoAndValidation.dto.user.RegisterPersonDTO;
+import dtoAndValidation.dto.user.GroupDTO;
+import dtoAndValidation.dto.user.PersonDTO;
+import dtoAndValidation.dto.user.RegisterPersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.userservice.IUserManagementService;

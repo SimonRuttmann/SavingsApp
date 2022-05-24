@@ -1,6 +1,8 @@
 package dtoAndValidation.dto.user;
 
-public class RegisterGroupDTO {
+import dtoAndValidation.validation.IValidatable;
+
+public class RegisterGroupDTO implements IValidatable {
 
     public String groupName;
 
