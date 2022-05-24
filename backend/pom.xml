@@ -20,7 +20,6 @@
         <module>advertisementservice</module>
         <module>contentservice</module>
         <module>inflationservice</module>
-        <module>userservice</module>
         <module>chatService</module>
         <module>inMemoryDatabaseService</module>
         <module>documentDatabaseService</module>
