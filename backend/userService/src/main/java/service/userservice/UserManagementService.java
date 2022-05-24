@@ -29,8 +29,8 @@ public class UserManagementService implements IUserManagementService {
 
     // Person
     @Override
-    public PersonDTO register(RegisterPersonDTO registerDto) {
-        Person newPerson = new Person(registerDto.id, registerDto.username, registerDto.email);
+    public PersonDTO register(PersonDTO registerDto) {
+        Person newPerson = new Person(registerDto.getId(), registerDto.getUsername(), registerDto.getEmail());
         var p =  databaseService.savePerson(newPerson);
         return MapperUtil.PersonToDTO(p);
     }
@@ -65,9 +65,9 @@ public class UserManagementService implements IUserManagementService {
 
     // Group
     @Override
-    public GroupDTO registerGroup(HttpServletRequest request, RegisterGroupDTO registerDto) {
+    public GroupDTO registerGroup(HttpServletRequest request, GroupDTO registerDto) {
         UUID userId = getUserId(request);
-        Group newGroup = new Group(registerDto.groupName);
+        Group newGroup = new Group(registerDto.getGroupName());
         Group savedGroup = databaseService.saveGroup(newGroup);
         // add the creator-user to group
         databaseService.addPersonToGroup(userId, savedGroup.getId());

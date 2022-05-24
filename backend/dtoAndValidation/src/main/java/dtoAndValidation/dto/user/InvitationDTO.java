@@ -11,14 +11,13 @@ import java.util.Date;
 public class InvitationDTO {
     public Long groupId;
     public String groupName;
-    public Date date;
-    public String status;
+    public Date date = null;
+    public String status = null;
     public InvitationDTO() {}
 
-    public InvitationDTO( Long groupId, String groupName, Date date) {
+    public InvitationDTO( Long groupId, String groupName) {
         this.groupId = groupId;
         this.groupName = groupName;
-        this.date = date;
     }
 
     public InvitationDTO(InvitationStatus invitationStatus, Long id, String groupName, Date date) {

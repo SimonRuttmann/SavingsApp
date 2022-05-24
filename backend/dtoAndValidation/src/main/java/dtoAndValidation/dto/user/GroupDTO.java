@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class GroupDTO implements IValidatable {
 
-    private Long id;
+    private Long id = null;
 
     private String groupName;
 
