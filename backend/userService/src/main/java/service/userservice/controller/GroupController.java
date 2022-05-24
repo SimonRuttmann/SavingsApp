@@ -2,7 +2,6 @@ package service.userservice.controller;
 
 import dtoAndValidation.dto.user.GroupDTO;
 import dtoAndValidation.dto.user.PersonDTO;
-import dtoAndValidation.dto.user.RegisterGroupDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.userservice.IUserManagementService;
@@ -26,7 +25,7 @@ public class GroupController {
     }
 
     @PostMapping("/group/register")
-    public GroupDTO registerNewGroup(HttpServletRequest request, @RequestBody RegisterGroupDTO registerDto) {
+    public GroupDTO registerNewGroup(HttpServletRequest request, @RequestBody GroupDTO registerDto) {
         return userManagementService.registerGroup( request, registerDto);
     }
 

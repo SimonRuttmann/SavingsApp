@@ -7,8 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @ComponentScan(basePackages = {"service", "documentDatabaseModule", "relationalDatabaseModule"})
-@EnableJpaRepositories("relationalDatabaseModule.service")
-@EntityScan("relationalDatabaseModule.model")
+@EnableJpaRepositories(basePackages = {"relationalDatabaseModule.service", "service.userservice.service.imp"})
+@EntityScan("relationalDatabaseModule.model", "service.userservice.persistence")
 @SpringBootApplication()
 public class UserServiceApplication {
 
