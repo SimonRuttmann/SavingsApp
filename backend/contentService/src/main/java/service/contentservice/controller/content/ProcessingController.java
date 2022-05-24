@@ -1,22 +1,23 @@
 package service.contentservice.controller.content;
 
-import documentDatabaseService.documentbased.service.IGroupDocumentService;
-import dtoAndValidation.dto.content.GeneralGroupInformationDTO;
-import dtoAndValidation.dto.processing.*;
-import dtoAndValidation.util.MapperUtil;
-import dtoAndValidation.validation.ValidatorFactory;
+import documentDatabaseModule.model.Category;
+import documentDatabaseModule.model.DocObjectIdUtil;
+import documentDatabaseModule.model.GroupDocument;
+import documentDatabaseModule.model.SavingEntry;
+import documentDatabaseModule.service.IGroupDocumentService;
+import main.java.dtoAndValidation.dto.content.GeneralGroupInformationDTO;
+import main.java.dtoAndValidation.dto.processing.*;
+import main.java.dtoAndValidation.util.MapperUtil;
+import main.java.dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import relationalDatabaseService.model.Group;
-import relationalDatabaseService.model.Person;
-import relationalDatabaseService.service.IDatabaseService;
-import documentDatabaseService.documentbased.model.Category;
-import documentDatabaseService.documentbased.model.GroupDocument;
-import documentDatabaseService.documentbased.model.SavingEntry;
-import documentDatabaseService.documentbased.model.DocObjectIdUtil;
+import org.springframework.web.client.RestTemplate;
+import relationalDatabaseModule.model.Group;
+import relationalDatabaseModule.model.Person;
+import relationalDatabaseModule.service.IDatabaseService;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,7 +27,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/content/processing")
 public class ProcessingController {
 
-    public final Double INFLATION = 0.1d;
+    //TODO MICHAEL //FIXME MICHAEL
+    private final String URI ="http://inflationservice:8013/inflationrate";
     private final IGroupDocumentService groupDocumentService;
 
     private final IDatabaseService databaseService;
@@ -76,6 +78,13 @@ public class ProcessingController {
     public ResponseEntity<ProcessResultContainerDTO> getProcessedResults(
             @PathVariable(value="groupId") Long groupId,
             @RequestBody FilterInformationDTO filterInformation){
+
+
+
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        Double inflation = restTemplate.getForObject(URI, Double.class);
 
 
         var validator = ValidatorFactory.getInstance().getValidator(FilterInformationDTO.class);
@@ -177,7 +186,7 @@ public class ProcessingController {
         diagram1.setIncome(income);
         diagram1.setOutcome(outcome);
         diagram1.setBalance(income-outcome);
-        diagram1.setFutureBalance(diagram1.getBalance() * INFLATION);
+        diagram1.setFutureBalance(diagram1.getBalance() * inflation);
 
         result.setBalanceProcessResultDTO(diagram1);
 

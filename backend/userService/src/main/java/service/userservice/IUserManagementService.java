@@ -1,6 +1,6 @@
 package service.userservice;
 
-import dtoAndValidation.dto.user.*;
+import main.java.dtoAndValidation.dto.user.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;

@@ -11,31 +11,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>documentDatabaseService</name>
     <description>documentDatabaseService</description>
+    <packaging>jar</packaging>
     <dependencies>
-        <!-- start keycloak-dependencies -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>5.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>5.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-spring-boot-starter</artifactId>
-            <version>15.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.keycloak.bom</groupId>
-            <artifactId>keycloak-adapter-bom</artifactId>
-            <version>15.0.2</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <!-- end keycloak-dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -67,4 +44,23 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>14</source>
+                    <target>14</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <properties>
+        <maven.compiler.source>9</maven.compiler.source>
+        <maven.compiler.target>9</maven.compiler.target>
+    </properties>
+
 </project>

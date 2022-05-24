@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import documentDatabaseService.documentbased.model.Category;
+import main.java.model.Category;
 import service.contentservice.persistence.relational.entity.Person;
 
 import javax.xml.bind.JAXBContext;
