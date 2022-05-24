@@ -1,4 +1,4 @@
-package service.userservice;
+package userservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@ComponentScan(basePackages = {"service", "documentDatabaseModule", "relationalDatabaseModule"})
-@EnableJpaRepositories(basePackages = {"relationalDatabaseModule.service", "service.userservice.service.imp"})
-@EntityScan("relationalDatabaseModule.model", "service.userservice.persistence")
+@ComponentScan(basePackages = {"documentDatabaseModule", "relationalDatabaseModule"})
+@EnableJpaRepositories("relationalDatabaseModule.service")
+@EntityScan("relationalDatabaseModule.model")
 @SpringBootApplication()
 public class UserServiceApplication {
 

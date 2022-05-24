@@ -1,12 +1,11 @@
-package service.userservice.controller;
+package userservice.controller;
 
 import dtoAndValidation.dto.user.GroupDTO;
 import dtoAndValidation.dto.user.PersonDTO;
-import dtoAndValidation.dto.user.RegisterPersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.userservice.IUserManagementService;
-import service.userservice.service.imp.KeycloakService;
+import userservice.IUserManagementService;
+import userservice.imp.KeycloakService;
 
 import java.util.Collection;
 import java.util.UUID;
