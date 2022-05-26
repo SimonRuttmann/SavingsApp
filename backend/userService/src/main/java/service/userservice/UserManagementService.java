@@ -42,8 +42,13 @@ public class UserManagementService implements IUserManagementService {
         Person newPerson = new Person(registerDto.getId(), registerDto.getUsername(), registerDto.getEmail());
         var p =  databaseService.savePerson(newPerson);
         redisDataBaseService.incrementValue(AtomicIntegerModel.COUNTUSERS);
+        // open Group in postgres - temp solution becaues copy of registerGroup
+        Group newGroup = new Group("Ich", true );
+        Group savedGroup = databaseService.saveGroup(newGroup);
+        databaseService.addPersonToGroup(registerDto.getId(), savedGroup.getId());
+        // open groupDoc in Mongo
         var d =new GroupDocument();
-        d.groupId = 1L;
+        d.groupId = savedGroup.getId();
         groupDocumentService.createDocument(d);
         return MapperUtil.PersonToDTO(p);
     }
@@ -80,7 +85,7 @@ public class UserManagementService implements IUserManagementService {
     @Override
     public GroupDTO registerGroup(HttpServletRequest request, GroupDTO registerDto) {
         UUID userId = getUserId(request);
-        Group newGroup = new Group(registerDto.getGroupName());
+        Group newGroup = new Group(registerDto.getGroupName(), false);
         Group savedGroup = databaseService.saveGroup(newGroup);
         // add the creator-user to group
         databaseService.addPersonToGroup(userId, savedGroup.getId());
