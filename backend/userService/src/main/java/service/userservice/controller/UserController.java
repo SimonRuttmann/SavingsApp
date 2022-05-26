@@ -1,13 +1,11 @@
 package service.userservice.controller;
 
+import dtoAndValidation.dto.user.GroupDTO;
+import dtoAndValidation.dto.user.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.userservice.businessmodel.account.GroupDTO;
-import service.userservice.businessmodel.account.PersonDTO;
-import service.userservice.businessmodel.account.RegisterPersonDTO;
-import service.userservice.persistence.entity.userdata.Group;
-import service.userservice.service.IUserManagementService;
-import service.userservice.service.imp.KeycloakService;
+import service.userservice.IUserManagementService;
+import service.userservice.imp.KeycloakService;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -27,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/user/register")
-    public PersonDTO registerNewUser(@RequestBody RegisterPersonDTO registerDto) {
+    public PersonDTO registerNewUser(@RequestBody PersonDTO registerDto) {
         return userManagementService.register(registerDto);
     }
     @GetMapping("/user/{userId}")
