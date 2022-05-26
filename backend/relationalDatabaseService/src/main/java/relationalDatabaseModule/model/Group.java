@@ -35,11 +35,21 @@ public class Group {
             length=512)
     private String groupName;
 
+    @Column(
+            name="PersonGroupBool",
+            unique = false,
+            nullable = false,
+            insertable = true,
+            updatable = true,
+            length=255)
+    private Boolean personGroup;
+
 
     public Group() {}
 
-    public Group(String groupName) {
+    public Group(String groupName, Boolean personGroup) {
         this.groupName = groupName;
+        this.personGroup = personGroup;
     }
 
 
