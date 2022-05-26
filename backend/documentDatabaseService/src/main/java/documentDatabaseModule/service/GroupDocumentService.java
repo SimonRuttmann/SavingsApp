@@ -27,7 +27,7 @@ public class GroupDocumentService implements IGroupDocumentService{
     private Query getDocumentQuery(Long identifier){
 
         String isUserGroup = "isUserGroup";
-        String id = "id";
+        String id = "groupId";
 
         Query query = new Query();
         query.addCriteria(  Criteria.
