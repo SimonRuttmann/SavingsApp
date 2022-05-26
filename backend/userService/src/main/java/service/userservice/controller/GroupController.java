@@ -1,14 +1,11 @@
 package service.userservice.controller;
 
+import dtoAndValidation.dto.user.GroupDTO;
+import dtoAndValidation.dto.user.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.userservice.businessmodel.account.GroupDTO;
-import service.userservice.businessmodel.account.PersonDTO;
-import service.userservice.businessmodel.account.RegisterGroupDTO;
-import service.userservice.persistence.entity.userdata.Group;
-import service.userservice.persistence.entity.userdata.Person;
-import service.userservice.service.IUserManagementService;
-import service.userservice.service.imp.KeycloakService;
+import service.userservice.IUserManagementService;
+import service.userservice.imp.KeycloakService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -28,7 +25,7 @@ public class GroupController {
     }
 
     @PostMapping("/group/register")
-    public GroupDTO registerNewGroup(HttpServletRequest request, @RequestBody RegisterGroupDTO registerDto) {
+    public GroupDTO registerNewGroup(HttpServletRequest request, @RequestBody GroupDTO registerDto) {
         return userManagementService.registerGroup( request, registerDto);
     }
 
@@ -48,7 +45,7 @@ public class GroupController {
     }
 
     @DeleteMapping("/group/{groupId}")
-    public GroupDTO deleteGroup( @PathVariable Long groupId){
+    public GroupDTO deleteGroup(@PathVariable Long groupId){
         return userManagementService.deleteGroup( groupId);
     }
 }

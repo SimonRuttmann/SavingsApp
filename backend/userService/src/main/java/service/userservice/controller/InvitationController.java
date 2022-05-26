@@ -1,14 +1,11 @@
 package service.userservice.controller;
 
+import dtoAndValidation.dto.user.InvitationDTO;
+import dtoAndValidation.dto.user.InviteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.userservice.businessmodel.account.InvitationStatusDTO;
-import service.userservice.businessmodel.account.InvitationDTO;
-import service.userservice.businessmodel.account.InviteDTO;
-import service.userservice.persistence.entity.userdata.Invitation;
-import service.userservice.persistence.entity.userdata.InvitationStatus;
-import service.userservice.service.IUserManagementService;
-import service.userservice.service.imp.KeycloakService;
+import service.userservice.IUserManagementService;
+import service.userservice.imp.KeycloakService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -32,7 +29,7 @@ public class InvitationController {
      *ERROR because of saving in DB
      */
     @PostMapping("/invitation/invite")
-    public InvitationStatusDTO invite(@RequestBody InviteDTO newInvitation){
+    public InvitationDTO invite(@RequestBody InviteDTO newInvitation){
         return userManagementService.invite(newInvitation);
     }
 
@@ -45,12 +42,12 @@ public class InvitationController {
     }
 
     @PutMapping("/invitation/accept/{groupId}")
-    public InvitationStatusDTO acceptInvitation(HttpServletRequest request, @PathVariable Long groupId){
+    public InvitationDTO acceptInvitation(HttpServletRequest request, @PathVariable Long groupId){
         return userManagementService.acceptInvitation(request, groupId);
     }
 
     @PutMapping("/invitation/decline/{groupId}")
-    public InvitationStatusDTO declineInvitation(HttpServletRequest request, @PathVariable Long groupId){
+    public InvitationDTO declineInvitation(HttpServletRequest request, @PathVariable Long groupId){
         return userManagementService.declineInvitation(request, groupId);
     }
 
