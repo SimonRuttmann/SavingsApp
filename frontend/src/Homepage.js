@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Chart as ChartJS,
     ArcElement,
@@ -11,9 +11,24 @@ import {
 } from 'chart.js';
 import {Bar, Line} from 'react-chartjs-2';
 import "./styles.css"
-import {Button, ButtonGroup, Card, CardGroup, Container, Form, Nav, Navbar, NavDropdown, Table} from 'react-bootstrap'
+import {
+    Button,
+    ButtonGroup,
+    Card,
+    CardGroup, CloseButton, Col,
+    Container,
+    Form,
+    Modal,
+    Nav,
+    Navbar,
+    NavDropdown, Row,
+    Table, ToggleButton
+} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Popup from "./Popup";
+import Popup from "./SettingsPopup";
+import SettingsPopup from "./SettingsPopup";
+import CategoriesPopup from "./CategoriesPopup";
+import Chat from "./Chat";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 const chartStyle = {
@@ -25,7 +40,7 @@ const chartStyle = {
 
 const buttonStyle = {
     float: "right",
-    paddingRight: "1%",
+    margin: "2px"
 }
 
 const textstyle = {
@@ -37,25 +52,40 @@ const textstyle = {
 
 
 
-const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, newEntry, setGuestSite }) => {
+const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, setGuestSite, user }) => {
 
     const [selectedGroup = groups[0], setSelectedGroup] = useState()
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
     const [selectedEntry = entrys[0], setSelectedEntry] = useState()
+    const [showMore, setShowMore] = useState(false)
+    const [checked, setChecked] = useState(false);
+    const [categories, setCategories] = useState([
+        {
+            name: 'Lernen',
+            checked: false
+        },
+        {
+            name: 'Food',
+            checked: false
+        },
+        {
+            name: 'Hund',
+            checked: false
+        },
+        {
+            name: 'Miete',
+            checked: false
+        }
+    ])
 
-    const [isOpen, setIsOpen] = useState(false);
-
-    const togglePopup = () => {
-        setIsOpen(!isOpen);
-    }
 
     return (
         <>
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand href="start">Start</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                    <Navbar.Collapse id="basic-navbar-nav">
+                    <Navbar.Brand>Haushalt</Navbar.Brand>
+                    <Navbar.Toggle/>
+                    <Navbar.Collapse className="justify-content-end">
                         <Nav className="me-auto">
                             <NavDropdown title="Ansicht" id="basic-nav-dropdown">
                                 { groups.map(group => <NavDropdown.Item onClick={(e) => {
@@ -63,14 +93,74 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                                     setSelectedGroup(group)
                                 }} href={group.name}>{group.name}</NavDropdown.Item>)}
                             </NavDropdown>
+                            <Chat/>
                         </Nav>
-                        <h5 style={textstyle}>{selectedGroup.name}</h5>
-                        <Button type="button" onClick={togglePopup} variant="secondary">Settings</Button>
-                        <Button variant="secondary" onClick={() => setGuestSite(true)}>Logout</Button>
+                        <Button variant={"dark"} style={textstyle}>{selectedGroup.name}</Button>
+                        <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
+                        <Button variant="primary" style={buttonStyle} onClick={() => setGuestSite(true)}>Logout</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <form>
+            <CardGroup>
+                <Card>
+                    <Card.Body>
+            <Form>
+                <Row>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control type="text" placeholder="Name eintragen" onChange={() => setSelectedEntry()} value={selectedEntry.name} />
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>Kosten</Form.Label>
+                            <Form.Control type="text" placeholder="Kosten eintragen" onChange={() => setSelectedEntry()} value={selectedEntry.costs} />
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>Kategorie</Form.Label>
+                            <Form.Select aria-label="Kategorie" onChange={() => setSelectedEntry()}>
+                                <option value="1">Kategorie1</option>
+                                <option value="2">Kategorie2</option>
+                                <option value="3">Kategorie3</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group>
+                            <Button onClick={() => AddEntry(selectedEntry)}>Eintrag erstellen</Button>
+                            {!showMore &&  <Button variant="link" onClick={() => setShowMore(true)}>Zeig mehr</Button>}
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <br/>
+                { showMore &&
+                <Row>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>Datum</Form.Label>
+                            <Form.Control type="text" placeholder="Datum eintragen" onChange={() => setSelectedEntry()} value={selectedEntry.timestamp}/>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>Beschreibung</Form.Label>
+                            <Form.Control as="textarea" rows={3} onChange={() => setSelectedEntry()} />
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group>
+                            <Button variant="link" onClick={() => setShowMore(false)}>Zeig weniger</Button>
+                        </Form.Group>
+                    </Col>
+                </Row>}
+            </Form>
+                    </Card.Body>
+                </Card>
+            </CardGroup>
+            {/*<form>
                 <CardGroup >
                     <Card>
                         <label>Name:</label>
@@ -98,7 +188,40 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         <input onChange={() => setSelectedEntry()}/>
                     </Card>
                 </CardGroup>
-            </form>
+            </form>*/}
+            <br/>
+            <Container>
+                <Row>
+                    { categories.map(categorie =>
+                        <Col>
+                            <CloseButton onClick={() => {
+                                setCategories([...categories.filter((c) => c.name !== categorie.name)])
+                            }}/>
+                            <ToggleButton
+                                size="lg"
+                                className="mb-2"
+                                id="toggle-check"
+                                type="checkbox"
+                                variant="outline-primary"
+                                checked={categorie.checked}
+                                value="1"
+                                onClick={() => {
+                                    setCategories([...categories.filter((c) => c.name !== categorie.name), {
+                                        name: categorie.name,
+                                        checked: !categorie.checked
+                                    }])
+                                }}
+                            >
+                                {categorie.name}
+                            </ToggleButton>
+                        </Col>
+                    )}
+                    <Col> {
+                            <CategoriesPopup categories={categories} setCategories={setCategories}/>
+                    }
+                    </Col>
+                </Row>
+            </Container>
             <CardGroup>
                 <Card style={chartStyle}>
                     <Bar
@@ -206,7 +329,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     />
                 </Card>
             </CardGroup>
-            {isOpen && <Popup
+            {/*{isOpen && <Popup
                 content={<>
                     <h2>Settings</h2>
                     <h5>Gruppen:</h5>
@@ -227,41 +350,48 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     <Button onClick={ () => DeleteGroup(selectedSettingsGroup.name)} variant="secondary">Gruppe Verlassen</Button>
                 </>}
                 handleClose={togglePopup}
-            />}
-            <br/>
-            <ButtonGroup style={buttonStyle}>
-                <Button variant="secondary">Alle</Button>
-                <Button variant="secondary">WG</Button>
-                <Button variant="secondary">FAM</Button>
-                <Button variant="secondary">Ich</Button>
-            </ButtonGroup>
-            <ButtonGroup style={buttonStyle}>
-                <Button onClick={() => DeleteEntry(selectedEntry.id)} variant="secondary">Eintrag löschen</Button>
-            </ButtonGroup>
-            <Table striped bordered hover>
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Kosten</th>
-                    <th>User</th>
-                    <th>Gruppe</th>
-                    <th>Zeitpunkt</th>
-                </tr>
-                </thead>
-                <tbody>
-                {entrys.map(entry =>
-                    <tr onClick={() => setSelectedEntry(entry)}>
-                        <td>{entry.id}</td>
-                        <td>{entry.name}</td>
-                        <td>{entry.costs}</td>
-                        <td>{entry.user}</td>
-                        <td>{entry.group}</td>
-                        <td>{entry.timestamp}</td>
-                    </tr>
-                )}
-                </tbody>
-            </Table>
+            />}*/}
+            <CardGroup>
+                <Card>
+                    <Card.Title>Einträge</Card.Title>
+                    <Card.Body>
+                        <br/>
+                        <ButtonGroup style={buttonStyle}>
+                            <Button variant="secondary">Alle</Button>
+                            <Button variant="secondary">WG</Button>
+                            <Button variant="secondary">FAM</Button>
+                            <Button variant="secondary">Ich</Button>
+                        </ButtonGroup>
+                        <ButtonGroup style={buttonStyle}>
+                            <Button onClick={() => DeleteEntry(selectedEntry.id)} variant="secondary">Eintrag löschen</Button>
+                        </ButtonGroup>
+                        <Table striped bordered hover>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Kosten</th>
+                                <th>User</th>
+                                <th>Gruppe</th>
+                                <th>Zeitpunkt</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {entrys.map(entry =>
+                                <tr onClick={() => setSelectedEntry(entry)}>
+                                    <td>{entry.id}</td>
+                                    <td>{entry.name}</td>
+                                    <td>{entry.costs}</td>
+                                    <td>{entry.user}</td>
+                                    <td>{entry.group}</td>
+                                    <td>{entry.timestamp}</td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </Table>
+                    </Card.Body>
+                </Card>
+            </CardGroup>
 
         </>
     )

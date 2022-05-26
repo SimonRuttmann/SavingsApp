@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import Homepage from "./Homepage";
 import GuestSite from "./GuestSite";
+import {Route, Router} from "react-router-dom";
 
 function App() {
+  const [user, setUser] = useState('Robin Röcker')
   const [groups, setGroups] = useState([
     {name: 'Ich',
       diagrams: {
@@ -81,6 +83,9 @@ function App() {
     timestamp: ''
   })
 
+
+
+
   const [guestSite, setGuestSite] = useState(true)
 
   const AddGroup = ({group}) => {
@@ -104,6 +109,10 @@ function App() {
   }
 
   return (
+/*      <Router>
+        <Route path="/" exact component={GuestSite(setGuestSite())}></Route>
+        <Route path="/homepage" component={Homepage(groups)}/>
+      </Router>*/
       <>
         {guestSite ? <GuestSite guestSite={guestSite} setGuestSite={setGuestSite}/> : <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry} guestSite={guestSite} setGuestSite={setGuestSite}/>  }
       </>
