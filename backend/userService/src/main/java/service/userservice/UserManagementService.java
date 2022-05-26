@@ -1,5 +1,7 @@
 package service.userservice;
 
+import documentDatabaseModule.model.GroupDocument;
+import documentDatabaseModule.service.IGroupDocumentService;
 import dtoAndValidation.dto.user.*;
 import dtoAndValidation.util.MapperUtil;
 import model.AtomicIntegerModel;
@@ -26,10 +28,12 @@ public class UserManagementService implements IUserManagementService {
     private RedisDatabaseService redisDataBaseService;
 
     private final DatabaseService databaseService;
+    private final IGroupDocumentService groupDocumentService;
 
     @Autowired
-    public UserManagementService(DatabaseService databaseService) {
+    public UserManagementService(DatabaseService databaseService, IGroupDocumentService groupDocumentService) {
         this.databaseService = databaseService;
+        this.groupDocumentService = groupDocumentService;
     }
 
     // Person
@@ -38,6 +42,9 @@ public class UserManagementService implements IUserManagementService {
         Person newPerson = new Person(registerDto.getId(), registerDto.getUsername(), registerDto.getEmail());
         var p =  databaseService.savePerson(newPerson);
         redisDataBaseService.incrementValue(AtomicIntegerModel.COUNTUSERS);
+        var d =new GroupDocument();
+        d.groupId = 1L;
+        groupDocumentService.createDocument(d);
         return MapperUtil.PersonToDTO(p);
     }
 
