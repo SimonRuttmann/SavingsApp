@@ -213,18 +213,18 @@ public class DatabaseService implements IDatabaseService {
 
     //Remove
 
-    @Override
-    @Transactional
-    public void removePerson(UUID id){
-
-         KPerson person = personRepository.getById(id.toString());
-
-         person.getGroups().forEach(group -> group.removeMember(person));
-         person.getInvitations().forEach(inv -> inv.getRequestedGroup().getInvitations().remove(inv));
-
-         invitationRepository.deleteAll(person.getInvitations());
-         personRepository.delete(person);
-    }
+//    @Override
+//    @Transactional
+//    public void removePerson(UUID id){
+//
+//         KPerson person = personRepository.getById(id.toString());
+//
+//         person.getGroups().forEach(group -> group.removeMember(person));
+//         person.getInvitations().forEach(inv -> inv.getRequestedGroup().getInvitations().remove(inv));
+//
+//         invitationRepository.deleteAll(person.getInvitations());
+//         personRepository.delete(person);
+//    }
 
     @Override
     @Transactional

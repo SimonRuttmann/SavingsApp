@@ -16,7 +16,7 @@ public interface IUserManagementService {
     PersonDTO register(PersonDTO registerDto);
     PersonDTO getUser(UUID userId);
     Collection<GroupDTO> getAllGroupsOfPerson(UUID personId);
-    PersonDTO deleteUser(UUID userId);
+    //PersonDTO deleteUser(UUID userId);
 
     //Group
     GroupDTO registerGroup(HttpServletRequest request, GroupDTO registerDto);

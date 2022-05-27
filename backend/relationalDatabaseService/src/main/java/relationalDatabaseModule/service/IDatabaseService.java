@@ -56,7 +56,7 @@ public interface IDatabaseService {
 
      Person savePerson(Person person);
 
-     void removePerson(UUID id);
+     //void removePerson(UUID id);
 
      Collection<KPerson> getPersonsOfGroupId(Long id);
 
