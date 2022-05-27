@@ -33,5 +33,6 @@ public interface IUserManagementService {
 
 
     Boolean checkIfPersonIsMember(UUID personId, Long groupId);
+    Collection<PersonDTO> getAllUser();
 }
 

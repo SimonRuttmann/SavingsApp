@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import relationalDatabaseModule.model.Group;
+import relationalDatabaseModule.model.KPerson;
 import relationalDatabaseModule.model.Person;
 import relationalDatabaseModule.service.IDatabaseService;
 
@@ -50,7 +51,7 @@ public class ProcessingController {
         var groupInfo = new GeneralGroupInformationDTO();
 
         //Add all users of the group and the group name
-        Collection<Person> persons = databaseService.getPersonsOfGroupId(groupId);
+        Collection<KPerson> persons = databaseService.getPersonsOfGroupId(groupId);
         persons.forEach(person -> groupInfo.addPersonToGroupInfo(MapperUtil.PersonToDTO(person)));
 
         Group group = databaseService.getGroupById(groupId);
@@ -112,10 +113,10 @@ public class ProcessingController {
 
 
         //Resolve persons
-        Set<Person> allowedPersons;
+        Set<KPerson> allowedPersons;
 
 
-        Collection<Person> persons = databaseService.getPersonsOfGroupId(groupId);
+        Collection<KPerson> persons = databaseService.getPersonsOfGroupId(groupId);
 
         allowedPersons =
                     persons.
@@ -125,7 +126,7 @@ public class ProcessingController {
                     collect(Collectors.toSet());
 
 
-        Set<String> personNames = allowedPersons.stream().map(Person::getUsername).collect(Collectors.toSet());
+        Set<String> personNames = allowedPersons.stream().map(KPerson::getUsername).collect(Collectors.toSet());
 
 
 

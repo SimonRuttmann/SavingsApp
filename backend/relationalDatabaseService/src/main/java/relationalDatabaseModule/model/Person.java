@@ -61,30 +61,30 @@ public class Person {
     /**
      * Many to many mapping between users and groups by using the is_member join table
      */
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "is_member",
-            joinColumns = {@JoinColumn(name="Person_Id", referencedColumnName = "Id")},
-            inverseJoinColumns = {@JoinColumn(name="Group_Id", referencedColumnName = "Id")},
-            uniqueConstraints = @UniqueConstraint(columnNames = {"Person_Id","Group_Id"})
-    )
-    Set<Group> groups = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "is_member",
+//            joinColumns = {@JoinColumn(name="Person_Id", referencedColumnName = "Id")},
+//            inverseJoinColumns = {@JoinColumn(name="Group_Id", referencedColumnName = "Id")},
+//            uniqueConstraints = @UniqueConstraint(columnNames = {"Person_Id","Group_Id"})
+//    )
+//    Set<Group> groups = new HashSet<>();
 
+//
+//    public void addGroup(Group group){
+//        if(group == null) return;
+//        if(this.groups.contains(group)) return;
+//
+//        this.groups.add(group);
+//        group.addMember(this);
+//    }
 
-    public void addGroup(Group group){
-        if(group == null) return;
-        if(this.groups.contains(group)) return;
-
-        this.groups.add(group);
-        group.addMember(this);
-    }
-
-    public void removeGroup(Group group){
-        if(group == null) return;
-        if(!this.groups.contains(group)) return;
-
-        this.groups.remove(group);
-    }
+//    public void removeGroup(Group group){
+//        if(group == null) return;
+//        if(!this.groups.contains(group)) return;
+//
+//        this.groups.remove(group);
+//    }
 
     /**
      * Many to many mapping by using the InvitationPersistence table to add additional attributes
@@ -102,8 +102,8 @@ public class Person {
     public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
 
-    public Set<Group> getGroups() {return groups;}
-    public void setGroups(Set<Group> groups) {this.groups = groups;}
+//    public Set<Group> getGroups() {return groups;}
+//    public void setGroups(Set<Group> groups) {this.groups = groups;}
 
     public Set<Invitation> getInvitations() {return invitations;}
     public void setInvitations(Set<Invitation> invitations) {this.invitations = invitations;}
@@ -128,7 +128,7 @@ public class Person {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", groups=" + groups +
+//                ", groups=" + groups +
                 ", invitations=" + invitations +
                 '}';
     }
