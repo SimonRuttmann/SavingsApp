@@ -17,6 +17,7 @@ public interface IUserManagementService {
     PersonDTO getUser(UUID userId);
     Collection<GroupDTO> getAllGroupsOfPerson(UUID personId);
     //PersonDTO deleteUser(UUID userId);
+    Collection<String> getAllUsernames();
 
     //Group
     GroupDTO registerGroup(HttpServletRequest request, GroupDTO registerDto);
@@ -34,5 +35,7 @@ public interface IUserManagementService {
 
     Boolean checkIfPersonIsMember(UUID personId, Long groupId);
     Collection<PersonDTO> getAllUser();
+
+
 }
 

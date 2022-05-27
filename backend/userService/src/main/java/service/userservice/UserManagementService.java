@@ -84,6 +84,18 @@ public class UserManagementService implements IUserManagementService {
         return groupsDto;
     }
 
+    @Override
+    public Collection<String> getAllUsernames() {
+        Collection<String> usernames = new HashSet<>();
+
+        List<KPerson> persons = keycloakRepository.findAll();
+        persons.forEach(person -> {
+            if(!Objects.equals(person.getUsername(), "admin")) {usernames.add(person.getUsername());}
+
+        });
+        return usernames;
+    }
+
 //    @Override
 //    public PersonDTO deleteUser(UUID userId) {
 //        KPerson person = databaseService.getPersonById(userId);

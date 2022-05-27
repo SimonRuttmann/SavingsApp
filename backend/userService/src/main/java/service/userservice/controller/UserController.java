@@ -8,6 +8,7 @@ import service.userservice.IUserManagementService;
 import service.userservice.imp.KeycloakService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,6 +37,11 @@ public class UserController {
     @GetMapping("/user/{userId}/groups")
     public Collection<GroupDTO> getGroups(@PathVariable UUID userId){
         return userManagementService.getAllGroupsOfPerson(userId);
+    }
+
+    @GetMapping("/user/usernames")
+    public Collection<String> getGroups(){
+        return userManagementService.getAllUsernames();
     }
 //
 //    @DeleteMapping("/user/{userId}")
