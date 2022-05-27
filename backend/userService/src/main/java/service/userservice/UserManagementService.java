@@ -74,19 +74,7 @@ public class UserManagementService implements IUserManagementService {
             Group newGroup = new Group("Ich", true );
             Group savedGroup = databaseService.saveGroup(newGroup);
             databaseService.addPersonToGroup(personId, savedGroup.getId());
-            // open groupDoc in Mongo
-            var d = new GroupDocument();
-            d.groupId = savedGroup.getId();
-            GroupDocument savedGroupDoc = groupDocumentService.createDocument(d);
-
-            // create default Categories
-            CategoryDTO miete = new CategoryDTO("Miete");
-            CategoryDTO lebensmittel = new CategoryDTO("Lebensmittel");
-            CategoryDTO restaurant = new CategoryDTO("Restaurant");
-
-            groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(miete));
-            groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(lebensmittel));
-            groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(restaurant));
+            newMongoGroup(savedGroup.getId());
 
             groups = databaseService.getGroupsOfPersonId(personId);
         }
@@ -113,6 +101,7 @@ public class UserManagementService implements IUserManagementService {
         Group savedGroup = databaseService.saveGroup(newGroup);
         // add the creator-user to group
         databaseService.addPersonToGroup(userId, savedGroup.getId());
+        newMongoGroup(savedGroup.getId());
         return MapperUtil.GroupToDTO(savedGroup);
     }
 
@@ -222,5 +211,22 @@ public class UserManagementService implements IUserManagementService {
         KeycloakAuthenticationToken principal = (KeycloakAuthenticationToken) request.getUserPrincipal();
         String userId = principal.getPrincipal().toString();
         return UUID.fromString(userId);
+    }
+
+    private void newMongoGroup(Long groupId){
+        // open groupDoc in Mongo
+        var d = new GroupDocument();
+        d.groupId = groupId;
+        GroupDocument savedGroupDoc = groupDocumentService.createDocument(d);
+
+        // create default Categories
+        CategoryDTO miete = new CategoryDTO("Miete");
+        CategoryDTO lebensmittel = new CategoryDTO("Lebensmittel");
+        CategoryDTO restaurant = new CategoryDTO("Restaurant");
+
+        groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(miete));
+        groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(lebensmittel));
+        groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(restaurant));
+
     }
 }
