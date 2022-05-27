@@ -24,10 +24,10 @@ public class UserController {
         this.userManagementService = userManagementService;
     }
 
-    @PostMapping("/user/register")
-    public PersonDTO registerNewUser(@RequestBody PersonDTO registerDto) {
-        return userManagementService.register(registerDto);
-    }
+//    @PostMapping("/user/register")
+//    public PersonDTO registerNewUser(@RequestBody PersonDTO registerDto) {
+//        return userManagementService.register(registerDto);
+//    }
     @GetMapping("/user/{userId}")
     public PersonDTO getUser(@PathVariable UUID userId){
         return userManagementService.getUser(userId);

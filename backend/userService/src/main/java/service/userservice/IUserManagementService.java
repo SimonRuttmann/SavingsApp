@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface IUserManagementService {
 
     //Person
-    PersonDTO register(PersonDTO registerDto);
+    //PersonDTO register(PersonDTO registerDto);
     PersonDTO getUser(UUID userId);
     Collection<GroupDTO> getAllGroupsOfPerson(UUID personId);
     //PersonDTO deleteUser(UUID userId);
