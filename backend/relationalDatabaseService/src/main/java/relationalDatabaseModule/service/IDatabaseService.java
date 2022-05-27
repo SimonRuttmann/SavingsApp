@@ -44,7 +44,7 @@ public interface IDatabaseService {
 
      Pair<KPerson, Group> addPersonToGroup(UUID personId, Long groupId);
 
-     Invitation addInvitation(UUID personId, Long groupId);
+     Invitation addInvitation(String username, Long groupId, UUID inviterPerson);
 
      Invitation declineInvitation(UUID userId, Long groupId);
 

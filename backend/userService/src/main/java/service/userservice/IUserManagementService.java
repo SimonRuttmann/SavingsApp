@@ -26,7 +26,7 @@ public interface IUserManagementService {
     GroupDTO deleteGroup(Long groupId);
 
     //Invitation
-    InvitationDTO invite(InviteDTO newInvitation);
+    InvitationDTO invite(InviteDTO newInvitation, HttpServletRequest request);
     List<InvitationDTO> getInvitations(HttpServletRequest request);
     InvitationDTO acceptInvitation(HttpServletRequest request, Long groupId);
     InvitationDTO declineInvitation(HttpServletRequest request, Long groupId);

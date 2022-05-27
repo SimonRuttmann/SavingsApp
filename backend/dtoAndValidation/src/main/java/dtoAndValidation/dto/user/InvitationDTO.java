@@ -15,14 +15,9 @@ public class InvitationDTO {
     public String status = null;
     public InvitationDTO() {}
 
-    public InvitationDTO( Long groupId, String groupName) {
-        this.groupId = groupId;
-        this.groupName = groupName;
-    }
-
     public InvitationDTO(InvitationStatus invitationStatus, Long id, String groupName, Date date) {
         this.status = invitationStatus.toString();
-        this.groupId = groupId;
+        this.groupId = id;
         this.groupName = groupName;
         this.date = date;
     }

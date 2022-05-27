@@ -29,8 +29,8 @@ public class InvitationController {
      *ERROR because of saving in DB
      */
     @PostMapping("/invitation/invite")
-    public InvitationDTO invite(@RequestBody InviteDTO newInvitation){
-        return userManagementService.invite(newInvitation);
+    public InvitationDTO invite(@RequestBody InviteDTO newInvitation, HttpServletRequest request){
+        return userManagementService.invite(newInvitation, request);
     }
 
     /**

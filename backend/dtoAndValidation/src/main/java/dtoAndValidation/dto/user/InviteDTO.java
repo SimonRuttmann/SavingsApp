@@ -6,12 +6,12 @@ import java.util.UUID;
 
 public class InviteDTO implements IValidatable {
 
-    public UUID userId;
+    public String username;
     public Long groupId;
     //public List<Invitation> inviteList;
 
-    public InviteDTO(UUID userId, Long groupId) {
-        this.userId = userId;
+    public InviteDTO(String username, Long groupId) {
+        this.username = username;
         this.groupId = groupId;
         //this.inviteList = inviteList;
     }

@@ -12,11 +12,11 @@ import java.util.UUID;
 @Repository
 public interface KeycloakRepository extends JpaRepository<KPerson,String>, RepositoryDetachAdapterCustom<KPerson>{
     @Query(value = "SELECT s FROM KPerson As s WHERE s.username = ?1")
-    Optional<Person> findPersonByUsername(String username);
+    Optional<KPerson> findPersonByUsername(String username);
 
     @Query(value = "SELECT s FROM KPerson As s WHERE s.email = ?1")
-    Optional<Person> findPersonByEmail(String email);
+    Optional<KPerson> findPersonByEmail(String email);
 
     @Query(value = "SELECT s FROM KPerson As s WHERE s.id = ?1")
-    Optional<Person> findPersonById(String id);
+    Optional<KPerson> findPersonById(String id);
 }

@@ -153,11 +153,13 @@ public class UserManagementService implements IUserManagementService {
 
     //Invitaion
     @Override
-    public InvitationDTO invite(InviteDTO newInvitation) {
-
-
+    public InvitationDTO invite(InviteDTO newInvitation, HttpServletRequest request) {
+        // check if person is inviting themself
+        UUID registeredUserId = getUserId(request);
+        KPerson registeredUser = databaseService.getPersonById(registeredUserId);
+        if(Objects.equals(newInvitation.username, registeredUser.getUsername())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User can't invite themself");
         //Check also if userId and groupID exists
-        Invitation invitation = databaseService.addInvitation(newInvitation.userId, newInvitation.groupId);
+        Invitation invitation = databaseService.addInvitation(newInvitation.username, newInvitation.groupId, registeredUserId);
 
         if (invitation == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user or group can not be find");
 
@@ -174,7 +176,7 @@ public class UserManagementService implements IUserManagementService {
                 listDto.add(MapperUtil.InvitationToDTO(invitation));
             });
         }
-        listDto.sort(Comparator.comparing(InvitationDTO::getCreatedOn));
+        listDto.sort(Comparator.comparing(InvitationDTO::getDate));
         return listDto;
     }
 
