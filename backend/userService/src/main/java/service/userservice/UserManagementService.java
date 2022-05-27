@@ -136,7 +136,7 @@ public class UserManagementService implements IUserManagementService {
     public GroupDTO deleteGroup(Long groupId) {
         Group group = databaseService.getGroupById(groupId);
         if(group == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group with id "+groupId+" don't exists.");
-
+        if(Objects.equals(group.getGroupName(), "Ich")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Personal Group can't be deleted");
         databaseService.removeGroup(groupId);
         return MapperUtil.GroupToDTO(group);
     }
