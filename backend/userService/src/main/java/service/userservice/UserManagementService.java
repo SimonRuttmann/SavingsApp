@@ -39,21 +39,21 @@ public class UserManagementService implements IUserManagementService {
     }
 
     // Person
-    @Override
-    public PersonDTO register(PersonDTO registerDto) {
-        Person newPerson = new Person(registerDto.getId(), registerDto.getUsername(), registerDto.getEmail());
-        var p =  databaseService.savePerson(newPerson);
-        redisDataBaseService.incrementValue(AtomicIntegerModel.COUNTUSERS);
-        // open Group in postgres - temp solution becaues copy of registerGroup
-        Group newGroup = new Group("Ich", true );
-        Group savedGroup = databaseService.saveGroup(newGroup);
-        databaseService.addPersonToGroup(registerDto.getId(), savedGroup.getId());
-        // open groupDoc in Mongo
-        var d =new GroupDocument();
-        d.groupId = savedGroup.getId();
-        groupDocumentService.createDocument(d);
-        return new PersonDTO(newPerson.getId(), newPerson.getUsername(), newPerson.getEmail());
-    }
+//    @Override
+//    public PersonDTO register(PersonDTO registerDto) {
+//        Person newPerson = new Person(registerDto.getId(), registerDto.getUsername(), registerDto.getEmail());
+//        var p =  databaseService.savePerson(newPerson);
+//        redisDataBaseService.incrementValue(AtomicIntegerModel.COUNTUSERS);
+//        // open Group in postgres - temp solution becaues copy of registerGroup
+//        Group newGroup = new Group("Ich", true );
+//        Group savedGroup = databaseService.saveGroup(newGroup);
+//        databaseService.addPersonToGroup(registerDto.getId(), savedGroup.getId());
+//        // open groupDoc in Mongo
+//        var d =new GroupDocument();
+//        d.groupId = savedGroup.getId();
+//        groupDocumentService.createDocument(d);
+//        return new PersonDTO(newPerson.getId(), newPerson.getUsername(), newPerson.getEmail());
+//    }
 
     @Override
     public PersonDTO getUser(UUID userId) {
