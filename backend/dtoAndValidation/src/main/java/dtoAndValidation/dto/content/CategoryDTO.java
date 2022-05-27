@@ -28,8 +28,7 @@ public class CategoryDTO implements IValidatable {
     }
 
 
-    public CategoryDTO(String id, String name) {
-        this.id = id;
+    public CategoryDTO(String name) {
         this.name = name;
     }
 

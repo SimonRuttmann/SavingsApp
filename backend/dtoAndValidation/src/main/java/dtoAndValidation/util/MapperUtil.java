@@ -3,11 +3,13 @@ package dtoAndValidation.util;
 import documentDatabaseModule.model.Category;
 import documentDatabaseModule.model.DocObjectIdUtil;
 import documentDatabaseModule.model.SavingEntry;
+import documentDatabaseModule.service.EmbeddedDocumentIdentifier;
 import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.content.SavingEntryDTO;
 import dtoAndValidation.dto.user.GroupDTO;
 import dtoAndValidation.dto.user.InvitationDTO;
 import dtoAndValidation.dto.user.PersonDTO;
+import org.bson.types.ObjectId;
 import relationalDatabaseModule.model.Group;
 import relationalDatabaseModule.model.Invitation;
 import relationalDatabaseModule.model.KPerson;
@@ -20,7 +22,6 @@ public class MapperUtil {
 
     public static Category DTOToCategory(CategoryDTO dto){
         Category category = new Category();
-        category.setId(DocObjectIdUtil.toObjectId(dto.getId()));
         category.setName(dto.getName());
         return category;
     }
