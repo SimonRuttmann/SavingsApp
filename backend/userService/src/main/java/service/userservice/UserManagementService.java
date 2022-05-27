@@ -84,14 +84,14 @@ public class UserManagementService implements IUserManagementService {
         return groupsDto;
     }
 
-    @Override
-    public PersonDTO deleteUser(UUID userId) {
-        KPerson person = databaseService.getPersonById(userId);
-        if (person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id"+ userId +" don't exists");
-
-        databaseService.removePerson(userId);
-        return MapperUtil.PersonToDTO(person);
-    }
+//    @Override
+//    public PersonDTO deleteUser(UUID userId) {
+//        KPerson person = databaseService.getPersonById(userId);
+//        if (person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id"+ userId +" don't exists");
+//
+//        databaseService.removePerson(userId);
+//        return MapperUtil.PersonToDTO(person);
+//    }
 
     // Group
     @Override
@@ -127,8 +127,17 @@ public class UserManagementService implements IUserManagementService {
 
     @Override
     public GroupDTO leaveGroup(HttpServletRequest request, Long groupId) {
+        //test group
+        Group group = databaseService.getGroupById(groupId);
+        if(group == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group with id "+groupId+" don't exists.");
+        if(Objects.equals(group.getGroupName(), "Ich")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Personal Group can't be left");
+
         UUID userId = getUserId(request);
         Pair<KPerson, Group> pair = databaseService.removePersonFromGroup(userId, groupId);
+        if(pair.getSecond().getMembers().isEmpty()){
+            databaseService.removeGroup(groupId);
+            groupDocumentService.deleteDocument(groupId);
+        }
         return MapperUtil.GroupToDTO(pair.getSecond());
     }
 
@@ -138,6 +147,7 @@ public class UserManagementService implements IUserManagementService {
         if(group == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group with id "+groupId+" don't exists.");
         if(Objects.equals(group.getGroupName(), "Ich")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Personal Group can't be deleted");
         databaseService.removeGroup(groupId);
+        groupDocumentService.deleteDocument(groupId);
         return MapperUtil.GroupToDTO(group);
     }
 

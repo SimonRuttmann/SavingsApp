@@ -37,9 +37,9 @@ public class UserController {
     public Collection<GroupDTO> getGroups(@PathVariable UUID userId){
         return userManagementService.getAllGroupsOfPerson(userId);
     }
-
-    @DeleteMapping("/user/{userId}")
-    public PersonDTO deleteUser(@PathVariable String userId) {
-        return userManagementService.deleteUser(UUID.fromString(userId));
-    }
+//
+//    @DeleteMapping("/user/{userId}")
+//    public PersonDTO deleteUser(@PathVariable String userId) {
+//        return userManagementService.deleteUser(UUID.fromString(userId));
+//    }
 }
