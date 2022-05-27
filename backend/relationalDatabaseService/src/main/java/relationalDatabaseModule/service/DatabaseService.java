@@ -130,12 +130,15 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     @Transactional
-    public Invitation addInvitation(UUID personId, Long groupId) {
+    public Invitation addInvitation(String username, Long groupId, UUID inviterPerson) {
+        Boolean isInviterMember = checkIfPersonIsMember(inviterPerson, groupId);
+        if(!isInviterMember) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person is not in Group it is inviting others in");
 
-        Optional<KPerson> optPerson = personRepository.findById(personId.toString());
+        Optional<KPerson> optPerson = personRepository.findPersonByUsername(username);
         Optional<Group> optGroup = groupRepository.findById(groupId);
 
         if(optGroup.isEmpty() || optPerson.isEmpty()) return null;
+        if(Objects.equals(optGroup.get().getGroupName(), "Ich")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Other Users can't be invited in personal Group");
         KPerson person = optPerson.get();
         Group group = optGroup.get();
 
