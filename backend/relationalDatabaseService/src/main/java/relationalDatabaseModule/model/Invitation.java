@@ -32,7 +32,7 @@ public class Invitation {
     @ManyToOne
     @MapsId("personCompoundId")
     @JoinColumn(name="Id_Invited_Person")
-    private Person invitedPerson;
+    private KPerson invitedPerson;
 
     /**
      * The reference to the group object
@@ -64,11 +64,11 @@ public class Invitation {
         this.id = id;
     }
 
-    public Person getInvitedPerson() {
+    public KPerson getInvitedPerson() {
         return invitedPerson;
     }
 
-    public void setInvitedPerson(Person invitedPerson) {
+    public void setInvitedPerson(KPerson invitedPerson) {
         this.invitedPerson = invitedPerson;
     }
 

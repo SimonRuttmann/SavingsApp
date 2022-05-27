@@ -12,19 +12,22 @@ import java.util.*;
 @Component
 public class DatabaseService implements IDatabaseService {
 
-    private final PersonRepository personRepository;
+    private final KeycloakRepository personRepository;
     private final GroupRepository groupRepository;
     private final InvitationRepository invitationRepository;
+    private final PersonRepository personRepositoryRIGHT;
 
     @Autowired
     public DatabaseService(
-            PersonRepository personRepository,
+            KeycloakRepository personRepository,
             GroupRepository groupRepository,
-            InvitationRepository invitationRepository) {
+            InvitationRepository invitationRepository,
+            PersonRepository personRepositoryRIGHT) {
 
         this.personRepository = personRepository;
         this.groupRepository = groupRepository;
         this.invitationRepository = invitationRepository;
+        this.personRepositoryRIGHT = personRepositoryRIGHT;
     }
 
 
@@ -32,8 +35,8 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     @Transactional
-    public Person getPersonById(UUID id){
-        Optional<Person> person = personRepository.findById(id);
+    public KPerson getPersonById(UUID id){
+        Optional<KPerson> person = personRepository.findById(id.toString());
         if(person.isEmpty()) return null;
         personRepository.detach(person.get());
         return person.get();
@@ -51,7 +54,7 @@ public class DatabaseService implements IDatabaseService {
     @Transactional
     public Collection<Group> getGroupsOfPersonId(UUID id){
 
-        var person = personRepository.findById(id);
+        var person = personRepository.findById(id.toString());
 
         if(person.isEmpty()) return null;
 
@@ -63,7 +66,7 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     @Transactional
-    public  Collection<Person> getPersonsOfGroupId(Long id){
+    public  Collection<KPerson> getPersonsOfGroupId(Long id){
 
         Optional<Group> group =  groupRepository.findById(id);
 
@@ -80,9 +83,9 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     @Transactional
-    public Pair<Person, Group> addPersonToGroup(UUID personId, Long groupId){
+    public Pair<KPerson, Group> addPersonToGroup(UUID personId, Long groupId){
 
-        Person person = personRepository.getById(personId);
+        KPerson person = personRepository.getById(personId.toString());
         Group group = groupRepository.getById(groupId);
 
         person.addGroup(group);
@@ -99,11 +102,11 @@ public class DatabaseService implements IDatabaseService {
     // TODO warum wird hier nicht geprüft ob die person existiert
     @Override
     @Transactional
-    public Pair<Person, Group> removePersonFromGroup(UUID personId, Long groupId){
+    public Pair<KPerson, Group> removePersonFromGroup(UUID personId, Long groupId){
 
         //check if person and group exists
 
-        Person person = personRepository.getById(personId);
+        KPerson person = personRepository.getById(personId.toString());
         Group group = groupRepository.getById(groupId);
         if(person == null || group == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "this group and/or person do not exist.");
         // check if person is in the group
@@ -129,11 +132,11 @@ public class DatabaseService implements IDatabaseService {
     @Transactional
     public Invitation addInvitation(UUID personId, Long groupId) {
 
-        Optional<Person> optPerson = personRepository.findById(personId);
+        Optional<KPerson> optPerson = personRepository.findById(personId.toString());
         Optional<Group> optGroup = groupRepository.findById(groupId);
 
         if(optGroup.isEmpty() || optPerson.isEmpty()) return null;
-        Person person = optPerson.get();
+        KPerson person = optPerson.get();
         Group group = optGroup.get();
 
         Invitation invitation = new Invitation();
@@ -161,7 +164,7 @@ public class DatabaseService implements IDatabaseService {
     @Override
     @Transactional
     public Invitation declineInvitation(UUID userId, Long groupId) {
-        Person person = getPersonById(userId);
+        KPerson person = getPersonById(userId);
         Group group = getGroupById(groupId);
         if(group == null || person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person or/and Group does not exist.");
 
@@ -180,7 +183,7 @@ public class DatabaseService implements IDatabaseService {
     @Override
     @Transactional
     public Invitation acceptInvitation(UUID userId, Long groupId) {
-        Person person = getPersonById(userId);
+        KPerson person = getPersonById(userId);
         Group group = getGroupById(groupId);
         if(group == null || person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person or/and Group does not exist.");
 
@@ -202,7 +205,7 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     public List<Invitation> getAllInvitations(UUID userId) {
-        Person person = personRepository.getById(userId);
+        KPerson person = personRepository.getById(userId.toString());
         List<Invitation> invitationList = invitationRepository.findByInvitedPersonAndInvitationStatus(person,InvitationStatus.OPEN);
         if (invitationList.isEmpty()) return null;
         return invitationList;
@@ -214,7 +217,7 @@ public class DatabaseService implements IDatabaseService {
     @Transactional
     public void removePerson(UUID id){
 
-         Person person = personRepository.getById(id);
+         KPerson person = personRepository.getById(id.toString());
 
          person.getGroups().forEach(group -> group.removeMember(person));
          person.getInvitations().forEach(inv -> inv.getRequestedGroup().getInvitations().remove(inv));
@@ -244,10 +247,10 @@ public class DatabaseService implements IDatabaseService {
 
 
 
-        var value = this.personRepository.saveAndFlush(person);
+        var value = this.personRepositoryRIGHT.saveAndFlush(person);
 
 
-        personRepository.detach(person);
+        personRepositoryRIGHT.detach(person);
         return value;
     }
 

@@ -10,7 +10,10 @@ import dtoAndValidation.dto.user.InvitationDTO;
 import dtoAndValidation.dto.user.PersonDTO;
 import relationalDatabaseModule.model.Group;
 import relationalDatabaseModule.model.Invitation;
+import relationalDatabaseModule.model.KPerson;
 import relationalDatabaseModule.model.Person;
+
+import java.util.UUID;
 
 
 public class MapperUtil {
@@ -54,9 +57,9 @@ public class MapperUtil {
     }
 
 
-    public static PersonDTO PersonToDTO(Person person){
+    public static PersonDTO PersonToDTO(KPerson person){
         PersonDTO dto = new PersonDTO();
-        dto.setId(person.getId());
+        dto.setId(UUID.fromString(person.getId()));
         dto.setEmail(person.getEmail());
         dto.setUsername(person.getUsername());
         return dto;
@@ -66,6 +69,7 @@ public class MapperUtil {
         GroupDTO groupDTO = new GroupDTO();
         groupDTO.setId(group.getId());
         groupDTO.setGroupName(group.getGroupName());
+        groupDTO.setPersonGroupBoolean(group.getPersonGroupBool());
         return groupDTO;
     }
 

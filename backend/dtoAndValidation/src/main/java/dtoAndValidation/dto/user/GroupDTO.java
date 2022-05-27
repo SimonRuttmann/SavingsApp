@@ -41,6 +41,7 @@ public class GroupDTO implements IValidatable {
     public GroupDTO(Long id, String groupName, Boolean personGroup) {
         this.id = id;
         this.groupName = groupName;
+        this.personGroup = personGroup;
     }
 
     @Override

@@ -1,39 +1,41 @@
 package service.userservice;
 
+import documentDatabaseModule.model.Category;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.service.IGroupDocumentService;
+import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.user.*;
 import dtoAndValidation.util.MapperUtil;
 import model.AtomicIntegerModel;
+import org.bson.types.ObjectId;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import relationalDatabaseModule.model.Group;
-import relationalDatabaseModule.model.Invitation;
-import relationalDatabaseModule.model.Pair;
-import relationalDatabaseModule.model.Person;
+import relationalDatabaseModule.model.*;
 import relationalDatabaseModule.service.DatabaseService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import relationalDatabaseModule.service.KeycloakRepository;
 import service.RedisDatabaseService;
 
 @Service
 public class UserManagementService implements IUserManagementService {
     @Autowired
     private RedisDatabaseService redisDataBaseService;
-
     private final DatabaseService databaseService;
     private final IGroupDocumentService groupDocumentService;
+    private final KeycloakRepository keycloakRepository;
 
     @Autowired
-    public UserManagementService(DatabaseService databaseService, IGroupDocumentService groupDocumentService) {
+    public UserManagementService(DatabaseService databaseService, IGroupDocumentService groupDocumentService, KeycloakRepository keycloakRepository) {
         this.databaseService = databaseService;
         this.groupDocumentService = groupDocumentService;
+        this.keycloakRepository = keycloakRepository;
     }
 
     // Person
@@ -50,12 +52,12 @@ public class UserManagementService implements IUserManagementService {
         var d =new GroupDocument();
         d.groupId = savedGroup.getId();
         groupDocumentService.createDocument(d);
-        return MapperUtil.PersonToDTO(p);
+        return new PersonDTO(newPerson.getId(), newPerson.getUsername(), newPerson.getEmail());
     }
 
     @Override
     public PersonDTO getUser(UUID userId) {
-        Person person = databaseService.getPersonById(userId);
+        KPerson person = databaseService.getPersonById(userId);
         if (person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id"+userId+" don't exists");
         return MapperUtil.PersonToDTO(person);
     }
@@ -66,6 +68,28 @@ public class UserManagementService implements IUserManagementService {
         Collection<Group> groups = databaseService.getGroupsOfPersonId(personId);
         if (groups == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "the user with id "+personId+" is not in the db");
 
+        // new registered User
+        if (groups.isEmpty()){
+            // open Group in postgres
+            Group newGroup = new Group("Ich", true );
+            Group savedGroup = databaseService.saveGroup(newGroup);
+            databaseService.addPersonToGroup(personId, savedGroup.getId());
+            // open groupDoc in Mongo
+            var d = new GroupDocument();
+            d.groupId = savedGroup.getId();
+            GroupDocument savedGroupDoc = groupDocumentService.createDocument(d);
+
+            // create default Categories
+            CategoryDTO miete = new CategoryDTO("Miete");
+            CategoryDTO lebensmittel = new CategoryDTO("Lebensmittel");
+            CategoryDTO restaurant = new CategoryDTO("Restaurant");
+
+            groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(miete));
+            groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(lebensmittel));
+            groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(restaurant));
+
+            groups = databaseService.getGroupsOfPersonId(personId);
+        }
         groups.forEach( group -> {
             groupsDto.add(MapperUtil.GroupToDTO(group));
         });
@@ -74,7 +98,7 @@ public class UserManagementService implements IUserManagementService {
 
     @Override
     public PersonDTO deleteUser(UUID userId) {
-        Person person = databaseService.getPersonById(userId);
+        KPerson person = databaseService.getPersonById(userId);
         if (person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id"+ userId +" don't exists");
 
         databaseService.removePerson(userId);
@@ -102,7 +126,7 @@ public class UserManagementService implements IUserManagementService {
     @Override
     public Collection<PersonDTO> getAllUserfromGroup(Long groupId) {
         Collection<PersonDTO> personsDTO = new HashSet<>();
-        Collection<Person> members = databaseService.getPersonsOfGroupId(groupId);
+        Collection<KPerson> members = databaseService.getPersonsOfGroupId(groupId);
         if (members == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "the group with id "+groupId+" is not in the db");
 
         members.forEach( member -> {
@@ -115,7 +139,7 @@ public class UserManagementService implements IUserManagementService {
     @Override
     public GroupDTO leaveGroup(HttpServletRequest request, Long groupId) {
         UUID userId = getUserId(request);
-        Pair<Person, Group> pair = databaseService.removePersonFromGroup(userId, groupId);
+        Pair<KPerson, Group> pair = databaseService.removePersonFromGroup(userId, groupId);
         return MapperUtil.GroupToDTO(pair.getSecond());
     }
 
@@ -179,6 +203,18 @@ public class UserManagementService implements IUserManagementService {
     @Override
     public Boolean checkIfPersonIsMember(UUID personId, Long groupId) {
         return databaseService.checkIfPersonIsMember(personId, groupId);
+    }
+
+    @Override
+    public Collection<PersonDTO> getAllUser() {
+        Collection<PersonDTO> personsDTO = new HashSet<>();
+
+        List<KPerson> persons = keycloakRepository.findAll();
+        persons.forEach(person -> {
+            personsDTO.add(MapperUtil.PersonToDTO(person));
+
+        });
+        return personsDTO;
     }
 
 

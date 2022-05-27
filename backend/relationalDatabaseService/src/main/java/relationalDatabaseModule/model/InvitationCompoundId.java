@@ -13,8 +13,8 @@ import java.util.UUID;
 
 @Embeddable
 public class InvitationCompoundId implements Serializable {
-    @Type(type="org.hibernate.type.PostgresUUIDType")
-    private UUID personCompoundId;
+
+    private String personCompoundId;
 
     private Long groupCompoundId;
 
@@ -23,7 +23,7 @@ public class InvitationCompoundId implements Serializable {
     private Date date;
     public InvitationCompoundId() {}
 
-    public InvitationCompoundId(UUID userCompoundId, Long groupCompoundId) {
+    public InvitationCompoundId(String userCompoundId, Long groupCompoundId) {
         this.personCompoundId = userCompoundId;
         this.groupCompoundId = groupCompoundId;
     }
@@ -33,8 +33,8 @@ public class InvitationCompoundId implements Serializable {
 
     public void setDate(Date date) {this.date = date;}
 
-    public UUID getPersonCompoundId() {return personCompoundId;}
-    public void setPersonCompoundId(UUID userId) {this.personCompoundId = userId;}
+    public UUID getPersonCompoundId() {return UUID.fromString(personCompoundId);}
+    public void setPersonCompoundId(String userId) {this.personCompoundId = userId.toString();}
 
     public Long getGroupCompoundId() {return groupCompoundId;}
     public void setGroupCompoundId(Long groupId) {this.groupCompoundId = groupId;}
