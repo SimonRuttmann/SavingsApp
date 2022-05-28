@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
-import service.contentservice.services.DatabaseService;
-import service.userservice.service.imp.DatabaseService;
+import relationalDatabaseModule.service.DatabaseService;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
