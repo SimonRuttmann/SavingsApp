@@ -115,7 +115,7 @@ public class CategoryController {
 
         //Update category
         Category updatedCategory = groupDocumentService.updateCategory(
-                groupId, MapperUtil.DTOToCategory(category));
+                groupId, MapperUtil.DTOToExistingCategory(category));
 
         if(updatedCategory == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -146,7 +146,7 @@ public class CategoryController {
         //Validate input
         var validator = ValidatorFactory.getInstance().getValidator(CategoryDTO.class);
 
-        if(!validator.validate(category, true) || groupId == null)
+        if(!validator.validate(category, false) || groupId == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         //Insert category
