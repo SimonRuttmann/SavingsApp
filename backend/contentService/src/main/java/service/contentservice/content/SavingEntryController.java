@@ -8,6 +8,7 @@ import dtoAndValidation.dto.content.SavingEntryDTO;
 import dtoAndValidation.util.MapperUtil;
 import dtoAndValidation.validation.ValidatorFactory;
 import model.AtomicIntegerModel;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import service.IRedisDatabaseService;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -154,7 +157,7 @@ public class SavingEntryController {
 
         //Insert SavingEntry
         SavingEntry insertSavingEntry = groupDocumentService.addSavingEntry(
-                groupId, MapperUtil.DTOToSavingEntry(savingEntry));
+                groupId, MapperUtil.DTOToNewSavingEntry(savingEntry));
 
         if(insertSavingEntry == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -192,7 +195,6 @@ public class SavingEntryController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 
 
