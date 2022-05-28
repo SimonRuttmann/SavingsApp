@@ -29,7 +29,7 @@ public class SavingEntry extends EmbeddedDocumentIdentifier {
 
 
     @Field(targetType = FieldType.STRING)
-    private String description;
+    private String description = "";
 
     public String getName() {
         return name;
@@ -84,13 +84,12 @@ public class SavingEntry extends EmbeddedDocumentIdentifier {
 
     public SavingEntry(
             String name, Double costBalance, Category category,
-            Date creationDate, String creator, String description) {
+            Date creationDate, String creator) {
         this.name = name;
         this.costBalance = costBalance;
         this.category = category;
         this.creationDate = creationDate;
         this.creator = creator;
-        this.description = description;
     }
 
     @Override

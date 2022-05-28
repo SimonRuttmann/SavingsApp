@@ -12,6 +12,8 @@ import relationalDatabaseModule.model.Group;
 import relationalDatabaseModule.model.Invitation;
 import relationalDatabaseModule.model.KPerson;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -39,13 +41,28 @@ public class MapperUtil {
 
     public static SavingEntry DTOToSavingEntry(SavingEntryDTO dto){
         SavingEntry savingEntry = new SavingEntry();
-        savingEntry.setCategory(DTOToCategory(dto.getCategory()));
+        savingEntry.setCategory(DTOToExistingCategory(dto.getCategory()));
         savingEntry.setDescription(dto.getDescription());
         savingEntry.setCreationDate(dto.getCreationDate());
         savingEntry.setCreator(dto.getCreator());
         savingEntry.setId(DocObjectIdUtil.toObjectId(dto.getId()));
         savingEntry.setCostBalance(dto.getCostBalance());
         savingEntry.setName(dto.getName());
+        return savingEntry;
+    }
+
+    public static SavingEntry DTOToNewSavingEntry(SavingEntryDTO dto){
+
+        SavingEntry savingEntry = new SavingEntry(
+                dto.getName(),
+                dto.getCostBalance(),
+                DTOToExistingCategory(dto.getCategory()),
+                new Date(),
+                dto.getCreator()
+        );
+        if (dto.getDescription() != null) {
+            savingEntry.setDescription(dto.getDescription());
+        }
         return savingEntry;
     }
 
