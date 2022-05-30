@@ -10,7 +10,9 @@
 
 #Volumes
 /backend/mongodb/data/
-
+/backend/postgreSql/data
+/backend/postgreSql/postgresData
+/backend/postgreSql/keycloakData
 /backend/redis/data/
 
 # Node artifact files
