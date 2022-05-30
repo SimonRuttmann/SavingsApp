@@ -1,15 +1,14 @@
 package service.userservice.controller;
 
+import dtoAndValidation.dto.user.GroupDTO;
+import dtoAndValidation.dto.user.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.userservice.businessmodel.account.GroupDTO;
-import service.userservice.businessmodel.account.PersonDTO;
-import service.userservice.businessmodel.account.RegisterPersonDTO;
-import service.userservice.persistence.entity.userdata.Group;
-import service.userservice.service.IUserManagementService;
-import service.userservice.service.imp.KeycloakService;
+import service.userservice.IUserManagementService;
+import service.userservice.imp.KeycloakService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,10 +25,10 @@ public class UserController {
         this.userManagementService = userManagementService;
     }
 
-    @PostMapping("/user/register")
-    public PersonDTO registerNewUser(@RequestBody RegisterPersonDTO registerDto) {
-        return userManagementService.register(registerDto);
-    }
+//    @PostMapping("/user/register")
+//    public PersonDTO registerNewUser(@RequestBody PersonDTO registerDto) {
+//        return userManagementService.register(registerDto);
+//    }
     @GetMapping("/user/{userId}")
     public PersonDTO getUser(@PathVariable UUID userId){
         return userManagementService.getUser(userId);
@@ -40,8 +39,13 @@ public class UserController {
         return userManagementService.getAllGroupsOfPerson(userId);
     }
 
-    @DeleteMapping("/user/{userId}")
-    public PersonDTO deleteUser(@PathVariable String userId) {
-        return userManagementService.deleteUser(UUID.fromString(userId));
+    @GetMapping("/user/usernames")
+    public Collection<String> getGroups(){
+        return userManagementService.getAllUsernames();
     }
+//
+//    @DeleteMapping("/user/{userId}")
+//    public PersonDTO deleteUser(@PathVariable String userId) {
+//        return userManagementService.deleteUser(UUID.fromString(userId));
+//    }
 }

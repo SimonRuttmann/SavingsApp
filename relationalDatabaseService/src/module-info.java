@@ -1,3 +1,0 @@
-module relationalDatabaseService {
-    exports relationalDatabaseService;
-}

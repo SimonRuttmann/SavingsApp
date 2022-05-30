@@ -1,3 +1,0 @@
-module inMemoryDatabaseService {
-    exports inMemoryDatabaseService;
-}
