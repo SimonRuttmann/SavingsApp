@@ -102,13 +102,13 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
-  chatservice:
-    container_name: chat_service
-    restart: on-failure
-    build:
-      context: ./chatservice
-      dockerfile: Dockerfile
-    ports:
+  #chatservice:
+  #  container_name: chat_service
+  #  restart: on-failure
+  #  build:
+  #    context: ./chatservice
+  #    dockerfile: Dockerfile
+  #  ports:
       - "8014:8080"
 
   # Probably not needed

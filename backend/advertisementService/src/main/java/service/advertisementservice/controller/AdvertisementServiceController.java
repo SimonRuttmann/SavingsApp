@@ -30,7 +30,7 @@ public class AdvertisementServiceController {
      * }
      */
     @GetMapping("/global")
-    public String diagrammData(){
+    public AdvertisementDto diagrammData(){
         return advertisementServiceService.fetchData();
     }
 }

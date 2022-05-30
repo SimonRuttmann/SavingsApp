@@ -7,6 +7,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import service.inflationservice.InflationDto;
 
 @Component
 public class InflationServiceService {
@@ -25,21 +26,21 @@ public class InflationServiceService {
         data = restTemplate.getForObject(uri,String.class);
     }
 
-    public Double getLatestInflationData(){
+    public InflationDto getLatestInflationData() throws ParseException {
         JSONParser parser = new JSONParser();
 
         Object obj = null;
-        try {
+
             obj = parser.parse(getAllInflationData());
             JSONArray json = (JSONArray) obj;
 
             obj= parser.parse(json.get(0).toString());
             JSONObject jsonObject = (JSONObject) obj;
-            return Double.parseDouble(jsonObject.get("InflationRateRounded").toString());
+            var dto = new InflationDto();
+            dto.setInflationValueInPercent( Double.parseDouble(jsonObject.get("InflationRateRounded").toString()));
+            return dto;
 
-        }catch (Exception e){
-            return 500d;
-        }
+
     }
 
     public String getAllInflationData() {

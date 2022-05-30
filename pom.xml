@@ -11,6 +11,8 @@
         <java.version>15</java.version>
         <spring.boot.version>2.6.6</spring.boot.version>
         <keycloak.version>9.0.2</keycloak.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
     <packaging>pom</packaging>
     <name>CloudAndDistibuted</name>
