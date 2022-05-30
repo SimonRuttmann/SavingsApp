@@ -21,8 +21,4 @@ public class InvitationDTO {
         this.groupName = groupName;
         this.date = date;
     }
-
-    public Date getCreatedOn() {
-        return date;
-    }
 }
