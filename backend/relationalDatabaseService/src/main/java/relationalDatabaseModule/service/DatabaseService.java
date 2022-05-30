@@ -15,19 +15,17 @@ public class DatabaseService implements IDatabaseService {
     private final KeycloakRepository personRepository;
     private final GroupRepository groupRepository;
     private final InvitationRepository invitationRepository;
-    private final PersonRepository personRepositoryRIGHT;
+
 
     @Autowired
     public DatabaseService(
             KeycloakRepository personRepository,
             GroupRepository groupRepository,
-            InvitationRepository invitationRepository,
-            PersonRepository personRepositoryRIGHT) {
+            InvitationRepository invitationRepository) {
 
         this.personRepository = personRepository;
         this.groupRepository = groupRepository;
         this.invitationRepository = invitationRepository;
-        this.personRepositoryRIGHT = personRepositoryRIGHT;
     }
 
 
@@ -216,18 +214,6 @@ public class DatabaseService implements IDatabaseService {
 
     //Remove
 
-//    @Override
-//    @Transactional
-//    public void removePerson(UUID id){
-//
-//         KPerson person = personRepository.getById(id.toString());
-//
-//         person.getGroups().forEach(group -> group.removeMember(person));
-//         person.getInvitations().forEach(inv -> inv.getRequestedGroup().getInvitations().remove(inv));
-//
-//         invitationRepository.deleteAll(person.getInvitations());
-//         personRepository.delete(person);
-//    }
 
     @Override
     @Transactional
@@ -244,18 +230,6 @@ public class DatabaseService implements IDatabaseService {
 
     //Saves
 
-    @Override
-    @Transactional
-    public Person savePerson(Person person){
-
-
-
-        var value = this.personRepositoryRIGHT.saveAndFlush(person);
-
-
-        personRepositoryRIGHT.detach(person);
-        return value;
-    }
 
     @Override
     @Transactional
