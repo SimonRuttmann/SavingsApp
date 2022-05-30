@@ -1,13 +1,10 @@
 package service.userservice;
 
-import documentDatabaseModule.model.Category;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.service.IGroupDocumentService;
 import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.user.*;
 import dtoAndValidation.util.MapperUtil;
-import model.AtomicIntegerModel;
-import org.bson.types.ObjectId;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,7 +60,8 @@ public class UserManagementService implements IUserManagementService {
     }
 
     @Override
-    public Collection<GroupDTO> getAllGroupsOfPerson(UUID personId) {
+    public Collection<GroupDTO> getAllGroupsOfPerson(HttpServletRequest request) {
+        UUID personId = getUserId(request);
         Collection<GroupDTO> groupsDto = new HashSet<>();
         Collection<Group> groups = databaseService.getGroupsOfPersonId(personId);
         if (groups == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "the user with id "+personId+" is not in the db");
@@ -115,26 +113,6 @@ public class UserManagementService implements IUserManagementService {
         databaseService.addPersonToGroup(userId, savedGroup.getId());
         newMongoGroup(savedGroup.getId());
         return MapperUtil.GroupToDTO(savedGroup);
-    }
-
-    @Override
-    public GroupDTO getGroup(Long groupId) {
-        Group group = databaseService.getGroupById(groupId);
-        if(group == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group with id "+groupId+" don't exists.");
-        return MapperUtil.GroupToDTO(group);
-    }
-
-    @Override
-    public Collection<PersonDTO> getAllUserfromGroup(Long groupId) {
-        Collection<PersonDTO> personsDTO = new HashSet<>();
-        Collection<KPerson> members = databaseService.getPersonsOfGroupId(groupId);
-        if (members == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "the group with id "+groupId+" is not in the db");
-
-        members.forEach( member -> {
-            personsDTO.add(MapperUtil.PersonToDTO(member));
-        });
-
-        return personsDTO;
     }
 
     @Override
