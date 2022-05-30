@@ -2,11 +2,12 @@ package dtoAndValidation.dto.content;
 
 import dtoAndValidation.dto.user.PersonDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GeneralGroupInformationDTO {
 
-    private List<PersonDTO> personDTOList;
+    private List<PersonDTO> personDTOList = new ArrayList<>();
 
     private String groupName;
 

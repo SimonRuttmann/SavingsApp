@@ -54,9 +54,6 @@ public interface IDatabaseService {
 
      Pair<KPerson, Group> removePersonFromGroup(UUID personId, Long groupId);
 
-     Person savePerson(Person person);
-
-     //void removePerson(UUID id);
 
      Collection<KPerson> getPersonsOfGroupId(Long id);
 

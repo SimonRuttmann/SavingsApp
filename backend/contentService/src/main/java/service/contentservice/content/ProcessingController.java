@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import relationalDatabaseModule.model.Group;
 import relationalDatabaseModule.model.KPerson;
-import relationalDatabaseModule.model.Person;
 import relationalDatabaseModule.service.IDatabaseService;
 
 import java.text.SimpleDateFormat;
@@ -151,7 +150,7 @@ public class ProcessingController {
 
                 sorted((e1, e2) ->
 
-                         switch (filterInformation.getSortingParameter()) {
+                         switch (filterInformation.getSortParameter()) {
                             case CreationDate -> e1.getCreationDate().compareTo(e2.getCreationDate());
                             case Creator -> e1.getCreator().compareTo(e2.getCreator());
                             case CostBalance -> e1.getCostBalance().compareTo(e2.getCostBalance());
