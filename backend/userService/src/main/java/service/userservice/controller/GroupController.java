@@ -1,7 +1,6 @@
 package service.userservice.controller;
 
 import dtoAndValidation.dto.user.GroupDTO;
-import dtoAndValidation.dto.user.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.userservice.IUserManagementService;
@@ -29,15 +28,11 @@ public class GroupController {
         return userManagementService.registerGroup( request, registerDto);
     }
 
-    @GetMapping("/group/{groupId}/")
-    public GroupDTO getGroup(@PathVariable Long groupId){
-        return userManagementService.getGroup(groupId);
+    @GetMapping("/group/")
+    public Collection<GroupDTO> getGroups(HttpServletRequest request){
+        return userManagementService.getAllGroupsOfPerson(request);
     }
 
-    @GetMapping("/group/{groupId}/members")
-    public Collection<PersonDTO> getUsers(@PathVariable Long groupId){
-        return userManagementService.getAllUserfromGroup(groupId);
-    }
 
     @DeleteMapping("/group/leave/{groupId}")
     public GroupDTO leaveGroup(HttpServletRequest request, @PathVariable Long groupId){

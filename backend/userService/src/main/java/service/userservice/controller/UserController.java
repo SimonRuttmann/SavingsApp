@@ -30,10 +30,6 @@ public class UserController {
         return userManagementService.getUser(userId);
     }
 
-    @GetMapping("/user/{userId}/groups")
-    public Collection<GroupDTO> getGroups(@PathVariable UUID userId){
-        return userManagementService.getAllGroupsOfPerson(userId);
-    }
 
     @GetMapping("/user/usernames")
     public Collection<String> getGroups(){
