@@ -1,4 +1,4 @@
-package service.advertisementservice.controller;
+package service.advertisementservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
