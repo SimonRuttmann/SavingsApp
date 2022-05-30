@@ -25,10 +25,6 @@ public class UserController {
         this.userManagementService = userManagementService;
     }
 
-//    @PostMapping("/user/register")
-//    public PersonDTO registerNewUser(@RequestBody PersonDTO registerDto) {
-//        return userManagementService.register(registerDto);
-//    }
     @GetMapping("/user/{userId}")
     public PersonDTO getUser(@PathVariable UUID userId){
         return userManagementService.getUser(userId);
@@ -43,9 +39,5 @@ public class UserController {
     public Collection<String> getGroups(){
         return userManagementService.getAllUsernames();
     }
-//
-//    @DeleteMapping("/user/{userId}")
-//    public PersonDTO deleteUser(@PathVariable String userId) {
-//        return userManagementService.deleteUser(UUID.fromString(userId));
-//    }
+
 }
