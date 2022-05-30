@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import relationalDatabaseModule.model.Group;
 import relationalDatabaseModule.model.KPerson;
-import relationalDatabaseModule.model.Person;
 import relationalDatabaseModule.service.IDatabaseService;
 
 import java.text.SimpleDateFormat;
