@@ -1,3 +1,0 @@
-module documentDatabaseService {
-    exports documentDatabaseService;
-}
