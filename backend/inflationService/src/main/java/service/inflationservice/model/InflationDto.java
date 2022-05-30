@@ -1,4 +1,4 @@
-package service.inflationservice;
+package service.inflationservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
