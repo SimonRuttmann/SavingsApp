@@ -11,7 +11,7 @@
 #Volumes
 /backend/mongodb/data/
 /backend/postgreSql/data
-/backend/postgreSql/postgresData
+/backend/postgreSql
 /backend/postgreSql/keycloakData
 /backend/redis/data/
 
