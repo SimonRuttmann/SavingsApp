@@ -34,14 +34,14 @@ services:
 #      - "5432:5432"
 #    volumes:
 #      - ./postgresql/data:/data/db
-  #advertismentservice:
-  #  container_name: advertisment_service
-  #  restart: on-failure
-  #  build:
-  #    context: ./advertisementservice
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8010:8080"
+  advertismentservice:
+    container_name: advertisment_service
+    restart: on-failure
+    build:
+      context: ./advertisementservice
+      dockerfile: Dockerfile
+    ports:
+      - "8010:8080"
  # userservice:
  #   container_name: cAndD_user_service
  #   #restart: on-failure
@@ -64,14 +64,14 @@ services:
   #    dockerfile: Dockerfile
   #  ports:
   #    - "8012:8080"
-  #inflationservice:
-  #  container_name: inflation_service
-  #  restart: on-failure
-  #  build:
-  #    context: ./inflationservice
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8013:8080"
+  inflationservice:
+    container_name: inflation_service
+    restart: on-failure
+    build:
+      context: ./inflationservice
+      dockerfile: Dockerfile
+    ports:
+      - "8013:8080"
   keycloak:
     container_name: cAndD_keycloak
     image: quay.io/keycloak/keycloak:legacy
@@ -110,14 +110,4 @@ services:
   #    dockerfile: Dockerfile
   #  ports:
       - "8014:8080"
-
-  # Probably not needed
-  # databaseservice:
-  #   container_name: database_service
-  #   restart: on-failure
-  #   build:
-  #     context: ./databaseservice
-  #     dockerfile: Dockerfile
-  #   ports:
-  ##     - "8080:8080"
       
