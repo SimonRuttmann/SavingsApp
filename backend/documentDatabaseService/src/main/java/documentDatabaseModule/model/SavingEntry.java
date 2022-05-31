@@ -84,11 +84,10 @@ public class SavingEntry extends EmbeddedDocumentIdentifier {
 
     public SavingEntry(
             String name, Double costBalance, Category category,
-            Date creationDate, String creator) {
+            String creator) {
         this.name = name;
         this.costBalance = costBalance;
         this.category = category;
-        this.creationDate = creationDate;
         this.creator = creator;
     }
 
