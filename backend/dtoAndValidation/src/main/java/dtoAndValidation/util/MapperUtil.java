@@ -57,12 +57,14 @@ public class MapperUtil {
                 dto.getName(),
                 dto.getCostBalance(),
                 DTOToExistingCategory(dto.getCategory()),
-                new Date(),
                 dto.getCreator()
         );
         if (dto.getDescription() != null) {
             savingEntry.setDescription(dto.getDescription());
         }
+        if (dto.getCreationDate() != null) {
+            savingEntry.setCreationDate(dto.getCreationDate());
+        } else savingEntry.setCreationDate(new Date());
         return savingEntry;
     }
 
