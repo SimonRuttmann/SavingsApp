@@ -37,6 +37,9 @@ services:
   advertismentservice:
     container_name: advertisment_service
     restart: on-failure
+    environment:
+      server.port: 8080
+      spring.redis.host: redis
     build:
       context: ./advertisementservice
       dockerfile: Dockerfile
@@ -67,6 +70,9 @@ services:
   inflationservice:
     container_name: inflation_service
     restart: on-failure
+    environment:
+      server.port: 8080
+      spring.redis.host: redis
     build:
       context: ./inflationservice
       dockerfile: Dockerfile
@@ -102,12 +108,15 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
-  #chatservice:
-  #  container_name: chat_service
-  #  restart: on-failure
-  #  build:
-  #    context: ./chatservice
-  #    dockerfile: Dockerfile
-  #  ports:
+  chatservice:
+    container_name: chat_service
+    restart: on-failure
+    environment:
+      server.port: 8080
+      spring.redis.host: redis
+    build:
+      context: ./chatservice
+      dockerfile: Dockerfile
+    ports:
       - "8014:8080"
       
