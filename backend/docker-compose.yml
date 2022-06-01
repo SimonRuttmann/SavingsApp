@@ -59,14 +59,22 @@ services:
  #     - SPRING_DATASOURCE_PASSWORD=password
 
 
-  #contentservice:
-  #  container_name: content_service
-  #  restart: on-failure
-  #  build:
-  #    context: ./contentservice
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8012:8080"
+  contentservice:
+    container_name: content_service
+    restart: on-failure
+    environment:
+      spring.mongodb.host: mongodb
+      server.port: 8080
+      spring.redis.host: redis
+      keycloak.auth-server-url: http://keycloak:8090/auth
+      spring.data.mongodb.port: 27017
+      spring.data.mongodb.host: mongodb
+      spring.datasource.url=jdbc: postgresql://postgres:5432/keycloak
+    build:
+      context: ./contentservice
+      dockerfile: Dockerfile
+    ports:
+      - "8012:8080"
   inflationservice:
     container_name: inflation_service
     restart: on-failure
