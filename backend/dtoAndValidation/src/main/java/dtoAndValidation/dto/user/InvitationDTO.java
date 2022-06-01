@@ -2,21 +2,22 @@ package dtoAndValidation.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import relationalDatabaseModule.model.InvitationStatus;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@AllArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class InvitationDTO {
-    public Long groupId;
-    public String groupName;
-    public Date date = null;
-    public String status = null;
-    public InvitationDTO() {}
 
-    public InvitationDTO(InvitationStatus invitationStatus, Long id, String groupName, Date date) {
-        this.status = invitationStatus.toString();
+    private Long groupId;
+    private String groupName;
+    private Date date = null;
+    private String status = null;
+
+    public InvitationDTO(String invitationStatus, Long id, String groupName, Date date) {
+        this.status = invitationStatus;
         this.groupId = id;
         this.groupName = groupName;
         this.date = date;
