@@ -5,10 +5,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import service.inflationservice.model.InflationDto;
+
+import java.net.http.HttpResponse;
 
 @Slf4j
 @Component
@@ -28,11 +32,12 @@ public class InflationServiceService {
         data = restTemplate.getForObject(uri,String.class);
     }
 
-    public InflationDto getLatestInflationData() throws ParseException {
+    public ResponseEntity<InflationDto> getLatestInflationData() throws ParseException {
         JSONParser parser = new JSONParser();
 
         Object obj = null;
 
+        try {
             obj = parser.parse(getAllInflationData());
             JSONArray json = (JSONArray) obj;
 
@@ -40,8 +45,12 @@ public class InflationServiceService {
             JSONObject jsonObject = (JSONObject) obj;
             var dto = new InflationDto();
             dto.setInflationValueInPercent( Double.parseDouble(jsonObject.get("InflationRateRounded").toString()));
-            return dto;
 
+            return new ResponseEntity<>(dto, HttpStatus.OK) ;
+        }catch (Exception e){
+            log.error("Failed to parse json from api. Exception: "+e.toString());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
     }
 
