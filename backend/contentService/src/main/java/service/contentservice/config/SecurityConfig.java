@@ -54,6 +54,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PATCH).hasAnyRole("user")
                 .antMatchers(HttpMethod.DELETE).hasAnyRole("user")
                 .antMatchers(HttpMethod.PUT).hasAnyRole("user")
+                .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/group/**").hasAnyRole("user")
                 .anyRequest().permitAll();
         http.csrf().disable();
