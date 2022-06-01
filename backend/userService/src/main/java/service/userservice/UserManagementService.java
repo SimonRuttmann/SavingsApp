@@ -1,10 +1,10 @@
 package service.userservice;
 
+import documentDatabaseModule.model.Category;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.service.IGroupDocumentService;
-import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.user.*;
-import dtoAndValidation.util.MapperUtil;
+import model.AtomicIntegerModel;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +19,7 @@ import java.util.*;
 
 import relationalDatabaseModule.service.KeycloakRepository;
 import service.RedisDatabaseService;
+import service.userservice.util.UserServiceMapper;
 
 @Service
 public class UserManagementService implements IUserManagementService {
@@ -26,6 +27,8 @@ public class UserManagementService implements IUserManagementService {
     private final DatabaseService databaseService;
     private final IGroupDocumentService groupDocumentService;
     private final KeycloakRepository keycloakRepository;
+
+    private final List<String> defaultCategories = Arrays.asList("Miete","Lebensmittel","Restaurant");
 
     @Autowired
     public UserManagementService(DatabaseService databaseService, IGroupDocumentService groupDocumentService, KeycloakRepository keycloakRepository, RedisDatabaseService redisDataBaseService) {
@@ -42,7 +45,7 @@ public class UserManagementService implements IUserManagementService {
     public PersonDTO getUser(UUID userId) {
         KPerson person = databaseService.getPersonById(userId);
         if (person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id"+userId+" don't exists");
-        return MapperUtil.PersonToDTO(person);
+        return UserServiceMapper.PersonToDTO(person);
     }
 
     @Override
@@ -61,10 +64,10 @@ public class UserManagementService implements IUserManagementService {
             newMongoGroup(savedGroup.getId());
 
             groups = databaseService.getGroupsOfPersonId(personId);
+
+            redisDataBaseService.incrementValue(AtomicIntegerModel.COUNTUSERS);
         }
-        groups.forEach( group -> {
-            groupsDto.add(MapperUtil.GroupToDTO(group));
-        });
+        groups.forEach( group -> groupsDto.add(UserServiceMapper.GroupToDTO(group)));
         return groupsDto;
     }
 
@@ -80,14 +83,6 @@ public class UserManagementService implements IUserManagementService {
         return usernames;
     }
 
-//    @Override
-//    public PersonDTO deleteUser(UUID userId) {
-//        KPerson person = databaseService.getPersonById(userId);
-//        if (person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id"+ userId +" don't exists");
-//
-//        databaseService.removePerson(userId);
-//        return MapperUtil.PersonToDTO(person);
-//    }
 
     // Group
     @Override
@@ -98,7 +93,7 @@ public class UserManagementService implements IUserManagementService {
         // add the creator-user to group
         databaseService.addPersonToGroup(userId, savedGroup.getId());
         newMongoGroup(savedGroup.getId());
-        return MapperUtil.GroupToDTO(savedGroup);
+        return UserServiceMapper.GroupToDTO(savedGroup);
     }
 
     @Override
@@ -114,7 +109,7 @@ public class UserManagementService implements IUserManagementService {
             databaseService.removeGroup(groupId);
             groupDocumentService.deleteDocument(groupId);
         }
-        return MapperUtil.GroupToDTO(pair.getSecond());
+        return UserServiceMapper.GroupToDTO(pair.getSecond());
     }
 
     @Override
@@ -124,7 +119,7 @@ public class UserManagementService implements IUserManagementService {
         if(Objects.equals(group.getGroupName(), "Ich")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Personal Group can't be deleted");
         databaseService.removeGroup(groupId);
         groupDocumentService.deleteDocument(groupId);
-        return MapperUtil.GroupToDTO(group);
+        return UserServiceMapper.GroupToDTO(group);
     }
 
     //Invitaion
@@ -139,7 +134,7 @@ public class UserManagementService implements IUserManagementService {
 
         if (invitation == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user or group can not be find");
 
-        return MapperUtil.InvitationToDTO(invitation);
+        return UserServiceMapper.InvitationToDTO(invitation);
     }
 
     @Override
@@ -147,11 +142,10 @@ public class UserManagementService implements IUserManagementService {
         List<InvitationDTO> listDto = new ArrayList<>();
         UUID userId = getUserId(request);
         List<Invitation> invitations = databaseService.getAllInvitations(userId);
-        if(invitations != null) {
-            invitations.forEach(invitation -> {
-                listDto.add(MapperUtil.InvitationToDTO(invitation));
-            });
-        }
+
+        invitations.forEach(invitation ->
+                listDto.add(UserServiceMapper.InvitationToDTO(invitation)));
+
         listDto.sort(Comparator.comparing(InvitationDTO::getDate));
         return listDto;
     }
@@ -165,16 +159,15 @@ public class UserManagementService implements IUserManagementService {
         if (invitation == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Invitation is not found");
         databaseService.addPersonToGroup(userId, groupId);
 
-        return MapperUtil.InvitationToDTO(invitation);
+        return UserServiceMapper.InvitationToDTO(invitation);
     }
 
     @Override
     public InvitationDTO declineInvitation(HttpServletRequest request, Long groupId) {
         UUID userId = getUserId(request);
-        //InvitationCompoundId invitationCompoundId = new InvitationCompoundId(userId, groupId);
         Invitation invitation = databaseService.declineInvitation(userId, groupId);
         if (invitation == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Invitation is not found");
-        return MapperUtil.InvitationToDTO(invitation);
+        return UserServiceMapper.InvitationToDTO(invitation);
     }
 
     @Override
@@ -187,10 +180,7 @@ public class UserManagementService implements IUserManagementService {
         Collection<PersonDTO> personsDTO = new HashSet<>();
 
         List<KPerson> persons = keycloakRepository.findAll();
-        persons.forEach(person -> {
-            personsDTO.add(MapperUtil.PersonToDTO(person));
-
-        });
+        persons.forEach(person -> personsDTO.add(UserServiceMapper.PersonToDTO(person)));
         return personsDTO;
     }
 
@@ -202,19 +192,15 @@ public class UserManagementService implements IUserManagementService {
     }
 
     private void newMongoGroup(Long groupId){
-        // open groupDoc in Mongo
-        var d = new GroupDocument();
-        d.groupId = groupId;
-        GroupDocument savedGroupDoc = groupDocumentService.createDocument(d);
 
-        // create default Categories
-        CategoryDTO miete = new CategoryDTO("Miete");
-        CategoryDTO lebensmittel = new CategoryDTO("Lebensmittel");
-        CategoryDTO restaurant = new CategoryDTO("Restaurant");
+        var document = new GroupDocument();
+        document.groupId = groupId;
+        GroupDocument savedGroupDoc = groupDocumentService.createDocument(document);
 
-        groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(miete));
-        groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(lebensmittel));
-        groupDocumentService.insertCategory(savedGroupDoc.groupId,  MapperUtil.DTOToCategory(restaurant));
+        for (var defaultCategory : defaultCategories) {
+            Category category = new Category(defaultCategory);
+            groupDocumentService.insertCategory(savedGroupDoc.groupId,  category);
+        }
 
     }
 }

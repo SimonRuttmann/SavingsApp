@@ -97,7 +97,7 @@ public class DatabaseService implements IDatabaseService {
         return new Pair<>(person, group);
     }
 
-    // TODO warum wird hier nicht geprüft ob die person existiert
+
     @Override
     @Transactional
     public Pair<KPerson, Group> removePersonFromGroup(UUID personId, Long groupId){
@@ -106,11 +106,15 @@ public class DatabaseService implements IDatabaseService {
 
         KPerson person = personRepository.getById(personId.toString());
         Group group = groupRepository.getById(groupId);
-        if(person == null || group == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "this group and/or person do not exist.");
-        // check if person is in the group
-        Boolean check = checkIfPersonIsMember(personId, groupId);
-        if(check == false) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "the user with id "+personId+" is not member of group with Id "+groupId);
 
+        // check if person is in the group
+
+        boolean check = checkIfPersonIsMember(personId, groupId);
+        if(!check) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The user with id "+personId+" is not member of group with Id "+groupId);
+        }
 
 
         person.removeGroup(group);
@@ -129,14 +133,25 @@ public class DatabaseService implements IDatabaseService {
     @Override
     @Transactional
     public Invitation addInvitation(String username, Long groupId, UUID inviterPerson) {
-        Boolean isInviterMember = checkIfPersonIsMember(inviterPerson, groupId);
-        if(!isInviterMember) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person is not in Group it is inviting others in");
+
+        boolean isInviterMember = checkIfPersonIsMember(inviterPerson, groupId);
+        if(!isInviterMember) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Person is not in Group it is inviting others in");
+        }
 
         Optional<KPerson> optPerson = personRepository.findPersonByUsername(username);
         Optional<Group> optGroup = groupRepository.findById(groupId);
 
         if(optGroup.isEmpty() || optPerson.isEmpty()) return null;
-        if(Objects.equals(optGroup.get().getGroupName(), "Ich")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Other Users can't be invited in personal Group");
+
+        if(Objects.equals(optGroup.get().getGroupName(), "Ich")){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Other Users can't be invited in personal Group");
+        }
+
         KPerson person = optPerson.get();
         Group group = optGroup.get();
 
@@ -161,13 +176,19 @@ public class DatabaseService implements IDatabaseService {
         return invitation;
     }
 
-    // todo: new here invitation get deleted
+
     @Override
     @Transactional
     public Invitation declineInvitation(UUID userId, Long groupId) {
+
         KPerson person = getPersonById(userId);
         Group group = getGroupById(groupId);
-        if(group == null || person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person or/and Group does not exist.");
+
+        if(group == null || person == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Person or/and Group does not exist.");
+        }
 
 
         var invitations = invitationRepository.findByInvitedPersonAndRequestedGroup(person, group);
@@ -184,11 +205,14 @@ public class DatabaseService implements IDatabaseService {
     @Override
     @Transactional
     public Invitation acceptInvitation(UUID userId, Long groupId) {
+
         KPerson person = getPersonById(userId);
         Group group = getGroupById(groupId);
-        if(group == null || person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person or/and Group does not exist.");
 
-        //Optional<Invitation> optInvitation = invitationRepository.findById(invitationCompoundId);
+        if(group == null || person == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person or/and Group does not exist.");
+        }
+
         var invitations = invitationRepository.findByInvitedPersonAndRequestedGroup(person, group);
 
         if(invitations.isEmpty()) return null;
@@ -198,18 +222,15 @@ public class DatabaseService implements IDatabaseService {
 
             invitationRepository.detach(invitation);
         });
-        Invitation invitation = invitations.get(0);
 
-
-        return invitation;
+        return invitations.get(0);
     }
 
     @Override
     public List<Invitation> getAllInvitations(UUID userId) {
         KPerson person = personRepository.getById(userId.toString());
-        List<Invitation> invitationList = invitationRepository.findByInvitedPersonAndInvitationStatus(person,InvitationStatus.OPEN);
-        if (invitationList.isEmpty()) return null;
-        return invitationList;
+        return invitationRepository.findByInvitedPersonAndInvitationStatus(person,InvitationStatus.OPEN);
+
     }
 
     //Remove
@@ -235,8 +256,6 @@ public class DatabaseService implements IDatabaseService {
     @Transactional
     public Group saveGroup(Group group){
 
-
-
         var value =  this.groupRepository.saveAndFlush(group);
 
         groupRepository.detach(group);
@@ -247,8 +266,6 @@ public class DatabaseService implements IDatabaseService {
     @Transactional
     public Invitation saveInvitation(Invitation invitation){
 
-
-
         var value = this.invitationRepository.saveAndFlush(invitation);
 
         invitationRepository.detach(invitation);
@@ -257,13 +274,13 @@ public class DatabaseService implements IDatabaseService {
 
     @Override
     public Boolean checkIfPersonIsMember(UUID personId, Long groupId) {
-        boolean answer = false;
+
         var person = getPersonById(personId);
-        for (Group group:person.getGroups()
-             ) {
-            if(group.getId() == groupId)  answer = true;
-        }
-        return answer;
+
+        return  person.
+                getGroups().
+                stream().
+                anyMatch( group -> Objects.equals(group.getId(), groupId));
     }
 
 }
