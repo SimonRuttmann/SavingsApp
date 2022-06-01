@@ -1,10 +1,16 @@
 package dtoAndValidation.dto.processing;
 
 import dtoAndValidation.dto.content.SavingEntryDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProcessResultContainerDTO {
 
     private List<SavingEntryDTO> savingEntryDTOs = new ArrayList<>();
@@ -19,38 +25,4 @@ public class ProcessResultContainerDTO {
         savingEntryDTOs.add(entry);
     }
 
-    public void removeSavingEntry(SavingEntryDTO entry){
-        savingEntryDTOs.remove(entry);
-    }
-
-    public List<SavingEntryDTO> getSavingEntryDTOs() {
-        return savingEntryDTOs;
-    }
-
-    public void setSavingEntryDTOs(List<SavingEntryDTO> savingEntryDTOs) {
-        this.savingEntryDTOs = savingEntryDTOs;
-    }
-
-    public BalanceProcessResultDTO getBalanceProcessResultDTO() {
-        return balanceProcessResultDTO;
-    }
-    public void setBalanceProcessResultDTO(BalanceProcessResultDTO balanceProcessResultDTO) {
-        this.balanceProcessResultDTO = balanceProcessResultDTO;
-    }
-
-    public List<IntervalGroupDTO> getDiagramByIntervalAndCategory() {
-        return diagramByIntervalAndCategory;
-    }
-
-    public void setDiagramByIntervalAndCategory(List<IntervalGroupDTO> diagramByIntervalAndCategory) {
-        this.diagramByIntervalAndCategory = diagramByIntervalAndCategory;
-    }
-
-    public List<IntervalGroupDTO> getDiagramByIntervalAndCreator() {
-        return diagramByIntervalAndCreator;
-    }
-
-    public void setDiagramByIntervalAndCreator(List<IntervalGroupDTO> diagramByIntervalAndCreator) {
-        this.diagramByIntervalAndCreator = diagramByIntervalAndCreator;
-    }
 }
