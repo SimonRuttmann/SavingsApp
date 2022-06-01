@@ -43,10 +43,8 @@ public class GroupAuthorizationInterceptor implements HandlerInterceptor {
 
         if( pathVariables instanceof Map){
             Map<?,?> map = (Map<?,?>) pathVariables;
-
             if(map.containsKey("groupId")) {
                 var groupIdPathVariable = map.get("groupId");
-
                 if(groupIdPathVariable instanceof String){
                     Long groupId = Long.parseLong((String)groupIdPathVariable, 10);
 
@@ -60,13 +58,9 @@ public class GroupAuthorizationInterceptor implements HandlerInterceptor {
 
                     return true;
                 }
-
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "GroupId could not be parsed");
             }
-
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "GroupId not specified");
+            return true;
         }
-
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Path variables could not be parsed");
+        return true;
     }
 }
