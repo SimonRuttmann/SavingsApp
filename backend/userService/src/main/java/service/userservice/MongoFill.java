@@ -1,20 +1,17 @@
 package service.userservice;
 
-import com.mongodb.client.MongoClients;
+import documentDatabaseModule.service.GroupDocumentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+
+
 import documentDatabaseModule.model.Category;
 import documentDatabaseModule.model.GroupDocument;
-import documentDatabaseModule.model.SavingEntry;
-import documentDatabaseModule.service.GroupDocumentService;
 import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.content.SavingEntryDTO;
 import dtoAndValidation.util.MapperUtil;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.stereotype.Service;
-import relationalDatabaseModule.service.DatabaseService;
-
-import java.util.ArrayList;
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Random;
@@ -25,11 +22,11 @@ import java.util.Random;
  */
 @Service
 public class MongoFill {
-    private final MongoOperations mongoOps;
+
 
     private final GroupDocumentService groupDocumentService;
 
-    private final int largestGroupId=10;
+    private static final int largestGroupId=10;
 
     String[] categoryArray = {"Miete","Lebensmittel","Restaurant","Hund","Katze","Alterversicherung", "Hausversicherung",
             "Rennrad", "BasketballVerein", "Musik Verein", "Zoo","Fastfood","Zocken","Pokern",
@@ -37,19 +34,22 @@ public class MongoFill {
 
     ArrayList<Category> categories = new ArrayList<>();
 
-    public MongoFill() throws ParseException {
+    @Autowired
+    public MongoFill(GroupDocumentService groupDocumentService) throws ParseException {
         System.out.println("Starting mongo test data routine");
 
-        mongoOps = new MongoTemplate(MongoClients.create(), "test");
-        groupDocumentService = new GroupDocumentService(mongoOps);
+        this.groupDocumentService = groupDocumentService;
+    }
+
+    public void doExecute() throws ParseException {
         recreateCollection();
         addDocuments();
         fillPersonalGroups();
     }
 
     private void recreateCollection(){
-        mongoOps.dropCollection("groupDocuments");
-        mongoOps.createCollection("groupDocuments");
+       // mongoOps.dropCollection("groupDocuments");
+       // mongoOps.createCollection("groupDocuments");
     }
 
     private void addDocuments(){
@@ -95,6 +95,7 @@ public class MongoFill {
             }
         }
     }
+
 
     private String dateprefixNumber(int number){
         if(number<10) return "0"+number;
