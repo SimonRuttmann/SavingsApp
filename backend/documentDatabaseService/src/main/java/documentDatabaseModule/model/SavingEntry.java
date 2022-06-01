@@ -21,7 +21,7 @@ public class SavingEntry extends EmbeddedDocumentIdentifier {
 
 
     @Field(targetType = FieldType.DATE_TIME)
-    private Date creationDate;
+    private Date creationDate = new Date();
 
 
     @Field(targetType = FieldType.STRING)
@@ -60,7 +60,7 @@ public class SavingEntry extends EmbeddedDocumentIdentifier {
     }
 
     public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+        this.creationDate = Objects.requireNonNullElseGet(creationDate, Date::new);
     }
 
     public String getCreator() {
@@ -84,11 +84,15 @@ public class SavingEntry extends EmbeddedDocumentIdentifier {
 
     public SavingEntry(
             String name, Double costBalance, Category category,
-            String creator) {
+            String creator, Date creationDate, String description) {
+
         this.name = name;
         this.costBalance = costBalance;
         this.category = category;
         this.creator = creator;
+        this.description = description;
+        this.setCreationDate(creationDate);
+
     }
 
     @Override
