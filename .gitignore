@@ -10,7 +10,8 @@
 
 #Volumes
 /backend/mongodb/data/
-
+/backend/postgreSql/postgresData
+/backend/postgreSql/postgresDataDemo
 /backend/redis/data/
 
 # Node artifact files
