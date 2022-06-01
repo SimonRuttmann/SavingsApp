@@ -100,8 +100,8 @@ services:
     container_name: cAndD_postgresKeycloak
     image: postgres
     volumes:
-      - ./postgresql/postgresData:/var/lib/postgresql/data:rw
-      - ./postgresql/keycloakData:/data/db
+      - ./postgresql/postgresDataDemo:/var/lib/postgresql/data:rw
+      - ./postgresql/data:/data/db
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: postgres
