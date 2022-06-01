@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class UserServiceApplication implements CommandLineRunner {
 
     @Autowired
-    private MongoFill mongoFill;
+    private MongoTestDataCreator mongoTestDataCreator;
 
     private static final String MigrateTestData = "migrate";
 
@@ -24,11 +24,12 @@ public class UserServiceApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        if(MigrateTestData.equals(System.getenv("test")))
-        {
-            mongoFill.doExecute();
+    public void run(String... args) {
+
+        if(MigrateTestData.equals(System.getenv("test"))) {
+            mongoTestDataCreator.createTestData();
         }
+
     }
 
 
