@@ -30,7 +30,7 @@ public class UserServiceMapper {
 
     public static InvitationDTO InvitationToDTO(Invitation invitation){
         return new InvitationDTO(
-                invitation.getInvitationStatus(),
+                invitation.getInvitationStatus().toString(),
                 invitation.getRequestedGroup().getId(),
                 invitation.getRequestedGroup().getGroupName(),
                 invitation.getId().getDate());
