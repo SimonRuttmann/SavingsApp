@@ -45,6 +45,7 @@ services:
     ports:
       - "8011:8011"
     environment:
+      test: migrate
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres

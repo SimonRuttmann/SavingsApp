@@ -17,13 +17,15 @@ public class UserServiceApplication implements CommandLineRunner {
     @Autowired
     private MongoFill mongoFill;
 
+    private static final String MigrateTestData = "migrate";
+
     public static void main(String[] args)  {
         SpringApplication.run(UserServiceApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        if(Boolean.parseBoolean(System.getenv("test")))
+        if(MigrateTestData.equals(System.getenv("test")))
         {
             mongoFill.doExecute();
         }
