@@ -97,7 +97,7 @@ services:
     depends_on:
       - postgres
   postgres:
-    container_name: cAndD_postgresKeycloak
+    container_name: cAndD_postgres
     image: postgres
     volumes:
       - ./postgresql/postgresData:/var/lib/postgresql/data:rw
