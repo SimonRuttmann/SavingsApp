@@ -6,8 +6,8 @@ import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.model.SavingEntry;
 import documentDatabaseModule.service.IGroupDocumentService;
 import dtoAndValidation.dto.content.GeneralGroupInformationDTO;
+import dtoAndValidation.dto.inflation.InflationDto;
 import dtoAndValidation.dto.processing.*;
-import dtoAndValidation.util.MapperUtil;
 import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import relationalDatabaseModule.model.Group;
 import relationalDatabaseModule.model.KPerson;
 import relationalDatabaseModule.service.IDatabaseService;
+import service.contentservice.util.ContentServiceMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -27,10 +28,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/content/processing")
 public class ProcessingController {
 
-    //TODO MICHAEL //FIXME MICHAEL
-    private final String URI ="http://inflationservice:8013/inflationrate";
-    private final IGroupDocumentService groupDocumentService;
+    private static final String URI ="http://inflationservice:8013/inflationrate";
 
+    private final IGroupDocumentService groupDocumentService;
     private final IDatabaseService databaseService;
 
     @Autowired
@@ -51,7 +51,7 @@ public class ProcessingController {
 
         //Add all users of the group and the group name
         Collection<KPerson> persons = databaseService.getPersonsOfGroupId(groupId);
-        persons.forEach(person -> groupInfo.addPersonToGroupInfo(MapperUtil.PersonToDTO(person)));
+        persons.forEach(person -> groupInfo.addPersonToGroupInfo(ContentServiceMapper.mapPersonToDto(person)));
 
         Group group = databaseService.getGroupById(groupId);
         if (group == null)
@@ -84,8 +84,8 @@ public class ProcessingController {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        Double inflation = restTemplate.getForObject(URI, Double.class);
-
+        ResponseEntity<InflationDto> inflationResponse = restTemplate.getForObject(URI, ResponseEntity.class);
+        var inflationDto = inflationResponse.getBody();
 
         var validator = ValidatorFactory.getInstance().getValidator(FilterInformationDTO.class);
 
@@ -168,7 +168,7 @@ public class ProcessingController {
         //Add entries to result
 
         var result = new ProcessResultContainerDTO();
-        filteredAndSortedEntries.forEach(entry -> result.addSavingEntry(MapperUtil.SavingEntryToDTO(entry)));
+        filteredAndSortedEntries.forEach(entry -> result.addSavingEntry(ContentServiceMapper.mapSavingEntryToDto(entry)));
 
 
 
@@ -186,7 +186,7 @@ public class ProcessingController {
         diagram1.setIncome(income);
         diagram1.setOutcome(outcome);
         diagram1.setBalance(income-outcome);
-        diagram1.setFutureBalance(diagram1.getBalance() * inflation);
+        diagram1.setFutureBalance(diagram1.getBalance() * inflationDto.getInflationValueInPercent());
 
         result.setBalanceProcessResultDTO(diagram1);
 
