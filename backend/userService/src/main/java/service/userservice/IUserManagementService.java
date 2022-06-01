@@ -13,9 +13,7 @@ import java.util.UUID;
 public interface IUserManagementService {
 
     //Person
-    //PersonDTO register(PersonDTO registerDto);
     PersonDTO getUser(UUID userId);
-    //PersonDTO deleteUser(UUID userId);
     Collection<String> getAllUsernames();
 
     //Group
@@ -33,7 +31,6 @@ public interface IUserManagementService {
 
     Boolean checkIfPersonIsMember(UUID personId, Long groupId);
     Collection<PersonDTO> getAllUser();
-
 
 }
 
