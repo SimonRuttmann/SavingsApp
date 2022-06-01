@@ -1,4 +1,4 @@
-package service.inflationservice.model;
+package dtoAndValidation.dto.inflation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InflationDto {
+
     private String inflationValueHighPrecision;
+
     private double inflationValueInPercent;
+
     private Date lastUpdated;
 }

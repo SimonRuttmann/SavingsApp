@@ -5,13 +5,13 @@ import documentDatabaseModule.model.DocObjectIdUtil;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.service.IGroupDocumentService;
 import dtoAndValidation.dto.content.CategoryDTO;
-import dtoAndValidation.util.MapperUtil;
 import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import service.contentservice.util.ContentServiceMapper;
 
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class CategoryController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         //Return dto
-        CategoryDTO categoryDTO = MapperUtil.CategoryToDTO(category);
+        CategoryDTO categoryDTO = ContentServiceMapper.mapCategoryToDto(category);
 
         return ResponseEntity.
                 status(HttpStatus.OK).
@@ -85,7 +85,7 @@ public class CategoryController {
         //Return dto
         List<CategoryDTO> responseList = new ArrayList<>();
         groupDocument.categories.forEach(category ->
-                responseList.add(MapperUtil.CategoryToDTO(category)));
+                responseList.add(ContentServiceMapper.mapCategoryToDto(category)));
 
         return ResponseEntity.
                 status(HttpStatus.OK).
@@ -115,13 +115,13 @@ public class CategoryController {
 
         //Update category
         Category updatedCategory = groupDocumentService.updateCategory(
-                groupId, MapperUtil.DTOToExistingCategory(category));
+                groupId, ContentServiceMapper.mapDtoToExistingCategory(category));
 
         if(updatedCategory == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         //Return dto
-        CategoryDTO categoryDTO = MapperUtil.CategoryToDTO(updatedCategory);
+        CategoryDTO categoryDTO = ContentServiceMapper.mapCategoryToDto(updatedCategory);
 
         return ResponseEntity.
                 status(HttpStatus.OK).
@@ -151,13 +151,13 @@ public class CategoryController {
 
         //Insert category
         Category insertCategory = groupDocumentService.insertCategory(
-                groupId, MapperUtil.DTOToCategory(category));
+                groupId, ContentServiceMapper.mapDtoToCategory(category));
 
         if(insertCategory == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         //Return dto
-        CategoryDTO categoryDTO = MapperUtil.CategoryToDTO(insertCategory);
+        CategoryDTO categoryDTO = ContentServiceMapper.mapCategoryToDto(insertCategory);
 
         return ResponseEntity.
                 status(HttpStatus.OK).
@@ -172,7 +172,7 @@ public class CategoryController {
      * @return The status code
      */
     @DeleteMapping("/{groupId}/{categoryId}")
-    public ResponseEntity<?> deleteCategory(
+    public ResponseEntity<CategoryDTO> deleteCategory(
             @PathVariable(value="groupId") Long groupId,
             @PathVariable(value="categoryId") String categoryId){
 

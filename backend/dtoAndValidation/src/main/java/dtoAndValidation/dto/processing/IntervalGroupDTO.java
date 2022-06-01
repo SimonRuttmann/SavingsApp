@@ -1,7 +1,14 @@
 package dtoAndValidation.dto.processing;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class IntervalGroupDTO {
 
     private String dateRepresentation;
@@ -11,19 +18,5 @@ public class IntervalGroupDTO {
     public void addValue(IntervalBasedEntryValueDTO value){
         values.add(value);
     }
-    public String getDateRepresentation() {
-        return dateRepresentation;
-    }
 
-    public void setDateRepresentation(String dateRepresentation) {
-        this.dateRepresentation = dateRepresentation;
-    }
-
-    public List<IntervalBasedEntryValueDTO> getValues() {
-        return values;
-    }
-
-    public void setValues(List<IntervalBasedEntryValueDTO> values) {
-        this.values = values;
-    }
 }

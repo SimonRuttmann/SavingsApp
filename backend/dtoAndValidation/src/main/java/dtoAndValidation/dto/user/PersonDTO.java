@@ -1,7 +1,5 @@
 package dtoAndValidation.dto.user;
 
-
-
 import dtoAndValidation.validation.IValidatable;
 
 import java.util.Objects;

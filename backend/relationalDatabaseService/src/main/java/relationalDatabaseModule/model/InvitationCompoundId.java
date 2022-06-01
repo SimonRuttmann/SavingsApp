@@ -1,7 +1,5 @@
 package relationalDatabaseModule.model;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;

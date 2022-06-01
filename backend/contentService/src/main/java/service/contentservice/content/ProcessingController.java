@@ -6,8 +6,8 @@ import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.model.SavingEntry;
 import documentDatabaseModule.service.IGroupDocumentService;
 import dtoAndValidation.dto.content.GeneralGroupInformationDTO;
+import dtoAndValidation.dto.inflation.InflationDto;
 import dtoAndValidation.dto.processing.*;
-import dtoAndValidation.util.MapperUtil;
 import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import relationalDatabaseModule.model.Group;
 import relationalDatabaseModule.model.KPerson;
 import relationalDatabaseModule.service.IDatabaseService;
+import service.contentservice.util.ContentServiceMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -27,10 +28,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/content/processing")
 public class ProcessingController {
 
-    //TODO MICHAEL //FIXME MICHAEL
-    private final String URI ="http://inflationservice:8013/inflationrate";
-    private final IGroupDocumentService groupDocumentService;
+    private static final String URI ="http://inflationservice:8013/inflationrate";
 
+    private final IGroupDocumentService groupDocumentService;
     private final IDatabaseService databaseService;
 
     @Autowired
@@ -51,7 +51,7 @@ public class ProcessingController {
 
         //Add all users of the group and the group name
         Collection<KPerson> persons = databaseService.getPersonsOfGroupId(groupId);
-        persons.forEach(person -> groupInfo.addPersonToGroupInfo(MapperUtil.PersonToDTO(person)));
+        persons.forEach(person -> groupInfo.addPersonToGroupInfo(ContentServiceMapper.mapPersonToDto(person)));
 
         Group group = databaseService.getGroupById(groupId);
         if (group == null)
@@ -79,20 +79,13 @@ public class ProcessingController {
             @PathVariable(value="groupId") Long groupId,
             @RequestBody FilterInformationDTO filterInformation){
 
+        var inflationDto = receiveInflationRate();
 
-
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        Double inflation = restTemplate.getForObject(URI, Double.class);
-
-
+        //Validate input
         var validator = ValidatorFactory.getInstance().getValidator(FilterInformationDTO.class);
 
         if(!validator.validate(filterInformation, false) || groupId == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        //Validate input
 
 
         //Resolve categories
@@ -121,7 +114,7 @@ public class ProcessingController {
                     persons.
                     stream().
                     filter(p ->
-                            filterInformation.getPersonIds().contains(p.getId())).
+                            filterInformation.getPersonIds().contains(UUID.fromString(p.getId()))).
                     collect(Collectors.toSet());
 
 
@@ -168,7 +161,7 @@ public class ProcessingController {
         //Add entries to result
 
         var result = new ProcessResultContainerDTO();
-        filteredAndSortedEntries.forEach(entry -> result.addSavingEntry(MapperUtil.SavingEntryToDTO(entry)));
+        filteredAndSortedEntries.forEach(entry -> result.addSavingEntry(ContentServiceMapper.mapSavingEntryToDto(entry)));
 
 
 
@@ -186,7 +179,7 @@ public class ProcessingController {
         diagram1.setIncome(income);
         diagram1.setOutcome(outcome);
         diagram1.setBalance(income-outcome);
-        diagram1.setFutureBalance(diagram1.getBalance() * inflation);
+        diagram1.setFutureBalance(diagram1.getBalance() * inflationDto.getInflationValueInPercent());
 
         result.setBalanceProcessResultDTO(diagram1);
 
@@ -290,76 +283,27 @@ public class ProcessingController {
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+
+    private InflationDto receiveInflationRate(){
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<?> inflationResponse = restTemplate.getForObject(URI, ResponseEntity.class);
+        Object inflationBody = null;
+        if (inflationResponse != null) {
+            inflationBody = inflationResponse.getBody();
+        }
+
+        InflationDto inflationDto;
+
+        if(inflationBody instanceof InflationDto){
+            return (InflationDto) inflationBody;
+        }
+
+        inflationDto = new InflationDto();
+        inflationDto.setInflationValueInPercent(1.0);
+
+        return inflationDto;
+    }
 }
-
-
-
-
-
-
-
-    //FILTER:           KEY           VALUE
-    //                  Anfangsdatum    Date
-    //                  Endatum         Date
-    //                  User            Array an User Id`s
-    //                  Kategorie       Array an Kategorien
-    //
-    // Filter:
-    // Anfangsdatum
-    // Zeitintervall
-    //
-
-    //Diagramm 1
-    // Summe abhängig von Filtern
-    // 1. Zeitraum --> Anfangsdatum ist gegeben
-    // 2. User: Array an Usern, nur user beachten, welche darin liegen
-    // 3. Kategory: Array an KategorieId`s, nur beachten welche darin liegen
-
-    //Wert 1 Typ: Integer Summe der Einnahmen
-    //Wert 2 Typ: Integer Summe der Ausgaben
-
-
-    //Diagramm 2
-    // 1. Zeitraum --> Anfangsdatum ist gegeben, alle anderen weg
-    // 2. Zeitintervall --> Zeit in sekunden
-    // 3. User + Kategorie wie voher
-
-    // Array für jedes Zeitintervall
-    // Zeitintervall:
-    //      Kategorie 1: Summe ausgaben (für alle user)
-    //      Kategorie 2: Summe ausgaben
-    //      Kategorie 3: Summe ausgaben
-
-
-    //Diagramm 3
-    // 1. Zeitraum --> Anfangsdatum ist gegeben, alle anderen weg
-    // 2. Zeitintervall --> Zeit in sekunden
-    // 3. User + Kategorie wie voher
-
-    // Array für jedes Zeitintervall
-    // Zeitintervall:
-    //      user 1: Summe ausgaben (für alle kategorien)
-    //      user 2: Summe ausgaben
-    //      user 3: Summe ausgaben
-
-
-    //Diagramm 4
-    // 1. Zeitraum --> Anfangsdatum ist gegeben, alle anderen weg
-    // 2. Zeitintervall --> Zeit in sekunden
-
-    // Array für jedes Zeitintervall
-    // Zeitintervall:
-    //      Summe ausgaben
-    //      Summe ausgaben
-    //      Summe ausgaben
-
-    //Anzahl = Zeitintervall bisher / 2
-    // Calculated ..
-    // mittelwert * inflation
-
-
-
-    //Default get, put, post, delete entry
-
-
-
