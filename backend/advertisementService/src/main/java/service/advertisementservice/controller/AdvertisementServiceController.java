@@ -9,6 +9,7 @@ import service.advertisementservice.service.AdvertisementServiceService;
 
 @RestController
 public class AdvertisementServiceController {
+
     @Autowired
     AdvertisementServiceService advertisementServiceService;
 
