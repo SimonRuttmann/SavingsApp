@@ -22,17 +22,17 @@ import service.RedisDatabaseService;
 
 @Service
 public class UserManagementService implements IUserManagementService {
-    @Autowired
-    private RedisDatabaseService redisDataBaseService;
+    private final RedisDatabaseService redisDataBaseService;
     private final DatabaseService databaseService;
     private final IGroupDocumentService groupDocumentService;
     private final KeycloakRepository keycloakRepository;
 
     @Autowired
-    public UserManagementService(DatabaseService databaseService, IGroupDocumentService groupDocumentService, KeycloakRepository keycloakRepository) {
+    public UserManagementService(DatabaseService databaseService, IGroupDocumentService groupDocumentService, KeycloakRepository keycloakRepository, RedisDatabaseService redisDataBaseService) {
         this.databaseService = databaseService;
         this.groupDocumentService = groupDocumentService;
         this.keycloakRepository = keycloakRepository;
+        this.redisDataBaseService = redisDataBaseService;
     }
 
     // Person
