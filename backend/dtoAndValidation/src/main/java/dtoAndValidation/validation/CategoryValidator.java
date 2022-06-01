@@ -12,8 +12,7 @@ public class CategoryValidator implements IValidator<CategoryDTO>{
 
         if(withId && toValidate.getId() == null) return false;
         if(!withId && toValidate.getId() != null) return false;
-        //TODO why? this is already checked above
-        //if(toValidate.getId() == null) return false;
+
         return !toValidate.getName().isBlank();
     }
 }
