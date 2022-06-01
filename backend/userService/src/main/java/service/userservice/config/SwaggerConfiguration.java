@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfiguration {
 
-    @Value("${keycloak.auth-server-url}")
+    @Value("${external-url}")
     String keycloakAuthUrl;
 
     String realm = "haushaltsapp";
