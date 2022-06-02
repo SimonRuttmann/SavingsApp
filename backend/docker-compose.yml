@@ -59,6 +59,7 @@ services:
       spring.redis.host: redis
       spring.data.mongodb.host: mongodb
       spring.data.mongodb.port: 27017
+      external-url: http://localhost:8090/auth
     depends_on:
       - postgres
       - mongodb
@@ -75,6 +76,8 @@ services:
       spring.data.mongodb.port: 27017
       spring.data.mongodb.host: mongodb
       spring.datasource.url: jdbc:postgresql://postgres/keycloak
+      inflationservice-uri: http://inflationservice:8080/inflationrate
+      external-url: http://localhost:8090/auth
     build:
       context: ./contentservice
       dockerfile: Dockerfile
