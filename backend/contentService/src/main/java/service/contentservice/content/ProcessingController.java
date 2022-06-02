@@ -243,44 +243,44 @@ public class ProcessingController {
 
 
 
-//        //Diagram 2 <Interval> <Category,Sum>
-//        List<IntervalGroupDTO> valuesForEntriesByIntervalAndCategory = new ArrayList<>();
-//
-//        //For each interval, add the interval representation and group the remaining entries by category
-//        for (Map.Entry<String, List<SavingEntry>> entryByTimeInterval : entriesByTimeInterval.entrySet()) {
-//
-//            IntervalGroupDTO intervalGroupDTO = new IntervalGroupDTO();
-//            intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
-//
-//
-//            Map<Category, List<SavingEntry>> entriesByTimeIntervalAndCategory =
-//                    entryByTimeInterval.getValue().stream().
-//                    collect(Collectors.groupingBy(SavingEntry::getCategory));
-//
-//            //For each group of saving entries (grouped by interval and category) resolve the sum and name of category
-//            for(Map.Entry<Category, List<SavingEntry>> entryByTimeIntervalAndCategory :
-//                entriesByTimeIntervalAndCategory.entrySet()){
-//
-//                IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
-//                intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndCategory.getKey().getName());
-//
-//                Double sum = 0d;
-//
-//                for(SavingEntry savingEntry : entryByTimeIntervalAndCategory.getValue()){
-//                    sum += savingEntry.getCostBalance();
-//                }
-//
-//                intervalBasedEntryValueDTO.setSum(sum);
-//                intervalGroupDTO.addValue(intervalBasedEntryValueDTO);
-//            }
-//
-//            valuesForEntriesByIntervalAndCategory.add(intervalGroupDTO);
-//
-//        }
-//
-//        result.setDiagramByIntervalAndCategory(valuesForEntriesByIntervalAndCategory);
-//
-//
+        //Diagram 2 <Interval> <Category,Sum>
+        List<IntervalGroupDTO> valuesForEntriesByIntervalAndCategory = new ArrayList<>();
+
+        //For each interval, add the interval representation and group the remaining entries by category
+        for (Map.Entry<String, List<SavingEntry>> entryByTimeInterval : entriesByTimeInterval.entrySet()) {
+
+            IntervalGroupDTO intervalGroupDTO = new IntervalGroupDTO();
+            intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
+
+
+            Map<Category, List<SavingEntry>> entriesByTimeIntervalAndCategory =
+                    entryByTimeInterval.getValue().stream().
+                    collect(Collectors.groupingBy(SavingEntry::getCategory));
+
+            //For each group of saving entries (grouped by interval and category) resolve the sum and name of category
+            for(Map.Entry<Category, List<SavingEntry>> entryByTimeIntervalAndCategory :
+                entriesByTimeIntervalAndCategory.entrySet()){
+
+                IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
+                intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndCategory.getKey().getName());
+
+                Double sum = 0d;
+
+                for(SavingEntry savingEntry : entryByTimeIntervalAndCategory.getValue()){
+                    sum += savingEntry.getCostBalance();
+                }
+
+                intervalBasedEntryValueDTO.setSum(sum);
+                intervalGroupDTO.addValue(intervalBasedEntryValueDTO);
+            }
+
+            valuesForEntriesByIntervalAndCategory.add(intervalGroupDTO);
+
+        }
+
+        result.setDiagramByIntervalAndCategory(valuesForEntriesByIntervalAndCategory);
+
+
 //
 //        //Diagram 3 <Interval> <User,Sum>
 //        List<IntervalGroupDTO> valuesForEntriesByIntervalAndCreator = new ArrayList<>();
