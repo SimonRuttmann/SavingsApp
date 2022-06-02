@@ -88,7 +88,7 @@ public class MongoTestDataCreator {
             Date creationDate = createRandomizedDate(day, month, random.nextInt(24));
 
             String postingUser = setPostingUser(groupId);
-            Double cost = random.nextDouble() * 1000;
+            Double cost = random.nextDouble() + random.nextInt(1000 + 1000) - 1000;
 
             SavingEntry savingEntry = new SavingEntry(name, cost, category, postingUser, creationDate, description);
             groupDocumentService.addSavingEntry(groupId, savingEntry);

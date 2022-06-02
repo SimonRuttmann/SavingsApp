@@ -151,43 +151,48 @@ public class ProcessingController {
         Set<String> personNames = allowedPersons.stream().map(KPerson::getUsername).collect(Collectors.toSet());
 
         //test
-        List<SavingEntry> savingEntries = groupDocument.savingEntries;
-        Category savingCategory = savingEntries.get(0).getCategory();
-        Boolean isEnthalten = categories.contains(savingEntries.get(0).getCategory());
+       List<SavingEntry> entries = groupDocument.savingEntries;
+       for(SavingEntry entity: entries){
+           Date crationdate = entity.getCreationDate();
+           Date filterInfo = filterInformation.getEndDate();
+           int test =  crationdate.compareTo(filterInfo);
+            int a = 3;
+       }
 
 
         //Apply filter and sorting
         List<SavingEntry> filteredAndSortedEntries = groupDocument.savingEntries.
                 stream().
-//                filter(savingEntry ->
-//                        savingEntry.
-//                        getCreationDate().
-//                                compareTo(filterInformation.getStartDate()) > 0).
-//
-//                filter(savingEntry ->
-//                        savingEntry.
-//                        getCreationDate().
-//                                compareTo(
-//                                        filterInformation.getEndDate() == null ?
-//                                                new Date() : filterInformation.getEndDate()) < 0).
+                filter(savingEntry ->
+                        savingEntry.
+                        getCreationDate().
+                                compareTo(filterInformation.getStartDate()) > 0).
+
+                filter(savingEntry ->
+                        savingEntry.
+                        getCreationDate().
+                                compareTo(
+                                        filterInformation.getEndDate() == null ?
+                                                new Date() : filterInformation.getEndDate()) < 0).
+
                 filter(savingEntry -> categories.contains(savingEntry.getCategory())).
 
                 filter(savingEntry -> personNames.contains(savingEntry.getCreator())).
 
-//                sorted((e1, e2) ->
-//
-//                         switch (filterInformation.getSortParameter()) {
-//                            case CreationDate -> e1.getCreationDate().compareTo(e2.getCreationDate());
-//                            case Creator -> e1.getCreator().compareTo(e2.getCreator());
-//                            case CostBalance -> e1.getCostBalance().compareTo(e2.getCostBalance());
-//                            case Name -> e1.getName().compareTo(e2.getName());
-//                            case Categories -> e1.getCategory().getName().compareTo(e2.getCategory().getName());
-//
-//                            //Description is optional, therefore a null check is necessary
-//                            case Description ->  e1.getDescription() == null ?
-//                                    0 : e1.getDescription().compareTo(e2.getDescription());
-//
-//                        }).
+                sorted((e1, e2) ->
+
+                         switch (filterInformation.getSortParameter()) {
+                            case CreationDate -> e1.getCreationDate().compareTo(e2.getCreationDate());
+                            case Creator -> e1.getCreator().compareTo(e2.getCreator());
+                            case CostBalance -> e1.getCostBalance().compareTo(e2.getCostBalance());
+                            case Name -> e1.getName().compareTo(e2.getName());
+                            case Categories -> e1.getCategory().getName().compareTo(e2.getCategory().getName());
+
+                            //Description is optional, therefore a null check is necessary
+                            case Description ->  e1.getDescription() == null ?
+                                    0 : e1.getDescription().compareTo(e2.getDescription());
+
+                        }).
 
                collect(Collectors.toList());
 
@@ -211,8 +216,8 @@ public class ProcessingController {
         }
         diagram1.setIncome(income);
         diagram1.setOutcome(outcome);
-        diagram1.setBalance(income-outcome);
-        diagram1.setFutureBalance(diagram1.getBalance() * inflationDto.getInflationValueInPercent());
+        diagram1.setBalance(income+outcome);
+        diagram1.setFutureBalance(diagram1.getBalance() + diagram1.getBalance() * inflationDto.getInflationValueInPercent());
 
         result.setBalanceProcessResultDTO(diagram1);
 
