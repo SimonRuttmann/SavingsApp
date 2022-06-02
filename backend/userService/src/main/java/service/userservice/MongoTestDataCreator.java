@@ -109,9 +109,9 @@ public class MongoTestDataCreator {
             case 5 -> "emil";
             case 6 -> "franz";
             case 7 -> "gabriella";
-            case 8 -> group8[random.nextInt(3)];
-            case 9 -> group9[random.nextInt(3)];
-            case 10 -> group10[random.nextInt(5)];
+            case 8 -> group8[random.nextInt(4)];
+            case 9 -> group9[random.nextInt(4)];
+            case 10 -> group10[random.nextInt(6)];
             default -> "defautlUser";
         };
     }

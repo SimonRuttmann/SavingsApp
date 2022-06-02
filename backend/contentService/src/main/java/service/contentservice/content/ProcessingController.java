@@ -281,42 +281,42 @@ public class ProcessingController {
         result.setDiagramByIntervalAndCategory(valuesForEntriesByIntervalAndCategory);
 
 
-//
-//        //Diagram 3 <Interval> <User,Sum>
-//        List<IntervalGroupDTO> valuesForEntriesByIntervalAndCreator = new ArrayList<>();
-//
-//        //For each interval, add the interval representation and group the remaining entries by creators
-//        for (Map.Entry<String, List<SavingEntry>> entryByTimeInterval : entriesByTimeInterval.entrySet()) {
-//
-//            IntervalGroupDTO intervalGroupDTO = new IntervalGroupDTO();
-//            intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
-//
-//            Map<String, List<SavingEntry>> entriesByTimeIntervalAndUser =
-//                    filteredAndSortedEntries.stream().
-//                            collect(Collectors.groupingBy(SavingEntry::getCreator));
-//
-//            //For each group of saving entries (grouped by interval and user) resolve the sum and name of creator
-//            for(Map.Entry<String, List<SavingEntry>> entryByTimeIntervalAndUser :
-//                    entriesByTimeIntervalAndUser.entrySet()){
-//
-//                IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
-//                intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndUser.getKey());
-//                Double sum = 0d;
-//
-//                for(SavingEntry savingEntry : entryByTimeIntervalAndUser.getValue()){
-//                    sum += savingEntry.getCostBalance();
-//                }
-//
-//                intervalBasedEntryValueDTO.setSum(sum);
-//                intervalGroupDTO.addValue(intervalBasedEntryValueDTO);
-//            }
-//
-//            valuesForEntriesByIntervalAndCreator.add(intervalGroupDTO);
-//
-//        }
-//
-//
-//        result.setDiagramByIntervalAndCreator(valuesForEntriesByIntervalAndCreator);
+
+        //Diagram 3 <Interval> <User,Sum>
+        List<IntervalGroupDTO> valuesForEntriesByIntervalAndCreator = new ArrayList<>();
+
+        //For each interval, add the interval representation and group the remaining entries by creators
+        for (Map.Entry<String, List<SavingEntry>> entryByTimeInterval : entriesByTimeInterval.entrySet()) {
+
+            IntervalGroupDTO intervalGroupDTO = new IntervalGroupDTO();
+            intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
+
+            Map<String, List<SavingEntry>> entriesByTimeIntervalAndUser =
+                    filteredAndSortedEntries.stream().
+                            collect(Collectors.groupingBy(SavingEntry::getCreator));
+
+            //For each group of saving entries (grouped by interval and user) resolve the sum and name of creator
+            for(Map.Entry<String, List<SavingEntry>> entryByTimeIntervalAndUser :
+                    entriesByTimeIntervalAndUser.entrySet()){
+
+                IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
+                intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndUser.getKey());
+                Double sum = 0d;
+
+                for(SavingEntry savingEntry : entryByTimeIntervalAndUser.getValue()){
+                    sum += savingEntry.getCostBalance();
+                }
+
+                intervalBasedEntryValueDTO.setSum(sum);
+                intervalGroupDTO.addValue(intervalBasedEntryValueDTO);
+            }
+
+            valuesForEntriesByIntervalAndCreator.add(intervalGroupDTO);
+
+        }
+
+
+        result.setDiagramByIntervalAndCreator(valuesForEntriesByIntervalAndCreator);
 
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
