@@ -1,5 +1,6 @@
 package service.advertisementservice.service;
 
+import model.AtomicIntegerModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.RedisDatabaseService;
@@ -15,9 +16,9 @@ public class AdvertisementServiceService {
     public AdvertisementDto fetchData(){
         var dto = new AdvertisementDto();
 
-        dto.setDiagram1(redisDatabaseService.getSingleSetValue("sendMessages"));
-        dto.setDiagram2(redisDatabaseService.getSingleSetValue("registItems"));
-        dto.setDiagram3(redisDatabaseService.getSingleSetValue("countUser"));
+        dto.setDiagram1(redisDatabaseService.getSingleSetValue(AtomicIntegerModel.SENDMESSAGES).toString());
+        dto.setDiagram2(redisDatabaseService.getSingleSetValue(AtomicIntegerModel.REGISTEREDITEMS).toString());
+        dto.setDiagram3(redisDatabaseService.getSingleSetValue(AtomicIntegerModel.COUNTUSERS).toString());
 
         return dto;
     }
