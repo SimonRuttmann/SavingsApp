@@ -5,11 +5,13 @@ import documentDatabaseModule.model.DocObjectIdUtil;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.model.SavingEntry;
 import documentDatabaseModule.service.IGroupDocumentService;
+import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.content.GeneralGroupInformationDTO;
 import dtoAndValidation.dto.inflation.InflationDto;
 import dtoAndValidation.dto.processing.*;
 import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +29,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/content/processing")
 public class ProcessingController {
-
-    private static final String URI ="http://inflationservice:8013/inflationrate";
+    @Value("${inflationservice-uri}")
+    public String URI;
 
     private final IGroupDocumentService groupDocumentService;
     private final IDatabaseService databaseService;
@@ -90,73 +92,104 @@ public class ProcessingController {
 
         //Resolve categories
         Set<Category> categories;
+        List<Category> categoryList = new ArrayList<>();
         GroupDocument groupDocument = groupDocumentService.getGroupDocument(groupId);
 
         if(groupDocument == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        categories = groupDocument.
-                categories.
-                stream().
-                filter(c ->
-                        filterInformation.getCategoryIds().
-                                contains(DocObjectIdUtil.toHexString(c.getId()))).
-                collect(Collectors.toSet());
+        if(filterInformation.getCategoryIds().isEmpty()){
+            List<String> categoryIds = new ArrayList();
+            groupDocument.categories.forEach(category -> {
+                categoryList.add(category);
+                categoryIds.add(DocObjectIdUtil.toHexString(category.getId()));
+            });
+
+            categories = Set.copyOf(categoryList);
+            filterInformation.setCategoryIds(categoryIds);
+        } else {
+            categories = groupDocument.
+                    categories.
+                    stream().
+                    filter(c ->
+                            filterInformation.getCategoryIds().
+                                    contains(DocObjectIdUtil.toHexString(c.getId()))).
+                    collect(Collectors.toSet());
+        }
+
+
+
+
 
 
         //Resolve persons
         Set<KPerson> allowedPersons;
 
 
+
         Collection<KPerson> persons = databaseService.getPersonsOfGroupId(groupId);
 
-        allowedPersons =
+        if(filterInformation.getPersonIds().isEmpty()){
+            allowedPersons = Set.copyOf(persons);
+            List<UUID> personIds = new ArrayList();
+            for(KPerson person : persons) {
+                personIds.add(UUID.fromString(person.getId()));
+            }
+            filterInformation.setPersonIds(personIds);
+        } else {
+            allowedPersons =
                     persons.
                     stream().
                     filter(p ->
                             filterInformation.getPersonIds().contains(UUID.fromString(p.getId()))).
                     collect(Collectors.toSet());
+        }
+
+
 
 
         Set<String> personNames = allowedPersons.stream().map(KPerson::getUsername).collect(Collectors.toSet());
 
+        //test
+        List<SavingEntry> savingEntries = groupDocument.savingEntries;
+        Category savingCategory = savingEntries.get(0).getCategory();
+        Boolean isEnthalten = categories.contains(savingEntries.get(0).getCategory());
 
 
         //Apply filter and sorting
         List<SavingEntry> filteredAndSortedEntries = groupDocument.savingEntries.
                 stream().
-                filter(savingEntry ->
-                        savingEntry.
-                        getCreationDate().
-                                compareTo(filterInformation.getStartDate()) > 0).
-
-                filter(savingEntry ->
-                        savingEntry.
-                        getCreationDate().
-                                compareTo(
-                                        filterInformation.getEndDate() == null ?
-                                                new Date() : filterInformation.getEndDate()) < 0).
-
+//                filter(savingEntry ->
+//                        savingEntry.
+//                        getCreationDate().
+//                                compareTo(filterInformation.getStartDate()) > 0).
+//
+//                filter(savingEntry ->
+//                        savingEntry.
+//                        getCreationDate().
+//                                compareTo(
+//                                        filterInformation.getEndDate() == null ?
+//                                                new Date() : filterInformation.getEndDate()) < 0).
                 filter(savingEntry -> categories.contains(savingEntry.getCategory())).
 
                 filter(savingEntry -> personNames.contains(savingEntry.getCreator())).
 
-                sorted((e1, e2) ->
+//                sorted((e1, e2) ->
+//
+//                         switch (filterInformation.getSortParameter()) {
+//                            case CreationDate -> e1.getCreationDate().compareTo(e2.getCreationDate());
+//                            case Creator -> e1.getCreator().compareTo(e2.getCreator());
+//                            case CostBalance -> e1.getCostBalance().compareTo(e2.getCostBalance());
+//                            case Name -> e1.getName().compareTo(e2.getName());
+//                            case Categories -> e1.getCategory().getName().compareTo(e2.getCategory().getName());
+//
+//                            //Description is optional, therefore a null check is necessary
+//                            case Description ->  e1.getDescription() == null ?
+//                                    0 : e1.getDescription().compareTo(e2.getDescription());
+//
+//                        }).
 
-                         switch (filterInformation.getSortParameter()) {
-                            case CreationDate -> e1.getCreationDate().compareTo(e2.getCreationDate());
-                            case Creator -> e1.getCreator().compareTo(e2.getCreator());
-                            case CostBalance -> e1.getCostBalance().compareTo(e2.getCostBalance());
-                            case Name -> e1.getName().compareTo(e2.getName());
-                            case Categories -> e1.getCategory().getName().compareTo(e2.getCategory().getName());
-
-                            //Description is optional, therefore a null check is necessary
-                            case Description ->  e1.getDescription() == null ?
-                                    0 : e1.getDescription().compareTo(e2.getDescription());
-
-                        }).
-
-                collect(Collectors.toList());
+               collect(Collectors.toList());
 
         //Add entries to result
 
@@ -205,80 +238,80 @@ public class ProcessingController {
 
 
 
-        //Diagram 2 <Interval> <Category,Sum>
-        List<IntervalGroupDTO> valuesForEntriesByIntervalAndCategory = new ArrayList<>();
-
-        //For each interval, add the interval representation and group the remaining entries by category
-        for (Map.Entry<String, List<SavingEntry>> entryByTimeInterval : entriesByTimeInterval.entrySet()) {
-
-            IntervalGroupDTO intervalGroupDTO = new IntervalGroupDTO();
-            intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
-
-
-            Map<Category, List<SavingEntry>> entriesByTimeIntervalAndCategory =
-                    entryByTimeInterval.getValue().stream().
-                    collect(Collectors.groupingBy(SavingEntry::getCategory));
-
-            //For each group of saving entries (grouped by interval and category) resolve the sum and name of category
-            for(Map.Entry<Category, List<SavingEntry>> entryByTimeIntervalAndCategory :
-                entriesByTimeIntervalAndCategory.entrySet()){
-
-                IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
-                intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndCategory.getKey().getName());
-
-                Double sum = 0d;
-
-                for(SavingEntry savingEntry : entryByTimeIntervalAndCategory.getValue()){
-                    sum += savingEntry.getCostBalance();
-                }
-
-                intervalBasedEntryValueDTO.setSum(sum);
-                intervalGroupDTO.addValue(intervalBasedEntryValueDTO);
-            }
-
-            valuesForEntriesByIntervalAndCategory.add(intervalGroupDTO);
-
-        }
-
-        result.setDiagramByIntervalAndCategory(valuesForEntriesByIntervalAndCategory);
-
-
-
-        //Diagram 3 <Interval> <User,Sum>
-        List<IntervalGroupDTO> valuesForEntriesByIntervalAndCreator = new ArrayList<>();
-
-        //For each interval, add the interval representation and group the remaining entries by creators
-        for (Map.Entry<String, List<SavingEntry>> entryByTimeInterval : entriesByTimeInterval.entrySet()) {
-
-            IntervalGroupDTO intervalGroupDTO = new IntervalGroupDTO();
-            intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
-
-            Map<String, List<SavingEntry>> entriesByTimeIntervalAndUser =
-                    filteredAndSortedEntries.stream().
-                            collect(Collectors.groupingBy(SavingEntry::getCreator));
-
-            //For each group of saving entries (grouped by interval and user) resolve the sum and name of creator
-            for(Map.Entry<String, List<SavingEntry>> entryByTimeIntervalAndUser :
-                    entriesByTimeIntervalAndUser.entrySet()){
-
-                IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
-                intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndUser.getKey());
-                Double sum = 0d;
-
-                for(SavingEntry savingEntry : entryByTimeIntervalAndUser.getValue()){
-                    sum += savingEntry.getCostBalance();
-                }
-
-                intervalBasedEntryValueDTO.setSum(sum);
-                intervalGroupDTO.addValue(intervalBasedEntryValueDTO);
-            }
-
-            valuesForEntriesByIntervalAndCreator.add(intervalGroupDTO);
-
-        }
-
-
-        result.setDiagramByIntervalAndCreator(valuesForEntriesByIntervalAndCreator);
+//        //Diagram 2 <Interval> <Category,Sum>
+//        List<IntervalGroupDTO> valuesForEntriesByIntervalAndCategory = new ArrayList<>();
+//
+//        //For each interval, add the interval representation and group the remaining entries by category
+//        for (Map.Entry<String, List<SavingEntry>> entryByTimeInterval : entriesByTimeInterval.entrySet()) {
+//
+//            IntervalGroupDTO intervalGroupDTO = new IntervalGroupDTO();
+//            intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
+//
+//
+//            Map<Category, List<SavingEntry>> entriesByTimeIntervalAndCategory =
+//                    entryByTimeInterval.getValue().stream().
+//                    collect(Collectors.groupingBy(SavingEntry::getCategory));
+//
+//            //For each group of saving entries (grouped by interval and category) resolve the sum and name of category
+//            for(Map.Entry<Category, List<SavingEntry>> entryByTimeIntervalAndCategory :
+//                entriesByTimeIntervalAndCategory.entrySet()){
+//
+//                IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
+//                intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndCategory.getKey().getName());
+//
+//                Double sum = 0d;
+//
+//                for(SavingEntry savingEntry : entryByTimeIntervalAndCategory.getValue()){
+//                    sum += savingEntry.getCostBalance();
+//                }
+//
+//                intervalBasedEntryValueDTO.setSum(sum);
+//                intervalGroupDTO.addValue(intervalBasedEntryValueDTO);
+//            }
+//
+//            valuesForEntriesByIntervalAndCategory.add(intervalGroupDTO);
+//
+//        }
+//
+//        result.setDiagramByIntervalAndCategory(valuesForEntriesByIntervalAndCategory);
+//
+//
+//
+//        //Diagram 3 <Interval> <User,Sum>
+//        List<IntervalGroupDTO> valuesForEntriesByIntervalAndCreator = new ArrayList<>();
+//
+//        //For each interval, add the interval representation and group the remaining entries by creators
+//        for (Map.Entry<String, List<SavingEntry>> entryByTimeInterval : entriesByTimeInterval.entrySet()) {
+//
+//            IntervalGroupDTO intervalGroupDTO = new IntervalGroupDTO();
+//            intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
+//
+//            Map<String, List<SavingEntry>> entriesByTimeIntervalAndUser =
+//                    filteredAndSortedEntries.stream().
+//                            collect(Collectors.groupingBy(SavingEntry::getCreator));
+//
+//            //For each group of saving entries (grouped by interval and user) resolve the sum and name of creator
+//            for(Map.Entry<String, List<SavingEntry>> entryByTimeIntervalAndUser :
+//                    entriesByTimeIntervalAndUser.entrySet()){
+//
+//                IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
+//                intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndUser.getKey());
+//                Double sum = 0d;
+//
+//                for(SavingEntry savingEntry : entryByTimeIntervalAndUser.getValue()){
+//                    sum += savingEntry.getCostBalance();
+//                }
+//
+//                intervalBasedEntryValueDTO.setSum(sum);
+//                intervalGroupDTO.addValue(intervalBasedEntryValueDTO);
+//            }
+//
+//            valuesForEntriesByIntervalAndCreator.add(intervalGroupDTO);
+//
+//        }
+//
+//
+//        result.setDiagramByIntervalAndCreator(valuesForEntriesByIntervalAndCreator);
 
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -289,19 +322,13 @@ public class ProcessingController {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<?> inflationResponse = restTemplate.getForObject(URI, ResponseEntity.class);
-        Object inflationBody = null;
-        if (inflationResponse != null) {
-            inflationBody = inflationResponse.getBody();
+        InflationDto inflationResponse = restTemplate.getForObject(URI, InflationDto.class);
+
+        if(inflationResponse != null){
+            return inflationResponse;
         }
 
-        InflationDto inflationDto;
-
-        if(inflationBody instanceof InflationDto){
-            return (InflationDto) inflationBody;
-        }
-
-        inflationDto = new InflationDto();
+        InflationDto inflationDto = new InflationDto();
         inflationDto.setInflationValueInPercent(1.0);
 
         return inflationDto;
