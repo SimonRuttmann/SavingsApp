@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface IRedisDatabaseService {
-    String getSingleSetValue(String key);
+    Integer getSingleSetValue(AtomicIntegerModel key);
     void incrementValue(AtomicIntegerModel key);
 }
