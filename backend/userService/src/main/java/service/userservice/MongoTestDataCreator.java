@@ -87,13 +87,33 @@ public class MongoTestDataCreator {
             Category category = categories.get(random.nextInt(categories.size()));
             Date creationDate = createRandomizedDate(day, month, random.nextInt(24));
 
-            String postingUser = "SomeTestUser - " + random.nextInt();
+            String postingUser = setPostingUser(groupId);
             Double cost = random.nextDouble() * 1000;
 
             SavingEntry savingEntry = new SavingEntry(name, cost, category, postingUser, creationDate, description);
             groupDocumentService.addSavingEntry(groupId, savingEntry);
         }
 
+    }
+
+    private String setPostingUser(Long groupId){
+        String[] group8 = {"demo", "annabell", "benni", "chleo"};
+        String[] group9 = {"demo", "emil", "franz", "gabriella" };
+        String[] group10 = {"annabell", "benni", "chleo", "emil", "franz", "gabriella"};
+
+        return switch (groupId.intValue()) {
+            case 1 -> "demo";
+            case 2 -> "annabell";
+            case 3 -> "benni";
+            case 4 -> "chleo";
+            case 5 -> "emil";
+            case 6 -> "franz";
+            case 7 -> "gabriella";
+            case 8 -> group8[random.nextInt(3)];
+            case 9 -> group9[random.nextInt(3)];
+            case 10 -> group10[random.nextInt(5)];
+            default -> "defautlUser";
+        };
     }
 
     private String createDatePrefixNumber(int number){
