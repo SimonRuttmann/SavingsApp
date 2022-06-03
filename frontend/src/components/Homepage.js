@@ -10,7 +10,7 @@ import {
     Title, PointElement, LineElement
 } from 'chart.js';
 import {Bar, Line} from 'react-chartjs-2';
-import "./styles.css"
+import "../styles.css"
 import {
     Button,
     ButtonGroup,
@@ -25,10 +25,12 @@ import {
     Table, ToggleButton
 } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Popup from "./SettingsPopup";
+import {useHistory} from "react-router-dom";
+import Chat from "./Chat";
 import SettingsPopup from "./SettingsPopup";
 import CategoriesPopup from "./CategoriesPopup";
-import Chat from "./Chat";
+import {useDispatch} from "react-redux";
+import {updateInflationRate} from "../features/inflation";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 const chartStyle = {
@@ -78,6 +80,26 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         }
     ])
 
+    const dispatch = useDispatch()
+
+
+    const history = useHistory()
+
+    const navToGuestSite = () => {
+        history.push("/");
+    }
+
+    useEffect(() => {
+        getInflationRate()
+    })
+
+    const getInflationRate = () => {
+        fetch('http://localhost:8080/inflationrate')
+            .then(response => response.json())
+            .then(data => {
+                dispatch(updateInflationRate(data))
+            })
+    }
 
     return (
         <>
@@ -97,7 +119,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         </Nav>
                         <Button variant={"dark"} style={textstyle}>{selectedGroup.name}</Button>
                         <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
-                        <Button variant="primary" style={buttonStyle} onClick={() => setGuestSite(true)}>Logout</Button>
+                        <Button variant="primary" style={buttonStyle} onClick={() => navToGuestSite()}>Logout</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
@@ -353,8 +375,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
             />}*/}
             <CardGroup>
                 <Card>
-                    <Card.Title>Einträge</Card.Title>
                     <Card.Body>
+                        <h4>Einträge</h4>
                         <br/>
                         <ButtonGroup style={buttonStyle}>
                             <Button variant="secondary">Alle</Button>
