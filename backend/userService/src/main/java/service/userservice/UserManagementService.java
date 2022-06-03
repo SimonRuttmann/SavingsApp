@@ -3,11 +3,14 @@ package service.userservice;
 import documentDatabaseModule.model.Category;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.service.IGroupDocumentService;
+import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.user.*;
+import dtoAndValidation.validation.ValidatorFactory;
 import model.AtomicIntegerModel;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -87,6 +90,12 @@ public class UserManagementService implements IUserManagementService {
     // Group
     @Override
     public GroupDTO registerGroup(HttpServletRequest request, GroupDTO registerDto) {
+        //Validate input
+        var validator = ValidatorFactory.getInstance().getValidator(GroupDTO.class);
+
+        if(!validator.validate(registerDto, false))
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid GroupDTO in RequestBody");
+
         UUID userId = getUserId(request);
         Group newGroup = new Group(registerDto.getGroupName(), false);
         Group savedGroup = databaseService.saveGroup(newGroup);
@@ -125,6 +134,12 @@ public class UserManagementService implements IUserManagementService {
     //Invitaion
     @Override
     public InvitationDTO invite(InviteDTO newInvitation, HttpServletRequest request) {
+        //Validate input
+        var validator = ValidatorFactory.getInstance().getValidator(InviteDTO.class);
+
+        if(!validator.validate(newInvitation, false))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid InviteDTO in Requestbody");
+
         // check if person is inviting themself
         UUID registeredUserId = getUserId(request);
         KPerson registeredUser = databaseService.getPersonById(registeredUserId);

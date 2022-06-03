@@ -12,7 +12,7 @@ public class CategoryValidator implements IValidator<CategoryDTO>{
 
         if(withId && toValidate.getId() == null) return false;
         if(!withId && toValidate.getId() != null) return false;
-
+        if(toValidate.getName().isEmpty()) return false;
         return !toValidate.getName().isBlank();
     }
 }
