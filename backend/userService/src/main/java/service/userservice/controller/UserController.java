@@ -8,6 +8,7 @@ import service.userservice.IUserManagementService;
 import service.userservice.imp.KeycloakService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,22 +25,15 @@ public class UserController {
         this.userManagementService = userManagementService;
     }
 
-    @PostMapping("/user/register")
-    public PersonDTO registerNewUser(@RequestBody PersonDTO registerDto) {
-        return userManagementService.register(registerDto);
-    }
     @GetMapping("/user/{userId}")
     public PersonDTO getUser(@PathVariable UUID userId){
         return userManagementService.getUser(userId);
     }
 
-    @GetMapping("/user/{userId}/groups")
-    public Collection<GroupDTO> getGroups(@PathVariable UUID userId){
-        return userManagementService.getAllGroupsOfPerson(userId);
+
+    @GetMapping("/user/usernames")
+    public Collection<String> getGroups(){
+        return userManagementService.getAllUsernames();
     }
 
-    @DeleteMapping("/user/{userId}")
-    public PersonDTO deleteUser(@PathVariable String userId) {
-        return userManagementService.deleteUser(UUID.fromString(userId));
-    }
 }

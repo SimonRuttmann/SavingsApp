@@ -2,13 +2,15 @@ package service.userservice.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfiguration {
 
-    String keycloakAuthUrl = "http://localhost:8090/auth";
+    @Value("${external-url}")
+    String keycloakAuthUrl;
 
     String realm = "haushaltsapp";
 

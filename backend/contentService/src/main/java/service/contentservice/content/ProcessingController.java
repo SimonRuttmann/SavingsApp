@@ -5,19 +5,22 @@ import documentDatabaseModule.model.DocObjectIdUtil;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.model.SavingEntry;
 import documentDatabaseModule.service.IGroupDocumentService;
+import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.content.GeneralGroupInformationDTO;
+import dtoAndValidation.dto.inflation.InflationDto;
 import dtoAndValidation.dto.processing.*;
-import dtoAndValidation.util.MapperUtil;
 import dtoAndValidation.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import relationalDatabaseModule.model.Group;
-import relationalDatabaseModule.model.Person;
+import relationalDatabaseModule.model.KPerson;
 import relationalDatabaseModule.service.IDatabaseService;
+import service.contentservice.util.ContentServiceMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,11 +29,10 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/content/processing")
 public class ProcessingController {
+    @Value("${inflationservice-uri}")
+    public String URI;
 
-    //TODO MICHAEL //FIXME MICHAEL
-    private final String URI ="http://inflationservice:8013/inflationrate";
     private final IGroupDocumentService groupDocumentService;
-
     private final IDatabaseService databaseService;
 
     @Autowired
@@ -50,8 +52,8 @@ public class ProcessingController {
         var groupInfo = new GeneralGroupInformationDTO();
 
         //Add all users of the group and the group name
-        Collection<Person> persons = databaseService.getPersonsOfGroupId(groupId);
-        persons.forEach(person -> groupInfo.addPersonToGroupInfo(MapperUtil.PersonToDTO(person)));
+        Collection<KPerson> persons = databaseService.getPersonsOfGroupId(groupId);
+        persons.forEach(person -> groupInfo.addPersonToGroupInfo(ContentServiceMapper.mapPersonToDto(person)));
 
         Group group = databaseService.getGroupById(groupId);
         if (group == null)
@@ -79,54 +81,83 @@ public class ProcessingController {
             @PathVariable(value="groupId") Long groupId,
             @RequestBody FilterInformationDTO filterInformation){
 
+        var inflationDto = receiveInflationRate();
 
-
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        Double inflation = restTemplate.getForObject(URI, Double.class);
-
-
+        //Validate input
         var validator = ValidatorFactory.getInstance().getValidator(FilterInformationDTO.class);
 
         if(!validator.validate(filterInformation, false) || groupId == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        //Validate input
-
 
         //Resolve categories
         Set<Category> categories;
+        List<Category> categoryList = new ArrayList<>();
         GroupDocument groupDocument = groupDocumentService.getGroupDocument(groupId);
 
         if(groupDocument == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        categories = groupDocument.
-                categories.
-                stream().
-                filter(c ->
-                        filterInformation.getCategoryIds().
-                                contains(DocObjectIdUtil.toHexString(c.getId()))).
-                collect(Collectors.toSet());
+        if(filterInformation.getCategoryIds().isEmpty()){
+            List<String> categoryIds = new ArrayList();
+            groupDocument.categories.forEach(category -> {
+                categoryList.add(category);
+                categoryIds.add(DocObjectIdUtil.toHexString(category.getId()));
+            });
+
+            categories = Set.copyOf(categoryList);
+            filterInformation.setCategoryIds(categoryIds);
+        } else {
+            categories = groupDocument.
+                    categories.
+                    stream().
+                    filter(c ->
+                            filterInformation.getCategoryIds().
+                                    contains(DocObjectIdUtil.toHexString(c.getId()))).
+                    collect(Collectors.toSet());
+        }
+
+
+
+
 
 
         //Resolve persons
-        Set<Person> allowedPersons;
+        Set<KPerson> allowedPersons;
 
 
-        Collection<Person> persons = databaseService.getPersonsOfGroupId(groupId);
 
-        allowedPersons =
+        Collection<KPerson> persons = databaseService.getPersonsOfGroupId(groupId);
+
+        if(filterInformation.getPersonIds().isEmpty()){
+            allowedPersons = Set.copyOf(persons);
+            List<UUID> personIds = new ArrayList();
+            for(KPerson person : persons) {
+                personIds.add(UUID.fromString(person.getId()));
+            }
+            filterInformation.setPersonIds(personIds);
+        } else {
+            allowedPersons =
                     persons.
                     stream().
                     filter(p ->
-                            filterInformation.getPersonIds().contains(p.getId())).
+                            filterInformation.getPersonIds().contains(UUID.fromString(p.getId()))).
                     collect(Collectors.toSet());
+        }
 
 
-        Set<String> personNames = allowedPersons.stream().map(Person::getUsername).collect(Collectors.toSet());
 
+
+        Set<String> personNames = allowedPersons.stream().map(KPerson::getUsername).collect(Collectors.toSet());
+
+        //test
+       List<SavingEntry> entries = groupDocument.savingEntries;
+       for(SavingEntry entity: entries){
+           Date crationdate = entity.getCreationDate();
+           Date filterInfo = filterInformation.getEndDate();
+           int test =  crationdate.compareTo(filterInfo);
+            int a = 3;
+       }
 
 
         //Apply filter and sorting
@@ -150,7 +181,7 @@ public class ProcessingController {
 
                 sorted((e1, e2) ->
 
-                         switch (filterInformation.getSortingParameter()) {
+                         switch (filterInformation.getSortParameter()) {
                             case CreationDate -> e1.getCreationDate().compareTo(e2.getCreationDate());
                             case Creator -> e1.getCreator().compareTo(e2.getCreator());
                             case CostBalance -> e1.getCostBalance().compareTo(e2.getCostBalance());
@@ -163,12 +194,12 @@ public class ProcessingController {
 
                         }).
 
-                collect(Collectors.toList());
+               collect(Collectors.toList());
 
         //Add entries to result
 
         var result = new ProcessResultContainerDTO();
-        filteredAndSortedEntries.forEach(entry -> result.addSavingEntry(MapperUtil.SavingEntryToDTO(entry)));
+        filteredAndSortedEntries.forEach(entry -> result.addSavingEntry(ContentServiceMapper.mapSavingEntryToDto(entry)));
 
 
 
@@ -185,8 +216,8 @@ public class ProcessingController {
         }
         diagram1.setIncome(income);
         diagram1.setOutcome(outcome);
-        diagram1.setBalance(income-outcome);
-        diagram1.setFutureBalance(diagram1.getBalance() * inflation);
+        diagram1.setBalance(income+outcome);
+        diagram1.setFutureBalance(diagram1.getBalance() + diagram1.getBalance() * inflationDto.getInflationValueInPercent());
 
         result.setBalanceProcessResultDTO(diagram1);
 
@@ -290,76 +321,21 @@ public class ProcessingController {
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+
+    private InflationDto receiveInflationRate(){
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        InflationDto inflationResponse = restTemplate.getForObject(URI, InflationDto.class);
+
+        if(inflationResponse != null){
+            return inflationResponse;
+        }
+
+        InflationDto inflationDto = new InflationDto();
+        inflationDto.setInflationValueInPercent(1.0);
+
+        return inflationDto;
+    }
 }
-
-
-
-
-
-
-
-    //FILTER:           KEY           VALUE
-    //                  Anfangsdatum    Date
-    //                  Endatum         Date
-    //                  User            Array an User Id`s
-    //                  Kategorie       Array an Kategorien
-    //
-    // Filter:
-    // Anfangsdatum
-    // Zeitintervall
-    //
-
-    //Diagramm 1
-    // Summe abhängig von Filtern
-    // 1. Zeitraum --> Anfangsdatum ist gegeben
-    // 2. User: Array an Usern, nur user beachten, welche darin liegen
-    // 3. Kategory: Array an KategorieId`s, nur beachten welche darin liegen
-
-    //Wert 1 Typ: Integer Summe der Einnahmen
-    //Wert 2 Typ: Integer Summe der Ausgaben
-
-
-    //Diagramm 2
-    // 1. Zeitraum --> Anfangsdatum ist gegeben, alle anderen weg
-    // 2. Zeitintervall --> Zeit in sekunden
-    // 3. User + Kategorie wie voher
-
-    // Array für jedes Zeitintervall
-    // Zeitintervall:
-    //      Kategorie 1: Summe ausgaben (für alle user)
-    //      Kategorie 2: Summe ausgaben
-    //      Kategorie 3: Summe ausgaben
-
-
-    //Diagramm 3
-    // 1. Zeitraum --> Anfangsdatum ist gegeben, alle anderen weg
-    // 2. Zeitintervall --> Zeit in sekunden
-    // 3. User + Kategorie wie voher
-
-    // Array für jedes Zeitintervall
-    // Zeitintervall:
-    //      user 1: Summe ausgaben (für alle kategorien)
-    //      user 2: Summe ausgaben
-    //      user 3: Summe ausgaben
-
-
-    //Diagramm 4
-    // 1. Zeitraum --> Anfangsdatum ist gegeben, alle anderen weg
-    // 2. Zeitintervall --> Zeit in sekunden
-
-    // Array für jedes Zeitintervall
-    // Zeitintervall:
-    //      Summe ausgaben
-    //      Summe ausgaben
-    //      Summe ausgaben
-
-    //Anzahl = Zeitintervall bisher / 2
-    // Calculated ..
-    // mittelwert * inflation
-
-
-
-    //Default get, put, post, delete entry
-
-
-

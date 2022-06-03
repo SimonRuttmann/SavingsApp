@@ -1,40 +1,20 @@
 package dtoAndValidation.dto.content;
 
 import dtoAndValidation.validation.IValidatable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryDTO implements IValidatable {
 
     private String id;
 
     private String name;
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-
-    public CategoryDTO(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public CategoryDTO() {
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -48,4 +28,5 @@ public class CategoryDTO implements IValidatable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

@@ -23,7 +23,7 @@ public class SavingEntryValidator implements IValidator<SavingEntryDTO> {
         if(!ValidatorFactory.
                 getInstance().
                 getValidator(CategoryDTO.class).
-                validate(toValidate.getCategory(), withId))
+                validate(toValidate.getCategory(), true))
             return false;
 
         //Description is optional

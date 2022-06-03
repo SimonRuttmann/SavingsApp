@@ -1,5 +1,6 @@
 package service.chatservice.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,6 +12,7 @@ import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Slf4j
 @Service
 public class RedisDBService implements RedisRepository {
     @Autowired
@@ -20,7 +22,11 @@ public class RedisDBService implements RedisRepository {
     private ListOperations<String,ChatMessage> listOperations;
 
     public void addMessageToGroup(@NotNull String groupid,@NotNull ChatMessage message){
-        listOperations.leftPush(groupid, message);
+        try {
+            listOperations.leftPush(groupid, message);
+        }catch (Exception e){
+            log.error("An error has occured while pushing message to database.Exception: "+e);
+        }
     }
 
     /**

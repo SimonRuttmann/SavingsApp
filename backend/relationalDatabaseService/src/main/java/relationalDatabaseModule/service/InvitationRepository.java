@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface InvitationRepository extends JpaRepository<Invitation, InvitationCompoundId>, RepositoryDetachAdapterCustom<Invitation>{
-    List<Invitation> findByInvitedPersonAndInvitationStatus(Person person, InvitationStatus status);
-    List<Invitation> findByInvitedPersonAndRequestedGroup(Person person, Group group);
+    List<Invitation> findByInvitedPersonAndInvitationStatus(KPerson person, InvitationStatus status);
+    List<Invitation> findByInvitedPersonAndRequestedGroup(KPerson person, Group group);
 }

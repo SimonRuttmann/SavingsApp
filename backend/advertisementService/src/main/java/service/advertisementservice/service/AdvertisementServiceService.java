@@ -1,11 +1,10 @@
 package service.advertisementservice.service;
 
-import org.json.simple.JSONObject;
+import model.AtomicIntegerModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.RedisDatabaseService;
-
-import java.util.HashMap;
+import service.advertisementservice.model.AdvertisementDto;
 
 //Service returns nothing in string if an error occured
 @Service
@@ -14,15 +13,14 @@ public class AdvertisementServiceService {
     @Autowired
     RedisDatabaseService redisDatabaseService;
 
-    public String fetchData(){
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("Diagramm1",redisDatabaseService.getSingleSetValue("sendMessages"));
-        hashMap.put("Diagramm2",redisDatabaseService.getSingleSetValue("registItems"));
-        hashMap.put("Diagramm3",redisDatabaseService.getSingleSetValue("countUser"));
+    public AdvertisementDto fetchData(){
+        var dto = new AdvertisementDto();
 
-        JSONObject jsonObject = new JSONObject(hashMap);
+        dto.setDiagram1(redisDatabaseService.getSingleSetValue(AtomicIntegerModel.SENDMESSAGES).toString());
+        dto.setDiagram2(redisDatabaseService.getSingleSetValue(AtomicIntegerModel.REGISTEREDITEMS).toString());
+        dto.setDiagram3(redisDatabaseService.getSingleSetValue(AtomicIntegerModel.COUNTUSERS).toString());
 
-        return jsonObject.toJSONString();
+        return dto;
     }
 
 }

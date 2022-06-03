@@ -8,11 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Service
 public class GroupDocumentService implements IGroupDocumentService{
@@ -49,7 +55,8 @@ public class GroupDocumentService implements IGroupDocumentService{
     public GroupDocument createDocument(GroupDocument groupDocument) {
 
         var document = getGroupDocument(groupDocument.groupId);
-        if(document != null) return null;
+        // TODO why this? this way the ID's are never set and it is never going to be safed in mongo
+        //if(document != null) return null;
 
         groupDocument.setIdIfNotExists();
         groupDocument.categories.forEach(IEmbeddedDocumentIdentifier::setIdIfNotExists);

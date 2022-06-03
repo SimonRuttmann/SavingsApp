@@ -1,5 +1,7 @@
 package service.userservice;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -10,10 +12,25 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories("relationalDatabaseModule")
 @EntityScan("relationalDatabaseModule")
 @SpringBootApplication()
-public class UserServiceApplication {
+public class UserServiceApplication implements CommandLineRunner {
 
-    public static void main(String[] args) {
+    @Autowired
+    private MongoTestDataCreator mongoTestDataCreator;
+
+    private static final String MigrateTestData = "migrate";
+
+    public static void main(String[] args)  {
         SpringApplication.run(UserServiceApplication.class, args);
     }
+
+    @Override
+    public void run(String... args) {
+
+        if(MigrateTestData.equals(System.getenv("test"))) {
+            mongoTestDataCreator.createTestData();
+        }
+
+    }
+
 
 }
