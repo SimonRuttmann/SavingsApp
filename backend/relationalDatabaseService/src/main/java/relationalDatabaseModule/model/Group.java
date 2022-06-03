@@ -35,11 +35,21 @@ public class Group {
             length=512)
     private String groupName;
 
+    @Column(
+            name="PersonGroupBool",
+            unique = false,
+            nullable = false,
+            insertable = true,
+            updatable = true,
+            length=255)
+    private Boolean personGroup;
+
 
     public Group() {}
 
-    public Group(String groupName) {
+    public Group(String groupName, Boolean personGroup) {
         this.groupName = groupName;
+        this.personGroup = personGroup;
     }
 
 
@@ -49,9 +59,9 @@ public class Group {
      * UserPersistence.groups attribute defining the join table
      */
     @ManyToMany (mappedBy = "groups", fetch = FetchType.EAGER)
-    Set<Person> members = new HashSet<>();
+    Set<KPerson> members = new HashSet<>();
 
-    public void addMember(Person person){
+    public void addMember(KPerson person){
         if(person == null) return;
         if(this.members.contains(person)) return;
 
@@ -59,7 +69,7 @@ public class Group {
         person.addGroup(this);
     }
 
-    public void removeMember(Person person){
+    public void removeMember(KPerson person){
         if(person == null) return;
         if(!this.members.contains(person)) return;
 
@@ -77,11 +87,14 @@ public class Group {
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
+    public Boolean getPersonGroupBool() {return personGroup;}
+    public void setPersonGroupBool(Boolean personGroup) {this.personGroup = personGroup;}
+
     public String getGroupName() {return groupName;}
     public void setGroupName(String groupName) {this.groupName = groupName;}
 
-    public Set<Person> getMembers() {return members;}
-    public void setMembers(Set<Person> members) {this.members = members;}
+    public Set<KPerson> getMembers() {return members;}
+    public void setMembers(Set<KPerson> members) {this.members = members;}
 
     public Set<Invitation> getInvitations() {return invitations;}
     public void setInvitations(Set<Invitation> invitations) {this.invitations = invitations;}

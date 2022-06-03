@@ -1,10 +1,7 @@
 package relationalDatabaseModule.service;
 
 import org.springframework.stereotype.Component;
-import relationalDatabaseModule.model.Group;
-import relationalDatabaseModule.model.Invitation;
-import relationalDatabaseModule.model.Pair;
-import relationalDatabaseModule.model.Person;
+import relationalDatabaseModule.model.*;
 
 
 import java.util.Collection;
@@ -40,14 +37,14 @@ import java.util.UUID;
 @Component
 public interface IDatabaseService {
 
-     Person getPersonById(UUID id);
+     KPerson getPersonById(UUID id);
 
      Group getGroupById(Long id);
      Collection<Group> getGroupsOfPersonId(UUID id);
 
-     Pair<Person, Group> addPersonToGroup(UUID personId, Long groupId);
+     Pair<KPerson, Group> addPersonToGroup(UUID personId, Long groupId);
 
-     Invitation addInvitation(UUID personId, Long groupId);
+     Invitation addInvitation(String username, Long groupId, UUID inviterPerson);
 
      Invitation declineInvitation(UUID userId, Long groupId);
 
@@ -55,13 +52,10 @@ public interface IDatabaseService {
 
      List<Invitation> getAllInvitations(UUID userId);
 
-     Pair<Person, Group> removePersonFromGroup(UUID personId, Long groupId);
+     Pair<KPerson, Group> removePersonFromGroup(UUID personId, Long groupId);
 
-     Person savePerson(Person person);
 
-     void removePerson(UUID id);
-
-     Collection<Person> getPersonsOfGroupId(Long id);
+     Collection<KPerson> getPersonsOfGroupId(Long id);
 
 
      Group saveGroup(Group group);

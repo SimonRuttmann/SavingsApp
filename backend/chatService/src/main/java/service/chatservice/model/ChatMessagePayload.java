@@ -6,13 +6,13 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Data transfer object representing chatMessages
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-/**
- * Data transfer object representing chatMessages
- */
 public class ChatMessagePayload {
     @NotBlank
     private String content;

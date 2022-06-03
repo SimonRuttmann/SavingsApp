@@ -1,5 +1,10 @@
 version: '3.3'
 
+#volumes:
+#  postgresData:
+#    external: true
+#  keycloakData:
+#    external: true
 
 services: 
   mongodb:
@@ -20,53 +25,75 @@ services:
       - "6379:6379"
     volumes:
       - ./redis/data:/data/db
-#  postgresql:
-#    container_name: cAndD_postgresql
-#    build:
-#      context: ./postgresql
-#      dockerfile: Dockerfile
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - ./postgresql/data:/data/db
-  #advertismentservice:
-  #  container_name: advertisment_service
-  #  restart: on-failure
-  #  build:
-  #    context: ./advertisementservice
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8010:8080"
- # userservice:
- #   container_name: cAndD_user_service
- #   #restart: on-failure
- #   build:
- #     context: ./userservice
- #     dockerfile: Dockerfile
- #   ports:
- #     - "8011:8011"
- #   environment:
- #     - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/keycloak
- #     - SPRING_DATASOURCE_USERNAME=postgres
- #     - SPRING_DATASOURCE_PASSWORD=password
+  advertismentservice:
+    container_name: advertisment_service
+    restart: on-failure
+    environment:
+      server.port: 8080
+      spring.redis.host: redis
+    build:
+      context: ./advertisementservice
+      dockerfile: Dockerfile
+    ports:
+      - "8010:8080"
+  userservice:
+    container_name: cAndD_user_service
+    #restart: on-failure
+    build:
+      context: ./userservice
+      dockerfile: Dockerfile
+    ports:
+      - "8011:8011"
+    environment:
+      test: migrate
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: postgres
+      keycloak.auth-server-url: http://keycloak:8080/auth
+      spring.datasource.url: jdbc:postgresql://postgres/keycloak
+      spring.datasource.username: postgres
+      spring.datasource.password: password
+      server.port: 8011
+      spring.redis.host: redis
+      spring.data.mongodb.host: mongodb
+      spring.data.mongodb.port: 27017
+      external-url: http://localhost:8090/auth
+    depends_on:
+      - postgres
+      - mongodb
 
 
-  #contentservice:
-  #  container_name: content_service
-  #  restart: on-failure
-  #  build:
-  #    context: ./contentservice
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8012:8080"
-  #inflationservice:
-  #  container_name: inflation_service
-  #  restart: on-failure
-  #  build:
-  #    context: ./inflationservice
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8013:8080"
+  contentservice:
+    container_name: content_service
+    #restart: on-failure
+    environment:
+      spring.mongodb.host: mongodb
+      server.port: 8080
+      spring.redis.host: redis
+      keycloak.auth-server-url: http://keycloak:8080/auth
+      spring.data.mongodb.port: 27017
+      spring.data.mongodb.host: mongodb
+      spring.datasource.url: jdbc:postgresql://postgres/keycloak
+      inflationservice-uri: http://inflationservice:8080/inflationrate
+      external-url: http://localhost:8090/auth
+    build:
+      context: ./contentservice
+      dockerfile: Dockerfile
+    ports:
+      - "8012:8080"
+  inflationservice:
+    container_name: inflation_service
+    restart: on-failure
+    environment:
+      server.port: 8080
+      spring.redis.host: redis
+    build:
+      context: ./inflationservice
+      dockerfile: Dockerfile
+    ports:
+      - "8013:8080"
   keycloak:
     container_name: cAndD_keycloak
     image: quay.io/keycloak/keycloak:legacy
@@ -79,6 +106,7 @@ services:
       DB_PASSWORD: password
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_FRONTEND_URL: http://localhost:8090/auth
 #       Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
 #      JDBC_PARAMS: "ssl=true"
     ports:
@@ -86,33 +114,25 @@ services:
     depends_on:
       - postgres
   postgres:
-    container_name: cAndD_postgresKeycloak
+    container_name: cAndD_postgres
     image: postgres
     volumes:
-     # - postgres_data:/var/lib/postgresql/data
-      - ./postgresql/keycloakData:/data/db
+      - ./postgresql/postgresDataDemo:/var/lib/postgresql/data:rw
+      - ./postgresql/data:/data/db
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
-  #chatservice:
-  #  container_name: chat_service
-  #  restart: on-failure
-  #  build:
-  #    context: ./chatservice
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8014:8080"
-
-  # Probably not needed
-  # databaseservice:
-  #   container_name: database_service
-  #   restart: on-failure
-  #   build:
-  #     context: ./databaseservice
-  #     dockerfile: Dockerfile
-  #   ports:
-  ##     - "8080:8080"
-      
+  chatservice:
+    container_name: chat_service
+    restart: on-failure
+    environment:
+      server.port: 8080
+      spring.redis.host: redis
+    build:
+      context: ./chatservice
+      dockerfile: Dockerfile
+    ports:
+      - "8014:8080"
