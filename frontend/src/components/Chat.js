@@ -13,11 +13,13 @@ import {
     OverlayTrigger,
     Popover
 } from "react-bootstrap";
+import {useDispatch} from "react-redux";
+import {changeTopicOfMessages} from "../features/messaging";
 
 function Chat( user ) {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState([]);
-    const [topic, setTopic] = useState('NEU2');
+    const [topic, setTopic] = useState('Test');
     const [groupId, setGroupId] = useState('Robin Röcker');
     const [newMessage, setNewMessage] = useState('');
     const [show, setShow] = useState(false);
@@ -32,6 +34,8 @@ function Chat( user ) {
         subscribeToTopic()
         getMessagesForTopic()
     }
+
+    const dispatch = useDispatch()
 
     const connect = () => {
 
@@ -71,7 +75,9 @@ function Chat( user ) {
     const getMessagesForTopic = () => {
         fetch(`http://localhost:8080/chat/rooms/${topic}/messages`)
             .then(response => response.json())
-            .then(data => setData(data))
+            .then(data => {
+                return data
+            })
     }
 
     const sendMessage = () => {
@@ -86,6 +92,9 @@ function Chat( user ) {
     const disconnect = () => {
         stompClient.disconnect()
     }
+    const changeTopic = () => {
+        dispatch(changeTopicOfMessages({topic: topic, messages: getMessagesForTopic()}))
+    }
 
     const popover = (
         <Popover id='popover-basic'>
@@ -95,7 +104,8 @@ function Chat( user ) {
                     <Card>
                         <Form>
                             <label>Message :
-                                <input type='text'/>
+                                <input type='text' value={topic}/>
+                                <Button variant="secondary" onClick={sendMessage}></Button>
                             </label>
                             <Button>Send</Button>
                         </Form>
@@ -151,7 +161,7 @@ function Chat( user ) {
                   <Button variant="outline-success" id="button-addon2" onClick={() => {                  setData([...data, {
                       "content": newMessage,
                       "sender": "Robin Röcker",
-                      "topic": "NEU2"
+                      "topic": "Test"
                   }])}}>
                       Send
                   </Button>

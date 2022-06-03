@@ -3,7 +3,13 @@ import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Gradient from 'rgt'
-import './styles.css'
+import '../styles.css'
+import {useHistory} from "react-router-dom";
+import {useDispatch} from 'react-redux'
+import { login } from '../features/user'
+import { logout } from '../features/user'
+import {update, updateAdvertismentData} from "../features/advertisment";
+
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -31,13 +37,24 @@ const GuestSite = ({setGuestSite}) => {
         getStatisticsData()
     })
 
+    const dispatch = useDispatch()
+
+    const history = useHistory()
+
+    const navToHomepage = () => {
+    }
+
+    const loginAndNavigateToHomepage = () => {
+        dispatch(login({id: "c01d20e4-3fb4-454f-9a37-c23e6573e5b7", email: "demo@demo", username: "username"}))
+        history.push("/homepage");
+
+}
+
     const getStatisticsData = () => {
         fetch('http://localhost:8080/global')
             .then(response => response.json())
             .then(data => {
-                statistics.statistic1 = data.Diagramm1
-                statistics.statistic2 = data.Diagramm2
-                statistics.statistic3 = data.Diagramm3
+                dispatch(updateAdvertismentData(data))
             })
     }
     return (
@@ -49,7 +66,9 @@ const GuestSite = ({setGuestSite}) => {
                     <Navbar.Collapse className="justify-content-end">
                         <Button variant="light" style={buttonStyle} className="buttonStyle">Register</Button>
                         <Button variant="primary"  style={buttonStyle} className="buttonStyle"
-                                onClick={() => setGuestSite(false)}>Login</Button>
+                                onClick={() => {
+                                    loginAndNavigateToHomepage()
+                                }}>Login</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
