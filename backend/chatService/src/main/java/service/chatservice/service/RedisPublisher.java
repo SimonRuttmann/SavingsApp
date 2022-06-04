@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import service.RedisDatabaseService;
 import service.chatservice.model.ChatMessage;
 import service.chatservice.model.ChatMessagePayload;
+import service.chatservice.repository.IRedisChatPersistenceService;
 
 import static model.AtomicIntegerModel.SENDMESSAGES;
 
@@ -22,7 +23,7 @@ public class RedisPublisher {
     private RedisTemplate<String, ChatMessage> redisTemplate;
 
     @Autowired
-    private RedisChatPersistenceService redisChatPersistenceService;
+    private IRedisChatPersistenceService redisChatPersistenceService;
 
     /**
      * Publishes a given message on a given topic in redis.

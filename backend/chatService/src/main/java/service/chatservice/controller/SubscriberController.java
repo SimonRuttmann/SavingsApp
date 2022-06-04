@@ -6,6 +6,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import service.chatservice.repository.IRedisChatPersistenceService;
 import service.chatservice.service.RedisChatPersistenceService;
 import service.chatservice.service.SubscriptionService;
 
@@ -21,7 +22,7 @@ public class SubscriberController {
     private SubscriptionService subscriptionService;
 
     @Autowired
-    private RedisChatPersistenceService redisChatPersistenceService;
+    private IRedisChatPersistenceService redisChatPersistenceService;
 
     @GetMapping(path = "/rooms/{topic}/messages")
     public ResponseEntity<?> getChatMessages(@PathVariable("topic") String topic) {
