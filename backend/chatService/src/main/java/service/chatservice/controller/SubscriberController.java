@@ -6,7 +6,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.chatservice.service.RedisDBService;
+import service.chatservice.service.IRedisPersistance;
 import service.chatservice.service.StompSubscriber;
 
 /**
@@ -21,13 +21,13 @@ public class SubscriberController {
     private StompSubscriber stompSubscriber;
 
     @Autowired
-    private RedisDBService redisDBService;
+    private IRedisPersistance redisPersistance;
 
     @GetMapping(path = "/rooms/{topic}/messages")
     public ResponseEntity<?> getChatMessages(@PathVariable("topic") String topic) {
         try {
             if (topic != null) {
-                return new ResponseEntity<>(redisDBService.getMessagesByTopic(topic), HttpStatus.OK);
+                return new ResponseEntity<>(redisPersistance.getMessagesByTopic(topic), HttpStatus.OK);
             }
         }catch (Exception e){
             return new ResponseEntity<>("Error: "+e,HttpStatus.NOT_FOUND);
