@@ -16,6 +16,7 @@ public class SavingEntryValidator implements IValidator<SavingEntryDTO> {
 
         if(toValidate.getName() == null) return false;
         if(toValidate.getName().isBlank()) return false;
+        if(toValidate.getName().isEmpty()) return false;
 
         if(toValidate.getCostBalance() == null) return false;
 
@@ -29,6 +30,7 @@ public class SavingEntryValidator implements IValidator<SavingEntryDTO> {
         //Description is optional
 
         if(toValidate.getCreator() == null) return false;
+        if(toValidate.getCreator().isEmpty()) return false;
         return !toValidate.getCreator().isBlank();
 
     }

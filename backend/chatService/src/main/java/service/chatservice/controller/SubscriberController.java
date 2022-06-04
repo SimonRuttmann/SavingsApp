@@ -6,8 +6,8 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.chatservice.service.ChatService;
-import service.chatservice.service.RedisDBService;
+import service.chatservice.service.RedisPersistance;
+import service.chatservice.service.StompSubscriber;
 
 /**
  * Defines endpoints for subscribing
@@ -18,16 +18,16 @@ import service.chatservice.service.RedisDBService;
 public class SubscriberController {
 
     @Autowired
-    private ChatService chatService;
+    private StompSubscriber stompSubscriber;
 
     @Autowired
-    private RedisDBService redisDBService;
+    private RedisPersistance redisPersistance;
 
     @GetMapping(path = "/rooms/{topic}/messages")
     public ResponseEntity<?> getChatMessages(@PathVariable("topic") String topic) {
         try {
             if (topic != null) {
-                return new ResponseEntity<>(redisDBService.getMessagesByTopic(topic), HttpStatus.OK);
+                return new ResponseEntity<>(redisPersistance.getMessagesByTopic(topic), HttpStatus.OK);
             }
         }catch (Exception e){
             return new ResponseEntity<>("Error: "+e,HttpStatus.NOT_FOUND);
@@ -38,11 +38,11 @@ public class SubscriberController {
 
     @GetMapping("/sub/{topic}")
     public void subChannel(@PathVariable("topic") String topic){
-        chatService.subscribeToChannel(new ChannelTopic(topic));
+        stompSubscriber.subscribeToChannel(new ChannelTopic(topic));
     }
 
     @GetMapping("/unsub/{topic}")
     public void unsubChannel(@PathVariable("topic") String topic){
-        chatService.unsubscribeChannel(new ChannelTopic(topic));
+        stompSubscriber.unsubscribeChannel(new ChannelTopic(topic));
     }
 }
