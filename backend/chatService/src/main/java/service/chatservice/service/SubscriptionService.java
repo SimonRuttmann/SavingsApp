@@ -8,12 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StompSubscriber {
+public class SubscriptionService {
     private final RedisSubscriber redisSubscriber;
     private final RedisMessageListenerContainer redisMessageListener;
 
     @Autowired
-    public StompSubscriber(RedisSubscriber redisSubscriber, RedisMessageListenerContainer redisMessageListener) {
+    public SubscriptionService(RedisSubscriber redisSubscriber, RedisMessageListenerContainer redisMessageListener) {
         this.redisSubscriber = redisSubscriber;
         this.redisMessageListener = redisMessageListener;
     }

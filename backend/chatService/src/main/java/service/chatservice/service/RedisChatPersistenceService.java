@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import service.chatservice.model.ChatMessage;
+import service.chatservice.repository.IRedisChatPersistenceService;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class RedisPersistance {
+public class RedisChatPersistenceService implements IRedisChatPersistenceService {
     @Autowired
     RedisTemplate<String, ChatMessage> template;
 
