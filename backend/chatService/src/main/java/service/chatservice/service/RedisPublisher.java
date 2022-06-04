@@ -22,7 +22,7 @@ public class RedisPublisher {
     private RedisTemplate<String, ChatMessage> redisTemplate;
 
     @Autowired
-    private RedisDBService redisDBService;
+    private IRedisPersistance redisPersistance;
 
     /**
      * Publishes a given message on a given topic in redis.
@@ -38,7 +38,7 @@ public class RedisPublisher {
                 .withSender(message.getSender())
                 .build();
 
-        redisDBService.addMessageToGroup(publishedMessage.getTopic(),publishedMessage);
+        redisPersistance.addMessageToGroup(publishedMessage.getTopic(),publishedMessage);
         redisTemplate.convertAndSend(topic.getTopic(), publishedMessage);
         redisDatabaseService.incrementValue(SENDMESSAGES);
     }
