@@ -83,6 +83,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8012:8080"
+    depends_on:
+      - mongodb
+      - postgres
   inflationservice:
     container_name: inflation_service
     restart: on-failure
