@@ -10,6 +10,9 @@ import service.chatservice.model.ChatMessagePayload;
 
 import static model.AtomicIntegerModel.SENDMESSAGES;
 
+/**
+ * Class for everything related to redis publishing
+ */
 @Service
 public class RedisPublisher {
     @Autowired
@@ -22,7 +25,9 @@ public class RedisPublisher {
     private RedisDBService redisDBService;
 
     /**
-     * Pubishes a given message on a given topic in redis
+     * Publishes a given message on a given topic in redis.
+     * Messages is persisted for the given topic.
+     * Integer SendMessages is incemented.
      * @param topic to be published on
      * @param message
      */

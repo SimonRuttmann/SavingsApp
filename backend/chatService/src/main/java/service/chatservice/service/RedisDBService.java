@@ -21,6 +21,11 @@ public class RedisDBService implements RedisRepository {
     @Resource(name="redisTemplate")
     private ListOperations<String,ChatMessage> listOperations;
 
+    /**
+     * Adds a message to the group message list
+     * @param groupid that the message should be added to
+     * @param message to be added
+     */
     public void addMessageToGroup(@NotNull String groupid,@NotNull ChatMessage message){
         try {
             listOperations.leftPush(groupid, message);

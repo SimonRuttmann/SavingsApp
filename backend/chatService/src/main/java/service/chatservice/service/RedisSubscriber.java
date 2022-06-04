@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import service.chatservice.model.ChatMessage;
 import service.chatservice.model.ChatMessagePayload;
 
+/**
+ * Class for everthing related to redis subscribing
+ */
 @Slf4j
 @Service
 public class RedisSubscriber implements MessageListener {
@@ -25,6 +28,9 @@ public class RedisSubscriber implements MessageListener {
         this.messagingTemplate = messagingTemplate;
     }
 
+    /**
+     * Responsible for transferring chat messages from redis sub/pub to stomp.
+     */
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
