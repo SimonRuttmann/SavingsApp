@@ -13,7 +13,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class IRedisPersistance implements service.chatservice.repository.IRedisPersistance {
+public class RedisPersistance {
     @Autowired
     RedisTemplate<String, ChatMessage> template;
 

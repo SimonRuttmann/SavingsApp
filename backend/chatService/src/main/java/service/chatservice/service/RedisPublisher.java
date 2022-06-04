@@ -22,7 +22,7 @@ public class RedisPublisher {
     private RedisTemplate<String, ChatMessage> redisTemplate;
 
     @Autowired
-    private IRedisPersistance redisPersistance;
+    private RedisPersistance redisPersistance;
 
     /**
      * Publishes a given message on a given topic in redis.
