@@ -7,6 +7,17 @@
     background-color: #fff;
 }
 
+.writingStyle {
+    textAlign: center;
+    padding: 1%;
+    border: 0;
+}
+
+.buttonStyle {
+    float: right;
+    margin: 2px;
+}
+
 .modal {
     font-size: 12px;
 }
