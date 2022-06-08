@@ -1,8 +1,10 @@
 import React, {useState} from "react";
-import Homepage from "./Homepage";
-import GuestSite from "./GuestSite";
+import Homepage from "./components/Homepage";
+import GuestSite from "./components/GuestSite";
+import {BrowserRouter, Route, Router, Switch} from "react-router-dom";
 
 function App() {
+  const [user, setUser] = useState('Robin Röcker')
   const [groups, setGroups] = useState([
     {name: 'Ich',
       diagrams: {
@@ -81,6 +83,9 @@ function App() {
     timestamp: ''
   })
 
+
+
+
   const [guestSite, setGuestSite] = useState(true)
 
   const AddGroup = ({group}) => {
@@ -104,9 +109,16 @@ function App() {
   }
 
   return (
-      <>
-        {guestSite ? <GuestSite guestSite={guestSite} setGuestSite={setGuestSite}/> : <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry} guestSite={guestSite} setGuestSite={setGuestSite}/>  }
-      </>
+      <BrowserRouter>
+      <Switch>
+          <Route exact path="/">
+            <GuestSite guestSite={guestSite} setGuestSite={setGuestSite}/>
+          </Route>
+          <Route exact path="/homepage">
+            <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry} guestSite={guestSite} setGuestSite={setGuestSite}/>
+          </Route>
+      </Switch>
+      </BrowserRouter>
   )
 }
 
