@@ -4,9 +4,8 @@ import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Gradient from 'rgt'
 import '../styles.css'
-import axios from "axios";
-import {AdvertisementServiceURL} from "../utils/constants";
-import keycloakService from "../api/auth.js";
+import keycloakService from "../api/Auth.js";
+import fetchAdvertisement from "../api/services/Advertisement";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -53,7 +52,7 @@ const GuestSite = () => {
     console.log("Render", state)
 
     useEffect(() => {
-            axios.get(AdvertisementServiceURL).then((response)=> {
+            fetchAdvertisement().then((response)=> {
                 dispatch({type: getAdvertisementDataSuccess, payload: response.data})
                 console.log("data", response.data)
             }).catch(dispatch({type:getAdvertisementDataError}))
