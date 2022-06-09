@@ -5,7 +5,7 @@
 
 #Frontend
 /frontend/node_modules/
-
+/frontend/package-lock.json
 #Backend
 
 #Volumes
@@ -60,4 +60,3 @@ Thumbs.db
 *.mov
 *.wmv
 
-*.iml
