@@ -1,16 +1,14 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useReducer} from "react";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Gradient from 'rgt'
 import '../styles.css'
 import {useHistory} from "react-router-dom";
-import {useDispatch} from 'react-redux'
-import { login } from '../features/user'
-import { logout } from '../features/user'
-import {update, updateAdvertismentData} from "../features/advertisment";
+import axios from "axios";
+import {AdvertisementServiceURL} from "../utils/constants";
+import {updateAdvertismentData} from "../features/advertisment";
 import keycloakService from "../api/auth.js";
-import keycloak from "../api/auth.js";
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -25,23 +23,54 @@ const buttonStyle = {
     float: "right",
     margin: "2px"
 }
+let initalState = {
+    isLoading : false,
+    data : null,
+    isError:false
+};
+const reducer = (state, action) => {
+    switch (action.type){
+        case getAdvertisementDataSuccess:
+            return {
+                ...state,
+                isError: false,
+                data: action.payload
+            }
+        case getAdvertisementDataError:
+            return {
+                ...state,
+                isError: true,
+                isLoading: false,
+                data: mockData
+            }
+        default:
+            return state;
+    }
+}
 
-const statistics = {
-    statistic1: '8946',
-    statistic2: '5632',
-    statistic3: '423'
+const mockData = {
+    diagram1: '8946',
+    diagram2: '5632',
+    diagram3: '423'
 }
 
 const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
 const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten." +
     " Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
+
+const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
+const getAdvertisementDataError = "getAdvertisementDataError";
+
 const GuestSite = () => {
+    const [state, dispatch] = useReducer(reducer, initalState);
+    console.log("Render", state)
 
     useEffect(() => {
-        getStatisticsData()
-    })
-
-    const dispatch = useDispatch()
+            axios.get(AdvertisementServiceURL).then((response)=> {
+                dispatch({type: getAdvertisementDataSuccess, payload: response.data})
+                console.log("data", response.data)
+            }).catch(dispatch({type:getAdvertisementDataError}))
+    },[])
 
     const history = useHistory()
 
@@ -49,16 +78,6 @@ const GuestSite = () => {
     }
 
 
-
-
-    const getStatisticsData = () => {
-        fetch('http://localhost:8010/global')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                dispatch(updateAdvertismentData(data))
-            })
-    }
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -72,22 +91,24 @@ const GuestSite = () => {
                 </Container>
             </Navbar>
             <Card className="slogen" style={writingStyle}>
-                <h2 class="textColorfull"> {slogan}</h2>
+                <h2 className="textColorfull"> {slogan}</h2>
             </Card>
             <CardGroup>
                 <Card className="writingStyle" style={writingStyle}>
-                        <h2 class="textDiagramm1">{statistics.statistic1}</h2>
+                    <h2  className="textDiagramm1">{state.data == null ?"Loading":state.data.diagram1}</h2>
+
                     <h6>Nachrichten wurden bereits versendet.</h6>
                 </Card>
                 <Card className="writingStyle" style={writingStyle}>
                     <Gradient dir="top-to-bottom" from="#7928CA" to="#FF0080">
-                        <h2>{statistics.statistic2}</h2>
+                        {state.data == null ?<h2>Loading</h2>:<h2>{state.data.diagram2}</h2>}
                     </Gradient>
                     <h6>Einträge wurden bereits erstellt.</h6>
                 </Card>
                 <Card className="writingStyle" style={writingStyle}>
                     <Gradient dir="top-to-bottom" from="#FF4D4D" to="#F9CB28">
-                        <h2>{statistics.statistic3}</h2>
+                        {state.data == null ?
+                            <h2>Loading</h2>: <h2>{state.data.diagram3}</h2>}
                     </Gradient>
                     <h6>registrierte User.</h6>
                 </Card>
