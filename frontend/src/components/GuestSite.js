@@ -34,7 +34,7 @@ const statistics = {
 const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
 const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten." +
     " Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
-const GuestSite = ({setGuestSite}) => {
+const GuestSite = () => {
 
     useEffect(() => {
         getStatisticsData()
