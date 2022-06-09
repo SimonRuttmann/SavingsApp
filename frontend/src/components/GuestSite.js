@@ -5,9 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Gradient from 'rgt'
 import '../styles.css'
 import {useHistory} from "react-router-dom";
-import { login } from '../features/user'
 import axios from "axios";
 import {AdvertisementServiceURL} from "../utils/constants";
+import {updateAdvertismentData} from "../features/advertisment";
+import keycloakService from "../api/auth.js";
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -76,12 +77,6 @@ const GuestSite = () => {
     const navToHomepage = () => {
     }
 
-    const loginAndNavigateToHomepage = () => {
-        dispatch(login({id: "c01d20e4-3fb4-454f-9a37-c23e6573e5b7", email: "demo@demo", username: "username"}))
-        history.push("/homepage");
-
-}
-console.log("Data", state.data)
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -89,11 +84,8 @@ console.log("Data", state.data)
                     <Navbar.Brand>Haushalt</Navbar.Brand>
                     <Navbar.Toggle/>
                     <Navbar.Collapse className="justify-content-end">
-                        <Button variant="light" style={buttonStyle} className="buttonStyle">Register</Button>
-                        <Button variant="primary"  style={buttonStyle} className="buttonStyle"
-                                onClick={() => {
-                                    loginAndNavigateToHomepage()
-                                }}>Login</Button>
+                        <Button variant="light" style={buttonStyle} className="buttonStyle" onClick={() => keycloakService.register()}>Register</Button>
+                        <Button variant="primary"  style={buttonStyle} className="buttonStyle" onClick={() => keycloakService.login() }>Login</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
