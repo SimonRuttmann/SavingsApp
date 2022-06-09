@@ -4,17 +4,15 @@ import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Gradient from 'rgt'
 import '../styles.css'
-import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {AdvertisementServiceURL} from "../utils/constants";
 import keycloakService from "../api/auth.js";
 
-
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
-const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten." +
-    " Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
+const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten. " +
+    "Teilen Sie Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
 
 const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
 const getAdvertisementDataError = "getAdvertisementDataError";
@@ -76,7 +74,7 @@ const GuestSite = () => {
             <Card className="slogen">
                 <h2 className="textColorfull"> {slogan}</h2>
             </Card>
-            <CardGroup>
+            <CardGroup className="advertisementGroup">
                 <Card className="writingStyle">
                     <h2  className="textDiagramm1">{state.data == null ?"Loading":state.data.diagram1}</h2>
 
