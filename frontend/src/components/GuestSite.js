@@ -55,6 +55,7 @@ const GuestSite = () => {
         fetch('http://localhost:8010/global')
             .then(response => response.json())
             .then(data => {
+                console.log(data)
                 dispatch(updateAdvertismentData(data))
             })
     }
@@ -70,22 +71,12 @@ const GuestSite = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <br/>
-            <br/>
-            <br/>
-            <Card className="writingStyle" style={writingStyle}>
-                <Card.Text>{slogan}</Card.Text>
+            <Card className="slogen" style={writingStyle}>
+                <h2 class="textColorfull"> {slogan}</h2>
             </Card>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
             <CardGroup>
                 <Card className="writingStyle" style={writingStyle}>
-                    <Gradient dir="top-to-bottom" from="#007CF0" to="#00DFD8">
-                        <h2>{statistics.statistic1}</h2>
-                    </Gradient>
+                        <h2 class="textDiagramm1">{statistics.statistic1}</h2>
                     <h6>Nachrichten wurden bereits versendet.</h6>
                 </Card>
                 <Card className="writingStyle" style={writingStyle}>
