@@ -18,7 +18,6 @@ import {
     CardGroup, CloseButton, Col,
     Container,
     Form,
-    Modal,
     Nav,
     Navbar,
     NavDropdown, Row,
@@ -351,28 +350,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     />
                 </Card>
             </CardGroup>
-            {/*{isOpen && <Popup
-                content={<>
-                    <h2>Settings</h2>
-                    <h5>Gruppen:</h5>
-                    { groups.map(group => <h6 onClick={(e) => {
-                        e.preventDefault()
-                        setSelectedSettingsGroup(group)
-                    }} href={group.name}>{group.name}</h6>)}
-                    <h5>Mitglieder:</h5>
-                    {selectedSettingsGroup.members.map(user => <h6>{user}</h6>)}
-                    <Button onClick={() => AddGroup({name: 'Familie2',
-                        diagrams: {
-                        diagram1: {firstValue: 1852, secondValue: 1219},
-                        diagram2: {firstValues: [11, 22, 33, 44, 55, 66], secondValues: [66, 55, 44, 33, 22, 11]},
-                        diagram3: {firstValue: 1813, secondValue: 110}
-                    },
-                        members: ['Robin', 'Ralf', 'Maria']
-                    })} variant="secondary">Gruppe hinzufügen</Button>
-                    <Button onClick={ () => DeleteGroup(selectedSettingsGroup.name)} variant="secondary">Gruppe Verlassen</Button>
-                </>}
-                handleClose={togglePopup}
-            />}*/}
             <CardGroup>
                 <Card>
                     <Card.Body>
