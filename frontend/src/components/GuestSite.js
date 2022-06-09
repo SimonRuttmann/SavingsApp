@@ -7,22 +7,18 @@ import '../styles.css'
 import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {AdvertisementServiceURL} from "../utils/constants";
-import {updateAdvertismentData} from "../features/advertisment";
 import keycloakService from "../api/auth.js";
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const writingStyle = {
-    textAlign: "center",
-    padding: "1%",
-    border: "0"
-}
+const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
+const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten." +
+    " Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
 
-const buttonStyle = {
-    float: "right",
-    margin: "2px"
-}
+const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
+const getAdvertisementDataError = "getAdvertisementDataError";
+
 let initalState = {
     isLoading : false,
     data : null,
@@ -54,13 +50,6 @@ const mockData = {
     diagram3: '423'
 }
 
-const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
-const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten." +
-    " Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
-
-const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
-const getAdvertisementDataError = "getAdvertisementDataError";
-
 const GuestSite = () => {
     const [state, dispatch] = useReducer(reducer, initalState);
     console.log("Render", state)
@@ -72,12 +61,6 @@ const GuestSite = () => {
             }).catch(dispatch({type:getAdvertisementDataError}))
     },[])
 
-    const history = useHistory()
-
-    const navToHomepage = () => {
-    }
-
-
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -85,27 +68,27 @@ const GuestSite = () => {
                     <Navbar.Brand>Haushalt</Navbar.Brand>
                     <Navbar.Toggle/>
                     <Navbar.Collapse className="justify-content-end">
-                        <Button variant="light" style={buttonStyle} className="buttonStyle" onClick={() => keycloakService.register()}>Register</Button>
-                        <Button variant="primary"  style={buttonStyle} className="buttonStyle" onClick={() => keycloakService.login() }>Login</Button>
+                        <Button variant="light" onClick={() => keycloakService.register()}>Register</Button>
+                        <Button variant="primary" onClick={() => keycloakService.login() }>Login</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Card className="slogen" style={writingStyle}>
+            <Card className="slogen">
                 <h2 className="textColorfull"> {slogan}</h2>
             </Card>
             <CardGroup>
-                <Card className="writingStyle" style={writingStyle}>
+                <Card className="writingStyle">
                     <h2  className="textDiagramm1">{state.data == null ?"Loading":state.data.diagram1}</h2>
 
                     <h6>Nachrichten wurden bereits versendet.</h6>
                 </Card>
-                <Card className="writingStyle" style={writingStyle}>
+                <Card className="writingStyle">
                     <Gradient dir="top-to-bottom" from="#7928CA" to="#FF0080">
                         {state.data == null ?<h2>Loading</h2>:<h2>{state.data.diagram2}</h2>}
                     </Gradient>
                     <h6>Einträge wurden bereits erstellt.</h6>
                 </Card>
-                <Card className="writingStyle" style={writingStyle}>
+                <Card className="writingStyle">
                     <Gradient dir="top-to-bottom" from="#FF4D4D" to="#F9CB28">
                         {state.data == null ?
                             <h2>Loading</h2>: <h2>{state.data.diagram3}</h2>}
@@ -118,7 +101,7 @@ const GuestSite = () => {
             <br/>
             <br/>
             <br/>
-            <Card className="writingStyle" style={writingStyle}>
+            <Card className="writingStyle">
                 <Card.Text>{desc}</Card.Text>
             </Card>
             <br/>

@@ -13,6 +13,10 @@
     border: 0;
 }
 
+.card{
+    border:0 !important;
+}
+
 .slogen {
     text-align: center;
     padding: 1%;
