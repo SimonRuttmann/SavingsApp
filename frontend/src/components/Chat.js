@@ -2,15 +2,12 @@ import React, {useEffect, useState} from 'react'
 import SockJS from 'sockjs-client';
 import {Stomp} from "@stomp/stompjs";
 import {
-    Badge,
     Button,
     Card,
     CardGroup,
     Form, FormControl,
     InputGroup,
-    NavDropdown,
     Offcanvas,
-    OverlayTrigger,
     Popover
 } from "react-bootstrap";
 import {useDispatch} from "react-redux";
@@ -37,20 +34,6 @@ function Chat( user ) {
 
     const dispatch = useDispatch()
 
-    const connect = () => {
-
-        stompClient.connect({}, (frame) => {
-            console.log('connected: ' + frame)
-            stompClient.subscribe(`/sub/chat/rooms/${groupId}`, (message) => {
-                console.log(message)
-            })
-            fetch('http://localhost:8080/chat/sub/TEST123')
-            fetch('http://localhost:8080/chat/rooms/TEST123/messages')
-                .then(response => response.json())
-                .then(data => console.log(data))
-
-        })
-    }
     const connectToSockJs = () => {
         stompClient.connect({}, (frame) => {
             console.log('connected: ' + frame)

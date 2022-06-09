@@ -32,6 +32,7 @@ import {useDispatch} from "react-redux";
 import {updateInflationRate} from "../features/inflation";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
+//todo remove inline styles
 const chartStyle = {
     border: "0",
     padding: "3%",
@@ -50,8 +51,7 @@ const textstyle = {
     paddingTop: "1%",
     border: "0"
 }
-
-
+//
 
 const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, setGuestSite, user }) => {
 
