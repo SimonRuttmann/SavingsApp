@@ -9,7 +9,8 @@ import {useDispatch} from 'react-redux'
 import { login } from '../features/user'
 import { logout } from '../features/user'
 import {update, updateAdvertismentData} from "../features/advertisment";
-
+import keycloakService from "../api/auth.js";
+import keycloak from "../api/auth.js";
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -47,11 +48,8 @@ const GuestSite = () => {
     const navToHomepage = () => {
     }
 
-    const loginAndNavigateToHomepage = () => {
-        dispatch(login({id: "c01d20e4-3fb4-454f-9a37-c23e6573e5b7", email: "demo@demo", username: "username"}))
-        history.push("/homepage");
 
-}
+
 
     const getStatisticsData = () => {
         fetch('http://localhost:8010/global')
@@ -67,11 +65,8 @@ const GuestSite = () => {
                     <Navbar.Brand>Haushalt</Navbar.Brand>
                     <Navbar.Toggle/>
                     <Navbar.Collapse className="justify-content-end">
-                        <Button variant="light" style={buttonStyle} className="buttonStyle">Register</Button>
-                        <Button variant="primary"  style={buttonStyle} className="buttonStyle"
-                                onClick={() => {
-                                    loginAndNavigateToHomepage()
-                                }}>Login</Button>
+                        <Button variant="light" style={buttonStyle} className="buttonStyle" onClick={() => keycloakService.register()}>Register</Button>
+                        <Button variant="primary"  style={buttonStyle} className="buttonStyle" onClick={() => keycloakService.login() }>Login</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

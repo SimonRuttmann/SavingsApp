@@ -2,6 +2,9 @@ import React, {useState} from "react";
 import Homepage from "./components/Homepage";
 import GuestSite from "./components/GuestSite";
 import {BrowserRouter, Route, Router, Switch} from "react-router-dom";
+import PrivateRoute from "./api/helper/PrivateRoute.js";
+import keycloakService from "./api/auth.js";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
 
 function App() {
   const [user, setUser] = useState('Robin Röcker')
@@ -109,16 +112,20 @@ function App() {
   }
 
   return (
-      <BrowserRouter>
-      <Switch>
-          <Route exact path="/">
-            <GuestSite guestSite={guestSite} setGuestSite={setGuestSite}/>
-          </Route>
-          <Route exact path="/homepage">
-            <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry} guestSite={guestSite} setGuestSite={setGuestSite}/>
-          </Route>
-      </Switch>
-      </BrowserRouter>
+      <div>
+        <ReactKeycloakProvider authClient={keycloakService}>
+        <BrowserRouter>
+        <Switch>
+            <Route exact path="/">
+              <GuestSite guestSite={guestSite} setGuestSite={setGuestSite}/>
+            </Route>
+              <PrivateRoute> exact path="/homepage">
+                <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry} guestSite={guestSite} setGuestSite={setGuestSite}/>
+              </PrivateRoute>
+        </Switch>
+        </BrowserRouter>
+        </ReactKeycloakProvider>
+      </div>
   )
 }
 
