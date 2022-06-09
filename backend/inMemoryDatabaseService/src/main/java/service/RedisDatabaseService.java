@@ -38,11 +38,4 @@ public class RedisDatabaseService implements IRedisDatabaseService{
             case COUNTUSERS -> atomicCountUser.get();
         };
     }
-
-    private String removeBracket(String string){
-        string = string.replace("[","");
-        string = string.replace("]","");
-
-        return string;
-    }
 }
