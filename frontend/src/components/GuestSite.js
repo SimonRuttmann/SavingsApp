@@ -31,6 +31,9 @@ const statistics = {
     statistic3: '423'
 }
 
+const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
+const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten." +
+    " Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
 const GuestSite = ({setGuestSite}) => {
 
     useEffect(() => {
@@ -51,7 +54,7 @@ const GuestSite = ({setGuestSite}) => {
 }
 
     const getStatisticsData = () => {
-        fetch('http://localhost:8080/global')
+        fetch('http://localhost:8010/global')
             .then(response => response.json())
             .then(data => {
                 dispatch(updateAdvertismentData(data))
@@ -76,7 +79,7 @@ const GuestSite = ({setGuestSite}) => {
             <br/>
             <br/>
             <Card className="writingStyle" style={writingStyle}>
-                <Card.Text>Hier steht ein Slogan für wundervolle Menschen.</Card.Text>
+                <Card.Text>{slogan}</Card.Text>
             </Card>
             <br/>
             <br/>
@@ -109,7 +112,7 @@ const GuestSite = ({setGuestSite}) => {
             <br/>
             <br/>
             <Card className="writingStyle" style={writingStyle}>
-                <Card.Text>Hier beschrieben wir eine schöne App für schöne Leute.</Card.Text>
+                <Card.Text>{desc}</Card.Text>
             </Card>
             <br/>
             <br/>
