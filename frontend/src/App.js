@@ -3,7 +3,7 @@ import Homepage from "./components/Homepage";
 import GuestSite from "./components/GuestSite";
 import {BrowserRouter, Route, Router, Switch} from "react-router-dom";
 import PrivateRoute from "./api/helper/PrivateRoute.js";
-import keycloakService from "./api/auth.js";
+import keycloakService from "./api/Auth.js";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 
 function App() {
