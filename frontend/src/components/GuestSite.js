@@ -94,17 +94,9 @@ const GuestSite = () => {
                     <h6>registrierte User.</h6>
                 </Card>
             </CardGroup>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
             <Card className="writingStyle">
                 <Card.Text>{desc}</Card.Text>
             </Card>
-            <br/>
-            <br/>
-            <br/>
         </>)
 }
 export default GuestSite
