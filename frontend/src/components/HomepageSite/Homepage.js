@@ -79,17 +79,16 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
 
     }
 
-    KeyCloakService.updateToken(5)
+    KeyCloakService.updateToken()
         .then((refreshed) => refreshToken(refreshed))
         .catch(function() {
-            //TODO redirect to start page
             dispatch((logout()))
             console.log('Failed to refresh the token, or the session has expired');
         });
 
     const refreshToken = (refreshed) => {
         if (refreshed) {
-            dispatch(login(KeyCloakService.token));
+            dispatch(login(KeyCloakService.getToken()));
         } else {
             console.log('Token is still valid');
         }
