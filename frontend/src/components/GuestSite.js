@@ -77,20 +77,14 @@ const GuestSite = () => {
             <CardGroup className="advertisementGroup">
                 <Card className="writingStyle">
                     <h2  className="textDiagramm1">{state.data == null ?"Loading":state.data.diagram1}</h2>
-
                     <h6>Nachrichten wurden bereits versendet.</h6>
                 </Card>
                 <Card className="writingStyle">
-                    <Gradient dir="top-to-bottom" from="#7928CA" to="#FF0080">
-                        {state.data == null ?<h2>Loading</h2>:<h2>{state.data.diagram2}</h2>}
-                    </Gradient>
+                    <h2  className="textDiagramm2">{state.data == null ?"Loading":state.data.diagram2}</h2>
                     <h6>Einträge wurden bereits erstellt.</h6>
                 </Card>
                 <Card className="writingStyle">
-                    <Gradient dir="top-to-bottom" from="#FF4D4D" to="#F9CB28">
-                        {state.data == null ?
-                            <h2>Loading</h2>: <h2>{state.data.diagram3}</h2>}
-                    </Gradient>
+                    <h2  className="textDiagramm3">{state.data == null ?"Loading":state.data.diagram3}</h2>
                     <h6>registrierte User.</h6>
                 </Card>
             </CardGroup>
