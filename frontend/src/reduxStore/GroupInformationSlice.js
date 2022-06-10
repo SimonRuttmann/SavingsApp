@@ -58,7 +58,7 @@ export const { AddGroupCoreInformation, AddGeneralInformationToGroup, AddGroup, 
 
 export default groupInformationSlice.reducer
 
-export const selectGroupInformationStore = (state) => state.groupInformation.value;
+export const selectGroupInformationStore = (state) => state.groupInformation;
 
 
 export const fetchGroupCoreInformationFromServer = (header, groupId) => (dispatch) => {

@@ -32,7 +32,7 @@ export const { AddCategory, RemoveCategory, UpdateCategory } = categorySlice.act
 
 export default categorySlice.reducer
 
-export const selectCategoryStore = (state) => state.category.value;
+export const selectCategoryStore = (state) => state.category;
 
 export const fetchCategoriesFromServer = (header, groupId) => (dispatch) => {
     let response = getAllCategorys(groupId, header)
