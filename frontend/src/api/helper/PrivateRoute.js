@@ -6,7 +6,6 @@ const PrivateRoute = ({ children }) => {
     const history = useHistory();
 
     const isLoggedIn = keycloak.isLoggedIn()
-    console.log(isLoggedIn+"< is logged in | children  "+children)
     return isLoggedIn ? children : history.push("/")
 
 
