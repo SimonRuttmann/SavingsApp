@@ -1,11 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {
-    addGroupEntry,
-    deleteGroupEntry,
-    getAllGroupEntries,
-    getGroupInfo,
-    updateGroupEntry
-} from "../api/services/Content";
+import {getGroupInfo} from "../api/services/Content";
 import {getGroup} from "../api/services/User";
 
 /**

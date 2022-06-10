@@ -1,11 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {
-    addCategory, addGroupEntry,
-    deleteCategory, deleteGroupEntry,
-    getAllCategorys,
-    getAllGroupEntries,
-    updateCategory, updateGroupEntry
-} from "../api/services/Content";
+import {addGroupEntry, deleteGroupEntry, getAllGroupEntries, updateGroupEntry} from "../api/services/Content";
 
 /**
  * Saving Entry Schema
