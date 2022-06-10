@@ -3,6 +3,7 @@ import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../css/styles.scss'
+import '../css/guestsite.scss'
 import keycloakService from "../api/Auth.js";
 import getAdvertisement from "../api/services/Advertisement";
 
