@@ -53,7 +53,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
     useEffect( () => {
         dispatch(login(KeyCloakService.getToken()));
 
-        dispatch(fetchGroupCoreInformationFromServer(getHeader()))
+        dispatch(fetchGroupCoreInformationFromServer())
             .then(() => fetchContentInformation());
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,15 +67,15 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
 
         //Fetch all general information about the groups
         for (let group of groupInformationStore){
-            dispatch(fetchGeneralInformationToGroupFromServer(getHeader(), group.id))
+            dispatch(fetchGeneralInformationToGroupFromServer(group.id))
         }
 
         //fetch categories for this group
-        dispatch(fetchCategoriesFromServer(getHeader(), personGroup.id));
+        dispatch(fetchCategoriesFromServer(personGroup.id));
         //fetch saving entries for this group
-        dispatch(fetchSavingEntriesFromServer(getHeader(), personGroup.id));
+        dispatch(fetchSavingEntriesFromServer(personGroup.id));
         //fetch processing results
-        dispatch(fetchProcessingResultsFromServer(getHeader(), personGroup.id, defaultFilterInformation))
+        dispatch(fetchProcessingResultsFromServer(personGroup.id, defaultFilterInformation))
 
     }
 
@@ -104,20 +104,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
       //  dispatch(AddSavingEntry({id: 0, name: "Meine saving entry"}))
       //  savingEntryStore.forEach(savingEntry => console.log(savingEntry))
       //  console.log(userStore.name)
-    }
-
-
-    const getHeader = () => {
-        let token;
-
-        if(userStore == null || userStore.token == null) token = KeyCloakService.token;
-        else token = userStore.token;
-
-        return {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        };
     }
 
 
