@@ -2,27 +2,21 @@ import React, {useEffect, useReducer} from "react";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Gradient from 'rgt'
-import '../styles.css'
-import {useHistory} from "react-router-dom";
-import axios from "axios";
-import {AdvertisementServiceURL} from "../utils/constants";
-import {updateAdvertismentData} from "../features/advertisment";
-import keycloakService from "../api/auth.js";
-
+import '../css/styles.scss'
+import '../css/guestsite.scss'
+import keycloakService from "../api/Auth.js";
+import getAdvertisement from "../api/services/Advertisement";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const writingStyle = {
-    textAlign: "center",
-    padding: "1%",
-    border: "0"
-}
+const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
+const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten. " +
+    "Teilen Sie Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
 
-const buttonStyle = {
-    float: "right",
-    margin: "2px"
-}
+//Reducer action types
+const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
+const getAdvertisementDataError = "getAdvertisementDataError";
+
 let initalState = {
     isLoading : false,
     data : null,
@@ -48,35 +42,23 @@ const reducer = (state, action) => {
     }
 }
 
+//Is inserted into state if new data can't be pulled
 const mockData = {
     diagram1: '8946',
     diagram2: '5632',
     diagram3: '423'
 }
 
-const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
-const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten." +
-    " Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
-
-const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
-const getAdvertisementDataError = "getAdvertisementDataError";
-
 const GuestSite = () => {
     const [state, dispatch] = useReducer(reducer, initalState);
-    console.log("Render", state)
+    //console.log("Render", state)
 
     useEffect(() => {
-            axios.get(AdvertisementServiceURL).then((response)=> {
+            getAdvertisement().then((response)=> {
                 dispatch({type: getAdvertisementDataSuccess, payload: response.data})
                 console.log("data", response.data)
             }).catch(dispatch({type:getAdvertisementDataError}))
     },[])
-
-    const history = useHistory()
-
-    const navToHomepage = () => {
-    }
-
 
     return (
         <>
@@ -85,45 +67,32 @@ const GuestSite = () => {
                     <Navbar.Brand>Haushalt</Navbar.Brand>
                     <Navbar.Toggle/>
                     <Navbar.Collapse className="justify-content-end">
-                        <Button variant="light" style={buttonStyle} className="buttonStyle" onClick={() => keycloakService.register()}>Register</Button>
-                        <Button variant="primary"  style={buttonStyle} className="buttonStyle" onClick={() => keycloakService.login() }>Login</Button>
+                        <Button variant="light" onClick={() => keycloakService.register()}>Register</Button>
+                        <Button variant="primary" onClick={() => keycloakService.login() }>Login</Button>
+                        <Button variant="light" onClick={() => keycloakService.logout()}>Logout(temp)</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Card className="slogen" style={writingStyle}>
+            <Card className="slogen">
                 <h2 className="textColorfull"> {slogan}</h2>
             </Card>
-            <CardGroup>
-                <Card className="writingStyle" style={writingStyle}>
+            <CardGroup className="advertisementGroup">
+                <Card className="writingStyle">
                     <h2  className="textDiagramm1">{state.data == null ?"Loading":state.data.diagram1}</h2>
-
                     <h6>Nachrichten wurden bereits versendet.</h6>
                 </Card>
-                <Card className="writingStyle" style={writingStyle}>
-                    <Gradient dir="top-to-bottom" from="#7928CA" to="#FF0080">
-                        {state.data == null ?<h2>Loading</h2>:<h2>{state.data.diagram2}</h2>}
-                    </Gradient>
+                <Card className="writingStyle">
+                    <h2  className="textDiagramm2">{state.data == null ?"Loading":state.data.diagram2}</h2>
                     <h6>Einträge wurden bereits erstellt.</h6>
                 </Card>
-                <Card className="writingStyle" style={writingStyle}>
-                    <Gradient dir="top-to-bottom" from="#FF4D4D" to="#F9CB28">
-                        {state.data == null ?
-                            <h2>Loading</h2>: <h2>{state.data.diagram3}</h2>}
-                    </Gradient>
+                <Card className="writingStyle">
+                    <h2  className="textDiagramm3">{state.data == null ?"Loading":state.data.diagram3}</h2>
                     <h6>registrierte User.</h6>
                 </Card>
             </CardGroup>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <Card className="writingStyle" style={writingStyle}>
+            <Card className="writingStyle">
                 <Card.Text>{desc}</Card.Text>
             </Card>
-            <br/>
-            <br/>
-            <br/>
         </>)
 }
 export default GuestSite
