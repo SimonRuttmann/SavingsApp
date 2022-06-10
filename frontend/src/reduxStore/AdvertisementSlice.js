@@ -13,3 +13,5 @@ export const AdvertisementSlice = createSlice({
 export const {updateAdvertisementData} = AdvertisementSlice.actions
 
 export default AdvertisementSlice.reducer
+
+export const selectAdvertisementStore = (state) => state.advertisement.value;
