@@ -53,10 +53,8 @@ const mockData = {
 
 const GuestSite = () => {
     const [advertisementState, dispatchAdvertisement] = useReducer(advertisementReducer, initialAdvertisementState);
-    //console.log("Render", state)
 
     useEffect(() => {
-        console.log("erster Redirekt")
             Redirect()
             getAdvertisement().then((response)=> {
                 dispatchAdvertisement({type: getAdvertisementDataSuccess, payload: response.data})
