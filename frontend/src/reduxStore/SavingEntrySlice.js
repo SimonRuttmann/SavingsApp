@@ -48,7 +48,7 @@ export const { AddSavingEntry, RemoveSavingEntry, UpdateSavingEntry } = savingEn
 
 export default savingEntrySlice.reducer
 
-export const selectSavingEntryStore = (state) => state.savingEntry.value;
+export const selectSavingEntryStore = (state) => state.savingEntry;
 
 export const fetchSavingEntriesFromServer = (header, groupId) => (dispatch) => {
     let response = getAllGroupEntries(groupId, header)
