@@ -28,36 +28,17 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
 import Chat from "./Chat";
 import SettingsPopup from "./SettingsPopup";
-import CategoriesPopup from "./CategoriesPopup";
 import {useDispatch, useSelector} from "react-redux";
 import categorySlice, {selectCategoryStore} from "../reduxStore/CategorySlice";
 import savingEntrySlice, {AddSavingEntry, selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
 import groupInformationSlice, {selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
-import advertisementSlice from "../reduxStore/AdvertisementSlice";
 import {login, logout, selectUserStore} from "../reduxStore/UserSlice";
 import KeyCloakService from "../api/Auth";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+const animatedComponents = makeAnimated();
+
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
-
-//todo remove inline styles
-const chartStyle = {
-    border: "0",
-    padding: "3%",
-    height: "500px",
-    width: "400px",
-};
-
-const buttonStyle = {
-    float: "right",
-    margin: "2px"
-}
-
-const textstyle = {
-    textAlign: "center",
-    paddingRight: "45%",
-    paddingTop: "1%",
-    border: "0"
-}
-//
 
 const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, setGuestSite, user }) => {
 
@@ -73,6 +54,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const categoryStore         = useSelector(selectCategoryStore);
     const dispatch = useDispatch()
 
+    const mappedCategories = []/*categoryStore.map(category =>{
+        return{  label: category.name, value: category.id}
+    });*/
 
     useEffect( () => {
         dispatch(login(KeyCloakService.token));
@@ -145,7 +129,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         history.push("/");
     }
 
-
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -162,9 +145,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                             </NavDropdown>
                             <Chat/>
                         </Nav>
-                        <Button variant={"dark"} style={textstyle}>{selectedGroup.name}</Button>
+                        <Button variant={"dark"} className="textStyle">{selectedGroup.name}</Button>
                         <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
-                        <Button variant="primary" style={buttonStyle} onClick={() => navToGuestSite()}>Logout</Button>
+                        <Button variant="primary" className="buttonStyle" onClick={() => navToGuestSite()}>Logout</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
@@ -186,13 +169,12 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Form.Group>
-                            <Form.Label>Kategorie</Form.Label>
-                            <Form.Select aria-label="Kategorie" onChange={() => setSelectedEntry()}>
-                                <option value="1">Kategorie1</option>
-                                <option value="2">Kategorie2</option>
-                                <option value="3">Kategorie3</option>
-                            </Form.Select>
+                        <Form.Group className="CategoryArea">
+                            <Form.Label>Kategorien</Form.Label>
+                            <div className="Multiselect">
+                                <Select options={mappedCategories} components={animatedComponents}
+                                        isMulti />
+                            </div>
                         </Form.Group>
                     </Col>
                     <Col className="buttonCol">
@@ -228,7 +210,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                 </Card>
             </CardGroup>
             <CardGroup>
-                <Card style={chartStyle}>
+                <Card className="chartStyle">
                     <Bar
                         data={{
                             // Name of the variables on x-axies for each bar
@@ -270,7 +252,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         options={{ maintainAspectRatio: false }}
                     />
                 </Card>
-                <Card style={chartStyle}>
+                <Card className="chartStyle">
                     <Line data={{
                         labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
                         datasets: [
@@ -291,7 +273,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     }}
                           options={{ maintainAspectRatio: false }}/>
                 </Card>
-                <Card style={chartStyle}>
+                <Card className="chartStyle">
                     <Bar
                         data={{
                             // Name of the variables on x-axies for each bar
@@ -339,13 +321,13 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     <Card.Body>
                         <h4>Einträge</h4>
                         <br/>
-                        <ButtonGroup style={buttonStyle}>
+                        <ButtonGroup className="buttonStyle">
                             <Button variant="secondary">Alle</Button>
                             <Button variant="secondary">WG</Button>
                             <Button variant="secondary">FAM</Button>
                             <Button variant="secondary">Ich</Button>
                         </ButtonGroup>
-                        <ButtonGroup style={buttonStyle}>
+                        <ButtonGroup className="buttonStyle">
                             <Button onClick={() => DeleteEntry(selectedEntry.id)} variant="secondary">Eintrag löschen</Button>
                         </ButtonGroup>
                         <Table striped bordered hover>
