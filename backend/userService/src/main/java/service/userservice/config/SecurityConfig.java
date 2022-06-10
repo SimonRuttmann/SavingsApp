@@ -58,5 +58,6 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui/**").permitAll()
                 .anyRequest().permitAll();
         http.csrf().disable();
+        http.cors();
     }
 }
