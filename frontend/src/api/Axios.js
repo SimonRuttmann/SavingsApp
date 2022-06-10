@@ -1,5 +1,6 @@
 import axios from 'axios';
-import UserService from "./Auth";
+
+const debug = true;
 
 export function Get(url, auth){
     console.log("GET URL: ",url)
@@ -24,7 +25,11 @@ export function Get(url, auth){
         }
         request = axios(request)
     }
-    request.then((value => console.log("GET URL "+url+" worked, it returned ",value)))
+    if(debug) {
+        request
+            .then((value => console.log("GET URL " + url + " worked, it returned ", value)))
+            .catch((reason) => console.log("GET URL " + url + " failed with the following reason", reason))
+    }
     return request
 }
 
@@ -47,7 +52,11 @@ export function Post(url,body,auth){
         // catch error
         throw new Error(e.message)
     }
-    request.then((value => console.log("POST URL "+url+" worked, it returned ",value)))
+    if(debug) {
+        request
+            .then((value => console.log("POST URL " + url + " worked, it returned ", value)))
+            .catch((reason) => console.log("POST URL " + url + " failed with the following reason", reason))
+    }
     return request
 }
 
@@ -68,7 +77,11 @@ export function Put(url,body,auth){
         // catch error
         throw new Error(e.message)
     }
-    request.then((value => console.log("PUT URL "+url+" worked, it returned ",value)))
+    if(debug) {
+        request
+            .then((value => console.log("PUT URL " + url + " worked, it returned ", value)))
+            .catch((reason) => console.log("PUT URL " + url + " failed with the following reason", reason))
+    }
     return request
 }
 
@@ -87,6 +100,11 @@ export function Delete(url, auth){
     } catch (e) {
         // catch error
         throw new Error(e.message)
+    }
+    if(debug) {
+        request
+            .then((value => console.log("DELETE URL " + url + " worked, it returned ", value)))
+            .catch((reason) => console.log("DELETE URL " + url + " failed with the following reason", reason))
     }
     return request
 }
