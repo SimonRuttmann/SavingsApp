@@ -34,22 +34,22 @@ export default categorySlice.reducer
 
 export const selectCategoryStore = (state) => state.category;
 
-export const fetchCategoriesFromServer = (header, groupId) => (dispatch) => {
-    let response = getAllCategorys(groupId, header)
+export const fetchCategoriesFromServer = (groupId) => (dispatch) => {
+    let response = getAllCategorys(groupId)
     response.then(response => dispatch(response.data));
 }
 
-export const addCategoryToServer = (header, groupId, category) => (dispatch) => {
-    let response = addCategory(groupId, category, header)
+export const addCategoryToServer = (groupId, category) => (dispatch) => {
+    let response = addCategory(groupId, category)
     response.then(response => dispatch(response.data));
 }
 
-export const updateCategoryToServer = (header, groupId, category) => (dispatch) => {
-    let response = updateCategory(groupId, category, header)
+export const updateCategoryToServer = (groupId, category) => (dispatch) => {
+    let response = updateCategory(groupId, category)
     response.then(response => dispatch(response.data));
 }
 
-export const deleteCategoryFromServer = (header, groupId, categoryId) => (dispatch) => {
-    let response = deleteCategory(groupId, categoryId, header)
+export const deleteCategoryFromServer = (groupId, categoryId) => (dispatch) => {
+    let response = deleteCategory(groupId, categoryId)
     response.then(response => dispatch(response.data));
 }

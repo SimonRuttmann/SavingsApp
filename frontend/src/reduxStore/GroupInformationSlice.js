@@ -61,10 +61,10 @@ export default groupInformationSlice.reducer
 export const selectGroupInformationStore = (state) => state.groupInformation;
 
 
-export const fetchGroupCoreInformationFromServer = (header) => (dispatch) => {
+export const fetchGroupCoreInformationFromServer = () => (dispatch) => {
 
     return new Promise((resolve, reject) => {
-        let response = getGroup(header)
+        let response = getGroup()
         response
             .then(response => dispatch(AddGroupCoreInformation(response.data)))
             .then(resolve(null)) //Dispatch returns null
@@ -72,7 +72,7 @@ export const fetchGroupCoreInformationFromServer = (header) => (dispatch) => {
     });
 }
 
-export const fetchGeneralInformationToGroupFromServer = (header, groupId) => (dispatch) => {
-    let response = getGroupInfo(groupId, header)
+export const fetchGeneralInformationToGroupFromServer = (groupId) => (dispatch) => {
+    let response = getGroupInfo(groupId)
     response.then(response => dispatch(AddGeneralInformationToGroup(response.data)));
 }
