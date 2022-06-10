@@ -1,28 +1,23 @@
 import React, {useEffect, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
-import {Bar, Line} from 'react-chartjs-2';
 import "../../css/styles.scss"
 import "../../css/homepage.scss"
-import {Button, ButtonGroup, Card, CardGroup, Col, Container, Form, Nav, Navbar, NavDropdown, Row, Table} from 'react-bootstrap'
+import {CardGroup} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
-import Chat from "../Chat";
-import SettingsPopup from "./SettingsPopup";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchCategoriesFromServer, selectCategoryStore} from "../../reduxStore/CategorySlice";
 import {fetchSavingEntriesFromServer, selectSavingEntryStore} from "../../reduxStore/SavingEntrySlice";
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
 import {login, logout, selectUserStore} from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
 import {fetchProcessingResultsFromServer, selectProcessingStore} from "../../reduxStore/ProcessingSlice";
 import {Diagram1} from "./Diagrams/Diagram1";
 import {Diagram2} from "./Diagrams/Diagram2";
 import {Diagram3} from "./Diagrams/Diagram3";
 import {EntryTable} from "./EntryTable";
 import {NavigationBar} from "./NavigationBar";
-const animatedComponents = makeAnimated();
+import {SearchBar} from "./SearchBar";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
@@ -143,10 +138,16 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const navToGuestSite = () => {
         history.push("/");
     }
+
     console.log("group")
-console.log(groups)
+    console.log(groups)
+
     return (
-        <>
+        <React.Fragment>
+
+            {/**
+             Navigation bar to log in / logout, chat and change active group
+             */}
              <NavigationBar groups={groups}
                             setSelectedGroup={setSelectedGroup}
                             selectedGroup={selectedGroup}
@@ -156,76 +157,38 @@ console.log(groups)
                             navToGuestSite={navToGuestSite}
                             />
 
+            {/**
+             Searchbar, which is a bar to create entries?
+             */}
             <CardGroup>
-                <Card>
-                    <Card.Body>
-            <Form>
-                <Row className="searchBar">
-                    <Col>
-                        <Form.Group>
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" placeholder="Name eintragen" onChange={() => setSelectedEntry()} value={selectedEntry.name} />
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group>
-                            <Form.Label>Kosten</Form.Label>
-                            <Form.Control type="text" placeholder="Kosten eintragen" onChange={() => setSelectedEntry()} value={selectedEntry.costs} />
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group className="CategoryArea">
-                            <Form.Label>Kategorien</Form.Label>
-                            <div className="Multiselect">
-                                <Select options={mappedCategories} components={animatedComponents} onChange={(e) => setSelectedCategories(e)}
-                                        isMulti />
-                            </div>
-                        </Form.Group>
-                    </Col>
-                    <Col className="buttonCol">
-                        <Form.Group className="buttonArea">
-                            <Button onClick={() => AddEntry(selectedEntry)}>Eintrag erstellen</Button>
-                            {!showMore &&  <Button variant="link" onClick={() => setShowMore(true)}>Zeig mehr</Button>}
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br/>
-                { showMore &&
-                <Row>
-                    <Col>
-                        <Form.Group>
-                            <Form.Label>Datum</Form.Label>
-                            <Form.Control type="text" placeholder="Datum eintragen" onChange={() => setSelectedEntry()} value={selectedEntry.timestamp}/>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group>
-                            <Form.Label>Beschreibung</Form.Label>
-                            <Form.Control as="textarea" rows={3} onChange={() => setSelectedEntry()} />
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group>
-                            <Button variant="link" onClick={() => setShowMore(false)}>Zeig weniger</Button>
-                        </Form.Group>
-                    </Col>
-                </Row>}
-            </Form>
-                    </Card.Body>
-                </Card>
+                <SearchBar  setSelectedEntry={setSelectedEntry}
+                            selectedEntry={selectedEntry}
+                            mappedCategories={mappedCategories}
+                            setSelectedCategories={setSelectedCategories}
+                            AddEntry={AddEntry}
+                            setShowMore={setShowMore}
+                            showMore={showMore}/>
             </CardGroup>
 
+
+            {/**
+             Diagrams displaying the results from processing controller
+             */}
             <CardGroup>
                 <Diagram1 selectedGroup={selectedGroup}/>
                 <Diagram2 selectedGroup={selectedGroup}/>
                 <Diagram3 selectedGroup={selectedGroup}/>
             </CardGroup>
 
+            {/**
+                Table showing all entries
+             */}
             <CardGroup>
-                <EntryTable entries = {entrys} selectedEntry={selectedEntry} setSelectedEntry={setSelectedEntry} DeleteEntry={DeleteEntry} />
+                <EntryTable entries={entrys} selectedEntry={selectedEntry} setSelectedEntry={setSelectedEntry} DeleteEntry={DeleteEntry} />
             </CardGroup>
 
-        </>
+        </React.Fragment>
     )
 }
+
 export default Homepage
