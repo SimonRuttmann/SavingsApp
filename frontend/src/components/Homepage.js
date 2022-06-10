@@ -98,7 +98,11 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
 
 
     const getHeader = () => {
-        let token = userStore.token;
+
+        let token;
+
+        if(userStore == null || userStore.token == null) token = KeyCloakService.token;
+        else token = userStore.token;
 
         return {
             headers: {
