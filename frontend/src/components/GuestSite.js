@@ -77,6 +77,7 @@ const GuestSite = () => {
                     <Navbar.Collapse className="justify-content-end">
                         <Button variant="light" onClick={() => keycloakService.register()}>Register</Button>
                         <Button variant="primary" onClick={() => handleClick() }>Login(oneAnmeldung)</Button>
+                        <Button variant="primary" onClick={() => keycloakService.login()}>Login(mitAnmeldung)</Button>
                         <Button variant="light" onClick={() => keycloakService.logout()}>Logout(temp)</Button>
                     </Navbar.Collapse>
                 </Container>
