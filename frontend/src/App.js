@@ -77,19 +77,6 @@ function App() {
     },
   ])
 
-  const [newEntry, setNewEntry] = useState(    {
-    id: 0,
-    name: '',
-    costs: 0,
-    user: '',
-    group: '',
-    timestamp: ''
-  })
-
-
-
-
-  const [guestSite, setGuestSite] = useState(true)
 
   const AddGroup = ({group}) => {
     setGroups([...groups, group])
@@ -107,20 +94,16 @@ function App() {
     setEntrys(entrys.filter((entry) => entry.id !== id))
   }
 
-  const GetEntrys = (filterInfo) => {
-
-  }
-
   return (
       <div>
         <ReactKeycloakProvider authClient={keycloakService}>
         <BrowserRouter>
         <Switch>
             <Route exact path="/">
-              <GuestSite guestSite={guestSite} setGuestSite={setGuestSite}/>
+              <GuestSite/>
             </Route>
             <Route exact path="/homepage" >
-                <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry} guestSite={guestSite} setGuestSite={setGuestSite}/>
+                <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry}/>
             </Route>
         </Switch>
         </BrowserRouter>

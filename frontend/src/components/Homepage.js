@@ -17,13 +17,19 @@ import KeyCloakService from "../api/Auth";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import {fetchProcessingResultsFromServer, selectProcessingStore} from "../reduxStore/ProcessingSlice";
+import {Diagram1} from "./Diagrams/Diagram1";
+import {Diagram2} from "./Diagrams/Diagram2";
+import {Diagram3} from "./Diagrams/Diagram3";
+import {EntryTable} from "./EntryTable";
+import {NavigationBar} from "./NavigationBar";
 const animatedComponents = makeAnimated();
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
+
 const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, setGuestSite, user }) => {
 
-    const debug = true;
+    const debug = false;
 
 
     /** * * * * * * *
@@ -108,7 +114,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
 
 
     const getHeader = () => {
-
         let token;
 
         if(userStore == null || userStore.token == null) token = KeyCloakService.token;
@@ -130,26 +135,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const [selectedEntry = entrys[0], setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
 
-    const [categories, setCategories] = useState([
-        {
-            name: 'Lernen',
-            checked: false
-        },
-        {
-            name: 'Food',
-            checked: false
-        },
-        {
-            name: 'Hund',
-            checked: false
-        },
-        {
-            name: 'Miete',
-            checked: false
-        }
-    ])
-
-
+    const [selectedCategories, setSelectedCategories] = useState([])
 
 
     const history = useHistory()
@@ -157,33 +143,19 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const navToGuestSite = () => {
         history.push("/");
     }
-
+    console.log("group")
+console.log(groups)
     return (
         <>
-            <Navbar bg="dark" variant="dark">
-                <Container>
-                    <Navbar.Brand>Haushalt</Navbar.Brand>
-                    <Navbar.Toggle/>
-                    <Navbar.Collapse className="justify-content-end">
-                        <Nav className="me-auto">
-                            <NavDropdown title="Ansicht" id="basic-nav-dropdown">
-                                { groups.map(group =>
-                                    <NavDropdown.Item key={`Group-${group.id}`}
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            setSelectedGroup(group)
-                                        }}
-                                    >{group.name}
-                                    </NavDropdown.Item>)}
-                            </NavDropdown>
-                            <Chat/>
-                        </Nav>
-                        <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
-                        <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
-                        <Button variant="primary" className="buttonStyle" onClick={() => navToGuestSite()}>Logout</Button>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+             <NavigationBar groups={groups}
+                            setSelectedGroup={setSelectedGroup}
+                            selectedGroup={selectedGroup}
+                            selectedSettingsGroup={selectedSettingsGroup}
+                            AddGroup={AddGroup}
+                            DeleteGroup={DeleteGroup}
+                            navToGuestSite={navToGuestSite}
+                            />
+
             <CardGroup>
                 <Card>
                     <Card.Body>
@@ -205,7 +177,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         <Form.Group className="CategoryArea">
                             <Form.Label>Kategorien</Form.Label>
                             <div className="Multiselect">
-                                <Select options={mappedCategories} components={animatedComponents} onChange={(e) => setCategories(e)}
+                                <Select options={mappedCategories} components={animatedComponents} onChange={(e) => setSelectedCategories(e)}
                                         isMulti />
                             </div>
                         </Form.Group>
@@ -242,153 +214,15 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     </Card.Body>
                 </Card>
             </CardGroup>
+
             <CardGroup>
-                <Card className="chartStyle">
-                    <Bar
-                        data={{
-                            // Name of the variables on x-axies for each bar
-                            labels: ["1st bar", "2nd bar"],
-                            datasets: [
-                                {
-                                    // Label for bars
-                                    label: "total count/value",
-                                    // Data or value of your each variable
-                                    data: [selectedGroup.diagrams.diagram1.firstValue, selectedGroup.diagrams.diagram1.secondValue],
-                                    // Color of each bar
-                                    backgroundColor: ["aqua", "green"],
-                                    // Border color of each bar
-                                    borderColor: ["aqua", "green"],
-                                    borderWidth: 0.5,
-                                },
-                            ],
-                        }}
-                        // Height of graph
-                        height={400}
-                        options={{
-                            maintainAspectRatio: false,
-                            scales: {
-                                yAxes: [
-                                    {
-                                        ticks: {
-                                            // The y-axis value will start from zero
-                                            beginAtZero: true,
-                                        },
-                                    },
-                                ],
-                            },
-                            legend: {
-                                labels: {
-                                    fontSize: 15,
-                                },
-                            },
-                        }}
-                        options={{ maintainAspectRatio: false }}
-                    />
-                </Card>
-                <Card className="chartStyle">
-                    <Line data={{
-                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-                        datasets: [
-                            {
-                                label: "First dataset",
-                                data: selectedGroup.diagrams.diagram2.firstValues,
-                                fill: true,
-                                backgroundColor: "rgba(75,192,192,0.2)",
-                                borderColor: "rgba(75,192,192,1)"
-                            },
-                            {
-                                label: "Second dataset",
-                                data: selectedGroup.diagrams.diagram2.secondValues,
-                                fill: false,
-                                borderColor: "#742774"
-                            }
-                        ]
-                    }}
-                          options={{ maintainAspectRatio: false }}/>
-                </Card>
-                <Card className="chartStyle">
-                    <Bar
-                        data={{
-                            // Name of the variables on x-axies for each bar
-                            labels: ["1st bar", "2nd bar"],
-                            datasets: [
-                                {
-                                    // Label for bars
-                                    label: "total count/value",
-                                    // Data or value of your each variable
-                                    data: [selectedGroup.diagrams.diagram3.firstValue, selectedGroup.diagrams.diagram3.firstValue],
-                                    // Color of each bar
-                                    backgroundColor: ["red", "yellow"],
-                                    // Border color of each bar
-                                    borderColor: ["red", "yellow"],
-                                    borderWidth: 0.5,
-                                },
-                            ],
-                        }}
-                        // Height of graph
-                        height={400}
-                        options={{
-                            maintainAspectRatio: false,
-                            scales: {
-                                yAxes: [
-                                    {
-                                        ticks: {
-                                            // The y-axis value will start from zero
-                                            beginAtZero: true,
-                                        },
-                                    },
-                                ],
-                            },
-                            legend: {
-                                labels: {
-                                    fontSize: 15,
-                                },
-                            },
-                        }}
-                        options={{ maintainAspectRatio: false }}
-                    />
-                </Card>
+                <Diagram1 selectedGroup={selectedGroup}/>
+                <Diagram2 selectedGroup={selectedGroup}/>
+                <Diagram3 selectedGroup={selectedGroup}/>
             </CardGroup>
+
             <CardGroup>
-                <Card>
-                    <Card.Body>
-                        <h4>Einträge</h4>
-                        <br/>
-                        <ButtonGroup className="buttonStyle">
-                            <Button variant="secondary">Alle</Button>
-                            <Button variant="secondary">WG</Button>
-                            <Button variant="secondary">FAM</Button>
-                            <Button variant="secondary">Ich</Button>
-                        </ButtonGroup>
-                        <ButtonGroup className="buttonStyle">
-                            <Button onClick={() => DeleteEntry(selectedEntry.id)} variant="secondary">Eintrag löschen</Button>
-                        </ButtonGroup>
-                        <Table striped bordered hover>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Kosten</th>
-                                <th>User</th>
-                                <th>Gruppe</th>
-                                <th>Zeitpunkt</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {entrys.map(entry =>
-                                <tr key={`Entry-${entry.id}`} onClick={() => setSelectedEntry(entry)}>
-                                    <td>{entry.id}</td>
-                                    <td>{entry.name}</td>
-                                    <td>{entry.costs}</td>
-                                    <td>{entry.user}</td>
-                                    <td>{entry.group}</td>
-                                    <td>{entry.timestamp}</td>
-                                </tr>
-                            )}
-                            </tbody>
-                        </Table>
-                    </Card.Body>
-                </Card>
+                <EntryTable entries = {entrys} selectedEntry={selectedEntry} setSelectedEntry={setSelectedEntry} DeleteEntry={DeleteEntry} />
             </CardGroup>
 
         </>
