@@ -11,19 +11,19 @@ import {useHistory} from "react-router-dom";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
-const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten. " +
-    "Teilen Sie Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
+const desc =   "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten. " +
+               "Teilen Sie Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
 
 //Reducer action types
 const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
 const getAdvertisementDataError = "getAdvertisementDataError";
 
-let initalState = {
+let initialAdvertisementState = {
     isLoading : false,
     data : null,
     isError:false
 };
-const reducer = (state, action) => {
+const advertisementReducer = (state, action) => {
     switch (action.type){
         case getAdvertisementDataSuccess:
             return {
@@ -51,14 +51,14 @@ const mockData = {
 }
 
 const GuestSite = () => {
-    const [state, dispatch] = useReducer(reducer, initalState);
+    const [advertisementState, dispatchAdvertisement] = useReducer(advertisementReducer, initialAdvertisementState);
     //console.log("Render", state)
 
     useEffect(() => {
             getAdvertisement().then((response)=> {
-                dispatch({type: getAdvertisementDataSuccess, payload: response.data})
+                dispatchAdvertisement({type: getAdvertisementDataSuccess, payload: response.data})
                 console.log("data", response.data)
-            }).catch(dispatch({type:getAdvertisementDataError}))
+            }).catch(dispatchAdvertisement({type:getAdvertisementDataError}))
     },[])
 
     //
@@ -86,15 +86,15 @@ const GuestSite = () => {
             </Card>
             <CardGroup className="advertisementGroup">
                 <Card className="writingStyle">
-                    <h2  className="textDiagramm1">{state.data == null ?"Loading":state.data.diagram1}</h2>
+                    <h2  className="textDiagramm1">{advertisementState.data == null ?"Loading":advertisementState.data.diagram1}</h2>
                     <h6>Nachrichten wurden bereits versendet.</h6>
                 </Card>
                 <Card className="writingStyle">
-                    <h2  className="textDiagramm2">{state.data == null ?"Loading":state.data.diagram2}</h2>
+                    <h2  className="textDiagramm2">{advertisementState.data == null ?"Loading":advertisementState.data.diagram2}</h2>
                     <h6>Einträge wurden bereits erstellt.</h6>
                 </Card>
                 <Card className="writingStyle">
-                    <h2  className="textDiagramm3">{state.data == null ?"Loading":state.data.diagram3}</h2>
+                    <h2  className="textDiagramm3">{advertisementState.data == null ?"Loading":advertisementState.data.diagram3}</h2>
                     <h6>registrierte User.</h6>
                 </Card>
             </CardGroup>

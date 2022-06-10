@@ -11,7 +11,7 @@ import {
     Popover
 } from "react-bootstrap";
 import {useDispatch} from "react-redux";
-import {changeTopicOfMessages} from "../features/messaging";
+import {changeTopicOfMessages} from "../reduxStore/MessageSlice";
 
 function Chat( user ) {
     const [messages, setMessages] = useState([]);
