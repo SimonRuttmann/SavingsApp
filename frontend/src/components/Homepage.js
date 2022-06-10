@@ -10,7 +10,8 @@ import {
     Title, PointElement, LineElement
 } from 'chart.js';
 import {Bar, Line} from 'react-chartjs-2';
-import "../styles.scss"
+import "../css/styles.scss"
+import "../css/homepage.scss"
 import {
     Button,
     ButtonGroup,

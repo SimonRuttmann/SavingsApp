@@ -2,7 +2,7 @@ import React, {useEffect, useReducer} from "react";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import '../styles.scss'
+import '../css/styles.scss'
 import keycloakService from "../api/Auth.js";
 import getAdvertisement from "../api/services/Advertisement";
 
