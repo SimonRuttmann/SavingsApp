@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getAllCategorys} from "../api/services/Content";
+import {addCategory, deleteCategory, getAllCategorys, updateCategory} from "../api/services/Content";
 import {useSelector} from "react-redux";
 import {selectUserStore} from "./UserSlice";
 
@@ -35,11 +35,22 @@ export default categorySlice.reducer
 
 export const selectCategoryStore = (state) => state.category.value;
 
-export const fetchCategoriesFromServer = (groupId) => (dispatch) => {
-    let token = useSelector(selectUserStore).token;
-
-    let response = getAllCategorys(groupId, null)
+export const fetchCategoriesFromServer = (header, groupId) => (dispatch) => {
+    let response = getAllCategorys(groupId, header)
     response.then(response => dispatch(response.data));
 }
 
-export const addCategoryToServer = (groupId, category ) => (dispatch) => {}
+export const addCategoryToServer = (header, groupId, category) => (dispatch) => {
+    let response = addCategory(groupId, category, header)
+    response.then(response => dispatch(response.data));
+}
+
+export const updateCategoryToServer = (header, groupId, category) => (dispatch) => {
+    let response = updateCategory(groupId, category, header)
+    response.then(response => dispatch(response.data));
+}
+
+export const deleteCategoryFromServer = (header, groupId, categoryId) => (dispatch) => {
+    let response = deleteCategory(groupId, categoryId, header)
+    response.then(response => dispatch(response.data));
+}

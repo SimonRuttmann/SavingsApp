@@ -6,7 +6,7 @@ const categoryPath = ContentServiceBasePath + "category/";
 const processingPath = ContentServiceBasePath + "processing/";
 
 //Saving
-export function getAllGroupEntrys(groupId, header){
+export function getAllGroupEntries(groupId, header){
     return Get(savingPath + groupId, header)
 }
 export function getGroupEntry(groupId, savingEntryId,header){
@@ -32,8 +32,8 @@ export function getCategory(groupId, categoryId, header){
 export function addCategory(groupId, body, header){
     return Post(categoryPath + groupId, body, header)
 }
-export function updateCategory(groupId, header){
-    return Put(categoryPath + groupId, header)
+export function updateCategory(groupId, body, header){
+    return Put(categoryPath + groupId, body, header)
 }
 export function deleteCategory(groupId, categoryId, header){
     return Delete(categoryPath + groupId + "/" + categoryId, header)
@@ -41,8 +41,8 @@ export function deleteCategory(groupId, categoryId, header){
 
 //Processing
 export function getGroupInfo(groupId, header){
-    return Get(categoryPath + groupId, header)
+    return Get(processingPath + groupId, header)
 }
-export function filterEntrys(groupId, body, header){
-    return Post(categoryPath + groupId, body, header)
+export function getSavingEntriesProcessed(groupId, body, header){
+    return Post(processingPath + groupId, body, header)
 }
