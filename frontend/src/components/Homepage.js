@@ -13,10 +13,12 @@ import {fetchCategoriesFromServer, selectCategoryStore} from "../reduxStore/Cate
 import {fetchSavingEntriesFromServer, selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
 import {login, logout, selectUserStore} from "../reduxStore/UserSlice";
+import store from "../reduxStore/Store";
 import KeyCloakService from "../api/Auth";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import {fetchProcessingResultsFromServer, selectProcessingStore} from "../reduxStore/ProcessingSlice";
+import keycloak from "../api/Auth";
 const animatedComponents = makeAnimated();
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
@@ -24,6 +26,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, setGuestSite, user }) => {
 
     const debug = true;
+    const history = useHistory();
 
 
     /** * * * * * * *
@@ -50,6 +53,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     }
 
     useEffect( () => {
+        Redirext(false)
+        console.log("erster Effekt wird aufgerufen")
         dispatch(login(KeyCloakService.token));
 
         dispatch(fetchGroupCoreInformationFromServer(getHeader()))
@@ -57,7 +62,24 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
-    
+
+    useEffect(() => {
+        console.log("zweiter Effekt wird aufgerufen")
+        let a = store.getState()
+
+        console.log("console",a)
+    },[])
+
+    function Redirext(redirectNow) {
+        if (redirectNow) {
+            history.push("/")
+        } else if (!keycloak.authenticated) {
+            history.push("/")
+        }
+    }
+
+
+
 
     const fetchContentInformation = () => {
 
@@ -81,8 +103,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     KeyCloakService.updateToken(5)
         .then((refreshed) => refreshToken(refreshed))
         .catch(function() {
-            //TODO redirect to start page
             dispatch((logout()))
+            Redirext(true)
             console.log('Failed to refresh the token, or the session has expired');
         });
 
@@ -152,8 +174,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
 
 
 
-    const history = useHistory()
 
+    // TODO change or delete
     const navToGuestSite = () => {
         history.push("/");
     }
@@ -180,7 +202,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         </Nav>
                         <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
                         <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
-                        <Button variant="primary" className="buttonStyle" onClick={() => navToGuestSite()}>Logout</Button>
+                        <Button variant="primary" className="buttonStyle" onClick={() => keycloak.logout}>Logout</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
