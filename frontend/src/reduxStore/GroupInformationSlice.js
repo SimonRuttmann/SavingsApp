@@ -1,4 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {getGroupInfo} from "../api/services/Content";
+import {getGroup} from "../api/services/User";
 
 /**
  * Long id,
@@ -57,3 +59,14 @@ export const { AddGroupCoreInformation, AddGeneralInformationToGroup, AddGroup, 
 export default groupInformationSlice.reducer
 
 export const selectGroupInformationStore = (state) => state.groupInformation.value;
+
+
+export const fetchGroupCoreInformationFromServer = (header, groupId) => (dispatch) => {
+    let response = getGroup(groupId, header)
+    response.then(response => dispatch(response.data));
+}
+
+export const fetchGeneralInformationToGroupFromServer = (header, groupId) => (dispatch) => {
+    let response = getGroupInfo(groupId, header)
+    response.then(response => dispatch(response.data));
+}

@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {
-    Chart as ChartJS,
     ArcElement,
-    Tooltip,
-    Legend,
-    CategoryScale,
-    LinearScale,
     BarElement,
-    Title, PointElement, LineElement
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip
 } from 'chart.js';
 import {Bar, Line} from 'react-chartjs-2';
 import "../css/styles.scss"
@@ -16,22 +18,24 @@ import {
     Button,
     ButtonGroup,
     Card,
-    CardGroup, CloseButton, Col,
+    CardGroup,
+    Col,
     Container,
     Form,
     Nav,
     Navbar,
-    NavDropdown, Row,
-    Table, ToggleButton
+    NavDropdown,
+    Row,
+    Table
 } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
 import Chat from "./Chat";
 import SettingsPopup from "./SettingsPopup";
 import {useDispatch, useSelector} from "react-redux";
-import categorySlice, {selectCategoryStore} from "../reduxStore/CategorySlice";
-import savingEntrySlice, {AddSavingEntry, selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
-import groupInformationSlice, {selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
+import {selectCategoryStore} from "../reduxStore/CategorySlice";
+import {selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
+import {selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
 import {login, logout, selectUserStore} from "../reduxStore/UserSlice";
 import KeyCloakService from "../api/Auth";
 import Select from "react-select";
@@ -93,6 +97,17 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     }
 
 
+    const getHeader = () => {
+        let token = userStore.token;
+
+        return {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+    }
+
+
     /**
      * Local states
      */
@@ -128,6 +143,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const navToGuestSite = () => {
         history.push("/");
     }
+
 
     return (
         <>
