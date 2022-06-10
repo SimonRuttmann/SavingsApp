@@ -103,9 +103,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         console.log(userStore)
         console.log(categoryStore)
 
-        dispatch(AddSavingEntry({id: 0, name: "Meine saving entry"}))
-        savingEntryStore.forEach(savingEntry => console.log(savingEntry))
-        console.log(userStore.name)
+      //  dispatch(AddSavingEntry({id: 0, name: "Meine saving entry"}))
+      //  savingEntryStore.forEach(savingEntry => console.log(savingEntry))
+      //  console.log(userStore.name)
     }
 
 
