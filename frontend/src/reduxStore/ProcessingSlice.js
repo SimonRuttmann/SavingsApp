@@ -17,7 +17,7 @@ export default ProcessingSlice.reducer
 
 export const selectProcessingStore = (state) => state.processing;
 
-export const fetchProcessingResultsFromServer = (header, groupId, filterInformation) => (dispatch) => {
-    let response = getSavingEntriesProcessed(groupId, filterInformation, header)
+export const fetchProcessingResultsFromServer = (groupId, filterInformation) => (dispatch) => {
+    let response = getSavingEntriesProcessed(groupId, filterInformation)
     response.then(response => dispatch(updateProcessingData(response.data)));
 }

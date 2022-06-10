@@ -63,22 +63,22 @@ export default savingEntrySlice.reducer
 
 export const selectSavingEntryStore = (state) => state.savingEntry;
 
-export const fetchSavingEntriesFromServer = (header, groupId) => (dispatch) => {
-    let response = getAllGroupEntries(groupId, header)
+export const fetchSavingEntriesFromServer = (groupId) => (dispatch) => {
+    let response = getAllGroupEntries(groupId)
     response.then(response => dispatch(AddSavingEntries(response.data)));
 }
 
-export const addSavingEntryToServer = (header, groupId, savingEntry) => (dispatch) => {
-    let response = addGroupEntry(groupId, savingEntry, header)
+export const addSavingEntryToServer = (groupId, savingEntry) => (dispatch) => {
+    let response = addGroupEntry(groupId, savingEntry)
     response.then(response => dispatch(AddSavingEntry(response.data)));
 }
 
-export const updateSavingEntryToServer = (header, groupId, savingEntry) => (dispatch) => {
-    let response = updateGroupEntry(groupId, savingEntry, header)
+export const updateSavingEntryToServer = (groupId, savingEntry) => (dispatch) => {
+    let response = updateGroupEntry(groupId, savingEntry)
     response.then(response => dispatch(UpdateSavingEntry(response.data)));
 }
 
-export const deleteSavingEntryFromServer = (header, groupId, savingEntryId) => (dispatch) => {
-    let response = deleteGroupEntry(groupId, savingEntryId, header)
+export const deleteSavingEntryFromServer = (groupId, savingEntryId) => (dispatch) => {
+    let response = deleteGroupEntry(groupId, savingEntryId)
     response.then(response => dispatch(RemoveSavingEntry(response.data)));
 }
