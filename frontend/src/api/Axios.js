@@ -1,13 +1,13 @@
 import axios from 'axios';
+import UserService from "./Auth";
 
 export function Get(url, auth){
     console.log("GET URL: ",url)
-    console.log("Config :",auth)
-    let response;
+    let request;
     if(auth == null){
         console.log("Running GET without auth")
         try {
-            response = axios.get(url, null)
+            request = axios.get(url, null)
         } catch (e) {
             // catch error
             throw new Error(e.message)
@@ -15,54 +15,78 @@ export function Get(url, auth){
     }
     else {
         console.log("Running GET with auth")
-        response = {
+        request = {
             method: 'get',
-            url: 'http://localhost:8011/userservice/group',
+            url: url,
             headers: {
                 'Authorization': "Bearer " + auth
             }
         }
-        response = axios(response)
+        request = axios(request)
     }
-    return response
+    request.then((value => console.log("GET URL "+url+" worked, it returned ",value)))
+    return request
 }
 
-export function Post(url,body,config){
-    let response;
+export function Post(url,body,auth){
+    let request;
     console.log("POST ",url)
-
+    console.log("POST BODY ",body)
     try {
-        response = axios.post(url, body, config);
+        request = {
+            method: 'post',
+            url: url,
+            headers: {
+                'Authorization': "Bearer " + auth
+            },
+            data:body
+        }
+
+        request = axios(request)
     } catch (e) {
         // catch error
         throw new Error(e.message)
     }
-
-    return response
+    request.then((value => console.log("POST URL "+url+" worked, it returned ",value)))
+    return request
 }
 
-export function Put(url,body,config){
-    let response;
+export function Put(url,body,auth){
+    let request;
     console.log("PUT ",url)
 
     try {
-        response = axios.put(url, body, config);
+        request = {
+            method: 'post',
+            url: url,
+            headers: {
+                'Authorization': "Bearer " + auth
+            },
+            data:body
+        }
     } catch (e) {
         // catch error
         throw new Error(e.message)
     }
-    return response
+    request.then((value => console.log("PUT URL "+url+" worked, it returned ",value)))
+    return request
 }
 
-export function Delete(url,config){
-    let response;
+export function Delete(url, auth){
+    let request;
     console.log("Delete ",url)
 
     try {
-        response = axios.delete(url, config);
+        request = {
+            method: 'post',
+            url: url,
+            headers: {
+                'Authorization': "Bearer " + auth
+            }
+        }
     } catch (e) {
         // catch error
         throw new Error(e.message)
     }
-    return response
+    return request
 }
