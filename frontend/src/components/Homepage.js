@@ -161,7 +161,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                             </NavDropdown>
                             <Chat/>
                         </Nav>
-                        <Button variant={"dark"} className="textStyle">{selectedGroup.name}</Button>
+                        <Button variant={"dark"} className="textStyle showSelectedGroup">{selectedGroup.name}</Button>
                         <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
                         <Button variant="primary" className="buttonStyle" onClick={() => navToGuestSite()}>Logout</Button>
                     </Navbar.Collapse>
