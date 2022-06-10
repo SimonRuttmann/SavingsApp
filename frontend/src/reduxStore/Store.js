@@ -4,6 +4,7 @@ import savingEntrySlice from "./SavingEntrySlice";
 import groupInformationSlice from "./GroupInformationSlice";
 import userSlice from "./UserSlice";
 import advertisementSlice from "./AdvertisementSlice";
+import messageSlice from "./MessageSlice";
 
 
 export const store = configureStore({
@@ -12,7 +13,8 @@ export const store = configureStore({
         savingEntry: savingEntrySlice,
         groupInformation: groupInformationSlice,
         user: userSlice,
-        advertisement: advertisementSlice
+        advertisement: advertisementSlice,
+        message: messageSlice
     }
 })
 

@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {getAllCategorys} from "../api/services/Content";
 
 /**
  *  Category Schema
@@ -31,3 +32,10 @@ export const { AddCategory, RemoveCategory, UpdateCategory } = categorySlice.act
 export default categorySlice.reducer
 
 export const selectCategoryStore = (state) => state.category.value;
+
+export const fetchCategoriesFromServer = (groupId) => (dispatch) => {
+    let response = getAllCategorys(groupId, null)
+    response.then(response => dispatch(response.data));
+}
+
+export const addCategoryToServer = (groupId, category ) => (dispatch) => {}
