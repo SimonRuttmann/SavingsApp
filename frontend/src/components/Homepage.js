@@ -56,7 +56,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const userStore             = useSelector(selectUserStore);
     const categoryStore         = useSelector(selectCategoryStore);
-    const dispatch = useDispatch()
+    const dispatch              = useDispatch()
 
     const mappedCategories = categoryStore.map(category =>{
         return{  label: category.name, value: category.id}
@@ -64,7 +64,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
 
     useEffect( () => {
         dispatch(login(KeyCloakService.token));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     },[])
     
 
@@ -119,7 +119,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
     const [selectedEntry = entrys[0], setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
-    const [checked, setChecked] = useState(false);
+
     const [categories, setCategories] = useState([
         {
             name: 'Lernen',
@@ -168,7 +168,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                             </NavDropdown>
                             <Chat/>
                         </Nav>
-                        <Button variant={"dark"} className="textStyle showSelectedGroup">{selectedGroup.name}</Button>
+                        <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
                         <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
                         <Button variant="primary" className="buttonStyle" onClick={() => navToGuestSite()}>Logout</Button>
                     </Navbar.Collapse>
