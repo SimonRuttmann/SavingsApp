@@ -22,7 +22,7 @@ import {SearchBar} from "./SearchBar";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 
-const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, setGuestSite, user }) => {
+const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry }) => {
 
     const debug = false;
 
