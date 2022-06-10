@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import Homepage from "./components/Homepage";
+import Homepage from "./components/HomepageSite/Homepage";
 import GuestSite from "./components/GuestSite";
 import {BrowserRouter, Route, Router, Switch} from "react-router-dom";
 import PrivateRoute from "./api/helper/PrivateRoute.js";
-import keycloakService from "./api/Auth.js";
+import keycloakService, {_kc} from "./api/Auth.js";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 
 function App() {
@@ -77,19 +77,6 @@ function App() {
     },
   ])
 
-  const [newEntry, setNewEntry] = useState(    {
-    id: 0,
-    name: '',
-    costs: 0,
-    user: '',
-    group: '',
-    timestamp: ''
-  })
-
-
-
-
-  const [guestSite, setGuestSite] = useState(true)
 
   const AddGroup = ({group}) => {
     setGroups([...groups, group])
@@ -107,20 +94,16 @@ function App() {
     setEntrys(entrys.filter((entry) => entry.id !== id))
   }
 
-  const GetEntrys = (filterInfo) => {
-
-  }
-
   return (
       <div>
-        <ReactKeycloakProvider authClient={keycloakService}>
+        <ReactKeycloakProvider authClient={_kc}>
         <BrowserRouter>
         <Switch>
             <Route exact path="/">
-              <GuestSite guestSite={guestSite} setGuestSite={setGuestSite}/>
+              <GuestSite/>
             </Route>
             <Route exact path="/homepage" >
-                <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry} guestSite={guestSite} setGuestSite={setGuestSite}/>
+                <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry}/>
             </Route>
         </Switch>
         </BrowserRouter>
