@@ -5,8 +5,8 @@ export const userSlice = createSlice({
     initialState: {value: {id: "", email: "", username: ""}},
     reducers: {
         login: (state, action) => {
-            state.value = action.payload
-        },
+            state.token = action.payload; //TODO atm, dispatch(login(token)); if object needed dispatch(login({..., token: token}); and here action.payload.token
+        },                                  //TODO access via UserStore.token
         logout: (state, action) => {
             state.value = null;
         }

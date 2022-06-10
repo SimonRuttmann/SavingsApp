@@ -30,7 +30,6 @@ import Chat from "./Chat";
 import SettingsPopup from "./SettingsPopup";
 import CategoriesPopup from "./CategoriesPopup";
 import {useDispatch, useSelector} from "react-redux";
-import {updateInflationRate} from "../features/inflation";
 import categorySlice, {selectCategoryStore} from "../reduxStore/CategorySlice";
 import savingEntrySlice, {AddSavingEntry, selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
 import groupInformationSlice, {selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
@@ -80,7 +79,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         console.log(userStore)
         console.log(categoryStore)
 
-        dispatch(AddSavingEntry())
+        dispatch(AddSavingEntry({id: 0, name: "Meine saving entry"}))
+        savingEntryStore.forEach(savingEntry => console.log(savingEntry))
+        console.log(userStore.name)
     }
 
 
@@ -120,17 +121,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         history.push("/");
     }
 
-    useEffect(() => {
-        getInflationRate()
-    })
-
-    const getInflationRate = () => {
-        fetch('http://localhost:8080/inflationrate')
-            .then(response => response.json())
-            .then(data => {
-                dispatch(updateInflationRate(data))
-            })
-    }
 
     return (
         <>
