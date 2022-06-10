@@ -74,7 +74,7 @@ const GuestSite = () => {
 
     }
     function Redirect() {
-         if (keycloak.authenticated) {
+         if (keycloak.isLoggedIn()) {
             history.push("/homepage")
         }
     }
