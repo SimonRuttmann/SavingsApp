@@ -31,10 +31,11 @@ import SettingsPopup from "./SettingsPopup";
 import CategoriesPopup from "./CategoriesPopup";
 import {useDispatch, useSelector} from "react-redux";
 import {updateInflationRate} from "../features/inflation";
-import categorySlice from "../reduxStore/CategorySlice";
-import savingEntrySlice, {AddSavingEntry} from "../reduxStore/SavingEntrySlice";
-import groupInformationSlice from "../reduxStore/GroupInformationSlice";
+import categorySlice, {selectCategoryStore} from "../reduxStore/CategorySlice";
+import savingEntrySlice, {AddSavingEntry, selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
+import groupInformationSlice, {selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
 import advertisementSlice from "../reduxStore/AdvertisementSlice";
+import {selectUserStore} from "../reduxStore/UserSlice";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 //todo remove inline styles
@@ -66,10 +67,10 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     /**
      * Redux-Store
      */
-    const savingEntryStore      = useSelector((state) => state.savingEntry.value);
-    const groupInformationStore = useSelector((state) => state.groupInformation.value);
-    const userStore             = useSelector((state) => state.user.value);
-    const categoryStore         = useSelector((state) => state.category.value);
+    const savingEntryStore      = useSelector(selectSavingEntryStore);
+    const groupInformationStore = useSelector(selectGroupInformationStore);
+    const userStore             = useSelector(selectUserStore);
+    const categoryStore         = useSelector(selectCategoryStore);
     const dispatch = useDispatch()
 
 
