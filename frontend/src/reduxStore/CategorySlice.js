@@ -1,7 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {addCategory, deleteCategory, getAllCategorys, updateCategory} from "../api/services/Content";
-import {useSelector} from "react-redux";
-import {selectUserStore} from "./UserSlice";
+
 
 /**
  *  Category Schema
