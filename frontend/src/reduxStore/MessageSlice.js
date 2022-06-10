@@ -1,6 +1,7 @@
+
 import {createSlice} from '@reduxjs/toolkit'
 
-export const messagingSlice = createSlice({
+export const MessageSlice = createSlice({
     name: "messaging",
     initialState: {value: {topic: "Test", messages: []}},
     reducers: {
@@ -18,6 +19,7 @@ export const messagingSlice = createSlice({
     }
 });
 
-export const {changeTopicOfMessages, updateMessages} = messagingSlice.actions
+export const {changeTopicOfMessages, updateMessages} = MessageSlice.actions
 
-export default messagingSlice.reducer
+export default MessageSlice.reducer
+

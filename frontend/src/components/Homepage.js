@@ -29,8 +29,12 @@ import {useHistory} from "react-router-dom";
 import Chat from "./Chat";
 import SettingsPopup from "./SettingsPopup";
 import CategoriesPopup from "./CategoriesPopup";
-import {useDispatch} from "react-redux";
-import {updateInflationRate} from "../features/inflation";
+import {useDispatch, useSelector} from "react-redux";
+import categorySlice, {selectCategoryStore} from "../reduxStore/CategorySlice";
+import savingEntrySlice, {AddSavingEntry, selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
+import groupInformationSlice, {selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
+import advertisementSlice from "../reduxStore/AdvertisementSlice";
+import {selectUserStore} from "../reduxStore/UserSlice";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 //todo remove inline styles
@@ -56,6 +60,34 @@ const textstyle = {
 
 const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, setGuestSite, user }) => {
 
+    const debug = true;
+
+
+    /**
+     * Redux-Store
+     */
+    const savingEntryStore      = useSelector(selectSavingEntryStore);
+    const groupInformationStore = useSelector(selectGroupInformationStore);
+    const userStore             = useSelector(selectUserStore);
+    const categoryStore         = useSelector(selectCategoryStore);
+    const dispatch = useDispatch()
+
+
+    if(debug) {
+        console.log(savingEntryStore)
+        console.log(groupInformationStore)
+        console.log(userStore)
+        console.log(categoryStore)
+
+        dispatch(AddSavingEntry({id: 0, name: "Meine saving entry"}))
+        savingEntryStore.forEach(savingEntry => console.log(savingEntry))
+        console.log(userStore.name)
+    }
+
+
+    /**
+     * Local states
+     */
     const [selectedGroup = groups[0], setSelectedGroup] = useState()
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
     const [selectedEntry = entrys[0], setSelectedEntry] = useState()
@@ -80,7 +112,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         }
     ])
 
-    const dispatch = useDispatch()
+
 
 
     const history = useHistory()
@@ -89,17 +121,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         history.push("/");
     }
 
-    useEffect(() => {
-        getInflationRate()
-    })
-
-    const getInflationRate = () => {
-        fetch('http://localhost:8080/inflationrate')
-            .then(response => response.json())
-            .then(data => {
-                dispatch(updateInflationRate(data))
-            })
-    }
 
     return (
         <>
