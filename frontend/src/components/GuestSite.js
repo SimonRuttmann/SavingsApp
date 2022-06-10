@@ -4,17 +4,14 @@ import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Gradient from 'rgt'
 import '../styles.css'
-import {useHistory} from "react-router-dom";
-import axios from "axios";
-import {AdvertisementServiceURL} from "../utils/constants";
-import keycloakService from "../api/auth.js";
-
+import keycloakService from "../api/Auth.js";
+import fetchAdvertisement from "../api/services/Advertisement";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
-const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten." +
-    " Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
+const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten. " +
+    "Teilen Sie Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
 
 const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
 const getAdvertisementDataError = "getAdvertisementDataError";
@@ -55,7 +52,7 @@ const GuestSite = () => {
     console.log("Render", state)
 
     useEffect(() => {
-            axios.get(AdvertisementServiceURL).then((response)=> {
+            fetchAdvertisement().then((response)=> {
                 dispatch({type: getAdvertisementDataSuccess, payload: response.data})
                 console.log("data", response.data)
             }).catch(dispatch({type:getAdvertisementDataError}))
@@ -70,13 +67,14 @@ const GuestSite = () => {
                     <Navbar.Collapse className="justify-content-end">
                         <Button variant="light" onClick={() => keycloakService.register()}>Register</Button>
                         <Button variant="primary" onClick={() => keycloakService.login() }>Login</Button>
+                        <Button variant="light" onClick={() => keycloakService.logout()}>Logout(temp)</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
             <Card className="slogen">
                 <h2 className="textColorfull"> {slogan}</h2>
             </Card>
-            <CardGroup>
+            <CardGroup className="advertisementGroup">
                 <Card className="writingStyle">
                     <h2  className="textDiagramm1">{state.data == null ?"Loading":state.data.diagram1}</h2>
                     <h6>Nachrichten wurden bereits versendet.</h6>
@@ -90,17 +88,9 @@ const GuestSite = () => {
                     <h6>registrierte User.</h6>
                 </Card>
             </CardGroup>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
             <Card className="writingStyle">
                 <Card.Text>{desc}</Card.Text>
             </Card>
-            <br/>
-            <br/>
-            <br/>
         </>)
 }
 export default GuestSite
