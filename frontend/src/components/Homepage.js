@@ -51,13 +51,14 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
 
     useEffect( () => {
         dispatch(login(KeyCloakService.token));
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
 
         dispatch(fetchGroupCoreInformationFromServer(getHeader()))
             .then(() => fetchContentInformation());
 
     },[])
-
+    
 
     const fetchContentInformation = () => {
 
@@ -129,7 +130,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
     const [selectedEntry = entrys[0], setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
-    const [checked, setChecked] = useState(false);
+
     const [categories, setCategories] = useState([
         {
             name: 'Lernen',
@@ -178,7 +179,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                             </NavDropdown>
                             <Chat/>
                         </Nav>
-                        <Button variant={"dark"} className="textStyle showSelectedGroup">{selectedGroup.name}</Button>
+                        <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
                         <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
                         <Button variant="primary" className="buttonStyle" onClick={() => navToGuestSite()}>Logout</Button>
                     </Navbar.Collapse>
