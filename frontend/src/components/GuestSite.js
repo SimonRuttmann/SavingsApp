@@ -6,6 +6,7 @@ import '../css/styles.scss'
 import '../css/guestsite.scss'
 import keycloakService from "../api/Auth.js";
 import getAdvertisement from "../api/services/Advertisement";
+import {useHistory} from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -60,6 +61,13 @@ const GuestSite = () => {
             }).catch(dispatchAdvertisement({type:getAdvertisementDataError}))
     },[])
 
+    //
+    const history = useHistory();
+    function handleClick() {
+
+        history.push('/homepage');
+
+    }
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -68,7 +76,7 @@ const GuestSite = () => {
                     <Navbar.Toggle/>
                     <Navbar.Collapse className="justify-content-end">
                         <Button variant="light" onClick={() => keycloakService.register()}>Register</Button>
-                        <Button variant="primary" onClick={() => keycloakService.login() }>Login</Button>
+                        <Button variant="primary" onClick={() => handleClick() }>Login(oneAnmeldung)</Button>
                         <Button variant="light" onClick={() => keycloakService.logout()}>Logout(temp)</Button>
                     </Navbar.Collapse>
                 </Container>
