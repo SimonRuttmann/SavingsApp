@@ -29,8 +29,8 @@ public class MongoTestDataCreator {
 
     private static final Random random = new Random();
 
-    String[] categoryArray = {"Miete","Lebensmittel","Restaurant","Hund","Katze","Alterversicherung", "Hausversicherung",
-                              "Rennrad", "BasketballVerein", "Musik Verein", "Zoo","Fastfood","Zocken","Pokern",
+    String[] categoryArray = {"Miete","Lebensmittel","Restaurant","Hund","Katze","Altersversicherung", "Hausversicherung",
+                              "Rennrad", "Basketballverein", "Musik Verein", "Zoo","Fastfood","Zocken","Pokern",
                               "Glücksspiel","Hausversicherung","Kinder","Kindergarten","Massage","Wellness"};
 
     ArrayList<Category> categories = new ArrayList<>();
