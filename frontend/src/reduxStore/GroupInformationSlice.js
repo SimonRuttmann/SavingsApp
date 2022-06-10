@@ -53,4 +53,7 @@ const groupInformationSlice = createSlice({
 })
 
 export const { AddGroupCoreInformation, AddGeneralInformationToGroup, AddGroup, RemoveGroup } = groupInformationSlice.actions
+
 export default groupInformationSlice.reducer
+
+export const selectGroupInformationStore = (state) => state.groupInformation.value;

@@ -45,3 +45,5 @@ const savingEntrySlice = createSlice({
 
 export const { AddSavingEntry, RemoveSavingEntry, UpdateSavingEntry } = savingEntrySlice.actions
 export default savingEntrySlice.reducer
+
+export const selectSavingEntryStore = (state) => state.savingEntry.value;
