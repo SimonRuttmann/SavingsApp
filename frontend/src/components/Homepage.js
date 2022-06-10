@@ -171,6 +171,12 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         }
     ])
 
+    function logoutButton(){
+        dispatch((logout()))
+        Redirext(true)
+        KeyCloakService.logout()
+    }
+
 
 
 
@@ -202,7 +208,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         </Nav>
                         <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
                         <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
-                        <Button variant="primary" className="buttonStyle" onClick={() => keycloak.logout}>Logout</Button>
+                        <Button variant="primary" className="buttonStyle" onClick={() => logoutButton()}>Logout</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
