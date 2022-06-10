@@ -74,6 +74,15 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
     console.log("In Render GroupInformationStore:")
     console.log(groupInformationStore)
 
+    console.log("In Render savingEntryStore:")
+    console.log(savingEntryStore)
+
+    console.log("In Render categoryStore:")
+    console.log(categoryStore)
+
+    console.log("In Render processingStore:")
+    console.log(processingStore)
+
     const fetchContentInformation = () => {
 
         //Get personal group
