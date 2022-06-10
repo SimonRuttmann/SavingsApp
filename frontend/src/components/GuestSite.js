@@ -4,7 +4,7 @@ import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../styles.css'
 import keycloakService from "../api/Auth.js";
-import fetchAdvertisement from "../api/services/Advertisement";
+import getAdvertisement from "../api/services/Advertisement";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -53,7 +53,7 @@ const GuestSite = () => {
     //console.log("Render", state)
 
     useEffect(() => {
-            fetchAdvertisement().then((response)=> {
+            getAdvertisement().then((response)=> {
                 dispatch({type: getAdvertisementDataSuccess, payload: response.data})
                 console.log("data", response.data)
             }).catch(dispatch({type:getAdvertisementDataError}))
