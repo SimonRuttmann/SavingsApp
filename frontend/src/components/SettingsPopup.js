@@ -22,12 +22,12 @@ const SettingsPopup = ({groups, setSelectedSettingsGroup, selectedSettingsGroup,
             <Modal.Title>Einstellungen</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            { groups.map(group => <h6 onClick={(e) => {
+            { groups.map(group => <h6 key={`Settings-Group-${group.id}`} onClick={(e) => {
                 e.preventDefault()
                 setSelectedSettingsGroup(group)
             }} href={group.name}>{group.name}</h6>)}
             <h5>Mitglieder:</h5>
-            {selectedSettingsGroup.members.map(user => <h6>{user}</h6>)}
+            {selectedSettingsGroup.members.map(user => <h6 key={`Settings-Group-${user.name}`}>{user}</h6>)}
             <Button onClick={() => AddGroup({name: 'Familie2',
                 diagrams: {
                     diagram1: {firstValue: 1852, secondValue: 1219},

@@ -168,7 +168,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         <Nav className="me-auto">
                             <NavDropdown title="Ansicht" id="basic-nav-dropdown">
                                 { groups.map(group =>
-                                    <NavDropdown.Item
+                                    <NavDropdown.Item key={`Group-${group.id}`}
                                         onClick={(e) => {
                                             e.preventDefault()
                                             setSelectedGroup(group)
@@ -376,7 +376,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                             </thead>
                             <tbody>
                             {entrys.map(entry =>
-                                <tr onClick={() => setSelectedEntry(entry)}>
+                                <tr key={`Entry-${entry.id}`} onClick={() => setSelectedEntry(entry)}>
                                     <td>{entry.id}</td>
                                     <td>{entry.name}</td>
                                     <td>{entry.costs}</td>
