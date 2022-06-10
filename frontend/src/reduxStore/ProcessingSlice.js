@@ -3,10 +3,13 @@ import {getSavingEntriesProcessed} from "../api/services/Content";
 
 export const ProcessingSlice = createSlice({
     name: "processing",
-    initialState: {value: {statistic1: {}, statistic2: {}, statistic3: {}}},
+    initialState: {balanceProcessResultDTO: {}, diagramByIntervalAndCategory: {}, diagramByIntervalAndCreator: {}, savingEntryDTOs: []},
     reducers: {
         updateProcessingData: (state, action) => {
-            state.value = action.payload
+            state.balanceProcessResultDTO = action.payload.balanceProcessResultDTO;
+            state.diagramByIntervalAndCategory = action.payload.diagramByIntervalAndCategory;
+            state.diagramByIntervalAndCreator = action.payload.diagramByIntervalAndCreator;
+            state.savingEntryDTOs = action.payload.savingEntryDTOs;
         },
     }
 });
