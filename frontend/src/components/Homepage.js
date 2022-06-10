@@ -36,9 +36,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const processingStore       = useSelector(selectProcessingStore);
     const dispatch = useDispatch()
 
-    const mappedCategories = []/*categoryStore.map(category =>{
+    const mappedCategories = categoryStore.map(category =>{
         return{  label: category.name, value: category.id}
-    });*/
+    });
 
     useEffect( () => {
         dispatch(login(KeyCloakService.token));
@@ -149,7 +149,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         history.push("/");
     }
 
-
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -159,14 +158,18 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     <Navbar.Collapse className="justify-content-end">
                         <Nav className="me-auto">
                             <NavDropdown title="Ansicht" id="basic-nav-dropdown">
-                                { groups.map(group => <NavDropdown.Item onClick={(e) => {
-                                    e.preventDefault()
-                                    setSelectedGroup(group)
-                                }} href={group.name}>{group.name}</NavDropdown.Item>)}
+                                { groups.map(group =>
+                                    <NavDropdown.Item
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            setSelectedGroup(group)
+                                        }}
+                                    >{group.name}
+                                    </NavDropdown.Item>)}
                             </NavDropdown>
                             <Chat/>
                         </Nav>
-                        <Button variant={"dark"} className="textStyle">{selectedGroup.name}</Button>
+                        <Button variant={"dark"} className="textStyle showSelectedGroup">{selectedGroup.name}</Button>
                         <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
                         <Button variant="primary" className="buttonStyle" onClick={() => navToGuestSite()}>Logout</Button>
                     </Navbar.Collapse>
@@ -193,7 +196,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         <Form.Group className="CategoryArea">
                             <Form.Label>Kategorien</Form.Label>
                             <div className="Multiselect">
-                                <Select options={mappedCategories} components={animatedComponents}
+                                <Select options={mappedCategories} components={animatedComponents} onChange={(e) => setCategories(e)}
                                         isMulti />
                             </div>
                         </Form.Group>
