@@ -150,15 +150,6 @@ public class ProcessingController {
 
         Set<String> personNames = allowedPersons.stream().map(KPerson::getUsername).collect(Collectors.toSet());
 
-        //test
-       List<SavingEntry> entries = groupDocument.savingEntries;
-       for(SavingEntry entity: entries){
-           Date crationdate = entity.getCreationDate();
-           Date filterInfo = filterInformation.getEndDate();
-           int test =  crationdate.compareTo(filterInfo);
-            int a = 3;
-       }
-
 
         //Apply filter and sorting
         List<SavingEntry> filteredAndSortedEntries = groupDocument.savingEntries.
@@ -166,7 +157,9 @@ public class ProcessingController {
                 filter(savingEntry ->
                         savingEntry.
                         getCreationDate().
-                                compareTo(filterInformation.getStartDate()) > 0).
+                                compareTo(
+                                        filterInformation.getStartDate() == null ?
+                                                new Date(Long.MIN_VALUE): filterInformation.getStartDate()) > 0).
 
                 filter(savingEntry ->
                         savingEntry.
