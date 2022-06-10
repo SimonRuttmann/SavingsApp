@@ -10,7 +10,7 @@ import {
     Title, PointElement, LineElement
 } from 'chart.js';
 import {Bar, Line} from 'react-chartjs-2';
-import "../styles.css"
+import "../styles.scss"
 import {
     Button,
     ButtonGroup,
@@ -126,7 +126,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                 <Card>
                     <Card.Body>
             <Form>
-                <Row>
+                <Row className="searchBar">
                     <Col>
                         <Form.Group>
                             <Form.Label>Name</Form.Label>
@@ -149,8 +149,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                             </Form.Select>
                         </Form.Group>
                     </Col>
-                    <Col>
-                        <Form.Group>
+                    <Col className="buttonCol">
+                        <Form.Group className="buttonArea">
                             <Button onClick={() => AddEntry(selectedEntry)}>Eintrag erstellen</Button>
                             {!showMore &&  <Button variant="link" onClick={() => setShowMore(true)}>Zeig mehr</Button>}
                         </Form.Group>
