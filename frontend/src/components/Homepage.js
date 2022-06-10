@@ -40,6 +40,15 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         return{  label: category.name, value: category.id}
     });
 
+    const defaultFilterInformation = {
+        "sortParameter": "CreationDate",
+        "timeInterval": "Day",
+        "startDate": null,
+        "endDate": null,
+        "personIds": [],
+        "categoryIds": []
+    }
+
     useEffect( () => {
         dispatch(login(KeyCloakService.token));
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +74,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         //fetch saving entries for this group
         dispatch(fetchSavingEntriesFromServer(getHeader(), personGroup.id));
         //fetch processing results
-       // dispatch(fetchProcessingResultsFromServer(getHeader(), personGroup.id, TODO))
+        dispatch(fetchProcessingResultsFromServer(getHeader(), personGroup.id, defaultFilterInformation))
 
     }
 
