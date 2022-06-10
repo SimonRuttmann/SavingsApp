@@ -9,19 +9,26 @@ export const Diagram1 = ({selectedGroup}) => {
             <Bar
                 data={{
                     // Name of the variables on x-axies for each bar
-                    labels: ["1st bar", "2nd bar"],
+                    labels: ["Einnahmen vs Ausgaben"],
                     datasets: [
                         {
                             // Label for bars
-                            label: "total count/value",
+                            label: "Einnahmen",
                             // Data or value of your each variable
-                            data: [selectedGroup.diagrams.diagram1.firstValue, selectedGroup.diagrams.diagram1.secondValue],
+                            data: [selectedGroup.diagrams.diagram1.firstValue],
                             // Color of each bar
-                            backgroundColor: ["aqua", "green"],
+                            backgroundColor: "green",
                             // Border color of each bar
-                            borderColor: ["aqua", "green"],
+                            borderColor: "green",
                             borderWidth: 0.5,
                         },
+                        {
+                            label: "Ausgaben",
+                            backgroundColor: "red",
+                            data: [selectedGroup.diagrams.diagram1.secondValue],
+                            borderColor: "red",
+                            borderWidth: 0.5
+                        }
                     ],
                 }}
                 // Height of graph

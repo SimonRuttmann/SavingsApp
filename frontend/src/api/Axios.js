@@ -66,7 +66,7 @@ export function Put(url,body,auth){
 
     try {
         request = {
-            method: 'post',
+            method: 'put',
             url: url,
             headers: {
                 'Authorization': "Bearer " + auth
@@ -91,7 +91,7 @@ export function Delete(url, auth){
 
     try {
         request = {
-            method: 'post',
+            method: 'delete',
             url: url,
             headers: {
                 'Authorization': "Bearer " + auth
