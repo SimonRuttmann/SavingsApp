@@ -7,6 +7,7 @@ import '../css/guestsite.scss'
 import keycloakService from "../api/Auth.js";
 import getAdvertisement from "../api/services/Advertisement";
 import {useHistory} from "react-router-dom";
+import keycloak from "../api/Auth.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -55,11 +56,15 @@ const GuestSite = () => {
     //console.log("Render", state)
 
     useEffect(() => {
+        console.log("erster Redirekt")
+            Redirect()
             getAdvertisement().then((response)=> {
                 dispatchAdvertisement({type: getAdvertisementDataSuccess, payload: response.data})
                 console.log("data", response.data)
             }).catch(dispatchAdvertisement({type:getAdvertisementDataError}))
     },[])
+
+
 
     //
     const history = useHistory();
@@ -68,6 +73,13 @@ const GuestSite = () => {
         history.push('/homepage');
 
     }
+    function Redirect() {
+         if (keycloak.isLoggedIn()) {
+            history.push("/homepage")
+        }
+    }
+
+
     return (
         <>
             <Navbar bg="dark" variant="dark">

@@ -5,8 +5,19 @@ import "../../css/styles.scss"
 import "../../css/homepage.scss"
 import {Button, Container, Nav, Navbar, NavDropdown} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import keycloak from '../../api/Auth'
+import {logout} from "../../reduxStore/UserSlice";
+import {useDispatch} from "react-redux";
+import {useHistory} from "react-router-dom";
 
 export const NavigationBar = ({groups, setSelectedGroup, selectedGroup, setSelectedSettingsGroup, selectedSettingsGroup, AddGroup, DeleteGroup, navToGuestSite}) => {
+    const dispatch = useDispatch()
+    function Redirect() {
+        dispatch((logout()))
+        keycloak.doLogout()
+    }
+
+
     return (
         <Navbar bg="dark" variant="dark">
         <Container>
@@ -28,7 +39,7 @@ export const NavigationBar = ({groups, setSelectedGroup, selectedGroup, setSelec
                 </Nav>
                 <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
                 <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
-                <Button variant="primary" className="buttonStyle" onClick={() => navToGuestSite()}>Logout</Button>
+                <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
             </Navbar.Collapse>
         </Container>
         </Navbar>
