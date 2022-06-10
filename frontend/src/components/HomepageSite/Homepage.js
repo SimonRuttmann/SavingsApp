@@ -8,7 +8,11 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchCategoriesFromServer, selectCategoryStore} from "../../reduxStore/CategorySlice";
-import {fetchSavingEntriesFromServer, selectSavingEntryStore} from "../../reduxStore/SavingEntrySlice";
+import {
+    deleteSavingEntryFromServer,
+    fetchSavingEntriesFromServer,
+    selectSavingEntryStore
+} from "../../reduxStore/SavingEntrySlice";
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
 import {login, logout, selectUserStore} from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
@@ -23,7 +27,7 @@ import {SearchBar} from "./SearchBar";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 
-const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry }) => {
+const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry }) => {
 
     const debug = false;
 
@@ -147,6 +151,10 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
         history.push("/");
     }
 
+    const deleteEntry = (id) => {
+        dispatch(deleteSavingEntryFromServer(id));
+    }
+
     return (
         <React.Fragment>
 
@@ -189,7 +197,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
                 Table showing all entries
              */}
             <CardGroup>
-                <EntryTable entries={entrys} selectedEntry={selectedEntry} setSelectedEntry={setSelectedEntry} DeleteEntry={DeleteEntry} />
+                <EntryTable entries={processingStore.savingEntryDTOs} selectedEntry={selectedEntry} setSelectedEntry={setSelectedEntry} deleteEntry={deleteEntry} />
             </CardGroup>
 
         </React.Fragment>
