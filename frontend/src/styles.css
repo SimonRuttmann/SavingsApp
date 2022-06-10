@@ -31,10 +31,22 @@
     -webkit-text-fill-color: transparent;
 }
 .textDiagramm1 {
-    background-image:linear-gradient(90deg,blue,rgb(60, 240, 234));
+    background-image:linear-gradient(blue,rgb(60, 240, 234));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.textDiagramm2 {
+    background-image:linear-gradient(rgb(121, 40, 202),rgb(255, 0, 128));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.textDiagramm3 {
+    background-image:linear-gradient(rgb(255, 77, 77),rgb(249, 203, 40));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 
 .buttonStyle {
     float: right;
