@@ -19,15 +19,15 @@ const savingEntrySlice = createSlice({
     initialState: [],
     reducers: {
         AddSavingEntries: (state, action) => {
-          action.payload.forEach(
+          action.payload.forEach( savingEntry =>
               state.push({
-                  id: action.payload.id,
-                  name: action.payload.name,
-                  costBalance: action.payload.costBalance,
-                  creationDate: action.payload.creationDate,
-                  creator: action.payload.creator,
-                  description: action.payload.description,
-                  category: {id: action.payload.category.id, name: action.payload.category.name}
+                  id: savingEntry.id,
+                  name: savingEntry.name,
+                  costBalance: savingEntry.costBalance,
+                  creationDate: savingEntry.creationDate,
+                  creator: savingEntry.creator,
+                  description: savingEntry.description,
+                  category: {id: savingEntry.category.id, name: savingEntry.category.name}
               })
           )
         },

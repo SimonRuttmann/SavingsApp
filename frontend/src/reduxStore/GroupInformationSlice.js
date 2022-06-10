@@ -16,8 +16,6 @@ const groupInformationSlice = createSlice({
         //Based on UserService - GroupController userservice/group/
         //Long id, String groupName, boolean personGroup
         AddGroupCoreInformation: (state, action) => {
-            console.log("ADD GROUP CORE INFORMATION");
-            console.log(action)
             action.payload.forEach( group =>
                 state.push({
                     id: group.id,
@@ -76,5 +74,5 @@ export const fetchGroupCoreInformationFromServer = () => (dispatch) => {
 
 export const fetchGeneralInformationToGroupFromServer = (groupId) => (dispatch) => {
     let response = getGroupInfo(groupId)
-    response.then(response => dispatch(AddGeneralInformationToGroup(response.data)));
+    response.then(response => dispatch(AddGeneralInformationToGroup({id: groupId, ...response.data})));
 }

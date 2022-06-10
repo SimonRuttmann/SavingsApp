@@ -63,8 +63,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
     const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
 
     useEffect( () => {
-        console.log("start call")
-        console.log(groupInformationStore)
         if(!isLoadingCoreInformation) return;
 
         fetchContentInformation();
@@ -72,12 +70,11 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
 
     },[groupInformationStore])
 
-    console.log("rendering")
+
+    console.log("In Render GroupInformationStore:")
     console.log(groupInformationStore)
+
     const fetchContentInformation = () => {
-        console.log("GROUP INFROMATION STORE EFFECTIVE")
-        console.log(groupInformationStore)
-        console.log(groupInformationStore.value)
 
         //Get personal group
         let personGroup = groupInformationStore.find(group => group.personGroup === true);
