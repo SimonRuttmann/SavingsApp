@@ -51,7 +51,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
     }
 
     useEffect( () => {
-        dispatch(login(KeyCloakService.token));
+        dispatch(login(KeyCloakService.getToken()));
 
         dispatch(fetchGroupCoreInformationFromServer(getHeader()))
             .then(() => fetchContentInformation());

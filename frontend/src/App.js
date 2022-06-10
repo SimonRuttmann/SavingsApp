@@ -3,7 +3,7 @@ import Homepage from "./components/HomepageSite/Homepage";
 import GuestSite from "./components/GuestSite";
 import {BrowserRouter, Route, Router, Switch} from "react-router-dom";
 import PrivateRoute from "./api/helper/PrivateRoute.js";
-import keycloakService from "./api/Auth.js";
+import keycloakService, {_kc} from "./api/Auth.js";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 
 function App() {
@@ -96,7 +96,7 @@ function App() {
 
   return (
       <div>
-        <ReactKeycloakProvider authClient={keycloakService}>
+        <ReactKeycloakProvider authClient={_kc}>
         <BrowserRouter>
         <Switch>
             <Route exact path="/">
