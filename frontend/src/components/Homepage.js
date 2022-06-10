@@ -181,68 +181,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     </Card.Body>
                 </Card>
             </CardGroup>
-            {/*<form>
-                <CardGroup >
-                    <Card>
-                        <label>Name:</label>
-                        <input onChange={() => setSelectedEntry()} value={selectedEntry.name}/>
-                    </Card>
-                    <Card>
-                        <label>Kosten</label>
-                        <input onChange={() => setSelectedEntry()} value={selectedEntry.costs}/>
-                    </Card>
-                    <Card>
-                        <label>Kategorie</label>
-                        <input onChange={() => setSelectedEntry()}/>
-                    </Card>
-                    <Card>
-                        <Button onClick={() => AddEntry(selectedEntry)} variant="secondary">Eintrag erstellen</Button>
-                    </Card>
-                </CardGroup>
-                <CardGroup>
-                    <Card>
-                        <label>Datum</label>
-                        <input onChange={() => setSelectedEntry()} value={selectedEntry.timestamp}/>
-                    </Card>
-                    <Card>
-                        <label>Beschreibung</label>
-                        <input onChange={() => setSelectedEntry()}/>
-                    </Card>
-                </CardGroup>
-            </form>*/}
-            <br/>
-            <Container>
-                <Row>
-                    { categories.map(categorie =>
-                        <Col>
-                            <CloseButton onClick={() => {
-                                setCategories([...categories.filter((c) => c.name !== categorie.name)])
-                            }}/>
-                            <ToggleButton
-                                size="lg"
-                                className="mb-2"
-                                id="toggle-check"
-                                type="checkbox"
-                                variant="outline-primary"
-                                checked={categorie.checked}
-                                value="1"
-                                onClick={() => {
-                                    setCategories([...categories.filter((c) => c.name !== categorie.name), {
-                                        name: categorie.name,
-                                        checked: !categorie.checked
-                                    }])
-                                }}
-                            >
-                                {categorie.name}
-                            </ToggleButton>
-                        </Col>
-                    )}
-                    <Col> {
-                            <CategoriesPopup categories={categories} setCategories={setCategories}/>
-                    }
-                    </Col>
-                </Row>
-            </Container>
             <CardGroup>
                 <Card style={chartStyle}>
                     <Bar
