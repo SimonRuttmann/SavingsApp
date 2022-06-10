@@ -1,5 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {getAllCategorys} from "../api/services/Content";
+import {useSelector} from "react-redux";
+import {selectUserStore} from "./UserSlice";
 
 /**
  *  Category Schema
@@ -34,6 +36,8 @@ export default categorySlice.reducer
 export const selectCategoryStore = (state) => state.category.value;
 
 export const fetchCategoriesFromServer = (groupId) => (dispatch) => {
+    let token = useSelector(selectUserStore).token;
+
     let response = getAllCategorys(groupId, null)
     response.then(response => dispatch(response.data));
 }

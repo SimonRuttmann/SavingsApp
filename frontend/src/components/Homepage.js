@@ -34,7 +34,8 @@ import categorySlice, {selectCategoryStore} from "../reduxStore/CategorySlice";
 import savingEntrySlice, {AddSavingEntry, selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
 import groupInformationSlice, {selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
 import advertisementSlice from "../reduxStore/AdvertisementSlice";
-import {selectUserStore} from "../reduxStore/UserSlice";
+import {login, logout, selectUserStore} from "../reduxStore/UserSlice";
+import KeyCloakService from "../api/Auth";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 //todo remove inline styles
@@ -63,9 +64,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const debug = true;
 
 
-    /**
-     * Redux-Store
-     */
+    /** * * * * * * *
+     ** Redux-Store *
+     ** * * * * * * */
     const savingEntryStore      = useSelector(selectSavingEntryStore);
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const userStore             = useSelector(selectUserStore);
@@ -73,6 +74,29 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const dispatch = useDispatch()
 
 
+    useEffect( () => {
+        dispatch(login(KeyCloakService.token));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+    
+
+    KeyCloakService.updateToken(5)
+        .then((refreshed) => refreshToken(refreshed))
+        .catch(function() {
+            //TODO redirect to start page
+            dispatch((logout()))
+            console.log('Failed to refresh the token, or the session has expired');
+        });
+
+    const refreshToken = (refreshed) => {
+        if (refreshed) {
+            dispatch(login(KeyCloakService.token));
+        } else {
+            console.log('Token is still valid');
+        }
+    };
+    
+    
     if(debug) {
         console.log(savingEntryStore)
         console.log(groupInformationStore)
