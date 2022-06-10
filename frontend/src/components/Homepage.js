@@ -29,8 +29,12 @@ import {useHistory} from "react-router-dom";
 import Chat from "./Chat";
 import SettingsPopup from "./SettingsPopup";
 import CategoriesPopup from "./CategoriesPopup";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {updateInflationRate} from "../features/inflation";
+import categorySlice from "../reduxStore/CategorySlice";
+import savingEntrySlice, {AddSavingEntry} from "../reduxStore/SavingEntrySlice";
+import groupInformationSlice from "../reduxStore/GroupInformationSlice";
+import advertisementSlice from "../reduxStore/AdvertisementSlice";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 //todo remove inline styles
@@ -56,6 +60,32 @@ const textstyle = {
 
 const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, setGuestSite, user }) => {
 
+    const debug = true;
+
+
+    /**
+     * Redux-Store
+     */
+    const savingEntryStore      = useSelector((state) => state.savingEntry.value);
+    const groupInformationStore = useSelector((state) => state.groupInformation.value);
+    const userStore             = useSelector((state) => state.user.value);
+    const categoryStore         = useSelector((state) => state.category.value);
+    const dispatch = useDispatch()
+
+
+    if(debug) {
+        console.log(savingEntryStore)
+        console.log(groupInformationStore)
+        console.log(userStore)
+        console.log(categoryStore)
+
+        dispatch(AddSavingEntry())
+    }
+
+
+    /**
+     * Local states
+     */
     const [selectedGroup = groups[0], setSelectedGroup] = useState()
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
     const [selectedEntry = entrys[0], setSelectedEntry] = useState()
@@ -80,7 +110,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         }
     ])
 
-    const dispatch = useDispatch()
+
 
 
     const history = useHistory()
