@@ -1,45 +1,22 @@
 import React, {useEffect, useState} from "react";
-import {
-    ArcElement,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Legend,
-    LinearScale,
-    LineElement,
-    PointElement,
-    Title,
-    Tooltip
-} from 'chart.js';
+import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import {Bar, Line} from 'react-chartjs-2';
 import "../css/styles.scss"
 import "../css/homepage.scss"
-import {
-    Button,
-    ButtonGroup,
-    Card,
-    CardGroup,
-    Col,
-    Container,
-    Form,
-    Nav,
-    Navbar,
-    NavDropdown,
-    Row,
-    Table
-} from 'react-bootstrap'
+import {Button, ButtonGroup, Card, CardGroup, Col, Container, Form, Nav, Navbar, NavDropdown, Row, Table} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
 import Chat from "./Chat";
 import SettingsPopup from "./SettingsPopup";
 import {useDispatch, useSelector} from "react-redux";
-import {selectCategoryStore} from "../reduxStore/CategorySlice";
-import {selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
-import {selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
+import {fetchCategoriesFromServer, selectCategoryStore} from "../reduxStore/CategorySlice";
+import {fetchSavingEntriesFromServer, selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
+import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
 import {login, logout, selectUserStore} from "../reduxStore/UserSlice";
 import KeyCloakService from "../api/Auth";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import {fetchProcessingResultsFromServer, selectProcessingStore} from "../reduxStore/ProcessingSlice";
 const animatedComponents = makeAnimated();
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
@@ -56,17 +33,51 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const userStore             = useSelector(selectUserStore);
     const categoryStore         = useSelector(selectCategoryStore);
+    const processingStore       = useSelector(selectProcessingStore);
     const dispatch = useDispatch()
 
-    const mappedCategories = []/*categoryStore.map(category =>{
+    const mappedCategories = categoryStore.map(category =>{
         return{  label: category.name, value: category.id}
-    });*/
+    });
+
+    const defaultFilterInformation = {
+        "sortParameter": "CreationDate",
+        "timeInterval": "Day",
+        "startDate": null,
+        "endDate": null,
+        "personIds": [],
+        "categoryIds": []
+    }
 
     useEffect( () => {
         dispatch(login(KeyCloakService.token));
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        dispatch(fetchGroupCoreInformationFromServer(getHeader()))
+            .then(() => fetchContentInformation());
+
     },[])
     
+
+    const fetchContentInformation = () => {
+
+        //Get personal group
+        let personGroup = groupInformationStore.find(group => group.personGroup === true);
+
+        //Fetch all general information about the groups
+        for (let group of groupInformationStore){
+            dispatch(fetchGeneralInformationToGroupFromServer(getHeader(), group.id))
+        }
+
+        //fetch categories for this group
+        dispatch(fetchCategoriesFromServer(getHeader(), personGroup.id));
+        //fetch saving entries for this group
+        dispatch(fetchSavingEntriesFromServer(getHeader(), personGroup.id));
+        //fetch processing results
+        dispatch(fetchProcessingResultsFromServer(getHeader(), personGroup.id, defaultFilterInformation))
+
+    }
 
     KeyCloakService.updateToken(5)
         .then((refreshed) => refreshToken(refreshed))
@@ -98,7 +109,11 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
 
 
     const getHeader = () => {
-        let token = userStore.token;
+
+        let token;
+
+        if(userStore == null || userStore.token == null) token = KeyCloakService.token;
+        else token = userStore.token;
 
         return {
             headers: {
@@ -115,7 +130,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
     const [selectedEntry = entrys[0], setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
-    const [checked, setChecked] = useState(false);
+
     const [categories, setCategories] = useState([
         {
             name: 'Lernen',
@@ -144,7 +159,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
         history.push("/");
     }
 
-
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -154,14 +168,18 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     <Navbar.Collapse className="justify-content-end">
                         <Nav className="me-auto">
                             <NavDropdown title="Ansicht" id="basic-nav-dropdown">
-                                { groups.map(group => <NavDropdown.Item onClick={(e) => {
-                                    e.preventDefault()
-                                    setSelectedGroup(group)
-                                }} href={group.name}>{group.name}</NavDropdown.Item>)}
+                                { groups.map(group =>
+                                    <NavDropdown.Item
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            setSelectedGroup(group)
+                                        }}
+                                    >{group.name}
+                                    </NavDropdown.Item>)}
                             </NavDropdown>
                             <Chat/>
                         </Nav>
-                        <Button variant={"dark"} className="textStyle">{selectedGroup.name}</Button>
+                        <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
                         <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
                         <Button variant="primary" className="buttonStyle" onClick={() => navToGuestSite()}>Logout</Button>
                     </Navbar.Collapse>
@@ -188,7 +206,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                         <Form.Group className="CategoryArea">
                             <Form.Label>Kategorien</Form.Label>
                             <div className="Multiselect">
-                                <Select options={mappedCategories} components={animatedComponents}
+                                <Select options={mappedCategories} components={animatedComponents} onChange={(e) => setCategories(e)}
                                         isMulti />
                             </div>
                         </Form.Group>
