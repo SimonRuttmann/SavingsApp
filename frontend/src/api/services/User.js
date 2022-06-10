@@ -1,4 +1,4 @@
-import {Get, Post, Put} from "../Axios";
+import {Delete, Get, Post, Put} from "../Axios";
 
 const UserServiceBaseUrl = "http://localhost:8011/userservice/";
 const InvitationsBaseUrl = UserServiceBaseUrl + "invitation/";
@@ -7,43 +7,40 @@ const UserBaseUrl = UserServiceBaseUrl + "user/";
 
 
 //Invitations
-export function declineInvitation(groupId){
-    return Put(InvitationsBaseUrl + "decline/" + groupId)
+export function declineInvitation(groupId, header){
+    return Put(InvitationsBaseUrl + "decline/" + groupId,null,header)
 }
-export function acceptInvitation(groupId){
-    return Put(InvitationsBaseUrl + "accept/" + groupId)
-
+export function acceptInvitation(groupId, header){
+    return Put(InvitationsBaseUrl + "accept/" + groupId, null, header)
 }
-export function invite(body){
-    return Post(InvitationsBaseUrl + "invite", body)
-
+export function invite(body, header){
+    return Post(InvitationsBaseUrl + "invite", body, header)
 }
 export function receive(header){
-    return Get(InvitationsBaseUrl + "receive")
+    return Get(InvitationsBaseUrl + "receive",header)
 }
 
 //Groups
-export function register(body){
-    return Post(GroupBaseUrl + "register", body)
+export function register(body, header){
+    return Post(GroupBaseUrl + "register", body, header)
 }
-export function getGroup(headers){
-    return Get(GroupBaseUrl,headers)
+export function getGroup(header){
+    return Get(GroupBaseUrl,header)
 
 }
-export function deleteGroup(groupId){
-    return Delete(GroupBaseUrl + groupId)
+export function deleteGroup(groupId, header){
+    return Delete(GroupBaseUrl + groupId, header)
 
 }
-export function leaveGroup(groupId){
-    return Delete(GroupBaseUrl + "leave/" + groupId)
+export function leaveGroup(groupId, header){
+    return Delete(GroupBaseUrl + "leave/" + groupId, header)
 }
 
 //Users
-export function getUser(userid,header){
-    return Get(UserBaseUrl + userid)
+export function getUser(userid, header){
+    return Get(UserBaseUrl + userid, header)
 }
 export function getUsers(header){
-    return Get(UserBaseUrl + "usernames",headers)
-
+    return Get(UserBaseUrl + "usernames", header)
 }
 
