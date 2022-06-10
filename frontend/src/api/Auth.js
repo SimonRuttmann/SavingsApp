@@ -30,11 +30,14 @@ const getToken = () => _kc.token;
 
 const isLoggedIn = () => !!_kc.token;
 
-const updateToken = (successCallback) =>
-    _kc.updateToken(5)
-        .then(successCallback)
-        .catch(doLogin);
+const updateToken = () => {
+    return new Promise( (resolve, reject) => {
+        _kc.updateToken(5)
+            .then(resolve)
+            .catch(doLogin);
+    });
 
+}
 const getUsername = () => _kc.tokenParsed?.preferred_username;
 
 const hasRole = (roles) => roles.some((role) => _kc.hasRealmRole(role));
