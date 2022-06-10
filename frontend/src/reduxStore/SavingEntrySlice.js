@@ -1,4 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {
+    addCategory, addGroupEntry,
+    deleteCategory, deleteGroupEntry,
+    getAllCategorys,
+    getAllGroupEntries,
+    updateCategory, updateGroupEntry
+} from "../api/services/Content";
 
 /**
  * Saving Entry Schema
@@ -44,6 +51,27 @@ const savingEntrySlice = createSlice({
 })
 
 export const { AddSavingEntry, RemoveSavingEntry, UpdateSavingEntry } = savingEntrySlice.actions
+
 export default savingEntrySlice.reducer
 
 export const selectSavingEntryStore = (state) => state.savingEntry.value;
+
+export const fetchSavingEntriesFromServer = (header, groupId) => (dispatch) => {
+    let response = getAllGroupEntries(groupId, header)
+    response.then(response => dispatch(response.data));
+}
+
+export const addSavingEntryToServer = (header, groupId, savingEntry) => (dispatch) => {
+    let response = addGroupEntry(groupId, savingEntry, header)
+    response.then(response => dispatch(response.data));
+}
+
+export const updateSavingEntryToServer = (header, groupId, savingEntry) => (dispatch) => {
+    let response = updateGroupEntry(groupId, savingEntry, header)
+    response.then(response => dispatch(response.data));
+}
+
+export const deleteSavingEntryFromServer = (header, groupId, savingEntryId) => (dispatch) => {
+    let response = deleteGroupEntry(groupId, savingEntryId, header)
+    response.then(response => dispatch(response.data));
+}
