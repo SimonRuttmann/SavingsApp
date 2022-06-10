@@ -23,7 +23,7 @@ function Chat( user ) {
     const [data , setData] = useState([])
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const socket = new SockJS('http:localhost:8080/ws/chat')
+    const socket = new SockJS('http:localhost:8014/ws/chat')
     const stompClient = Stomp.over(socket)
 
     const startup = () => {
@@ -48,15 +48,15 @@ function Chat( user ) {
     }
 
     const subscribeToTopic = () => {
-        fetch(`http://localhost:8080/chat/sub/${topic}`)
+        fetch(`http://localhost:8014/chat/sub/${topic}`)
     }
 
     const unsubscribeToTopic = () => {
-        fetch(`http://localhost:8080/chat/unsub/${topic}`)
+        fetch(`http://localhost:8014/chat/unsub/${topic}`)
     }
 
     const getMessagesForTopic = () => {
-        fetch(`http://localhost:8080/chat/rooms/${topic}/messages`)
+        fetch(`http://localhost:8014/chat/rooms/${topic}/messages`)
             .then(response => response.json())
             .then(data => {
                 return data
@@ -64,7 +64,7 @@ function Chat( user ) {
     }
 
     const sendMessage = () => {
-        fetch('http://localhost:8080/chat/message',{
+        fetch('http://localhost:8014/chat/message',{
             body: {
                 'content': message,
                 'sender' : user,
