@@ -3,7 +3,7 @@ import Homepage from "./components/Homepage";
 import GuestSite from "./components/GuestSite";
 import {BrowserRouter, Route, Router, Switch} from "react-router-dom";
 import PrivateRoute from "./api/helper/PrivateRoute.js";
-import keycloakService from "./api/auth.js";
+import keycloakService from "./api/Auth.js";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 
 function App() {
@@ -119,7 +119,7 @@ function App() {
             <Route exact path="/">
               <GuestSite guestSite={guestSite} setGuestSite={setGuestSite}/>
             </Route>
-              <PrivateRoute> exact path="/homepage">
+              <PrivateRoute exact path="/homepage" >
                 <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry} guestSite={guestSite} setGuestSite={setGuestSite}/>
               </PrivateRoute>
         </Switch>

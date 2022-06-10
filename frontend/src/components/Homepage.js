@@ -10,7 +10,8 @@ import {
     Title, PointElement, LineElement
 } from 'chart.js';
 import {Bar, Line} from 'react-chartjs-2';
-import "../styles.css"
+import "../css/styles.scss"
+import "../css/homepage.scss"
 import {
     Button,
     ButtonGroup,
@@ -32,6 +33,7 @@ import {useDispatch} from "react-redux";
 import {updateInflationRate} from "../features/inflation";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
+//todo remove inline styles
 const chartStyle = {
     border: "0",
     padding: "3%",
@@ -50,8 +52,7 @@ const textstyle = {
     paddingTop: "1%",
     border: "0"
 }
-
-
+//
 
 const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry, setGuestSite, user }) => {
 
@@ -126,7 +127,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                 <Card>
                     <Card.Body>
             <Form>
-                <Row>
+                <Row className="searchBar">
                     <Col>
                         <Form.Group>
                             <Form.Label>Name</Form.Label>
@@ -149,8 +150,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                             </Form.Select>
                         </Form.Group>
                     </Col>
-                    <Col>
-                        <Form.Group>
+                    <Col className="buttonCol">
+                        <Form.Group className="buttonArea">
                             <Button onClick={() => AddEntry(selectedEntry)}>Eintrag erstellen</Button>
                             {!showMore &&  <Button variant="link" onClick={() => setShowMore(true)}>Zeig mehr</Button>}
                         </Form.Group>
@@ -181,68 +182,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
                     </Card.Body>
                 </Card>
             </CardGroup>
-            {/*<form>
-                <CardGroup >
-                    <Card>
-                        <label>Name:</label>
-                        <input onChange={() => setSelectedEntry()} value={selectedEntry.name}/>
-                    </Card>
-                    <Card>
-                        <label>Kosten</label>
-                        <input onChange={() => setSelectedEntry()} value={selectedEntry.costs}/>
-                    </Card>
-                    <Card>
-                        <label>Kategorie</label>
-                        <input onChange={() => setSelectedEntry()}/>
-                    </Card>
-                    <Card>
-                        <Button onClick={() => AddEntry(selectedEntry)} variant="secondary">Eintrag erstellen</Button>
-                    </Card>
-                </CardGroup>
-                <CardGroup>
-                    <Card>
-                        <label>Datum</label>
-                        <input onChange={() => setSelectedEntry()} value={selectedEntry.timestamp}/>
-                    </Card>
-                    <Card>
-                        <label>Beschreibung</label>
-                        <input onChange={() => setSelectedEntry()}/>
-                    </Card>
-                </CardGroup>
-            </form>*/}
-            <br/>
-            <Container>
-                <Row>
-                    { categories.map(categorie =>
-                        <Col>
-                            <CloseButton onClick={() => {
-                                setCategories([...categories.filter((c) => c.name !== categorie.name)])
-                            }}/>
-                            <ToggleButton
-                                size="lg"
-                                className="mb-2"
-                                id="toggle-check"
-                                type="checkbox"
-                                variant="outline-primary"
-                                checked={categorie.checked}
-                                value="1"
-                                onClick={() => {
-                                    setCategories([...categories.filter((c) => c.name !== categorie.name), {
-                                        name: categorie.name,
-                                        checked: !categorie.checked
-                                    }])
-                                }}
-                            >
-                                {categorie.name}
-                            </ToggleButton>
-                        </Col>
-                    )}
-                    <Col> {
-                            <CategoriesPopup categories={categories} setCategories={setCategories}/>
-                    }
-                    </Col>
-                </Row>
-            </Container>
             <CardGroup>
                 <Card style={chartStyle}>
                     <Bar
