@@ -1,8 +1,8 @@
-import Chat from "./Chat";
+import Chat from "../Chat";
 import SettingsPopup from "./SettingsPopup";
 import React from "react";
-import "../css/styles.scss"
-import "../css/homepage.scss"
+import "../../css/styles.scss"
+import "../../css/homepage.scss"
 import {Button, Container, Nav, Navbar, NavDropdown} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 

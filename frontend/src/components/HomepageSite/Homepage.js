@@ -1,22 +1,22 @@
 import React, {useEffect, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import {Bar, Line} from 'react-chartjs-2';
-import "../css/styles.scss"
-import "../css/homepage.scss"
+import "../../css/styles.scss"
+import "../../css/homepage.scss"
 import {Button, ButtonGroup, Card, CardGroup, Col, Container, Form, Nav, Navbar, NavDropdown, Row, Table} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
-import Chat from "./Chat";
+import Chat from "../Chat";
 import SettingsPopup from "./SettingsPopup";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchCategoriesFromServer, selectCategoryStore} from "../reduxStore/CategorySlice";
-import {fetchSavingEntriesFromServer, selectSavingEntryStore} from "../reduxStore/SavingEntrySlice";
-import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../reduxStore/GroupInformationSlice";
-import {login, logout, selectUserStore} from "../reduxStore/UserSlice";
-import KeyCloakService from "../api/Auth";
+import {fetchCategoriesFromServer, selectCategoryStore} from "../../reduxStore/CategorySlice";
+import {fetchSavingEntriesFromServer, selectSavingEntryStore} from "../../reduxStore/SavingEntrySlice";
+import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
+import {login, logout, selectUserStore} from "../../reduxStore/UserSlice";
+import KeyCloakService from "../../api/Auth";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import {fetchProcessingResultsFromServer, selectProcessingStore} from "../reduxStore/ProcessingSlice";
+import {fetchProcessingResultsFromServer, selectProcessingStore} from "../../reduxStore/ProcessingSlice";
 import {Diagram1} from "./Diagrams/Diagram1";
 import {Diagram2} from "./Diagrams/Diagram2";
 import {Diagram3} from "./Diagrams/Diagram3";
