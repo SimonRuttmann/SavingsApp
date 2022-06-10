@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import Homepage from "./components/Homepage";
+import Homepage from "./components/HomepageSite/Homepage";
 import GuestSite from "./components/GuestSite";
 import {BrowserRouter, Route, Router, Switch} from "react-router-dom";
 import PrivateRoute from "./api/helper/PrivateRoute.js";
