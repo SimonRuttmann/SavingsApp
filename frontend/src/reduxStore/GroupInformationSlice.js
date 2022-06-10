@@ -62,8 +62,14 @@ export const selectGroupInformationStore = (state) => state.groupInformation;
 
 
 export const fetchGroupCoreInformationFromServer = (header) => (dispatch) => {
-    let response = getGroup(header)
-    response.then(response => dispatch(AddGroupCoreInformation(response.data)));
+
+    return new Promise((resolve, reject) => {
+        let response = getGroup(header)
+        response
+            .then(response => dispatch(AddGroupCoreInformation(response.data)))
+            .then(resolve(null)) //Dispatch returns null
+            .catch(reject("Error contacting server"));
+    });
 }
 
 export const fetchGeneralInformationToGroupFromServer = (header, groupId) => (dispatch) => {

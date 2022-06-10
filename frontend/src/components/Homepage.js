@@ -52,11 +52,10 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry,
     useEffect( () => {
         dispatch(login(KeyCloakService.token));
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-
         dispatch(fetchGroupCoreInformationFromServer(getHeader()))
             .then(() => fetchContentInformation());
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     
 
