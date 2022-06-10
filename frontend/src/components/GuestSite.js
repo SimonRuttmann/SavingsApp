@@ -56,6 +56,7 @@ const GuestSite = () => {
     //console.log("Render", state)
 
     useEffect(() => {
+        console.log("erster Redirekt")
             Redirect()
             getAdvertisement().then((response)=> {
                 dispatchAdvertisement({type: getAdvertisementDataSuccess, payload: response.data})
