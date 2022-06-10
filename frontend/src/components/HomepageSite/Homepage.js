@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import "../../css/styles.scss"
@@ -54,13 +55,29 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
         dispatch(login(KeyCloakService.getToken()));
 
         dispatch(fetchGroupCoreInformationFromServer())
-            .then(() => fetchContentInformation());
+            .then(setLoadingCoreInformation(true));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
-    
 
+    const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
+
+    useEffect( () => {
+        console.log("start call")
+        console.log(groupInformationStore)
+        if(!isLoadingCoreInformation) return;
+
+        fetchContentInformation();
+        setLoadingCoreInformation(false);
+
+    },[groupInformationStore])
+
+    console.log("rendering")
+    console.log(groupInformationStore)
     const fetchContentInformation = () => {
+        console.log("GROUP INFROMATION STORE EFFECTIVE")
+        console.log(groupInformationStore)
+        console.log(groupInformationStore.value)
 
         //Get personal group
         let personGroup = groupInformationStore.find(group => group.personGroup === true);
