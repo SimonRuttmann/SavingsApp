@@ -138,9 +138,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, DeleteEntry 
         history.push("/");
     }
 
-    console.log("group")
-    console.log(groups)
-
     return (
         <React.Fragment>
 
