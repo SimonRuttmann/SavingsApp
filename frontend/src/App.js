@@ -119,9 +119,9 @@ function App() {
             <Route exact path="/">
               <GuestSite guestSite={guestSite} setGuestSite={setGuestSite}/>
             </Route>
-              <PrivateRoute exact path="/homepage" >
+            <Route> exact path="/homepage" >
                 <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry} guestSite={guestSite} setGuestSite={setGuestSite}/>
-              </PrivateRoute>
+            </Route>
         </Switch>
         </BrowserRouter>
         </ReactKeycloakProvider>
