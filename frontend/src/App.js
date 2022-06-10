@@ -90,10 +90,6 @@ function App() {
     setEntrys([...entrys, {id: entrys.length + 1, name: newEntry.name, costs: newEntry.costs, user: 'Robin01', group: 'WG', timestamp: newEntry.timestamp}])
   }
 
-  const DeleteEntry = (id) => {
-    setEntrys(entrys.filter((entry) => entry.id !== id))
-  }
-
   return (
       <div>
         <ReactKeycloakProvider authClient={_kc}>
@@ -103,7 +99,7 @@ function App() {
               <GuestSite/>
             </Route>
             <PrivateRoute exact path="/homepage" >
-                <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry} DeleteEntry={DeleteEntry}/>
+                <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry}/>
             </PrivateRoute>
         </Switch>
         </BrowserRouter>
