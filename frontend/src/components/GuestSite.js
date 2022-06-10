@@ -2,7 +2,6 @@ import React, {useEffect, useReducer} from "react";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Gradient from 'rgt'
 import '../styles.css'
 import keycloakService from "../api/Auth.js";
 import fetchAdvertisement from "../api/services/Advertisement";
@@ -13,6 +12,7 @@ const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
 const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten. " +
     "Teilen Sie Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
 
+//Reducer action types
 const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
 const getAdvertisementDataError = "getAdvertisementDataError";
 
@@ -41,6 +41,7 @@ const reducer = (state, action) => {
     }
 }
 
+//Is inserted into state if new data can't be pulled
 const mockData = {
     diagram1: '8946',
     diagram2: '5632',
@@ -49,7 +50,7 @@ const mockData = {
 
 const GuestSite = () => {
     const [state, dispatch] = useReducer(reducer, initalState);
-    console.log("Render", state)
+    //console.log("Render", state)
 
     useEffect(() => {
             fetchAdvertisement().then((response)=> {
