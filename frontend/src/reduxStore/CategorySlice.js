@@ -12,6 +12,14 @@ const categorySlice = createSlice({
     name: 'category',
     initialState: [],
     reducers: {
+        AddCategories: (state, action) => {
+            action.payload.forEach(category => {
+                state.push({
+                    id: category.id,
+                    name: category.name
+                })
+            })
+        },
         AddCategory: (state, action) => {
             state.push({
                 id: action.payload.id,
@@ -28,7 +36,7 @@ const categorySlice = createSlice({
     }
 })
 
-export const { AddCategory, RemoveCategory, UpdateCategory } = categorySlice.actions
+export const { AddCategory, RemoveCategory, UpdateCategory, AddCategories } = categorySlice.actions
 
 export default categorySlice.reducer
 
@@ -36,20 +44,20 @@ export const selectCategoryStore = (state) => state.category;
 
 export const fetchCategoriesFromServer = (groupId) => (dispatch) => {
     let response = getAllCategorys(groupId)
-    response.then(response => dispatch(response.data));
+    response.then(response => dispatch(AddCategories(response.data)));
 }
 
 export const addCategoryToServer = (groupId, category) => (dispatch) => {
     let response = addCategory(groupId, category)
-    response.then(response => dispatch(response.data));
+    response.then(response => dispatch(AddCategory(response.data)));
 }
 
 export const updateCategoryToServer = (groupId, category) => (dispatch) => {
     let response = updateCategory(groupId, category)
-    response.then(response => dispatch(response.data));
+    response.then(response => dispatch(UpdateCategory(response.data)));
 }
 
 export const deleteCategoryFromServer = (groupId, categoryId) => (dispatch) => {
     let response = deleteCategory(groupId, categoryId)
-    response.then(response => dispatch(response.data));
+    response.then(response => dispatch(RemoveCategory(response.data)));
 }
