@@ -132,8 +132,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     console.log(processingStore)
 
     useEffect(()=>{
-        if(categoryStore != null && Array.isArray(categoryStore))
-            setSelectedFilterCategories(categoryStore)
+        if(categoryStore != null && Array.isArray(categoryStore)) {
+            setSelectedFilterCategories(mappedCategories)
+        }
     },[categoryStore])
 
     const mappedCategories = categoryStore.map(category =>{
