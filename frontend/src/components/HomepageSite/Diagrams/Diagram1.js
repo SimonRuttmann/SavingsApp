@@ -13,13 +13,13 @@ export const Diagram1 = ({diagramValues}) => {
                     datasets: [
                         {
                             // Label for bars
-                            label: "total count/value",
+                            label: "Einnahmen vs Ausgaben",
                             // Data or value of your each variable
                             data: [diagramValues.income, -diagramValues.outcome, diagramValues.balance, diagramValues.futureBalance],
                             // Color of each bar
                             backgroundColor: ["green", "red", "yellow", "orange"],
                             // Border color of each bar
-                            borderColor: ["aqua", "green"],
+                            borderColor: "gray",
                             borderWidth: 0.5,
                         },
                     ],
