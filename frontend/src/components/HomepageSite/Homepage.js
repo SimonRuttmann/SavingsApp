@@ -3,7 +3,7 @@ import React, {useEffect, useReducer, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import "../../css/styles.scss"
 import "../../css/homepage.scss"
-import {CardGroup} from 'react-bootstrap'
+import {CardGroup, Row} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
@@ -28,6 +28,7 @@ import {Diagram3} from "./Diagrams/Diagram3";
 import {EntryTable} from "./EntryTable";
 import {NavigationBar} from "./NavigationBar";
 import {EntryCreationBar} from "./EntryCreationBar";
+import {SearchBar} from "./SearchBar";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
@@ -187,11 +188,17 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
      */
     const [selectedGroup = groups[0], setSelectedGroup] = useState()
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
+
+    //CreateEntryBar states for entry creation parameters
     const [selectedEntry, setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
 
-    const [selectedCreateCategory, setSelectedCreateCategory] = useState()
+    //SearchBar states for search parameters
+    const [selectedUsers, setSelectedUsers] = useState()
     const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
+    const [selectedTimeWindow, setSelectedTimeWindow] = useState()
+    const timeWindow = [{label : "day"},{label : "week"},{label : "month"},{label : "year"}]
+
 
     const history = useHistory()
 
@@ -232,17 +239,26 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
             {/**
              Searchbar, which is a bar to create entries?
              */}
-            <CardGroup>
-                <EntryCreationBar setSelectedEntry={setSelectedEntry}
-                                  selectedEntry={selectedEntry}
-                                  mappedCategories={mappedCategories}
-                                  AddEntry={addEntry}
-                                  entryAction = {entryAction}
-                                  entry = {entryState}
-                                  setEntry={dispatchEntry}
-                                  setShowMore={setShowMore}
-                                  showMore={showMore}/>
-            </CardGroup>
+            <EntryCreationBar setSelectedEntry = {setSelectedEntry}
+                              selectedEntry = {selectedEntry}
+                              mappedCategories = {mappedCategories}
+                              AddEntry = {addEntry}
+                              entryAction = {entryAction}
+                              entry = {entryState}
+                              setEntry = {dispatchEntry}
+                              setShowMore = {setShowMore}
+                              showMore = {showMore}
+            />
+            <SearchBar mappedCategories = {mappedCategories}
+                       setSelectedFilterCategories = {setSelectedFilterCategories}
+                       selectedFilterCategories = {selectedFilterCategories}
+                       users = {[{label:"Testuser1"},{label:"Testuser2"}]}
+                       selectedUsers = {selectedUsers}
+                       setSelectedUsers = {setSelectedUsers}
+                       timeWindow = {timeWindow}
+                       selectedTimeWindow = {selectedTimeWindow}
+                       setSelectedTimeWindow = {setSelectedTimeWindow}
+            />
 
 
             {/**
