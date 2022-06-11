@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface IUserManagementService {
 
     //Person
-    PersonDTO getUser(UUID userId);
+    PersonDTO getUser(HttpServletRequest request);
     Collection<String> getAllUsernames();
 
     //Group
