@@ -43,7 +43,8 @@ const savingEntrySlice = createSlice({
             });
         },
         RemoveSavingEntry: (state, action) => {
-            state = state.filter(savingEntry => savingEntry.id !== action.payload.id);
+
+            return state.filter(savingEntry => savingEntry.id !== action.payload);
         },
         UpdateSavingEntry: (state, action) => {
             let savingEntry = state.find(savingEntry => savingEntry.id === action.payload.id);
@@ -80,5 +81,5 @@ export const updateSavingEntryToServer = (groupId, savingEntry) => (dispatch) =>
 
 export const deleteSavingEntryFromServer = (groupId, savingEntryId) => (dispatch) => {
     let response = deleteGroupEntry(groupId, savingEntryId)
-    response.then(response => dispatch(RemoveSavingEntry(response.data)));
+    response.then(response => dispatch(RemoveSavingEntry(savingEntryId)));
 }
