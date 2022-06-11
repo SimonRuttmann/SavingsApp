@@ -15,7 +15,7 @@ import {
     selectSavingEntryStore
 } from "../../reduxStore/SavingEntrySlice";
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
-import {login, logout, selectUserStore} from "../../reduxStore/UserSlice";
+import {fetchUserDataFromServer, login, logout, selectUserStore} from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
 import {
     fetchProcessingResultsFromServer,
@@ -34,12 +34,11 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 
 const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,setActiveGroupId}) => {
 
-    const debug = false;
 
+    /**
+     *  Access Redux-Stores
+     */
 
-    /** * * * * * * *
-     ** Redux-Store *
-     ** * * * * * * */
     const savingEntryStore      = useSelector(selectSavingEntryStore);
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const userStore             = useSelector(selectUserStore);
@@ -47,9 +46,38 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
     const processingStore       = useSelector(selectProcessingStore);
     const dispatch = useDispatch()
 
-    const mappedCategories = categoryStore.map(category =>{
-        return{  label: category.name, value: category.id}
-    });
+
+    /**
+     * Configure Keycloak
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+
+    KeyCloakService.updateToken()
+        .then((refreshed) => refreshToken(refreshed))
+        .catch(function() {
+            dispatch((logout()))
+            console.log('Failed to refresh the token, or the session has expired');
+        });
+
+
+    const refreshToken = (refreshed) => {
+        if (refreshed) {
+            dispatch(login(KeyCloakService.getToken()));
+        } else {
+            console.log('Token is still valid');
+        }
+    };
+
+    const history = useHistory()
+
+    const navToGuestSite = () => {
+        history.push("/");
+    }
+
+    /**
+     * Initialize stores with data fetched from servers
+     * -----------------------------------------------------------------------------------------------------------------
+     */
 
     const defaultFilterInformation = {
         "sortParameter": "CreationDate",
@@ -60,42 +88,24 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
         "categoryIds": []
     }
 
+    const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
+
     useEffect( () => {
         dispatch(login(KeyCloakService.getToken()));
-
+        dispatch(fetchUserDataFromServer());
         dispatch(fetchGroupCoreInformationFromServer())
             .then(setLoadingCoreInformation(true));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
-    useEffect(()=>{
-        if(categoryStore != null && Array.isArray(categoryStore))
-            setSelectedFilterCategories(categoryStore)
-    },[categoryStore])
-
-    const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
-
     useEffect( () => {
         if(!isLoadingCoreInformation) return;
-
         fetchContentInformation();
         setLoadingCoreInformation(false);
         setActiveGroupId(groupInformationStore.find(group => group.personGroup === true).id);
     },[groupInformationStore])
 
-
-    console.log("In Render GroupInformationStore:")
-    console.log(groupInformationStore)
-
-    console.log("In Render savingEntryStore:")
-    console.log(savingEntryStore)
-
-    console.log("In Render categoryStore:")
-    console.log(categoryStore)
-
-    console.log("In Render processingStore:")
-    console.log(processingStore)
 
     const fetchContentInformation = () => {
 
@@ -116,20 +126,32 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
 
     }
 
-    KeyCloakService.updateToken()
-        .then((refreshed) => refreshToken(refreshed))
-        .catch(function() {
-            dispatch((logout()))
-            console.log('Failed to refresh the token, or the session has expired');
-        });
 
-    const refreshToken = (refreshed) => {
-        if (refreshed) {
-            dispatch(login(KeyCloakService.getToken()));
-        } else {
-            console.log('Token is still valid');
-        }
-    };
+    /**
+     * Update local states
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+
+    console.log("In Render GroupInformationStore:")
+    console.log(groupInformationStore)
+
+    console.log("In Render savingEntryStore:")
+    console.log(savingEntryStore)
+
+    console.log("In Render categoryStore:")
+    console.log(categoryStore)
+
+    console.log("In Render processingStore:")
+    console.log(processingStore)
+
+    useEffect(()=>{
+        if(categoryStore != null && Array.isArray(categoryStore))
+            setSelectedFilterCategories(categoryStore)
+    },[categoryStore])
+
+    const mappedCategories = categoryStore.map(category =>{
+        return{  label: category.name, value: category.id}
+    });
 
     const entryAction = {
         addCreator: "addCreator",
@@ -140,6 +162,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
         updateEntryCreationDate : "updateEntryCreationDate",
         updateEntry : "updateEntry"
     }
+
     const entryReducer = (state, action) => {
         console.log("ACTION: ",action)
         console.log("STATE: ",state)
@@ -193,11 +216,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
     const [selectedCreateCategory, setSelectedCreateCategory] = useState()
     const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
 
-    const history = useHistory()
-
-    const navToGuestSite = () => {
-        history.push("/");
-    }
 
     const deleteEntry = (id) => {
         console.log(id)
