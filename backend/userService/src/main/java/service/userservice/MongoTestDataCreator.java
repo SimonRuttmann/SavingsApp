@@ -3,6 +3,7 @@ package service.userservice;
 import documentDatabaseModule.model.SavingEntry;
 import documentDatabaseModule.service.GroupDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import documentDatabaseModule.model.Category;
@@ -22,10 +23,11 @@ import java.util.Random;
 @Service
 public class MongoTestDataCreator {
 
+    private final MongoOperations mongoOps;
 
     private final GroupDocumentService groupDocumentService;
 
-    private static final int LARGEST_GROUP_ID =10;
+    private static final int LARGEST_GROUP_ID = 10;
 
     private static final Random random = new Random();
 
@@ -36,13 +38,15 @@ public class MongoTestDataCreator {
     ArrayList<Category> categories = new ArrayList<>();
 
     @Autowired
-    public MongoTestDataCreator(GroupDocumentService groupDocumentService) throws ParseException {
+    public MongoTestDataCreator(MongoOperations mongoOps, GroupDocumentService groupDocumentService) throws ParseException {
+        this.mongoOps = mongoOps;
         log.info("Starting mongo test data routine");
-
         this.groupDocumentService = groupDocumentService;
     }
 
     public void createTestData(){
+        mongoOps.dropCollection("groupDocuments");
+        mongoOps.createCollection("groupDocuments");
         addDocuments();
         fillPersonalGroups();
     }
