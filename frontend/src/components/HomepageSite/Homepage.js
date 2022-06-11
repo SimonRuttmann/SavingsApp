@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import "../../css/styles.scss"
 import "../../css/homepage.scss"
@@ -9,6 +9,7 @@ import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchCategoriesFromServer, selectCategoryStore} from "../../reduxStore/CategorySlice";
 import {
+    addSavingEntryToServer,
     deleteSavingEntryFromServer,
     fetchSavingEntriesFromServer,
     selectSavingEntryStore
@@ -31,7 +32,7 @@ import {EntryCreationBar} from "./EntryCreationBar";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 
-const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGroupId,setActiveGroupId}) => {
+const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,setActiveGroupId}) => {
 
     const debug = false;
 
@@ -67,6 +68,11 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGro
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
+
+    useEffect(()=>{
+        if(categoryStore != null && Array.isArray(categoryStore))
+            setSelectedFilterCategories(categoryStore)
+    },[categoryStore])
 
     const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
 
@@ -124,18 +130,56 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGro
             console.log('Token is still valid');
         }
     };
-    
-    
-    if(debug) {
-        console.log(savingEntryStore)
-        console.log(groupInformationStore)
-        console.log(userStore)
-        console.log(categoryStore)
 
-      //  dispatch(AddSavingEntry({id: 0, name: "Meine saving entry"}))
-      //  savingEntryStore.forEach(savingEntry => console.log(savingEntry))
-      //  console.log(userStore.name)
+    const entryAction = {
+        addCreator: "addCreator",
+        updateEntryName : "updateEntryName",
+        updateEntryDesc : "updateEntryDesc",
+        updateEntryCostBalance : "updateEntryCostBalance",
+        updateEntryCategory : "updateEntryCategory",
+        updateEntryCreationDate : "updateEntryCreationDate",
+        updateEntry : "updateEntry"
     }
+    const entryReducer = (state, action) => {
+        console.log("ACTION: ",action)
+        console.log("STATE: ",state)
+        switch (action.type){
+            case entryAction.updateEntryName:
+                return {...state, name: action.payload}
+            case entryAction.updateEntryDesc:
+                return {...state, description: action.payload}
+            case entryAction.updateEntryCostBalance:
+                return {...state, costBalance: action.payload}
+            case entryAction.updateEntryCategory:
+                return {...state, category: action.payload}
+            case entryAction.updateEntryCreationDate:
+                return {...state, creationDate: action.payload}
+            case entryAction.updateEntry:
+                return {
+                    ...state,
+                    name: action.payload.name,
+                    description: action.payload.description,
+                    costBalance: action.payload.costBalance,
+                    creationDate: action.payload.creationDate,
+                    category: action.payload.category
+                }
+            case entryAction.addCreator:
+                return {...state, creator: action.payload}
+            default:
+                return state;
+        }
+    }
+    let initialEntryState = {
+        name: null,
+        description: null,
+        costBalance: null,
+        creationDate: null,
+        category: null,
+        creator: null
+    }
+
+    const [entryState, dispatchEntry] = useReducer(entryReducer, initialEntryState);
+
 
 
     /**
@@ -143,11 +187,11 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGro
      */
     const [selectedGroup = groups[0], setSelectedGroup] = useState()
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
-    const [selectedEntry = entrys[0], setSelectedEntry] = useState()
+    const [selectedEntry, setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
 
     const [selectedCreateCategory, setSelectedCreateCategory] = useState()
-    const [selectedFilterCategories, setselectedFilterCategories] = useState(categoryStore)
+    const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
 
     const history = useHistory()
 
@@ -160,6 +204,14 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGro
         dispatch(deleteSavingEntryFromServer(getActiveGroupId, id));
         dispatch(removeSortedAndFilteredSavingEntry(id))
         setSelectedEntry(null);
+    }
+    const addEntry = (id) => {
+        console.log(id)
+        dispatch(addSavingEntryToServer(getActiveGroupId, id))
+            .then(() => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+                setSelectedEntry(null);
+            })
     }
 
     return (
@@ -184,8 +236,10 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGro
                 <EntryCreationBar setSelectedEntry={setSelectedEntry}
                                   selectedEntry={selectedEntry}
                                   mappedCategories={mappedCategories}
-                                  setSelectedCategories={setSelectedCreateCategory}
-                                  AddEntry={AddEntry}
+                                  AddEntry={addEntry}
+                                  entryAction = {entryAction}
+                                  entry = {entryState}
+                                  setEntry={dispatchEntry}
                                   setShowMore={setShowMore}
                                   showMore={showMore}/>
             </CardGroup>
@@ -204,7 +258,12 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGro
                 Table showing all entries
              */}
             <CardGroup>
-                <EntryTable entries={processingStore.savingEntryDTOs} selectedEntry={selectedEntry} setSelectedEntry={setSelectedEntry} deleteEntry={deleteEntry} />
+                <EntryTable entries={processingStore.savingEntryDTOs}
+                            selectedEntry={selectedEntry}
+                            setSelectedEntry={dispatchEntry}
+                            deleteEntry={deleteEntry}
+                            entryAction={entryAction}
+                />
             </CardGroup>
 
         </React.Fragment>

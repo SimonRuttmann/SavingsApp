@@ -63,7 +63,6 @@ function App() {
                 <Homepage groups={groups}
                           AddGroup={AddGroup}
                           DeleteGroup={DeleteGroup}
-                          entrys={entrys}
                           AddEntry={AddEntry}
                           getActiveGroupId={getActiveGroupId}
                           setActiveGroupId={setActiveGroupId}/>
