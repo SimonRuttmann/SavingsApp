@@ -14,13 +14,13 @@ export const SearchBar = ({setSelectedEntry, selectedEntry, mappedCategories, se
                         <Col>
                             <Form.Group>
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" placeholder="Name eintragen" onChange={() => setSelectedEntry()} value={selectedEntry.name} />
+                                <Form.Control type="text" placeholder="Name eintragen" onChange={() => setSelectedEntry()} value={ selectedEntry != null ? selectedEntry.name : null} />
                             </Form.Group>
                         </Col>
                         <Col>
                             <Form.Group>
                                 <Form.Label>Kosten</Form.Label>
-                                <Form.Control type="text" placeholder="Kosten eintragen" onChange={() => setSelectedEntry()} value={selectedEntry.costs} />
+                                <Form.Control type="text" placeholder="Kosten eintragen" onChange={() => setSelectedEntry()} value={selectedEntry != null ? selectedEntry.costBalance : null} />
                             </Form.Group>
                         </Col>
                         <Col>
@@ -45,7 +45,7 @@ export const SearchBar = ({setSelectedEntry, selectedEntry, mappedCategories, se
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Datum</Form.Label>
-                                    <Form.Control type="text" placeholder="Datum eintragen" onChange={() => setSelectedEntry()} value={selectedEntry.timestamp}/>
+                                    <Form.Control type="text" placeholder="Datum eintragen" onChange={() => setSelectedEntry()} value={selectedEntry != null ? selectedEntry.timestamp : null}/>
                                 </Form.Group>
                             </Col>
                             <Col>
