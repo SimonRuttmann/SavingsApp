@@ -81,5 +81,5 @@ export const updateSavingEntryToServer = (groupId, savingEntry) => (dispatch) =>
 
 export const deleteSavingEntryFromServer = (groupId, savingEntryId) => (dispatch) => {
     let response = deleteGroupEntry(groupId, savingEntryId)
-    response.then(response => dispatch(RemoveSavingEntry(savingEntryId)));
+    response.then(() => dispatch(RemoveSavingEntry(savingEntryId)));
 }
