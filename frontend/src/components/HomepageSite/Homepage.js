@@ -194,7 +194,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
 
     //SearchBar states for search parameters
-    const [selectedUsers, setSelectedUsers] = useState()
+    const [selectedUsers, setSelectedUsers] = useState([])
     const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
     const [selectedTimeWindow, setSelectedTimeWindow] = useState()
     const timeWindow = [{label : "day"},{label : "week"},{label : "month"},{label : "year"}]
@@ -315,7 +315,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
             <CardGroup>
                 <Diagram1 diagramValues={processingStore.balanceProcessResultDTO} />
                 <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory} selectedCategories={selectedFilterCategories} defaultFilterInformation={defaultFilterInformation}/>
-                <Diagram3 diagramValues={processingStore.diagramByIntervalAndCategory} selectedUser={selectedUser} defaultFilterInformation={defaultFilterInformation}/>
+                <Diagram3 diagramValues={processingStore.diagramByIntervalAndCategory} selectedUsers={selectedUsers} defaultFilterInformation={defaultFilterInformation}/>
             </CardGroup>
 
             {/**
