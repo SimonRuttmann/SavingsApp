@@ -1,3 +1,5 @@
+// noinspection JSCheckFunctionSignatures
+
 import React, {useEffect, useReducer} from "react";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
@@ -58,7 +60,6 @@ const GuestSite = () => {
             Redirect()
             getAdvertisement().then((response)=> {
                 dispatchAdvertisement({type: getAdvertisementDataSuccess, payload: response.data})
-                console.log("data", response.data)
             }).catch(dispatchAdvertisement({type:getAdvertisementDataError}))
     },[])
 
