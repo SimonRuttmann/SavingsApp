@@ -13,6 +13,7 @@ const categorySlice = createSlice({
     initialState: [],
     reducers: {
         AddCategories: (state, action) => {
+            state = [];
             action.payload.forEach(category => {
                 state.push({
                     id: category.id,
@@ -27,7 +28,7 @@ const categorySlice = createSlice({
             })
         },
         RemoveCategory: (state, action) => {
-            state = state.filter(category => category.id !== action.payload.id);
+            return state.filter(category => category.id !== action.payload.id);
         },
         UpdateCategory: (state, action) => {
             let category = state.find(category => category.id === category.payload.id)

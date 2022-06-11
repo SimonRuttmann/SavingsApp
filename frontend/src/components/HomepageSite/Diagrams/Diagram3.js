@@ -1,32 +1,70 @@
-import {Card} from "react-bootstrap";
-import {Bar} from "react-chartjs-2";
-import React from "react";
+// noinspection JSUnresolvedVariable
 
-export const Diagram3 = ({selectedGroup}) => {
+import {Card} from "react-bootstrap";
+import {Line} from "react-chartjs-2";
+import React from "react";
+import {rainbow, sortByGivenDateType} from "../../../util";
+
+export const Diagram3 = ({diagramValues, selectedUser, defaultFilterInformation}) => {
+
+    if(diagramValues == null || !Array.isArray(diagramValues)) return null;
+
+
+    let arrayToSort = [...diagramValues];
+    let sortedDiagramValues = arrayToSort.sort((a,b) => sortByGivenDateType(a,b,defaultFilterInformation.timeInterval));
+
+    let labels = [];
+    sortedDiagramValues.forEach(timeValue => {
+        labels.push(timeValue.dateRepresentation)
+    });
+
+    let dataSet = [];
+
+    let index = 1;
+    for (let usersToPopulate of selectedUser) {
+
+        let dataValues = populateUser(usersToPopulate)
+        let label = usersToPopulate.label ? usersToPopulate.label : usersToPopulate.name
+
+        dataSet.push( {
+            label: label,
+            data: dataValues,
+            backgroundColor: rainbow(index, selectedUser.length),
+        })
+
+        index ++;
+    }
+
+
+    function populateUser(userToPopulate){
+
+        let dataValues = [];
+
+        for (let timeValue of sortedDiagramValues) {
+            let value = getUserForTimeValue(userToPopulate, timeValue);
+            dataValues.push(value);
+        }
+
+        return dataValues;
+    }
+
+    function getUserForTimeValue(userToPopulate, timeValue){
+        for(let user of timeValue.values) {
+            if (user.id === userToPopulate.id) {
+                return user.sum;
+
+            }
+        }
+        return 0;
+    }
+
     return (
         <Card className="chartStyle">
-            <Bar
-                data={{
-                    // Name of the variables on x-axies for each bar
-                    labels: ["1st bar", "2nd bar"],
-                    datasets: [
-                        {
-                            // Label for bars
-                            label: "total count/value",
-                            // Data or value of your each variable
-                            data: [selectedGroup.diagrams.diagram3.firstValue, selectedGroup.diagrams.diagram3.firstValue],
-                            // Color of each bar
-                            backgroundColor: ["red", "yellow"],
-                            // Border color of each bar
-                            borderColor: ["red", "yellow"],
-                            borderWidth: 0.5,
-                        },
-                    ],
-                }}
-                // Height of graph
-                height={400}
-                options={{ maintainAspectRatio: false }}
-            />
+            <Line data={{
+                labels: labels,
+                datasets: dataSet
+            }}
+                  options={{ maintainAspectRatio: false }}/>
         </Card>
     )
 }
