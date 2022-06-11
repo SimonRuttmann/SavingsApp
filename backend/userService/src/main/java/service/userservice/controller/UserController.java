@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import service.userservice.IUserManagementService;
 import service.userservice.imp.KeycloakService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -25,9 +26,9 @@ public class UserController {
         this.userManagementService = userManagementService;
     }
 
-    @GetMapping("/user/{userId}")
-    public PersonDTO getUser(@PathVariable UUID userId){
-        return userManagementService.getUser(userId);
+    @GetMapping("/user")
+    public PersonDTO getUser(HttpServletRequest request){
+        return userManagementService.getUser(request);
     }
 
 
