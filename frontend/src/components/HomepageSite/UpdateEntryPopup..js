@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Card, CardGroup, Col, Form, Modal, Row, ToggleButton} from "react-bootstrap";
-import {SearchBar} from "./SearchBar";
+import {EntryCreationBar} from "./SearchBar";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 

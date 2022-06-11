@@ -26,7 +26,7 @@ import {Diagram2} from "./Diagrams/Diagram2";
 import {Diagram3} from "./Diagrams/Diagram3";
 import {EntryTable} from "./EntryTable";
 import {NavigationBar} from "./NavigationBar";
-import {SearchBar} from "./SearchBar";
+import {EntryCreationBar} from "./EntryCreationBar";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
@@ -146,8 +146,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGro
     const [selectedEntry = entrys[0], setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
 
-    const [selectedCategories, setSelectedCategories] = useState([])
-
+    const [selectedCreateCategory, setSelectedCreateCategory] = useState()
+    const [selectedFilterCategories, setselectedFilterCategories] = useState(categoryStore)
 
     const history = useHistory()
 
@@ -181,13 +181,13 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGro
              Searchbar, which is a bar to create entries?
              */}
             <CardGroup>
-                <SearchBar  setSelectedEntry={setSelectedEntry}
-                            selectedEntry={selectedEntry}
-                            mappedCategories={mappedCategories}
-                            setSelectedCategories={setSelectedCategories}
-                            AddEntry={AddEntry}
-                            setShowMore={setShowMore}
-                            showMore={showMore}/>
+                <EntryCreationBar setSelectedEntry={setSelectedEntry}
+                                  selectedEntry={selectedEntry}
+                                  mappedCategories={mappedCategories}
+                                  setSelectedCategories={setSelectedCreateCategory}
+                                  AddEntry={AddEntry}
+                                  setShowMore={setShowMore}
+                                  showMore={showMore}/>
             </CardGroup>
 
 
@@ -196,7 +196,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGro
              */}
             <CardGroup>
                 <Diagram1 diagramValues={processingStore.balanceProcessResultDTO}/>
-                <Diagram2 selectedGroup={selectedGroup}/>
+                <Diagram2 selectedGroup={selectedGroup} selectedCategories={selectedFilterCategories}/>
                 <Diagram3 selectedGroup={selectedGroup}/>
             </CardGroup>
 
