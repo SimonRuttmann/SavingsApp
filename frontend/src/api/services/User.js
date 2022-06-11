@@ -40,7 +40,7 @@ export function leaveGroup(groupId){
 export function getUser(){
     return Get(UserBaseUrl, token())
 }
-export function getUsers(){
+export function getUsernames(){
     return Get(UserBaseUrl + "/usernames", token())
 }
 
