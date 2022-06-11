@@ -131,9 +131,18 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     console.log("In Render processingStore:")
     console.log(processingStore)
 
+    const getUsers = () =>{
+        try {
+            const info = groupInformationStore.find(group => group.id === getActiveGroupId).personDTOList;
+            if(info == null) return [];
+            return info;
+        }catch (e){return []}
+    }
+
     useEffect(()=>{
         if(categoryStore != null && Array.isArray(categoryStore)) {
             setSelectedFilterCategories(mappedCategories)
+            console.log("CategoryMapping is running! ",mappedCategories)
         }
     },[categoryStore])
 
@@ -300,7 +309,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
             <SearchBar mappedCategories = {mappedCategories}
                        setSelectedFilterCategories = {setSelectedFilterCategories}
                        selectedFilterCategories = {selectedFilterCategories}
-                       users = {[{label:"Testuser1"},{label:"Testuser2"}]}
+                       users = {getUsers()}
                        selectedUsers = {selectedUsers}
                        setSelectedUsers = {setSelectedUsers}
                        timeWindow = {timeWindow}
@@ -314,7 +323,10 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
              */}
             <CardGroup>
                 <Diagram1 diagramValues={processingStore.balanceProcessResultDTO} />
-                <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory} selectedCategories={selectedFilterCategories} defaultFilterInformation={defaultFilterInformation}/>
+                <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory}
+                          selectedCategories={selectedFilterCategories}
+                          defaultFilterInformation={defaultFilterInformation}
+                />
                 <Diagram3 diagramValues={processingStore.diagramByIntervalAndCategory} selectedUsers={selectedUsers} defaultFilterInformation={defaultFilterInformation}/>
             </CardGroup>
 

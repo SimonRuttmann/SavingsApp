@@ -2,7 +2,6 @@ import {Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
 import React from "react";
 import makeAnimated from "react-select/animated";
-import {Title} from "chart.js";
 export const SearchBar = ({
                               mappedCategories,
                               users, selectedUsers, setSelectedUsers,
@@ -10,6 +9,10 @@ export const SearchBar = ({
                               timeWindow, selectedTimeWindow, setSelectedTimeWindow}) => {
 
     const animatedComponents = makeAnimated();
+
+    const mapUsers = () =>{
+        return users.map(user =>{ return {label: user.username,...user}});
+    }
 
     return (
         <Card className="searchBar">
@@ -37,7 +40,7 @@ export const SearchBar = ({
                             <Form.Group className="UserArea">
                                 <Form.Label>Users</Form.Label>
                                 <div className="Multiselect">
-                                    <Select options={users} components={animatedComponents} defaultValue={selectedUsers} onChange={(e) => setSelectedUsers(e)}
+                                    <Select options={mapUsers()} components={animatedComponents} defaultValue={selectedUsers} onChange={(e) => setSelectedUsers(e)}
                                             isMulti />
                                 </div>
                             </Form.Group>
