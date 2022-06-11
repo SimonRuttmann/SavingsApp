@@ -1,5 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {addGroupEntry, deleteGroupEntry, getAllGroupEntries, updateGroupEntry} from "../api/services/Content";
+import {getGroup} from "../api/services/User";
+import {AddGroupCoreInformation} from "./GroupInformationSlice";
 
 /**
  * Saving Entry Schema
@@ -70,8 +72,13 @@ export const fetchSavingEntriesFromServer = (groupId) => (dispatch) => {
 }
 
 export const addSavingEntryToServer = (groupId, savingEntry) => (dispatch) => {
-    let response = addGroupEntry(groupId, savingEntry)
-    response.then(response => dispatch(AddSavingEntry(response.data)));
+    return new Promise((resolve, reject) => {
+        let response = addGroupEntry(groupId, savingEntry)
+        response
+            .then(response => dispatch(AddSavingEntry(response.data)))
+            .then(() => resolve(null))
+            .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+    });
 }
 
 export const updateSavingEntryToServer = (groupId, savingEntry) => (dispatch) => {

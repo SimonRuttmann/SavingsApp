@@ -2,7 +2,7 @@ import {Button, ButtonGroup, Card, Table} from "react-bootstrap";
 import React from "react";
 import {updateGroupEntry} from "../../api/services/Content";
 
-export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntry}) => {
+export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntry, entryAction}) => {
 
     return (
         <Card>
@@ -26,7 +26,7 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                     </thead>
                     <tbody>
                     {entries == null ? null : entries.map(entry =>
-                        <tr className={selectedEntry!= null && entry.id === selectedEntry.id ? "selectedEntry" : ""} key={`Entry-${entry.id}`} onClick={() => setSelectedEntry(entry)}>
+                        <tr className={selectedEntry!= null && entry.id === selectedEntry.id ? "selectedEntry" : ""} key={`Entry-${entry.id}`} onClick={() => setSelectedEntry({type:entryAction.updateEntry,payload:entry})}>
                             <td>{entry.id}</td>
                             <td>{entry.name}</td>
                             <td>{entry.costBalance}</td>
