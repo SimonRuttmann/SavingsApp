@@ -90,6 +90,8 @@ function App() {
     setEntrys([...entrys, {id: entrys.length + 1, name: newEntry.name, costs: newEntry.costs, user: 'Robin01', group: 'WG', timestamp: newEntry.timestamp}])
   }
 
+  const [getActiveGroupId, setActiveGroupId] = useState(null);
+
   return (
       <div>
         <ReactKeycloakProvider authClient={_kc}>
@@ -99,7 +101,13 @@ function App() {
               <GuestSite/>
             </Route>
             <PrivateRoute exact path="/homepage" >
-                <Homepage groups={groups} AddGroup={AddGroup} DeleteGroup={DeleteGroup} entrys={entrys} AddEntry={AddEntry}/>
+                <Homepage groups={groups}
+                          AddGroup={AddGroup}
+                          DeleteGroup={DeleteGroup}
+                          entrys={entrys}
+                          AddEntry={AddEntry}
+                          getActiveGroupId={getActiveGroupId}
+                          setActiveGroupId={setActiveGroupId}/>
             </PrivateRoute>
         </Switch>
         </BrowserRouter>

@@ -30,7 +30,7 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                     </thead>
                     <tbody>
                     {entries == null ? null : entries.map(entry =>
-                        <tr className={entry.id === selectedEntry.id ? "selectedEntry" : ""} key={`Entry-${entry.id}`} onClick={() => setSelectedEntry(entry)}>
+                        <tr className={selectedEntry!= null && entry.id === selectedEntry.id ? "selectedEntry" : ""} key={`Entry-${entry.id}`} onClick={() => setSelectedEntry(entry)}>
                             <td>{entry.id}</td>
                             <td>{entry.name}</td>
                             <td>{entry.costBalance}</td>

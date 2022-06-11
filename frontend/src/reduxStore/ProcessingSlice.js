@@ -11,10 +11,15 @@ export const ProcessingSlice = createSlice({
             state.diagramByIntervalAndCreator = action.payload.diagramByIntervalAndCreator;
             state.savingEntryDTOs = action.payload.savingEntryDTOs;
         },
+        removeSortedAndFilteredSavingEntry: (state, action) => {
+
+            state.savingEntryDTOs = state.savingEntryDTOs.filter(savingEntry => savingEntry.id !== action.payload);
+
+        },
     }
 });
 
-export const {updateProcessingData} = ProcessingSlice.actions
+export const {updateProcessingData, removeSortedAndFilteredSavingEntry} = ProcessingSlice.actions
 
 export default ProcessingSlice.reducer
 
