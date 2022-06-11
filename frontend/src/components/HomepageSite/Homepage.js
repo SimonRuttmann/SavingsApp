@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+// noinspection JSCheckFunctionSignatures
+
 import React, {useEffect, useReducer, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import "../../css/styles.scss"
@@ -8,20 +10,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchCategoriesFromServer, selectCategoryStore} from "../../reduxStore/CategorySlice";
-import {
-    addSavingEntryToServer,
-    deleteSavingEntryFromServer,
-    fetchSavingEntriesFromServer,
-    selectSavingEntryStore
-} from "../../reduxStore/SavingEntrySlice";
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
 import {fetchUserDataFromServer, login, logout, selectUserStore} from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
 import {
+    addSavingEntryToServer, deleteSavingEntryFromServer,
     fetchProcessingResultsFromServer,
     removeSortedAndFilteredSavingEntry,
     selectProcessingStore
-} from "../../reduxStore/ProcessingSlice";
+} from "../../reduxStore/ContentSlice";
 import {Diagram1} from "./Diagrams/Diagram1";
 import {Diagram2} from "./Diagrams/Diagram2";
 import {Diagram3} from "./Diagrams/Diagram3";
@@ -32,14 +29,13 @@ import {EntryCreationBar} from "./EntryCreationBar";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 
-const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,setActiveGroupId}) => {
+const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGroupId}) => {
 
 
     /**
      *  Access Redux-Stores
      */
 
-    const savingEntryStore      = useSelector(selectSavingEntryStore);
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const userStore             = useSelector(selectUserStore);
     const categoryStore         = useSelector(selectCategoryStore);
@@ -90,6 +86,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
 
     const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
 
+    // Fetch core data
     useEffect( () => {
         dispatch(login(KeyCloakService.getToken()));
         dispatch(fetchUserDataFromServer());
@@ -99,6 +96,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
+    // Fetch additional content data
     useEffect( () => {
         if(!isLoadingCoreInformation) return;
         fetchContentInformation();
@@ -119,8 +117,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
 
         //fetch categories for this group
         dispatch(fetchCategoriesFromServer(personGroup.id));
-        //fetch saving entries for this group
-        dispatch(fetchSavingEntriesFromServer(personGroup.id));
         //fetch processing results
         dispatch(fetchProcessingResultsFromServer(personGroup.id, defaultFilterInformation))
 
@@ -134,9 +130,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
 
     console.log("In Render GroupInformationStore:")
     console.log(groupInformationStore)
-
-    console.log("In Render savingEntryStore:")
-    console.log(savingEntryStore)
 
     console.log("In Render categoryStore:")
     console.log(categoryStore)
@@ -209,13 +202,24 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
      * Local states
      */
     const [selectedGroup = groups[0], setSelectedGroup] = useState()
-    const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
+    const [selectedSettingsGroup = groups[0], ] = useState()
     const [selectedEntry, setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
 
-    const [selectedCreateCategory, setSelectedCreateCategory] = useState()
     const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
 
+    /**
+     * Crud saving entry
+     */
+
+    const addEntry = (entry) => {
+        entry.creator = userStore.username;
+        dispatch(addSavingEntryToServer(getActiveGroupId, entry))
+            .then(() => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+                setSelectedEntry(null);
+            })
+    }
 
     const deleteEntry = (id) => {
         console.log(id)
@@ -223,14 +227,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
         dispatch(removeSortedAndFilteredSavingEntry(id))
         setSelectedEntry(null);
     }
-    const addEntry = (id) => {
-        console.log(id)
-        dispatch(addSavingEntryToServer(getActiveGroupId, id))
-            .then(() => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
-                setSelectedEntry(null);
-            })
-    }
+
 
     return (
         <React.Fragment>
