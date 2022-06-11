@@ -7,7 +7,6 @@ export const MessageSlice = createSlice({
     reducers: {
         changeTopicOfMessages: (state, action) => {
             state.value = action.payload
-            console.log(state.value)
         },
         updateMessages: (state, action) => {
             state.value = {
