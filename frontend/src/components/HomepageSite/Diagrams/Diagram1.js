@@ -9,20 +9,50 @@ export const Diagram1 = ({diagramValues}) => {
             <Bar
                 data={{
                     // Name of the variables on x-axies for each bar
-                    labels: ["Einnahmen", "Ausgaben", "Balance", "Zukünftige Balance"],
+                    labels: ["Datemvergleich"],
                     datasets: [
                         {
                             // Label for bars
-                            label: "Einnahmen vs Ausgaben",
+                            label: "Einnahmen",
                             // Data or value of your each variable
-                            data: [diagramValues.income, -diagramValues.outcome, diagramValues.balance, diagramValues.futureBalance],
+                            data: [diagramValues.income],
                             // Color of each bar
-                            backgroundColor: ["green", "red", "yellow", "orange"],
+                            backgroundColor: "green",
                             // Border color of each bar
                             borderColor: "gray",
                             borderWidth: 0.5,
                         },
-                    ],
+                        {
+                            label: "Ausgaben",
+                            // Data or value of your each variable
+                            data: [-diagramValues.outcome],
+                            // Color of each bar
+                            backgroundColor: "red",
+                            // Border color of each bar
+                            borderColor: "gray",
+                            borderWidth: 0.5,
+                        },
+                        {
+                            label: "Balance",
+                            // Data or value of your each variable
+                            data: [diagramValues.balance],
+                            // Color of each bar
+                            backgroundColor: "yellow",
+                            // Border color of each bar
+                            borderColor: "gray",
+                            borderWidth: 0.5
+                        },
+                        {
+                            label: "Zukünftige Balance",
+                            // Data or value of your each variable
+                            data: [diagramValues.futureBalance],
+                            // Color of each bar
+                            backgroundColor: "orange",
+                            // Border color of each bar
+                            borderColor: "gray",
+                            borderWidth: 0.5
+                        }
+                        ],
                 }}
                 // Height of graph
                 height={400}
