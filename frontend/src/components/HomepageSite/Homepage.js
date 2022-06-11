@@ -46,15 +46,12 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         .then((refreshed) => refreshToken(refreshed))
         .catch(function() {
             dispatch((logout()))
-            console.log('Failed to refresh the token, or the session has expired');
         });
 
 
     const refreshToken = (refreshed) => {
         if (refreshed) {
             dispatch(login(KeyCloakService.getToken()));
-        } else {
-            console.log('Token is still valid');
         }
     };
 
@@ -161,8 +158,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     }
 
     const entryReducer = (state, action) => {
-        console.log("ACTION: ",action)
-        console.log("STATE: ",state)
         switch (action.type){
             case entryAction.updateEntryName:
                 return {...state, name: action.payload}
