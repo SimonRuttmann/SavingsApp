@@ -34,48 +34,7 @@ function App() {
       members: ['Robin', 'Ralf', 'Maria']
     },
   ])
-  const [entrys, setEntrys] = useState([
-    {
-      id: 1,
-      name: 'Whopper',
-      costs: 12,
-      user: 'Robin01',
-      group: 'WG',
-      timestamp: '01.03.2022'
-    },
-    {
-      id: 2,
-      name: 'Hund',
-      costs: 400,
-      user: 'Sargon',
-      group: 'Ich',
-      timestamp: '01.03.2022'
-    },
-    {
-      id: 3,
-      name: 'Stuhl',
-      costs: 150,
-      user: 'Michael123',
-      group: 'WG',
-      timestamp: '01.03.2022'
-    },
-    {
-      id: 4,
-      name: 'Nutella',
-      costs: 10,
-      user: 'Sargon',
-      group: 'WG',
-      timestamp: '01.03.2022'
-    },
-    {
-      id: 5,
-      name: 'Katze',
-      costs: 460,
-      user: 'Robin01',
-      group: 'WG',
-      timestamp: '01.03.2022'
-    },
-  ])
+  const [entrys, setEntrys] = useState([])
 
 
   const AddGroup = ({group}) => {

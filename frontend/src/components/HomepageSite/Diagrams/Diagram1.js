@@ -9,7 +9,7 @@ export const Diagram1 = ({diagramValues}) => {
             <Bar
                 data={{
                     // Name of the variables on x-axies for each bar
-                    labels: ["Datemvergleich"],
+                    labels: ["Datenvergleich"],
                     datasets: [
                         {
                             // Label for bars
