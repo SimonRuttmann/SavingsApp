@@ -71,7 +71,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
 
     const defaultFilterInformation = {
         "sortParameter": "CreationDate",
-        "timeInterval": "Day",
+        "timeInterval": "Month",
         "startDate": null,
         "endDate": null,
         "personIds": [],
@@ -137,7 +137,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     },[categoryStore])
 
     const mappedCategories = categoryStore.map(category =>{
-        return{  label: category.name, value: category.id}
+        return{ name: category.name, label: category.name, value: category.id}
     });
 
     const entryAction = {
@@ -312,8 +312,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
              Diagrams displaying the results from processing controller
              */}
             <CardGroup>
-                <Diagram1 diagramValues={processingStore.balanceProcessResultDTO}/>
-                <Diagram2 selectedGroup={selectedGroup} selectedCategories={selectedFilterCategories}/>
+                <Diagram1 diagramValues={processingStore.balanceProcessResultDTO} />
+                <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory} selectedCategories={selectedFilterCategories} defaultFilterInformation={defaultFilterInformation}/>
                 <Diagram3 selectedGroup={selectedGroup}/>
             </CardGroup>
 
