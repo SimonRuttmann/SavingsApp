@@ -5,7 +5,7 @@ import {Line} from "react-chartjs-2";
 import React from "react";
 import {rainbow, sortByGivenDateType} from "../../../util";
 
-export const Diagram3 = ({diagramValues, selectedUser, defaultFilterInformation}) => {
+export const Diagram3 = ({diagramValues, selectedUsers, defaultFilterInformation}) => {
 
     if(diagramValues == null || !Array.isArray(diagramValues)) return null;
 
@@ -21,7 +21,7 @@ export const Diagram3 = ({diagramValues, selectedUser, defaultFilterInformation}
     let dataSet = [];
 
     let index = 1;
-    for (let usersToPopulate of selectedUser) {
+    for (let usersToPopulate of selectedUsers) {
 
         let dataValues = populateUser(usersToPopulate)
         let label = usersToPopulate.label ? usersToPopulate.label : usersToPopulate.name
@@ -29,7 +29,7 @@ export const Diagram3 = ({diagramValues, selectedUser, defaultFilterInformation}
         dataSet.push( {
             label: label,
             data: dataValues,
-            backgroundColor: rainbow(index, selectedUser.length),
+            backgroundColor: rainbow(index, selectedUsers.length),
         })
 
         index ++;
