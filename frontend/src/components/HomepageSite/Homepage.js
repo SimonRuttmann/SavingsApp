@@ -138,7 +138,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     },[categoryStore])
 
     const mappedCategories = categoryStore.map(category =>{
-        return{  label: category.name, value: category.id}
+        return{ name: category.name, label: category.name, value: category.id}
     });
 
     const entryAction = {
@@ -313,9 +313,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
              Diagrams displaying the results from processing controller
              */}
             <CardGroup>
-                <Diagram1 diagramValues={processingStore.balanceProcessResultDTO}/>
-                <Diagram2 selectedGroup={selectedGroup} selectedCategories={selectedFilterCategories}/>
-                <Diagram3 selectedGroup={selectedGroup}/>
+                <Diagram1 diagramValues={processingStore.balanceProcessResultDTO} />
+                <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory} selectedCategories={selectedFilterCategories} defaultFilterInformation={defaultFilterInformation}/>
+                <Diagram3 diagramValues={processingStore.diagramByIntervalAndCategory} selectedUser={selectedUser} defaultFilterInformation={defaultFilterInformation}/>
             </CardGroup>
 
             {/**
