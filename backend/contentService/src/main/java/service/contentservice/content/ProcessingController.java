@@ -5,7 +5,6 @@ import documentDatabaseModule.model.DocObjectIdUtil;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.model.SavingEntry;
 import documentDatabaseModule.service.IGroupDocumentService;
-import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.content.GeneralGroupInformationDTO;
 import dtoAndValidation.dto.inflation.InflationDto;
 import dtoAndValidation.dto.processing.*;
@@ -99,7 +98,7 @@ public class ProcessingController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         if(filterInformation.getCategoryIds().isEmpty()){
-            List<String> categoryIds = new ArrayList();
+            List<String> categoryIds = new ArrayList<>();
             groupDocument.categories.forEach(category -> {
                 categoryList.add(category);
                 categoryIds.add(DocObjectIdUtil.toHexString(category.getId()));
@@ -131,7 +130,7 @@ public class ProcessingController {
 
         if(filterInformation.getPersonIds().isEmpty()){
             allowedPersons = Set.copyOf(persons);
-            List<UUID> personIds = new ArrayList();
+            List<UUID> personIds = new ArrayList<>();
             for(KPerson person : persons) {
                 personIds.add(UUID.fromString(person.getId()));
             }
@@ -256,6 +255,7 @@ public class ProcessingController {
 
                 IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
                 intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndCategory.getKey().getName());
+                intervalBasedEntryValueDTO.setId(DocObjectIdUtil.toHexString(entryByTimeIntervalAndCategory.getKey().getId()));
 
                 Double sum = 0d;
 
@@ -294,6 +294,11 @@ public class ProcessingController {
 
                 IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
                 intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndUser.getKey());
+                var name = entryByTimeIntervalAndUser.getKey();
+
+                var person = allowedPersons.stream().filter(searchedPerson -> name.equals(searchedPerson.getUsername())).findFirst();
+                person.ifPresent(kPerson -> intervalBasedEntryValueDTO.setId(kPerson.getId()));
+
                 Double sum = 0d;
 
                 for(SavingEntry savingEntry : entryByTimeIntervalAndUser.getValue()){
