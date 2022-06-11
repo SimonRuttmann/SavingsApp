@@ -45,7 +45,8 @@ public class UserManagementService implements IUserManagementService {
 
 
     @Override
-    public PersonDTO getUser(UUID userId) {
+    public PersonDTO getUser(HttpServletRequest request) {
+        UUID userId = getUserId(request);
         KPerson person = databaseService.getPersonById(userId);
         if (person == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id"+userId+" don't exists");
         return UserServiceMapper.PersonToDTO(person);
