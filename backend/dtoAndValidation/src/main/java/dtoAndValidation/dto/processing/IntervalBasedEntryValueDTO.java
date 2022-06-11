@@ -15,6 +15,8 @@ public class IntervalBasedEntryValueDTO {
 
     private String nameDescription;
 
+    private String id;
+
     private Double sum;
 
 }
