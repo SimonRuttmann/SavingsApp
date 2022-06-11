@@ -16,7 +16,11 @@ import {
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
 import {login, logout, selectUserStore} from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
-import {fetchProcessingResultsFromServer, selectProcessingStore} from "../../reduxStore/ProcessingSlice";
+import {
+    fetchProcessingResultsFromServer,
+    removeSortedAndFilteredSavingEntry,
+    selectProcessingStore
+} from "../../reduxStore/ProcessingSlice";
 import {Diagram1} from "./Diagrams/Diagram1";
 import {Diagram2} from "./Diagrams/Diagram2";
 import {Diagram3} from "./Diagrams/Diagram3";
@@ -27,7 +31,7 @@ import {SearchBar} from "./SearchBar";
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 
-const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry }) => {
+const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry, getActiveGroupId,setActiveGroupId}) => {
 
     const debug = false;
 
@@ -71,7 +75,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry }) => {
 
         fetchContentInformation();
         setLoadingCoreInformation(false);
-
+        setActiveGroupId(groupInformationStore.find(group => group.personGroup === true).id);
     },[groupInformationStore])
 
 
@@ -152,7 +156,10 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry }) => {
     }
 
     const deleteEntry = (id) => {
-        dispatch(deleteSavingEntryFromServer(id));
+        console.log(id)
+        dispatch(deleteSavingEntryFromServer(getActiveGroupId, id));
+        dispatch(removeSortedAndFilteredSavingEntry(id))
+        setSelectedEntry(null);
     }
 
     return (
@@ -188,7 +195,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, entrys, AddEntry }) => {
              Diagrams displaying the results from processing controller
              */}
             <CardGroup>
-                <Diagram1 selectedGroup={selectedGroup}/>
+                <Diagram1 diagramValues={processingStore.balanceProcessResultDTO}/>
                 <Diagram2 selectedGroup={selectedGroup}/>
                 <Diagram3 selectedGroup={selectedGroup}/>
             </CardGroup>
