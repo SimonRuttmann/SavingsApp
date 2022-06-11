@@ -9,16 +9,11 @@ import {CardGroup} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchCategoriesFromServer, selectCategoryStore} from "../../reduxStore/CategorySlice";
+import {addCategoryToServer, deleteCategoryFromServer, fetchCategoriesFromServer, selectCategoryStore, updateCategoryToServer} from "../../reduxStore/CategorySlice";
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
 import {fetchUserDataFromServer, login, logout, selectUserStore} from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
-import {
-    addSavingEntryToServer, deleteSavingEntryFromServer,
-    fetchProcessingResultsFromServer,
-    removeSortedAndFilteredSavingEntry,
-    selectProcessingStore
-} from "../../reduxStore/ContentSlice";
+import {addSavingEntryToServer, deleteSavingEntryFromServer, fetchProcessingResultsFromServer, selectProcessingStore, updateSavingEntryToServer} from "../../reduxStore/ContentSlice";
 import {Diagram1} from "./Diagrams/Diagram1";
 import {Diagram2} from "./Diagrams/Diagram2";
 import {Diagram3} from "./Diagrams/Diagram3";
@@ -195,37 +190,76 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     }
 
     const [entryState, dispatchEntry] = useReducer(entryReducer, initialEntryState);
-
-
-
-    /**
-     * Local states
-     */
     const [selectedGroup = groups[0], setSelectedGroup] = useState()
     const [selectedSettingsGroup = groups[0], ] = useState()
-    const [selectedEntry, setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
-
     const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
+
 
     /**
      * Crud saving entry
+     * -----------------------------------------------------------------------------------------------------------------
      */
+
+    const [selectedEntry, setSelectedEntry] = useState()
 
     const addEntry = (entry) => {
         entry.creator = userStore.username;
         dispatch(addSavingEntryToServer(getActiveGroupId, entry))
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
-                setSelectedEntry(null);
             })
+        setSelectedEntry(null);
     }
 
     const deleteEntry = (id) => {
-        console.log(id)
-        dispatch(deleteSavingEntryFromServer(getActiveGroupId, id));
-        dispatch(removeSortedAndFilteredSavingEntry(id))
+        dispatch(deleteSavingEntryFromServer(getActiveGroupId, id))
+            .then(() => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+                setSelectedEntry(null);
+            })
         setSelectedEntry(null);
+    }
+
+    const updateEntry = (entry) => {
+        dispatch(updateSavingEntryToServer(getActiveGroupId, entry))
+            .then( () => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+            })
+        setSelectedEntry(null);
+    }
+
+
+
+    /**
+     * Crud category
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+
+    const [selectedCategory, setSelectedCategory] = useState()
+
+    const addCategory = (category) => {
+        dispatch(addCategoryToServer(getActiveGroupId, category))
+            .then( () => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+            })
+        setSelectedCategory(null);
+    }
+
+    const deleteCategory = (id) => {
+        dispatch(deleteCategoryFromServer(getActiveGroupId, id))
+            .then( () => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+            })
+        setSelectedCategory(null);
+    }
+
+    const updateCategory = (category) => {
+        dispatch(updateCategoryToServer(getActiveGroupId, category))
+            .then( () => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+            })
+        setSelectedCategory(null);
     }
 
 

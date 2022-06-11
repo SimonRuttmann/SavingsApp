@@ -25,11 +25,6 @@ export const ContentSlice = createSlice({
             state.diagramByIntervalAndCreator = action.payload.diagramByIntervalAndCreator;
             state.savingEntryDTOs = action.payload.savingEntryDTOs;
         },
-        removeSortedAndFilteredSavingEntry: (state, action) => {
-
-            state.savingEntryDTOs = state.savingEntryDTOs.filter(savingEntry => savingEntry.id !== action.payload);
-
-        },
         addSavingEntry: (state, action) => {
             state.savingEntryDTOs.push({
                 id: action.payload.id,
@@ -94,6 +89,6 @@ export const deleteSavingEntryFromServer = (groupId, savingEntryId) => (dispatch
     });
 }
 
-export const {updateProcessingData, removeSortedAndFilteredSavingEntry, addSavingEntry, updateSavingEntry, removeSavingEntry} = ContentSlice.actions
+export const {updateProcessingData, addSavingEntry, updateSavingEntry, removeSavingEntry} = ContentSlice.actions
 export default ContentSlice.reducer
 export const selectProcessingStore = (state) => state.content;
