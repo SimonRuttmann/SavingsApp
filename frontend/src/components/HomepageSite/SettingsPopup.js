@@ -1,21 +1,33 @@
 import React, {useState} from "react";
-import {Button, Modal} from "react-bootstrap";
+import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {addNewGroup, leaveAGroup, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
 import {isDisabled} from "@testing-library/user-event/dist/utils";
+import {
+    acceptAInvitation,
+    acceptInvitation, declineAInvitation, declineInvitation,
+    invitePerson,
+    selectUserInvitationsStore,
+    selectUserNamesStore,
+    selectUserStore
+} from "../../reduxStore/UserSlice";
 
 const SettingsPopup = ({getActiveGroupId}) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [getGroupId, setGroupId] = useState();
+    const [showNewGroup, setShowNewGroup]= useState(false)
+    const [showInvite, setShowInvite] = useState(false)
+    const [showInvitations, setInvitations] = useState(false)
 
     //states
     const groupInformationStore = useSelector(selectGroupInformationStore);
-    // if(groupInformationStore == null || !Array.isArray(groupInformationStore)) return null;
-    // if( getActiveGroupId == null) return null;
-    // if( )
+    const usernames = useSelector(selectUserNamesStore);
+    const invitations = useSelector(selectUserInvitationsStore);
+    const userStore   = useSelector(selectUserStore);
     const dispatch = useDispatch()
+
     //gruppe initialisieren
     let selectedGroup
     if(getGroupId == null){
@@ -24,19 +36,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
         selectedGroup= (groupInformationStore.find(group => group.id === getGroupId));
     }
 
-
-    if(!Array.isArray(groupInformationStore) || getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null) return null;
-
-
-
-        //tests
-
-
-    const getInformation = () => {
-
-
-    }
-    getInformation()
+    if(!Array.isArray(groupInformationStore) ||getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null) return null;
 
     const buttonStyle = {
         float: "right",
@@ -57,21 +57,32 @@ const SettingsPopup = ({getActiveGroupId}) => {
     }
 
     function LeaveGroup(id) {
-        console.log("Guppenid "+id);
         dispatch(leaveAGroup(id))
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
     }
     function DeleteGroup(id) {
-        console.log("Delete Guppenid "+id);
         dispatch(leaveAGroup(id))
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
     }
 
-    function openToAddGroup() {
-        //is opening a little Box to insert new Groupname
+    //check if username valid
+    function inviteUser() {
+        let userName = document.getElementById("InviteUserName").value;
+        const newInvite = {
+            "username": ""+userName,
+            "groupId": ""+getGroupId
+        }
+        dispatch(invitePerson(newInvite))
+    }
 
+    function acceptThisInvitation(groupId) {
+        dispatch(acceptAInvitation(groupId))
+    }
+
+    function declineThisInvitation(groupId) {
+        dispatch(declineAInvitation(groupId))
     }
 
     return (
@@ -85,22 +96,86 @@ const SettingsPopup = ({getActiveGroupId}) => {
             <Modal.Title>Einstellungen</Modal.Title>
         </Modal.Header>
         <Modal.Body className = {"settingPopUp"}>
-            <div id="newGroup">
-                <form className={"forumSize"}>
-                    <input id="groupName" type="text" name="name" placeholder="Gruppennamen eingeben" />
-                    <Button  onClick={ () => addGroup()} variant="secondary">Bestätigen</Button>
-                </form>
-                <div className={"addGroupButtonDiv"}><Button className={"addGroupButton"} onClick={ () => openToAddGroup()} variant="secondary">Gruppe hinzufügen</Button>
+            {showNewGroup &&
+            <div>
+                <h6>Neue Gruppe erstellen:</h6>
+                <div className="row">
+                    <Col>
+                        <Form.Group>
+                            <Form.Control  id="groupName" type="text" placeholder="Gruppenname"/>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Button  onClick={ () => addGroup()} variant="secondary">Bestätigen</Button>
+                    </Col>
+                    <Col>
+                        <Button onClick={ () => setShowNewGroup(false)} variant="secondary">Abbrechen</Button>
+                    </Col>
                 </div>
             </div>
-             <h5 styleclass={"topMarginText"} >Meine Gruppen:</h5>
+            }
+
+            <div className={"row"}>
+                { !showNewGroup && <Button className={"addGroupButton"} onClick={ () => setShowNewGroup(true)} variant="secondary">Gruppe hinzufügen</Button>}
+            </div>
+            {showInvite &&
+            <div>
+                <h6>In Gruppe "{selectedGroup.groupName}" einladen:</h6>
+                <div className="row">
+                    <Col>
+                        <Form.Group>
+                            <Form.Control  id="InviteUserName" type="text" placeholder="Username"/>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Button  onClick={ () => inviteUser()} variant="secondary">Bestätigen</Button>
+                    </Col>
+                    <Col>
+                        <Button onClick={ () => setShowInvite(false)} variant="secondary">Abbrechen</Button>
+                    </Col>
+                </div>
+            </div>
+            }
+            <div className={"row"}>
+            { !showInvite && <Button className={"addGroupButton"} onClick={ () => setShowInvite(true)} variant="secondary">Zur Gruppe Einladen</Button>}
+            </div>
+            { showInvitations &&
+            <div>
+                <h5>Einladungen:</h5>
+                { userStore.invitations.map(invitation =>
+                    <div key={`Settings-Invitation-div-${invitation.groupId}`}>
+                        <Row key={`Settings-Invitation-Row-${invitation.groupId}`}>
+                            <Col  key={`Settings-Invitation-Col1-${invitation.groupId}`}>
+                                <h6 key={`Settings-Invitation-${invitation.groupId}`}>{invitation.groupName}</h6>
+                            </Col>
+                            <Col  key={`Settings-Invitation-Col2-${invitation.groupId}`}>
+                                <Button key={`Settings-Inv-But-1-${invitation.groupId}`} onClick={ () => acceptThisInvitation(invitation.groupId) } variant="secondary">Akzeptieren</Button>
+                            </Col>
+                            <Col key={`Settings-Invitation-Col3-${invitation.groupId}`}>
+                                <Button key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId)} variant="secondary">Ablehnen</Button>
+                            </Col>
+                        </Row>
+                    </div>
+                )}
+            </div>
+            }
+            <div className={"row"}>
+                { !showInvitations && <Button className={"addGroupButton"} onClick={ () => setInvitations(true)} variant="secondary">Zur Gruppe Einladen</Button>}
+            </div>
+
+            <h5 styleclass={"topMarginText"} >Meine Gruppen:</h5>
             { groupInformationStore.map(group =>
                 <h6 className={selectedGroup != null && selectedGroup.id === group.id ? "selectedGroup" : ""} onClick={ () => changeGroup(group)} key={`Settings-Group-${group.id}`}>{group.groupName}</h6>)}
             <h5>Mitglieder:</h5>
             { selectedGroup.personDTOList.map(user => <h6 key={`Settings-Group-${user.username}`}>{user.username}</h6>)}
-            <Button onClick={ () => addGroup()} variant="secondary">Gruppe hinzufügen</Button>
+            <div className="row">
+            <Col>
             <Button disabled={!!selectedGroup.personGroup} onClick={ () => LeaveGroup(selectedGroup.id)} variant="secondary">Gruppe Verlassen</Button>
-            <Button disabled={!!selectedGroup.personGroup} onClick={ () => DeleteGroup(selectedGroup.id)} variant="secondary">Gruppe löschen</Button>
+            </Col>
+            <Col>
+                <Button disabled={!!selectedGroup.personGroup} onClick={ () => DeleteGroup(selectedGroup.id)} variant="secondary">Gruppe löschen</Button>
+            </Col>
+            </div>
         </Modal.Body>
         <Modal.Footer>
         </Modal.Footer>

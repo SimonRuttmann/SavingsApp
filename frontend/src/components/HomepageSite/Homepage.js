@@ -11,7 +11,14 @@ import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {addCategoryToServer, deleteCategoryFromServer, fetchCategoriesFromServer, selectCategoryStore, updateCategoryToServer} from "../../reduxStore/CategorySlice";
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
-import {fetchUserDataFromServer, login, logout, selectUserStore} from "../../reduxStore/UserSlice";
+import {
+    fetchInvitations,
+    fetchUserDataFromServer,
+    fetchUserNames,
+    login,
+    logout, selectUserInvitationsStore, selectUserNamesStore,
+    selectUserStore
+} from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
 import {addSavingEntryToServer, deleteSavingEntryFromServer, fetchProcessingResultsFromServer, selectProcessingStore, updateSavingEntryToServer} from "../../reduxStore/ContentSlice";
 import {Diagram1} from "./Diagrams/Diagram1";
@@ -158,6 +165,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         let dataObject = currentFilterInformationToDataObject();
         dispatch(fetchProcessingResultsFromServer(personGroup.id, dataObject))
 
+        //fetch usernames
+        dispatch(fetchUserNames())
+        //fetch invitations
+        dispatch(fetchInvitations())
     }
 
 
@@ -167,13 +178,14 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
      */
 
     console.log("In Render GroupInformationStore:")
-   console.log(groupInformationStore)
+    console.log(groupInformationStore)
 
     console.log("In Render categoryStore:")
     console.log(categoryStore)
 
     console.log("In Render processingStore:")
     console.log(processingStore)
+
 
     const getUsers = () =>{
         try {
