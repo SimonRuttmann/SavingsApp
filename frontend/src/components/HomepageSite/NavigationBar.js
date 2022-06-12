@@ -34,7 +34,7 @@ export const NavigationBar = ({groups, setSelectedGroup, selectedGroup, setSelec
                             >{group.name}
                             </NavDropdown.Item>)}
                     </NavDropdown>
-                    <Chat/>
+                    {/*   <Chat/> */}
                 </Nav>
                 <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
                 <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>

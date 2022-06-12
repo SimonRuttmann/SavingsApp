@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+// noinspection JSCheckFunctionSignatures
+
 import React, {useEffect, useReducer, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import "../../css/styles.scss"
@@ -21,6 +23,15 @@ import {EntryCreationBar} from "./EntryCreationBar";
 import {SearchBar} from "./SearchBar";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
+
+
+export const filterInformationAction = {
+    changeFilterTimeInterval: "changeFilterTimeInterval",
+    changeFilterUsers : "changeFilterUsers",
+    changeFilterCategories : "changeFilterCategories",
+    changeStartDate: "changeStartDate",
+    changeEndDate: "changeEndDate"
+}
 
 
 const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGroupId}) => {
@@ -66,14 +77,34 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
      * -----------------------------------------------------------------------------------------------------------------
      */
 
-    const defaultFilterInformation = {
+    const currentFilterInformationReducer = (state, action) => {
+        switch (action.type){
+            case filterInformationAction.changeFilterTimeInterval:
+                return {...state, timeWindow: action.payload}
+            case filterInformationAction.changeFilterUsers:
+                return {...state, filterUser: action.payload}
+            case filterInformationAction.changeFilterCategories:
+                return {...state, filterCategory: action.payload}
+            case filterInformationAction.changeStartDate:
+                return {...state, changeStartDate: action.payload}
+            case filterInformationAction.changeEndDate:
+                return {...state, changeEndDate: action.payload}
+            default:
+                return state;
+        }
+    }
+
+    const [currentFilterInformation, dispatchFilterInformation] = useReducer(currentFilterInformationReducer, {
         "sortParameter": "CreationDate",
         "timeInterval": "Day",
         "startDate": null,
         "endDate": null,
-        "personIds": [],
-        "categoryIds": []
-    }
+        "users": [],
+        "categories": []
+    });
+
+
+
 
     const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
 
@@ -109,7 +140,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         //fetch categories for this group
         dispatch(fetchCategoriesFromServer(personGroup.id));
         //fetch processing results
-        dispatch(fetchProcessingResultsFromServer(personGroup.id, defaultFilterInformation))
+        dispatch(fetchProcessingResultsFromServer(personGroup.id, currentFilterInformation))
 
     }
 
@@ -119,14 +150,14 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
      * -----------------------------------------------------------------------------------------------------------------
      */
 
-    console.log("In Render GroupInformationStore:")
-    console.log(groupInformationStore)
+   // console.log("In Render GroupInformationStore:")
+   //console.log(groupInformationStore)
 
-    console.log("In Render categoryStore:")
-    console.log(categoryStore)
+   // console.log("In Render categoryStore:")
+   // console.log(categoryStore)
 
-    console.log("In Render processingStore:")
-    console.log(processingStore)
+   // console.log("In Render processingStore:")
+   // console.log(processingStore)
 
     useEffect(()=>{
         if(categoryStore != null && Array.isArray(categoryStore)) {
@@ -191,8 +222,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     //SearchBar states for search parameters
     const [selectedUsers, setSelectedUsers] = useState([])
     const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
-    const [selectedTimeWindow, setSelectedTimeWindow] = useState()
-    const timeWindow = [{label : "day"},{label : "week"},{label : "month"},{label : "year"}]
 
 
 
@@ -208,7 +237,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         entry.creator = userStore.username;
         dispatch(addSavingEntryToServer(getActiveGroupId, entry))
             .then(() => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
             })
         setSelectedEntry(null);
     }
@@ -216,7 +245,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const deleteEntry = (id) => {
         dispatch(deleteSavingEntryFromServer(getActiveGroupId, id))
             .then(() => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
                 setSelectedEntry(null);
             })
         setSelectedEntry(null);
@@ -225,7 +254,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const updateEntry = (entry) => {
         dispatch(updateSavingEntryToServer(getActiveGroupId, entry))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
             })
         setSelectedEntry(null);
     }
@@ -242,7 +271,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const addCategory = (category) => {
         dispatch(addCategoryToServer(getActiveGroupId, category))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
             })
         setSelectedCategory(null);
     }
@@ -250,7 +279,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const deleteCategory = (id) => {
         dispatch(deleteCategoryFromServer(getActiveGroupId, id))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
             })
         setSelectedCategory(null);
     }
@@ -258,7 +287,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const updateCategory = (category) => {
         dispatch(updateCategoryToServer(getActiveGroupId, category))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
             })
         setSelectedCategory(null);
     }
@@ -298,9 +327,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
                        users = {[{label:"Testuser1"},{label:"Testuser2"}]}
                        selectedUsers = {selectedUsers}
                        setSelectedUsers = {setSelectedUsers}
-                       timeWindow = {timeWindow}
-                       selectedTimeWindow = {selectedTimeWindow}
-                       setSelectedTimeWindow = {setSelectedTimeWindow}
+                       currentFilterInformation = {currentFilterInformation}
+                       dispatchFilterInformation = {dispatchFilterInformation}
             />
 
 
@@ -309,8 +337,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
              */}
             <CardGroup>
                 <Diagram1 diagramValues={processingStore.balanceProcessResultDTO} />
-                <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory} selectedCategories={selectedFilterCategories} defaultFilterInformation={defaultFilterInformation}/>
-                <Diagram3 diagramValues={processingStore.diagramByIntervalAndCategory} selectedUsers={selectedUsers} defaultFilterInformation={defaultFilterInformation}/>
+                <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory} selectedCategories={currentFilterInformation.categories} defaultFilterInformation={currentFilterInformation}/>
+                <Diagram3 diagramValues={processingStore.diagramByIntervalAndCategory} selectedUsers={currentFilterInformation.users} defaultFilterInformation={currentFilterInformation}/>
             </CardGroup>
 
             {/**
