@@ -1,6 +1,6 @@
 import {Button, Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import makeAnimated from "react-select/animated";
 import {filterInformationAction} from "./Homepage";
 import DatePicker from "react-datepicker";
@@ -8,10 +8,16 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 
-export const SearchBar = ({   mappedCategories,
+export const SearchBar = ({   clearSelectors,
+                              mappedCategories,
                               users,
                               currentFilterInformation,
                               dispatchFilterInformation}) => {
+
+    useEffect( () => {
+        //TODO SELECTOR Categorys . value = null
+        //TODO SELECTOR SavingEntries .value = null
+    },[clearSelectors])
 
     registerLocale('de', de)
 
