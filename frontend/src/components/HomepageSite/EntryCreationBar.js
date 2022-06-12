@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
+import {isNumberOrDecimalString} from "../../util";
 
 
 export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore, clearSelectors}) => {
@@ -19,6 +20,7 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
 
     const [entryCreationSelectedCategory,setEntryCreationSelectedCategory] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
+    const [costBalance, setCostBalance] = useState("0.00")
 
     const animatedComponents = makeAnimated();
 
@@ -29,6 +31,10 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
 
     function handleChange(category){
         setEntryCreationSelectedCategory(category);
+    }
+
+    function changeCostBalance(string){
+        if(isNumberOrDecimalString(string)) setCostBalance(string)
     }
 
     function addEntry(){
@@ -72,7 +78,7 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
                         <Col>
                             <Form.Group>
                                 <Form.Label>Kosten</Form.Label>
-                                <Form.Control ref={costBalanceRef} type="text" placeholder="Kosten eintragen"/>
+                                <Form.Control ref={costBalanceRef} type="text" placeholder="Kosten eintragen" value={costBalance} onChange={(e)=>changeCostBalance(e.target.value)}/>
                             </Form.Group>
                         </Col>
                         <Col>

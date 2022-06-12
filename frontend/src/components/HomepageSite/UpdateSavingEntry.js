@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 import makeAnimated from "react-select/animated";
+import {isNumberOrDecimalString} from "../../util";
 
 const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpenUpdateEntryPopup}) => {
 
@@ -28,12 +29,17 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
 
     const [entryUpdateSelectedCategory,setEntryUpdateSelectedCategory] = useState(selectedEntry.category);
     const [startDate, setStartDate] = useState(Date.parse(selectedEntry.creationDate));
+    const [costBalance, setCostBalance] = useState(selectedEntry.costBalance)
 
     const animatedComponents = makeAnimated();
 
 
     function handleChange(category){
         setEntryUpdateSelectedCategory(category);
+    }
+
+    function changeCostBalance(string){
+        if(isNumberOrDecimalString(string)) setCostBalance(string)
     }
 
     function perpareUpdate(){
@@ -95,7 +101,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                                     <Col>
                                         <Form.Group>
                                             <Form.Label>Kosten</Form.Label>
-                                            <Form.Control ref={costBalanceRef} type="text" defaultValue={selectedEntry.costBalance}/>
+                                            <Form.Control ref={costBalanceRef} type="text" value={costBalance} onChange={(e) => changeCostBalance(e.target.value)}/>
                                         </Form.Group>
                                     </Col>
                                     <Col>
