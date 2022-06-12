@@ -91,14 +91,14 @@ public class ProcessingController {
 
         //Resolve categories
         Set<Category> categories;
-        List<Category> categoryList = new ArrayList<>();
+        List<Category> categoryList = new ArrayList();
         GroupDocument groupDocument = groupDocumentService.getGroupDocument(groupId);
 
         if(groupDocument == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         if(filterInformation.getCategoryIds().isEmpty()){
-            List<String> categoryIds = new ArrayList<>();
+            List<String> categoryIds = new ArrayList();
             groupDocument.categories.forEach(category -> {
                 categoryList.add(category);
                 categoryIds.add(DocObjectIdUtil.toHexString(category.getId()));
@@ -285,7 +285,7 @@ public class ProcessingController {
             intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
 
             Map<String, List<SavingEntry>> entriesByTimeIntervalAndUser =
-                    filteredAndSortedEntries.stream().
+                    entryByTimeInterval.getValue().stream().
                             collect(Collectors.groupingBy(SavingEntry::getCreator));
 
             //For each group of saving entries (grouped by interval and user) resolve the sum and name of creator

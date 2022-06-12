@@ -27,9 +27,9 @@ function Chat( user ) {
     const stompClient = Stomp.over(socket)
 
     const startup = () => {
-        connectToSockJs()
-        subscribeToTopic()
-        getMessagesForTopic()
+      //  connectToSockJs()
+     //   subscribeToTopic()
+    //    getMessagesForTopic()
     }
 
     const dispatch = useDispatch()

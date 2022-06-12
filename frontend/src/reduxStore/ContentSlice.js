@@ -79,7 +79,6 @@ export const updateSavingEntryToServer = (groupId, savingEntry) => (dispatch) =>
 }
 
 export const deleteSavingEntryFromServer = (groupId, savingEntryId) => (dispatch) => {
-
     return new Promise( (resolve, reject) => {
         let response = deleteGroupEntry(groupId, savingEntryId)
         response

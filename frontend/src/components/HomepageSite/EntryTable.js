@@ -1,8 +1,8 @@
 import {Button, ButtonGroup, Card, Table} from "react-bootstrap";
 import React from "react";
-import {updateGroupEntry} from "../../api/services/Content";
 
-export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntry, entryAction}) => {
+
+export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntry, updateEntry}) => {
 
     return (
         <Card>
@@ -10,7 +10,7 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                 <h4>Einträge</h4>
                 <br/>
                 <ButtonGroup className="buttonStyle">
-                    <Button onClick={() => updateGroupEntry(selectedEntry.id)} variant="secondary">Update</Button>
+                    <Button onClick={() => updateEntry(selectedEntry)} variant="secondary">Update</Button>
                     <Button onClick={() => deleteEntry(selectedEntry.id)} variant="secondary">Löschen</Button>
                 </ButtonGroup>
                 <Table className="entryTable" striped bordered hover>
@@ -25,7 +25,7 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                     </thead>
                     <tbody>
                     {entries == null ? null : entries.map(entry =>
-                        <tr className={selectedEntry!= null && entry.id === selectedEntry.id ? "selectedEntry" : ""} key={`Entry-${entry.id}`} onClick={() => setSelectedEntry({type:entryAction.updateEntry,payload:entry})}>
+                        <tr className={selectedEntry!= null && entry.id === selectedEntry.id ? "selectedEntry" : ""} key={`Entry-${entry.id}`} onClick={() => setSelectedEntry(entry)}>
                             <td>{entry.name}</td>
                             <td>{entry.costBalance +"€"}</td>
                             <td>{entry.creator}</td>

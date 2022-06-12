@@ -76,11 +76,10 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
      * Initialize stores with data fetched from servers
      * -----------------------------------------------------------------------------------------------------------------
      */
-
     const currentFilterInformationReducer = (state, action) => {
         switch (action.type){
             case filterInformationAction.changeFilterTimeInterval:
-                return {...state, timeWindow: action.payload}
+                return {...state, timeInterval: action.payload.label}
             case filterInformationAction.changeFilterUsers:
                 return {...state, filterUser: action.payload}
             case filterInformationAction.changeFilterCategories:
@@ -99,11 +98,20 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         "timeInterval": "Day",
         "startDate": null,
         "endDate": null,
-        "users": [],
-        "categories": []
+        "filterUser": [],
+        "filterCategory": []
     });
 
-
+    const currentFilterInformationToDataObject = () => {
+        return {
+            "sortParameter": currentFilterInformation.sortParameter,
+            "timeInterval": currentFilterInformation.timeInterval,
+            "startDate": currentFilterInformation.startDate,
+            "endDate": currentFilterInformation.endDate,
+            "personIds": currentFilterInformation.filterUser.map(user => user.id),
+            "categoryIds": currentFilterInformation.filterCategory.map(category => category.id)
+        }
+    }
 
 
     const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
@@ -140,7 +148,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         //fetch categories for this group
         dispatch(fetchCategoriesFromServer(personGroup.id));
         //fetch processing results
-        dispatch(fetchProcessingResultsFromServer(personGroup.id, currentFilterInformation))
+        let dataObject = currentFilterInformationToDataObject();
+        dispatch(fetchProcessingResultsFromServer(personGroup.id, dataObject))
 
     }
 
@@ -150,79 +159,31 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
      * -----------------------------------------------------------------------------------------------------------------
      */
 
-   // console.log("In Render GroupInformationStore:")
-   //console.log(groupInformationStore)
+    console.log("In Render GroupInformationStore:")
+   console.log(groupInformationStore)
 
-   // console.log("In Render categoryStore:")
-   // console.log(categoryStore)
+    console.log("In Render categoryStore:")
+    console.log(categoryStore)
 
-   // console.log("In Render processingStore:")
-   // console.log(processingStore)
+    console.log("In Render processingStore:")
+    console.log(processingStore)
 
-    useEffect(()=>{
-        if(categoryStore != null && Array.isArray(categoryStore)) {
-            setSelectedFilterCategories(mappedCategories)
-        }
-    },[categoryStore])
+    const getUsers = () =>{
+        try {
+            const info = groupInformationStore.find(group => group.id === getActiveGroupId).personDTOList;
+            if(info == null) return [];
+            return info;
+        }catch (e){return []}
+    }
+
 
     const mappedCategories = categoryStore.map(category =>{
-        return{ name: category.name, label: category.name, value: category.id}
+        return{label: category.name, value: category.id, ...category}
     });
 
-    const entryAction = {
-        addCreator: "addCreator",
-        updateEntryName : "updateEntryName",
-        updateEntryDesc : "updateEntryDesc",
-        updateEntryCostBalance : "updateEntryCostBalance",
-        updateEntryCategory : "updateEntryCategory",
-        updateEntryCreationDate : "updateEntryCreationDate",
-        updateEntry : "updateEntry"
-    }
 
-    const entryReducer = (state, action) => {
-        switch (action.type){
-            case entryAction.updateEntryName:
-                return {...state, name: action.payload}
-            case entryAction.updateEntryDesc:
-                return {...state, description: action.payload}
-            case entryAction.updateEntryCostBalance:
-                return {...state, costBalance: action.payload}
-            case entryAction.updateEntryCategory:
-                return {...state, category: action.payload}
-            case entryAction.updateEntryCreationDate:
-                return {...state, creationDate: action.payload}
-            case entryAction.updateEntry:
-                return {
-                    ...state,
-                    name: action.payload.name,
-                    description: action.payload.description,
-                    costBalance: action.payload.costBalance,
-                    creationDate: action.payload.creationDate,
-                    category: action.payload.category
-                }
-            case entryAction.addCreator:
-                return {...state, creator: action.payload}
-            default:
-                return state;
-        }
-    }
-    let initialEntryState = {
-        name: null,
-        description: null,
-        costBalance: null,
-        creationDate: null,
-        category: null,
-        creator: null
-    }
-
-    const [entryState, dispatchEntry] = useReducer(entryReducer, initialEntryState);
     const [selectedGroup = groups[0], setSelectedGroup] = useState()
     const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
-
-    //SearchBar states for search parameters
-    const [selectedUsers, setSelectedUsers] = useState([])
-    const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
-
 
 
     /**
@@ -246,7 +207,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         dispatch(deleteSavingEntryFromServer(getActiveGroupId, id))
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
-                setSelectedEntry(null);
             })
         setSelectedEntry(null);
     }
@@ -292,14 +252,16 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         setSelectedCategory(null);
     }
 
+    console.log("CURRENT FILTER INFORMATION")
+    console.log(currentFilterInformation)
 
     return (
         <React.Fragment>
 
-            {/**
-             Navigation bar to log in / logout, chat and change active group
-             */}
-             <NavigationBar groups={groups}
+
+             <NavigationBar getActiveGroupId={getActiveGroupId}
+                            groups={groups}
+                            realGroups={groupInformationStore}
                             setSelectedGroup={setSelectedGroup}
                             selectedGroup={selectedGroup}
                             selectedSettingsGroup={selectedSettingsGroup}
@@ -308,25 +270,16 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
                             navToGuestSite={navToGuestSite}
                             />
 
-            {/**
-             Searchbar, which is a bar to create entries?
-             */}
             <EntryCreationBar setSelectedEntry = {setSelectedEntry}
                               selectedEntry = {selectedEntry}
                               mappedCategories = {mappedCategories}
                               AddEntry = {addEntry}
-                              entryAction = {entryAction}
-                              entry = {entryState}
-                              setEntry = {dispatchEntry}
                               setShowMore = {setShowMore}
                               showMore = {showMore}
             />
+
             <SearchBar mappedCategories = {mappedCategories}
-                       setSelectedFilterCategories = {setSelectedFilterCategories}
-                       selectedFilterCategories = {selectedFilterCategories}
-                       users = {[{label:"Testuser1"},{label:"Testuser2"}]}
-                       selectedUsers = {selectedUsers}
-                       setSelectedUsers = {setSelectedUsers}
+                       users = {getUsers()}
                        currentFilterInformation = {currentFilterInformation}
                        dispatchFilterInformation = {dispatchFilterInformation}
             />
@@ -337,8 +290,14 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
              */}
             <CardGroup>
                 <Diagram1 diagramValues={processingStore.balanceProcessResultDTO} />
-                <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory} selectedCategories={currentFilterInformation.categories} defaultFilterInformation={currentFilterInformation}/>
-                <Diagram3 diagramValues={processingStore.diagramByIntervalAndCategory} selectedUsers={currentFilterInformation.users} defaultFilterInformation={currentFilterInformation}/>
+
+                <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory}
+                          selectedCategories={currentFilterInformation.filterCategory.length === 0 ? categoryStore : currentFilterInformation.filterCategory}
+                          defaultFilterInformation={currentFilterInformation}/>
+
+                <Diagram3 diagramValues={processingStore.diagramByIntervalAndCreator}
+                          selectedUsers={currentFilterInformation.filterUser.length === 0 ? getUsers(): currentFilterInformation.filterUser}
+                          defaultFilterInformation={currentFilterInformation}/>
             </CardGroup>
 
             {/**
@@ -347,9 +306,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
             <CardGroup>
                 <EntryTable entries={processingStore.savingEntryDTOs}
                             selectedEntry={selectedEntry}
-                            setSelectedEntry={dispatchEntry}
+                            setSelectedEntry={setSelectedEntry}
                             deleteEntry={deleteEntry}
-                            entryAction={entryAction}
                 />
             </CardGroup>
 
