@@ -1,29 +1,53 @@
 import {Button, Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import makeAnimated from "react-select/animated";
-export const EntryCreationBar = ({setSelectedEntry, selectedEntry, mappedCategories, entry, setEntry, AddEntry, entryAction, setShowMore, showMore}) => {
+export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore}) => {
 
     const nameRef = useRef(null);
     const costBalanceRef = useRef(null);
     const creationDateRef = useRef(null);
     const descriptionRef = useRef(null);
 
+    const [entryCreationSelectedCategory,setEntryCreationSelectedCategory] = useState(null);
+
     const animatedComponents = makeAnimated();
 
+
+    function handleChange(category){
+        setEntryCreationSelectedCategory(category);
+    }
+
     function addEntry(){
-        setEntry({type:entryAction.updateEntryName,payload:nameRef.current.value});
-        setEntry({type:entryAction.updateEntryCostBalance,payload: costBalanceRef.current.value});
+        let name = nameRef.current.value;
+        let costBalance = costBalanceRef.current.value;
+        let creationDate;
+        let description;
+        let category = entryCreationSelectedCategory;
+
+        if(category == null && mappedCategories.length > 0)
+            category = mappedCategories[0]
+
 
         if( creationDateRef.current == null || creationDateRef.current.value === "")
-            setEntry({type:entryAction.updateEntryCreationDate,payload: Date.now()});
+            creationDate = Date.now();
         else
-            setEntry({type:entryAction.updateEntryCreationDate,payload: creationDateRef.current.value});
+            creationDate = creationDateRef.current.value;
 
         if( descriptionRef.current == null || descriptionRef.current.value === "")
-            setEntry({type:entryAction.updateEntryDesc,payload: null});
+            description = null;
         else
-            setEntry({type:entryAction.updateEntryDesc,payload: descriptionRef.current.value});
+            description = descriptionRef.current.value;
+
+
+        let entry = {
+            name: name,
+            description: description,
+            costBalance: costBalance,
+            creationDate: creationDate,
+            category: category,
+            creator: null
+        }
 
         AddEntry(entry)
     }
@@ -49,7 +73,7 @@ export const EntryCreationBar = ({setSelectedEntry, selectedEntry, mappedCategor
                             <Form.Group className="CategoryArea">
                                 <Form.Label>Kategorien</Form.Label>
                                 <div className="Select">
-                                    <Select options={mappedCategories} components={animatedComponents} onChange={(e) => setEntry({type:"updateEntryCategory", payload:e})}
+                                    <Select options={mappedCategories} components={animatedComponents} onChange={(e) => handleChange(e)}
                                             />
                                 </div>
                             </Form.Group>

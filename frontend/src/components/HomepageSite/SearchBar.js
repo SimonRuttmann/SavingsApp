@@ -1,4 +1,4 @@
-import {Card, Col, Form, Row} from "react-bootstrap";
+import {Button, Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
 import React from "react";
 import makeAnimated from "react-select/animated";
@@ -11,6 +11,10 @@ export const SearchBar = ({   mappedCategories,
 
     const animatedComponents = makeAnimated();
     const timeWindow = [{label : "Day"},{label : "Week"},{label : "Month"},{label : "Year"}]
+
+    const mapUsers = () =>{
+        return users.map(user =>{ return {label: user.username,value: user.id, ...user}});
+    }
 
     return (
         <Card className="searchBar">
@@ -43,9 +47,9 @@ export const SearchBar = ({   mappedCategories,
                             <Form.Group className="UserArea">
                                 <Form.Label>Users</Form.Label>
                                 <div className="Multiselect">
-                                    <Select options={users}
+                                    <Select options={mapUsers()}
                                             components={animatedComponents}
-                                            defaultValue={currentFilterInformation.users}
+                                            defaultValue={mapUsers()}
                                             onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeFilterUsers, payload:e})}
                                             isMulti />
                                 </div>
@@ -57,10 +61,15 @@ export const SearchBar = ({   mappedCategories,
                                 <div className="Multiselect">
                                     <Select options={mappedCategories}
                                             components={animatedComponents}
-                                            defaultValue={currentFilterInformation.categories}
+                                            defaultValue={currentFilterInformation.filterCategory}
                                             onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeFilterCategories, payload:e})}
                                             isMulti />
                                 </div>
+                            </Form.Group>
+                        </Col>
+                        <Col className="buttonCol">
+                            <Form.Group className="buttonArea">
+                                <Button >Refresh Data</Button>
                             </Form.Group>
                         </Col>
                     </Row>

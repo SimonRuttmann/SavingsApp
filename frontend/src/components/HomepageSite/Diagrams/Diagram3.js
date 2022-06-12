@@ -24,7 +24,8 @@ export const Diagram3 = ({diagramValues, selectedUsers, defaultFilterInformation
     for (let usersToPopulate of selectedUsers) {
 
         let dataValues = populateUser(usersToPopulate)
-        let label = usersToPopulate.label ? usersToPopulate.label : usersToPopulate.name
+
+        let label = usersToPopulate.username
 
         dataSet.push( {
             label: label,
@@ -41,6 +42,7 @@ export const Diagram3 = ({diagramValues, selectedUsers, defaultFilterInformation
         let dataValues = [];
 
         for (let timeValue of sortedDiagramValues) {
+
             let value = getUserForTimeValue(userToPopulate, timeValue);
             dataValues.push(value);
         }
@@ -50,9 +52,9 @@ export const Diagram3 = ({diagramValues, selectedUsers, defaultFilterInformation
 
     function getUserForTimeValue(userToPopulate, timeValue){
         for(let user of timeValue.values) {
+
             if (user.id === userToPopulate.id) {
                 return user.sum;
-
             }
         }
         return 0;

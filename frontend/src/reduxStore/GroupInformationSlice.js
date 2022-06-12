@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {getGroupInfo} from "../api/services/Content";
-import {getGroup} from "../api/services/User";
+import {deleteGroup, getGroup, leaveGroup, register} from "../api/services/User";
 
 /**
  * Long id,
@@ -75,4 +75,27 @@ export const fetchGroupCoreInformationFromServer = () => (dispatch) => {
 export const fetchGeneralInformationToGroupFromServer = (groupId) => (dispatch) => {
     let response = getGroupInfo(groupId)
     response.then(response => dispatch(AddGeneralInformationToGroup({id: groupId, ...response.data})));
+}
+
+export const addNewGroup = (groupBody) => (dispatch) =>{
+    return new Promise((resolve, reject) => {
+        let response = register(groupBody)
+        response.then(response => dispatch(AddGroup(response.data)))
+                .then(() => resolve(null))
+                .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+    });
+}
+
+export const leaveAGroup = (groupId) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        let response = leaveGroup(groupId)
+        response.then(response => dispatch(RemoveGroup(response.data)))
+    })
+}
+
+export const deleteAGroup = (groupId) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        let response = deleteGroup(groupId)
+        response.then(response => dispatch(RemoveGroup(response.data)))
+    })
 }

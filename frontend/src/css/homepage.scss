@@ -1,12 +1,12 @@
-.entryCreationBar{
-  .buttonCol{
-    position: relative;
-    .buttonArea{
-      position: absolute;
-      bottom: 0;
-    }
+.buttonCol{
+  position: relative;
+  .buttonArea{
+    position: absolute;
+    bottom: 0;
   }
 }
+
+
 
 .chartStyle{
   border: 0;
@@ -36,3 +36,20 @@
   }
 }
 
+//WIP for setting 
+.selectedGroup{
+  background-color: lightblue;
+}
+.addGroupButtonDiv{
+  align: "right";
+}
+
+.topMarginText{
+  margin-top: 0rem;
+}
+.settingPopUp{
+  margin-top: 0rem;
+}
+.forumSize{
+ width: 10rem;
+}
