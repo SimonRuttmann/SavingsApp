@@ -3,8 +3,10 @@ import UserService from "../Auth";
 
 const UserServiceBaseUrl = "http://localhost:8011/userservice/";
 const InvitationsBaseUrl = UserServiceBaseUrl + "invitation/";
+
 const GroupBaseUrl = UserServiceBaseUrl + "group/";
 const UserBaseUrl = UserServiceBaseUrl + "user/";
+
 
 const token = ()=> UserService.getToken();
 
@@ -25,6 +27,7 @@ export function receive(){
 //Groups
 export function register(body){
     return Post(GroupBaseUrl + "register", body, token())
+
 }
 export function getGroup(){
     return Get(GroupBaseUrl,token())
@@ -37,10 +40,10 @@ export function leaveGroup(groupId){
 }
 
 //Users
-export function getUser(userid){
-    return Get(UserBaseUrl + userid, token())
+export function getUser(){
+    return Get(UserBaseUrl, token())
 }
-export function getUsers(){
-    return Get(UserBaseUrl + "usernames", token())
+export function getUsernames(){
+    return Get(UserBaseUrl + "/usernames", token())
 }
 

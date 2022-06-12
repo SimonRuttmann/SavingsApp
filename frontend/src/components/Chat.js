@@ -36,14 +36,12 @@ function Chat( user ) {
 
     const connectToSockJs = () => {
         stompClient.connect({}, (frame) => {
-            console.log('connected: ' + frame)
             subscribeToGroup()
         })
     }
 
     const subscribeToGroup = () => {
         stompClient.subscribe(`/sub/chat/rooms/${groupId}`, (message) => {
-            console.log(message)
         })
     }
 

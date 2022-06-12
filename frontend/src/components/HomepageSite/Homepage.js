@@ -7,49 +7,64 @@ import {CardGroup} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchCategoriesFromServer, selectCategoryStore} from "../../reduxStore/CategorySlice";
-import {
-    addSavingEntryToServer,
-    deleteSavingEntryFromServer,
-    fetchSavingEntriesFromServer,
-    selectSavingEntryStore
-} from "../../reduxStore/SavingEntrySlice";
+import {addCategoryToServer, deleteCategoryFromServer, fetchCategoriesFromServer, selectCategoryStore, updateCategoryToServer} from "../../reduxStore/CategorySlice";
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
-import {login, logout, selectUserStore} from "../../reduxStore/UserSlice";
+import {fetchUserDataFromServer, login, logout, selectUserStore} from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
-import {
-    fetchProcessingResultsFromServer,
-    removeSortedAndFilteredSavingEntry,
-    selectProcessingStore
-} from "../../reduxStore/ProcessingSlice";
+import {addSavingEntryToServer, deleteSavingEntryFromServer, fetchProcessingResultsFromServer, selectProcessingStore, updateSavingEntryToServer} from "../../reduxStore/ContentSlice";
 import {Diagram1} from "./Diagrams/Diagram1";
 import {Diagram2} from "./Diagrams/Diagram2";
 import {Diagram3} from "./Diagrams/Diagram3";
 import {EntryTable} from "./EntryTable";
 import {NavigationBar} from "./NavigationBar";
 import {EntryCreationBar} from "./EntryCreationBar";
+import {SearchBar} from "./SearchBar";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
 
-const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,setActiveGroupId}) => {
-
-    const debug = false;
+const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGroupId}) => {
 
 
-    /** * * * * * * *
-     ** Redux-Store *
-     ** * * * * * * */
-    const savingEntryStore      = useSelector(selectSavingEntryStore);
+    /**
+     *  Access Redux-Stores
+     */
+
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const userStore             = useSelector(selectUserStore);
     const categoryStore         = useSelector(selectCategoryStore);
     const processingStore       = useSelector(selectProcessingStore);
     const dispatch = useDispatch()
 
-    const mappedCategories = categoryStore.map(category =>{
-        return{  label: category.name, value: category.id}
-    });
+
+    /**
+     * Configure Keycloak
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+
+    KeyCloakService.updateToken()
+        .then((refreshed) => refreshToken(refreshed))
+        .catch(function() {
+            dispatch((logout()))
+        });
+
+
+    const refreshToken = (refreshed) => {
+        if (refreshed) {
+            dispatch(login(KeyCloakService.getToken()));
+        }
+    };
+
+    const history = useHistory()
+
+    const navToGuestSite = () => {
+        history.push("/");
+    }
+
+    /**
+     * Initialize stores with data fetched from servers
+     * -----------------------------------------------------------------------------------------------------------------
+     */
 
     const defaultFilterInformation = {
         "sortParameter": "CreationDate",
@@ -60,42 +75,26 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
         "categoryIds": []
     }
 
+    const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
+
+    // Fetch core data
     useEffect( () => {
         dispatch(login(KeyCloakService.getToken()));
-
+        dispatch(fetchUserDataFromServer());
         dispatch(fetchGroupCoreInformationFromServer())
             .then(setLoadingCoreInformation(true));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
-    useEffect(()=>{
-        if(categoryStore != null && Array.isArray(categoryStore))
-            setSelectedFilterCategories(categoryStore)
-    },[categoryStore])
-
-    const [isLoadingCoreInformation, setLoadingCoreInformation] = useState(false)
-
+    // Fetch additional content data
     useEffect( () => {
         if(!isLoadingCoreInformation) return;
-
         fetchContentInformation();
         setLoadingCoreInformation(false);
         setActiveGroupId(groupInformationStore.find(group => group.personGroup === true).id);
     },[groupInformationStore])
 
-
-    console.log("In Render GroupInformationStore:")
-    console.log(groupInformationStore)
-
-    console.log("In Render savingEntryStore:")
-    console.log(savingEntryStore)
-
-    console.log("In Render categoryStore:")
-    console.log(categoryStore)
-
-    console.log("In Render processingStore:")
-    console.log(processingStore)
 
     const fetchContentInformation = () => {
 
@@ -109,27 +108,44 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
 
         //fetch categories for this group
         dispatch(fetchCategoriesFromServer(personGroup.id));
-        //fetch saving entries for this group
-        dispatch(fetchSavingEntriesFromServer(personGroup.id));
         //fetch processing results
         dispatch(fetchProcessingResultsFromServer(personGroup.id, defaultFilterInformation))
 
     }
 
-    KeyCloakService.updateToken()
-        .then((refreshed) => refreshToken(refreshed))
-        .catch(function() {
-            dispatch((logout()))
-            console.log('Failed to refresh the token, or the session has expired');
-        });
 
-    const refreshToken = (refreshed) => {
-        if (refreshed) {
-            dispatch(login(KeyCloakService.getToken()));
-        } else {
-            console.log('Token is still valid');
+    /**
+     * Update local states
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+
+    console.log("In Render GroupInformationStore:")
+    console.log(groupInformationStore)
+
+    console.log("In Render categoryStore:")
+    console.log(categoryStore)
+
+    console.log("In Render processingStore:")
+    console.log(processingStore)
+
+    const getUsers = () =>{
+        try {
+            const info = groupInformationStore.find(group => group.id === getActiveGroupId).personDTOList;
+            if(info == null) return [];
+            return info;
+        }catch (e){return []}
+    }
+
+    useEffect(()=>{
+        if(categoryStore != null && Array.isArray(categoryStore)) {
+            setSelectedFilterCategories(mappedCategories)
+            console.log("CategoryMapping is running! ",mappedCategories)
         }
-    };
+    },[categoryStore])
+
+    const mappedCategories = categoryStore.map(category =>{
+        return{ name: category.name, label: category.name, value: category.id}
+    });
 
     const entryAction = {
         addCreator: "addCreator",
@@ -140,9 +156,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
         updateEntryCreationDate : "updateEntryCreationDate",
         updateEntry : "updateEntry"
     }
+
     const entryReducer = (state, action) => {
-        console.log("ACTION: ",action)
-        console.log("STATE: ",state)
         switch (action.type){
             case entryAction.updateEntryName:
                 return {...state, name: action.payload}
@@ -179,40 +194,84 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
     }
 
     const [entryState, dispatchEntry] = useReducer(entryReducer, initialEntryState);
+    const [selectedGroup = groups[0], setSelectedGroup] = useState()
+    const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
+
+    //SearchBar states for search parameters
+    const [selectedUsers, setSelectedUsers] = useState([])
+    const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
+    const [selectedTimeWindow, setSelectedTimeWindow] = useState()
+    const timeWindow = [{label : "day"},{label : "week"},{label : "month"},{label : "year"}]
 
 
 
     /**
-     * Local states
+     * Crud saving entry
+     * -----------------------------------------------------------------------------------------------------------------
      */
-    const [selectedGroup = groups[0], setSelectedGroup] = useState()
-    const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
+
     const [selectedEntry, setSelectedEntry] = useState()
     const [showMore, setShowMore] = useState(false)
 
-    const [selectedCreateCategory, setSelectedCreateCategory] = useState()
-    const [selectedFilterCategories, setSelectedFilterCategories] = useState([])
-
-    const history = useHistory()
-
-    const navToGuestSite = () => {
-        history.push("/");
+    const addEntry = (entry) => {
+        entry.creator = userStore.username;
+        dispatch(addSavingEntryToServer(getActiveGroupId, entry))
+            .then(() => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+            })
+        setSelectedEntry(null);
     }
 
     const deleteEntry = (id) => {
-        console.log(id)
-        dispatch(deleteSavingEntryFromServer(getActiveGroupId, id));
-        dispatch(removeSortedAndFilteredSavingEntry(id))
-        setSelectedEntry(null);
-    }
-    const addEntry = (id) => {
-        console.log(id)
-        dispatch(addSavingEntryToServer(getActiveGroupId, id))
+        dispatch(deleteSavingEntryFromServer(getActiveGroupId, id))
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
                 setSelectedEntry(null);
             })
+        setSelectedEntry(null);
     }
+
+    const updateEntry = (entry) => {
+        dispatch(updateSavingEntryToServer(getActiveGroupId, entry))
+            .then( () => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+            })
+        setSelectedEntry(null);
+    }
+
+
+
+    /**
+     * Crud category
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+
+    const [selectedCategory, setSelectedCategory] = useState()
+
+    const addCategory = (category) => {
+        dispatch(addCategoryToServer(getActiveGroupId, category))
+            .then( () => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+            })
+        setSelectedCategory(null);
+    }
+
+    const deleteCategory = (id) => {
+        dispatch(deleteCategoryFromServer(getActiveGroupId, id))
+            .then( () => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+            })
+        setSelectedCategory(null);
+    }
+
+    const updateCategory = (category) => {
+        dispatch(updateCategoryToServer(getActiveGroupId, category))
+            .then( () => {
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, defaultFilterInformation))
+            })
+        setSelectedCategory(null);
+    }
+
 
     return (
         <React.Fragment>
@@ -234,26 +293,38 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
             {/**
              Searchbar, which is a bar to create entries?
              */}
-            <CardGroup>
-                <EntryCreationBar setSelectedEntry={setSelectedEntry}
-                                  selectedEntry={selectedEntry}
-                                  mappedCategories={mappedCategories}
-                                  AddEntry={addEntry}
-                                  entryAction = {entryAction}
-                                  entry = {entryState}
-                                  setEntry={dispatchEntry}
-                                  setShowMore={setShowMore}
-                                  showMore={showMore}/>
-            </CardGroup>
+            <EntryCreationBar setSelectedEntry = {setSelectedEntry}
+                              selectedEntry = {selectedEntry}
+                              mappedCategories = {mappedCategories}
+                              AddEntry = {addEntry}
+                              entryAction = {entryAction}
+                              entry = {entryState}
+                              setEntry = {dispatchEntry}
+                              setShowMore = {setShowMore}
+                              showMore = {showMore}
+            />
+            <SearchBar mappedCategories = {mappedCategories}
+                       setSelectedFilterCategories = {setSelectedFilterCategories}
+                       selectedFilterCategories = {selectedFilterCategories}
+                       users = {getUsers()}
+                       selectedUsers = {selectedUsers}
+                       setSelectedUsers = {setSelectedUsers}
+                       timeWindow = {timeWindow}
+                       selectedTimeWindow = {selectedTimeWindow}
+                       setSelectedTimeWindow = {setSelectedTimeWindow}
+            />
 
 
             {/**
              Diagrams displaying the results from processing controller
              */}
             <CardGroup>
-                <Diagram1 diagramValues={processingStore.balanceProcessResultDTO}/>
-                <Diagram2 selectedGroup={selectedGroup} selectedCategories={selectedFilterCategories}/>
-                <Diagram3 selectedGroup={selectedGroup}/>
+                <Diagram1 diagramValues={processingStore.balanceProcessResultDTO} />
+                <Diagram2 diagramValues={processingStore.diagramByIntervalAndCategory}
+                          selectedCategories={selectedFilterCategories}
+                          defaultFilterInformation={defaultFilterInformation}
+                />
+                <Diagram3 diagramValues={processingStore.diagramByIntervalAndCategory} selectedUsers={selectedUsers} defaultFilterInformation={defaultFilterInformation}/>
             </CardGroup>
 
             {/**
