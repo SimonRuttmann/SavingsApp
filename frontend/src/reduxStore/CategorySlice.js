@@ -34,7 +34,7 @@ const categorySlice = createSlice({
             return state.filter(category => category.id !== action.payload);
         },
         UpdateCategory: (state, action) => {
-            let category = state.find(category => category.id === category.payload.id)
+            let category = state.find(category => category.id === action.payload.id)
             category.name = action.payload.name;
         }
     }

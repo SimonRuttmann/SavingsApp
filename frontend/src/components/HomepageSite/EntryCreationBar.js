@@ -61,7 +61,7 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
                         <Col>
                             <Form.Group>
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control ref={nameRef} id="name" type="text" placeholder="Name eintragen"/>
+                                <Form.Control ref={nameRef} id="name" type="text" placeholder="Eintragsname eintragen"/>
                             </Form.Group>
                         </Col>
                         <Col>
