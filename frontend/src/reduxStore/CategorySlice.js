@@ -13,12 +13,15 @@ const categorySlice = createSlice({
     initialState: [],
     reducers: {
         AddCategories: (state, action) => {
+            console.log("update categories")
+            state = [];
             action.payload.forEach(category => {
                 state.push({
                     id: category.id,
                     name: category.name
                 })
             })
+            return state;
         },
         AddCategory: (state, action) => {
             state.push({
@@ -27,7 +30,7 @@ const categorySlice = createSlice({
             })
         },
         RemoveCategory: (state, action) => {
-            state = state.filter(category => category.id !== action.payload.id);
+            return state.filter(category => category.id !== action.payload.id);
         },
         UpdateCategory: (state, action) => {
             let category = state.find(category => category.id === category.payload.id)
@@ -43,6 +46,7 @@ export default categorySlice.reducer
 export const selectCategoryStore = (state) => state.category;
 
 export const fetchCategoriesFromServer = (groupId) => (dispatch) => {
+    console.log("fetching categories")
     let response = getAllCategorys(groupId)
     response.then(response => dispatch(AddCategories(response.data)));
 }

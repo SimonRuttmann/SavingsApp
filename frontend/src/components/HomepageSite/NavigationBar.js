@@ -8,7 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import keycloak from '../../api/Auth'
 import {logout} from "../../reduxStore/UserSlice";
 import {useDispatch} from "react-redux";
-import {useHistory} from "react-router-dom";
 
 export const NavigationBar = ({getActiveGroupId, groups, realGroups, setSelectedGroup, selectedGroup, setSelectedSettingsGroup, selectedSettingsGroup, AddGroup, DeleteGroup, navToGuestSite}) => {
     const dispatch = useDispatch()

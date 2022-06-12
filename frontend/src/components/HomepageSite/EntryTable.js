@@ -16,7 +16,6 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                 <Table className="entryTable" striped bordered hover>
                     <thead>
                     <tr>
-                        <th>#</th>
                         <th>Name</th>
                         <th>Kosten</th>
                         <th>User</th>
@@ -27,9 +26,8 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                     <tbody>
                     {entries == null ? null : entries.map(entry =>
                         <tr className={selectedEntry!= null && entry.id === selectedEntry.id ? "selectedEntry" : ""} key={`Entry-${entry.id}`} onClick={() => setSelectedEntry({type:entryAction.updateEntry,payload:entry})}>
-                            <td>{entry.id}</td>
                             <td>{entry.name}</td>
-                            <td>{entry.costBalance}</td>
+                            <td>{entry.costBalance +"€"}</td>
                             <td>{entry.creator}</td>
                             <td>{entry.category.name}</td>
                             <td>{entry.creationDate}</td>
