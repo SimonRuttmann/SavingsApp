@@ -1,14 +1,16 @@
 import {Button, Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import makeAnimated from "react-select/animated";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
+import {isNumberOrDecimalString} from "../../util";
 
 
-export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore}) => {
+export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore, clearSelectors}) => {
+
 
     registerLocale('de', de)
 
@@ -18,12 +20,21 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
 
     const [entryCreationSelectedCategory,setEntryCreationSelectedCategory] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
+    const [costBalance, setCostBalance] = useState("0.00")
 
     const animatedComponents = makeAnimated();
+
+    useEffect( () => {
+        setEntryCreationSelectedCategory(null);
+    }, [clearSelectors])
 
 
     function handleChange(category){
         setEntryCreationSelectedCategory(category);
+    }
+
+    function changeCostBalance(string){
+        if(isNumberOrDecimalString(string)) setCostBalance(string)
     }
 
     function addEntry(){
@@ -67,14 +78,17 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
                         <Col>
                             <Form.Group>
                                 <Form.Label>Kosten</Form.Label>
-                                <Form.Control ref={costBalanceRef} type="text" placeholder="Kosten eintragen"/>
+                                <Form.Control ref={costBalanceRef} type="text" placeholder="Kosten eintragen" value={costBalance} onChange={(e)=>changeCostBalance(e.target.value)}/>
                             </Form.Group>
                         </Col>
                         <Col>
                             <Form.Group className="CategoryArea">
                                 <Form.Label>Kategorien</Form.Label>
                                 <div className="Select">
-                                    <Select options={mappedCategories} components={animatedComponents} onChange={(e) => handleChange(e)}
+                                    <Select options={mappedCategories}
+                                            components={animatedComponents}
+                                            onChange={(e) => handleChange(e)}
+                                            value = {entryCreationSelectedCategory}
                                             />
                                 </div>
                             </Form.Group>

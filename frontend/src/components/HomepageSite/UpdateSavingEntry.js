@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 import makeAnimated from "react-select/animated";
+import {isNumberOrDecimalString} from "../../util";
 
 const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpenUpdateEntryPopup}) => {
 
@@ -28,6 +29,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
 
     const [entryUpdateSelectedCategory,setEntryUpdateSelectedCategory] = useState(selectedEntry.category);
     const [startDate, setStartDate] = useState(Date.parse(selectedEntry.creationDate));
+    const [costBalance, setCostBalance] = useState(selectedEntry.costBalance)
 
     const animatedComponents = makeAnimated();
 
@@ -36,7 +38,9 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
         setEntryUpdateSelectedCategory(category);
     }
 
-
+    function changeCostBalance(string){
+        if(isNumberOrDecimalString(string)) setCostBalance(string)
+    }
 
     function perpareUpdate(){
         console.log("prepareUpdate")
@@ -70,6 +74,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
         updateEntry(entry);
         handleClose();
     }
+
 //Select default value
     // defaultValue = {{label: selectedEntry.category, value: selectedEntry.category.id, ...selectedEntry.category}}
     return (
@@ -78,7 +83,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                 Eintrag ändern
             </Button>
 
-            <Modal show={show} onHide={handleClose} className ="updateEntryPopUp">
+            <Modal show={show} onHide={handleClose} size="xl">
                 <Modal.Header closeButton>
                     <Modal.Title>Eintrag ändern</Modal.Title>
                 </Modal.Header>
@@ -96,7 +101,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                                     <Col>
                                         <Form.Group>
                                             <Form.Label>Kosten</Form.Label>
-                                            <Form.Control ref={costBalanceRef} type="text" defaultValue={selectedEntry.costBalance}/>
+                                            <Form.Control ref={costBalanceRef} type="text" value={costBalance} onChange={(e) => changeCostBalance(e.target.value)}/>
                                         </Form.Group>
                                     </Col>
                                     <Col>
@@ -144,6 +149,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                 </Modal.Body>
                 <Modal.Footer>
                 </Modal.Footer>
+
             </Modal>
         </>
 

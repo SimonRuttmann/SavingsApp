@@ -1,6 +1,6 @@
 import {Button, Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import makeAnimated from "react-select/animated";
 import {filterInformationAction} from "./Homepage";
 import DatePicker from "react-datepicker";
@@ -8,10 +8,22 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 
-export const SearchBar = ({   mappedCategories,
+export const SearchBar = ({   clearSelectors,
+                              mappedCategories,
                               users,
                               currentFilterInformation,
                               dispatchFilterInformation}) => {
+
+    const categoryRef = useRef(null);
+    const userRef = useRef(null);
+
+    useEffect( () => {
+        if(categoryRef.current != null)
+            categoryRef.current.commonProps.clearValue();
+
+        if(userRef.current != null)
+            userRef.current.commonProps.clearValue();
+    },[clearSelectors])
 
     registerLocale('de', de)
 
@@ -61,7 +73,8 @@ export const SearchBar = ({   mappedCategories,
                             <Form.Group className="UserArea">
                                 <Form.Label>Users</Form.Label>
                                 <div className="Multiselect">
-                                    <Select options={mapUsers()}
+                                    <Select ref={userRef}
+                                            options={mapUsers()}
                                             components={animatedComponents}
                                             defaultValue={mapUsers()}
                                             onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeFilterUsers, payload:e})}
@@ -73,7 +86,8 @@ export const SearchBar = ({   mappedCategories,
                             <Form.Group className="CategoryArea">
                                 <Form.Label>Kategorien</Form.Label>
                                 <div className="Multiselect">
-                                    <Select options={mappedCategories}
+                                    <Select ref={categoryRef}
+                                            options={mappedCategories}
                                             components={animatedComponents}
                                             defaultValue={currentFilterInformation.filterCategory}
                                             onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeFilterCategories, payload:e})}

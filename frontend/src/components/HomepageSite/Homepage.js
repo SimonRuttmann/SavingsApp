@@ -171,6 +171,27 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(fetchInvitations())
     }
 
+    /**
+     * Fetch data on switch group
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+
+    useEffect( () => {
+
+        if(getActiveGroupId == null) return;
+
+        //fetch categories for this group
+        dispatch(fetchCategoriesFromServer(getActiveGroupId));
+        //fetch processing results
+        let dataObject = currentFilterInformationToDataObject();
+        dispatch(fetchProcessingResultsFromServer(getActiveGroupId, dataObject))
+
+        //Trigger selector clear
+        setClearSelectors(prevState => !prevState);
+
+        },[getActiveGroupId])
+
+    const [clearSelectors, setClearSelectors] = useState(false);
 
     /**
      * Update local states
@@ -307,7 +328,8 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                 <h4>Suchleiste</h4>
             </Card>
 
-            <SearchBar mappedCategories = {mappedCategories}
+            <SearchBar clearSelectors={clearSelectors}
+                       mappedCategories = {mappedCategories}
                        users = {getUsers()}
                        currentFilterInformation = {currentFilterInformation}
                        dispatchFilterInformation = {dispatchFilterInformation}
@@ -333,7 +355,8 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                 <h4>Eintragserstellung</h4>
             </Card>
 
-            <EntryCreationBar setSelectedEntry = {setSelectedEntry}
+            <EntryCreationBar clearSelectors={clearSelectors}
+                              setSelectedEntry = {setSelectedEntry}
                               selectedEntry = {selectedEntry}
                               mappedCategories = {mappedCategories}
                               AddEntry = {addEntry}
@@ -346,7 +369,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                 <h4>Kategoriebearbeitung</h4>
             </Card>
 
-            <CategoryEditingBar addCategory={addCategory} deleteCategory={deleteCategory} updateCategory={updateCategory} mappedCategories={mappedCategories}/>
+            <CategoryEditingBar clearSelectors={clearSelectors}
+                                addCategory={addCategory}
+                                deleteCategory={deleteCategory}
+                                updateCategory={updateCategory} mappedCategories={mappedCategories}/>
 
 
             {/**

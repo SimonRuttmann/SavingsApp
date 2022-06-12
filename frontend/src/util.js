@@ -52,3 +52,8 @@ export function rainbow(numOfSteps, step) {
     var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
     return (c);
 }
+
+const regexp = /^-?(\d{0,8})(\.)?(\d{1,2})?$/;
+export function isNumberOrDecimalString(str) {
+    return regexp.test(str)
+}

@@ -6,7 +6,6 @@ export function Get(url, auth){
     console.log("GET URL: ",url)
     let request;
     if(auth == null){
-        console.log("Running GET without auth")
         try {
             request = axios.get(url, null)
         } catch (e) {
@@ -36,7 +35,6 @@ export function Get(url, auth){
 export function Post(url,body,auth){
     let request;
     console.log("POST ",url)
-    console.log("POST BODY ",body)
     try {
         request = {
             method: 'post',
