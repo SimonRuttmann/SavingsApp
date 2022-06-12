@@ -220,7 +220,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, AddEntry, getActiveGroupId,set
             {/**
              Navigation bar to log in / logout, chat and change active group
              */}
-             <NavigationBar groups={groups}
+             <NavigationBar getActiveGroupId={getActiveGroupId}
+                            groups={groups}
+                            realGroups={groupInformationStore}
                             setSelectedGroup={setSelectedGroup}
                             selectedGroup={selectedGroup}
                             selectedSettingsGroup={selectedSettingsGroup}

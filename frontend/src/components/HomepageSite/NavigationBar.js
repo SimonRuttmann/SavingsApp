@@ -10,12 +10,14 @@ import {logout} from "../../reduxStore/UserSlice";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router-dom";
 
-export const NavigationBar = ({groups, setSelectedGroup, selectedGroup, setSelectedSettingsGroup, selectedSettingsGroup, AddGroup, DeleteGroup, navToGuestSite}) => {
+export const NavigationBar = ({getActiveGroupId, groups, realGroups, setSelectedGroup, selectedGroup, setSelectedSettingsGroup, selectedSettingsGroup, AddGroup, DeleteGroup, navToGuestSite}) => {
     const dispatch = useDispatch()
     function Redirect() {
         dispatch((logout()))
         keycloak.doLogout()
     }
+    console.log("NavigatonBar")
+    console.log(realGroups)
 
 
     return (
@@ -38,7 +40,7 @@ export const NavigationBar = ({groups, setSelectedGroup, selectedGroup, setSelec
                     <Chat/>
                 </Nav>
                 <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
-                <SettingsPopup groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
+                <SettingsPopup getActiveGroupId={getActiveGroupId} realgroups={realGroups} groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
                 <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
             </Navbar.Collapse>
         </Container>
