@@ -9,8 +9,8 @@ import {
     InputGroup,
     Offcanvas,
 } from "react-bootstrap";
-import {useDispatch, useSelector} from "react-redux";
-import {getMessages, postMessage, subTopic, unSubTopic} from "../api/services/Chat";
+import {useSelector} from "react-redux";
+import {getMessages, postMessage, subTopic} from "../api/services/Chat";
 import {selectUserStore} from "../reduxStore/UserSlice";
 import "../css/chat.scss"
 
@@ -23,22 +23,33 @@ function Chat( getActiveGroupId ) {
     //New messages to be send
     const [message, setMessage] = useState();
     //Topic equals selected groupID
-    const [topic, setTopic] = useState('Test');
+    const [topic, setTopic] = useState();
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+
+    const handleShow = () => {
+        if(getActiveGroupId.getActiveGroupId != null) {
+            setTopic(getActiveGroupId.getActiveGroupId)
+            console.log("Changing topic to ",topic)
+        }
+        else console.log("Its still null")
+        setShow(true);
+    }
     let stompClient = null;
 
     useEffect(()=>{
-        console.log("Change Topic to",getActiveGroupId.getActiveGroupId)
-        setTopic(getActiveGroupId.getActiveGroupId)
+        if(getActiveGroupId.getActiveGroupId != null)
+            setTopic(getActiveGroupId.getActiveGroupId)
+        console.log("Chat changed topic to ",topic)
+
         connectToSockJs()
         subscribeToTopic()
         getMessagesForTopic()
-    },[])
+    },[getActiveGroupId.getActiveGroupId,topic])
 
     const connectToSockJs = () => {
+        if(stompClient != null)disconnect()
         const socket = new SockJS('http://localhost:8014/ws/chat')
         stompClient = Stomp.over(socket)
         stompClient.connect({}, (frame) => {
@@ -50,7 +61,11 @@ function Chat( getActiveGroupId ) {
     //Handles the subscribe to stomp socket
     const subscribeToGroup = () => {
         stompClient.subscribe(`/sub/chat/rooms/`+topic, (msg) => {
-            setMessages(messages.concat(msg.body))
+            const json =JSON.parse(msg.body)
+            console.log("Message State before: ",messages)
+            console.log("Received message: ",json)
+            setMessages(messages.concat(json))
+            console.log("New messages ",messages)
         })
     }
 
@@ -60,8 +75,9 @@ function Chat( getActiveGroupId ) {
     }
 
     const getMessagesForTopic = () => {
+        console.log("Started fetching with topic: ",topic)
         getMessages(topic).then((tmp)=> {
-            setMessages(messages.concat(tmp.data))
+            setMessages(tmp.data)
         })
     }
 
@@ -105,11 +121,7 @@ function Chat( getActiveGroupId ) {
 
   return (
       <>
-          <Button variant="dark" onClick={
-              () => {
-                  handleShow()
-              }
-          }>
+          <Button className="chatButton" variant="dark" onClick={()=>handleShow()}>
               Chat
           </Button>
           <Offcanvas show={show} onHide={handleClose}>
