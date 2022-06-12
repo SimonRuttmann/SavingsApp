@@ -32,7 +32,7 @@ export const Diagram2 = ({diagramValues,selectedCategories, defaultFilterInforma
     for (let categoryToPopulate of selectedCategories) {
 
         let dataValues = populateCategory(categoryToPopulate)
-        let label = categoryToPopulate.label ? categoryToPopulate.label : categoryToPopulate.name
+        let label = categoryToPopulate.name
 
         dataSet.push( {
             label: label,

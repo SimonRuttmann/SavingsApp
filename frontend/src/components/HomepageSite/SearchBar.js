@@ -2,14 +2,15 @@ import {Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
 import React from "react";
 import makeAnimated from "react-select/animated";
-import {Title} from "chart.js";
-export const SearchBar = ({
-                              mappedCategories,
-                              users, selectedUsers, setSelectedUsers,
-                              selectedFilterCategories, setSelectedFilterCategories,
-                              timeWindow, selectedTimeWindow, setSelectedTimeWindow}) => {
+import {filterInformationAction} from "./Homepage";
+
+export const SearchBar = ({   mappedCategories,
+                              users,
+                              currentFilterInformation,
+                              dispatchFilterInformation}) => {
 
     const animatedComponents = makeAnimated();
+    const timeWindow = [{label : "Day"},{label : "Week"},{label : "Month"},{label : "Year"}]
 
     return (
         <Card className="searchBar">
@@ -20,8 +21,11 @@ export const SearchBar = ({
                             <Form.Group>
                                 <Form.Label>Zeitraum</Form.Label>
                                 <div className="Select">
-                                    <Select options={timeWindow} components={animatedComponents} defaultValue={selectedTimeWindow}  onChange={(e) => setSelectedTimeWindow(e)}
-                                            />
+                                    <Select options={timeWindow}
+                                            components={animatedComponents}
+                                            defaultValue={currentFilterInformation.timeInterval}
+                                            onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeFilterTimeInterval, payload:e})}
+                                    />
                                 </div>
                             </Form.Group>
                         </Col>
@@ -30,6 +34,8 @@ export const SearchBar = ({
                                 <Form.Label>Datum</Form.Label>
 {/*
                                 <Form.Control type="text" placeholder="Datum" onChange={() => setSelectedEntry()} value={selectedEntry != null ? selectedEntry.timestamp : null}/>
+                                //TODO onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeStartDate, payload:e})}
+                                //TODO onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeEndDate, payload:e})}
 */}
                             </Form.Group>
                         </Col>
@@ -37,7 +43,10 @@ export const SearchBar = ({
                             <Form.Group className="UserArea">
                                 <Form.Label>Users</Form.Label>
                                 <div className="Multiselect">
-                                    <Select options={users} components={animatedComponents} defaultValue={selectedUsers} onChange={(e) => setSelectedUsers(e)}
+                                    <Select options={users}
+                                            components={animatedComponents}
+                                            defaultValue={currentFilterInformation.users}
+                                            onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeFilterUsers, payload:e})}
                                             isMulti />
                                 </div>
                             </Form.Group>
@@ -46,7 +55,10 @@ export const SearchBar = ({
                             <Form.Group className="CategoryArea">
                                 <Form.Label>Kategorien</Form.Label>
                                 <div className="Multiselect">
-                                    <Select options={mappedCategories} components={animatedComponents} defaultValue={selectedFilterCategories} onChange={(e) => setSelectedFilterCategories(e)}
+                                    <Select options={mappedCategories}
+                                            components={animatedComponents}
+                                            defaultValue={currentFilterInformation.categories}
+                                            onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeFilterCategories, payload:e})}
                                             isMulti />
                                 </div>
                             </Form.Group>
