@@ -21,6 +21,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
     const [showInvite, setShowInvite] = useState(false)
     const [showInvitations, setInvitations] = useState(false)
 
+
     //states
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const usernames = useSelector(selectUserNamesStore);
@@ -36,7 +37,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
         selectedGroup= (groupInformationStore.find(group => group.id === getGroupId));
     }
 
-    if(!Array.isArray(groupInformationStore) ||getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null) return null;
+    if(!Array.isArray(groupInformationStore) || getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null || userStore == null) return null;
 
     const buttonStyle = {
         float: "right",
@@ -70,11 +71,15 @@ const SettingsPopup = ({getActiveGroupId}) => {
     //check if username valid
     function inviteUser() {
         let userName = document.getElementById("InviteUserName").value;
-        const newInvite = {
-            "username": ""+userName,
-            "groupId": ""+getGroupId
+        if( userStore.usernames.indexOf(userName)> -1){
+            const newInvite = {
+                "username": ""+userName,
+                "groupId": ""+getGroupId
+            }
+            dispatch(invitePerson(newInvite))
+        } else {
+            //show user
         }
-        dispatch(invitePerson(newInvite))
     }
 
     function acceptThisInvitation(groupId) {
@@ -84,6 +89,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
     function declineThisInvitation(groupId) {
         dispatch(declineAInvitation(groupId))
     }
+
 
     return (
         <>
@@ -124,7 +130,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
                 <div className="row">
                     <Col>
                         <Form.Group>
-                            <Form.Control  id="InviteUserName" type="text" placeholder="Username"/>
+                            <Form.Control  id="InviteUserName" type="text" placeholder="Username" />
                         </Form.Group>
                     </Col>
                     <Col>
@@ -137,7 +143,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
             </div>
             }
             <div className={"row"}>
-            { !showInvite && <Button className={"addGroupButton"} onClick={ () => setShowInvite(true)} variant="secondary">Zur Gruppe Einladen</Button>}
+            { !showInvite && <Button disabled={!!selectedGroup.personGroup} className={"addGroupButton"} onClick={ () => setShowInvite(true)} variant="secondary">Zur Gruppe Einladen</Button>}
             </div>
             { showInvitations &&
             <div>
