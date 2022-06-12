@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {addNewGroup, leaveAGroup, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
 import {isDisabled} from "@testing-library/user-event/dist/utils";
 
-const SettingsPopup = ({getActiveGroupId, groups, setSelectedSettingsGroup, selectedSettingsGroup, AddGroup}) => {
+const SettingsPopup = ({getActiveGroupId}) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);

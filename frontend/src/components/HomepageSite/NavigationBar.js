@@ -9,13 +9,16 @@ import keycloak from '../../api/Auth'
 import {logout} from "../../reduxStore/UserSlice";
 import {useDispatch} from "react-redux";
 
-export const NavigationBar = ({getActiveGroupId, groups, realGroups, setSelectedGroup, selectedGroup, setSelectedSettingsGroup, selectedSettingsGroup, AddGroup, DeleteGroup, navToGuestSite}) => {
+export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite}) => {
+
     const dispatch = useDispatch()
+
     function Redirect() {
         dispatch((logout()))
         keycloak.doLogout()
     }
-
+    console.log("NAVIGATIONBAR")
+    console.log(groupInformationStore)
 
     return (
         <Navbar bg="dark" variant="dark">
@@ -24,20 +27,26 @@ export const NavigationBar = ({getActiveGroupId, groups, realGroups, setSelected
             <Navbar.Toggle/>
             <Navbar.Collapse className="justify-content-end">
                 <Nav className="me-auto">
-                    <NavDropdown title="Ansicht" id="basic-nav-dropdown">
-                        { groups.map(group =>
-                            <NavDropdown.Item key={`Group-${group.id}`}
-                                              onClick={(e) => {
-                                                  e.preventDefault()
-                                                  setSelectedGroup(group)
-                                              }}
-                            >{group.name}
-                            </NavDropdown.Item>)}
-                    </NavDropdown>
+                    {Array.isArray(groupInformationStore) && groupInformationStore.length > 0 ?
+                        <NavDropdown title="Ansicht" id="basic-nav-dropdown">
+                            { groupInformationStore.map(group =>
+                                <NavDropdown.Item key={`Group-${group.id}`}
+                                                  onClick={(e) => {
+                                                      e.preventDefault()
+                                                      setActiveGroupId(group.id)
+                                                  }}
+                                >{group.groupName}
+                                </NavDropdown.Item>)}
+                        </NavDropdown>: null}
                     {/*   <Chat/> */}
                 </Nav>
-                <Button variant={"dark"} className="showSelectedGroup">{selectedGroup.name}</Button>
-                <SettingsPopup getActiveGroupId={getActiveGroupId} realgroups={realGroups} groups={ groups} setSelectedSettingsGroup={setSelectedSettingsGroup} selectedSettingsGroup={selectedSettingsGroup} AddGroup={AddGroup} DeleteGroup={DeleteGroup}/>
+                <p className="showSelectedGroup">
+
+                    {getActiveGroupId != null ?
+                        groupInformationStore.find(group => group.id === getActiveGroupId).groupName : null}
+                </p>
+
+                <SettingsPopup getActiveGroupId={getActiveGroupId}/>
                 <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
             </Navbar.Collapse>
         </Container>
