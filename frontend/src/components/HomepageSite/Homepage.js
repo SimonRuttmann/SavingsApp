@@ -21,6 +21,7 @@ import {EntryTable} from "./EntryTable";
 import {NavigationBar} from "./NavigationBar";
 import {EntryCreationBar} from "./EntryCreationBar";
 import {SearchBar} from "./SearchBar";
+import UpdateSavingEntry from "./UpdateSavingEntry";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
@@ -214,6 +215,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     }
 
     const updateEntry = (entry) => {
+        console.log("UPDATE ENTRY EFFECTIVE")
+        console.log(entry)
         dispatch(updateSavingEntryToServer(getActiveGroupId, entry))
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
@@ -257,6 +260,13 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     console.log("CURRENT FILTER INFORMATION")
     console.log(currentFilterInformation)
 
+    const [openUpdateEntryPopup, setOpenUpdateEntryPopup] = useState(false);
+
+    const triggerUpdateEntry = () => {
+        setOpenUpdateEntryPopup(prevState => !prevState);
+    }
+
+
     return (
         <React.Fragment>
 
@@ -271,6 +281,14 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
                             DeleteGroup={DeleteGroup}
                             navToGuestSite={navToGuestSite}
                             />
+
+            {openUpdateEntryPopup ?
+                <UpdateSavingEntry
+                    setOpenUpdateEntryPopup={setOpenUpdateEntryPopup}
+                    selectedEntry = {selectedEntry}
+                    updateEntry={updateEntry}
+                    mappedCategories={mappedCategories} /> : null}
+
 
             <EntryCreationBar setSelectedEntry = {setSelectedEntry}
                               selectedEntry = {selectedEntry}
@@ -310,6 +328,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
                             selectedEntry={selectedEntry}
                             setSelectedEntry={setSelectedEntry}
                             deleteEntry={deleteEntry}
+                            openUpdateEntry={triggerUpdateEntry}
                 />
             </CardGroup>
 

@@ -7,9 +7,11 @@ import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 import makeAnimated from "react-select/animated";
 
-const UpdateSavingEntry = (selectedEntry, updateEntry, mappedCategories) => {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpenUpdateEntryPopup}) => {
+
+
+    const [show, setShow] = useState(true);
+    const handleClose = () => {setShow(false); setOpenUpdateEntryPopup(false)}
     const handleShow = () => setShow(true);
 
     registerLocale('de', de)
@@ -25,7 +27,7 @@ const UpdateSavingEntry = (selectedEntry, updateEntry, mappedCategories) => {
     const descriptionRef = useRef(null);
 
     const [entryUpdateSelectedCategory,setEntryUpdateSelectedCategory] = useState(selectedEntry.category);
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(Date.parse(selectedEntry.creationDate));
 
     const animatedComponents = makeAnimated();
 
@@ -37,6 +39,8 @@ const UpdateSavingEntry = (selectedEntry, updateEntry, mappedCategories) => {
 
 
     function perpareUpdate(){
+        console.log("prepareUpdate")
+        console.log(nameRef.current.value)
         let name = nameRef.current.value;
         let costBalance = costBalanceRef.current.value;
         let creationDate = startDate;
@@ -61,20 +65,24 @@ const UpdateSavingEntry = (selectedEntry, updateEntry, mappedCategories) => {
             creator: selectedEntry.creator
         }
 
-        updateEntry(selectedEntry);
-    }
 
+
+        updateEntry(entry);
+        handleClose();
+    }
+//Select default value
+    // defaultValue = {{label: selectedEntry.category, value: selectedEntry.category.id, ...selectedEntry.category}}
     return (
         <>
             <Button variant="light" style={buttonStyle} onClick={handleShow}>
-                Einstellungen
+                Eintrag ändern
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} className ="updateEntryPopUp">
                 <Modal.Header closeButton>
-                    <Modal.Title>Einstellungen</Modal.Title>
+                    <Modal.Title>Eintrag ändern</Modal.Title>
                 </Modal.Header>
-                <Modal.Body className = {"settingPopUp"}>
+                <Modal.Body >
                     <Card>
                         <Card.Body>
                             <Form>
@@ -82,7 +90,7 @@ const UpdateSavingEntry = (selectedEntry, updateEntry, mappedCategories) => {
                                     <Col>
                                         <Form.Group>
                                             <Form.Label>Name</Form.Label>
-                                            <Form.Control ref={nameRef} id="name" type="text" placeholder="Name eintragen"/>
+                                            <Form.Control ref={nameRef} id="name" type="text" defaultValue={selectedEntry.name}/>
                                         </Form.Group>
                                     </Col>
                                     <Col>
@@ -95,14 +103,18 @@ const UpdateSavingEntry = (selectedEntry, updateEntry, mappedCategories) => {
                                         <Form.Group className="CategoryArea">
                                             <Form.Label>Kategorien</Form.Label>
                                             <div className="Select">
-                                                <Select options={mappedCategories} components={animatedComponents} onChange={(e) => handleChange(e)}
+                                                <Select
+                                                        defaultValue={mappedCategories.find(cat => cat.id === selectedEntry.category.id)}
+                                                        options={mappedCategories}
+                                                        components={animatedComponents}
+                                                        onChange={(e) => handleChange(e)}
                                                 />
                                             </div>
                                         </Form.Group>
                                     </Col>
                                     <Col className="buttonCol">
                                         <Form.Group className="buttonArea">
-                                            <Button onClick={() => perpareUpdate()}>Eintrag erstellen</Button>
+                                            <Button onClick={() => perpareUpdate()}>Eintrag ändern</Button>
 
                                         </Form.Group>
                                     </Col>

@@ -2,7 +2,7 @@ import {Button, ButtonGroup, Card, Table} from "react-bootstrap";
 import React from "react";
 
 
-export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntry, updateEntry}) => {
+export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntry, openUpdateEntry}) => {
 
     return (
         <Card>
@@ -10,7 +10,12 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                 <h4>Einträge</h4>
                 <br/>
                 <ButtonGroup className="buttonStyle">
-                    <Button onClick={() => updateEntry(selectedEntry)} variant="secondary">Update</Button>
+                    <Button
+                        onClick={() => {
+                            if(selectedEntry == null) return;
+                            openUpdateEntry(selectedEntry)
+                        }}
+                        variant="secondary">Update</Button>
                     <Button onClick={() => deleteEntry(selectedEntry.id)} variant="secondary">Löschen</Button>
                 </ButtonGroup>
                 <Table className="entryTable" striped bordered hover>
