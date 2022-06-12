@@ -4,11 +4,20 @@ const allMonths = ['Januar','Februar','März', 'April','Mai','Juni','Juli','Augu
 
 export function sortByGivenDateType(a, b, type){
 
-    switch (type) {
-        case "Day":    return parseDate(a.dateRepresentation) - parseDate(b.dateRepresentation);
-        case "Week":   return a.dateRepresentation - b.dateRepresentation;
-        case "Year":   return a.dateRepresentation - b.dateRepresentation;
-        case "Month":  return allMonths.indexOf(a.dateRepresentation) - allMonths.indexOf(b.dateRepresentation);
+    try {
+        switch (type) {
+            case "Day":
+                return parseDate(a.dateRepresentation) - parseDate(b.dateRepresentation);
+            case "Week":
+                return a.dateRepresentation - b.dateRepresentation;
+            case "Year":
+                return a.dateRepresentation - b.dateRepresentation;
+            case "Month":
+                return allMonths.indexOf(a.dateRepresentation) - allMonths.indexOf(b.dateRepresentation);
+        }
+    }
+    catch(e){
+        return 0;
     }
 }
 
