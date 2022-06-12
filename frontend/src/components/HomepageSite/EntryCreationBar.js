@@ -2,14 +2,22 @@ import {Button, Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
 import React, {useRef, useState} from "react";
 import makeAnimated from "react-select/animated";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale } from  "react-datepicker";
+import de from 'date-fns/locale/de';
+
+
 export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore}) => {
+
+    registerLocale('de', de)
 
     const nameRef = useRef(null);
     const costBalanceRef = useRef(null);
-    const creationDateRef = useRef(null);
     const descriptionRef = useRef(null);
 
     const [entryCreationSelectedCategory,setEntryCreationSelectedCategory] = useState(null);
+    const [startDate, setStartDate] = useState(new Date());
 
     const animatedComponents = makeAnimated();
 
@@ -21,24 +29,17 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
     function addEntry(){
         let name = nameRef.current.value;
         let costBalance = costBalanceRef.current.value;
-        let creationDate;
+        let creationDate = startDate;
         let description;
         let category = entryCreationSelectedCategory;
 
         if(category == null && mappedCategories.length > 0)
             category = mappedCategories[0]
 
-
-        if( creationDateRef.current == null || creationDateRef.current.value === "")
-            creationDate = Date.now();
-        else
-            creationDate = creationDateRef.current.value;
-
         if( descriptionRef.current == null || descriptionRef.current.value === "")
             description = null;
         else
             description = descriptionRef.current.value;
-
 
         let entry = {
             name: name,
@@ -91,7 +92,11 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Datum</Form.Label>
-                                    <Form.Control ref={creationDateRef} type="text" placeholder="Datum eintragen"/>
+                                    <DatePicker selected={startDate}
+                                                onChange={(date) => setStartDate(date)}
+                                                locale="de"
+                                                dateFormat="dd/MM/yyyy"
+                                    />
                                 </Form.Group>
                             </Col>
                             <Col>

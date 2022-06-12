@@ -85,9 +85,11 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
             case filterInformationAction.changeFilterCategories:
                 return {...state, filterCategory: action.payload}
             case filterInformationAction.changeStartDate:
-                return {...state, changeStartDate: action.payload}
+                console.log("CHANGE START DATE")
+                console.log(action.payload)
+                return {...state, startDate: action.payload}
             case filterInformationAction.changeEndDate:
-                return {...state, changeEndDate: action.payload}
+                return {...state, endDate: action.payload}
             default:
                 return state;
         }
@@ -198,7 +200,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         entry.creator = userStore.username;
         dispatch(addSavingEntryToServer(getActiveGroupId, entry))
             .then(() => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             })
         setSelectedEntry(null);
     }
@@ -206,7 +208,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const deleteEntry = (id) => {
         dispatch(deleteSavingEntryFromServer(getActiveGroupId, id))
             .then(() => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             })
         setSelectedEntry(null);
     }
@@ -214,7 +216,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const updateEntry = (entry) => {
         dispatch(updateSavingEntryToServer(getActiveGroupId, entry))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             })
         setSelectedEntry(null);
     }
@@ -231,7 +233,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const addCategory = (category) => {
         dispatch(addCategoryToServer(getActiveGroupId, category))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject))
             })
         setSelectedCategory(null);
     }
@@ -239,7 +241,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const deleteCategory = (id) => {
         dispatch(deleteCategoryFromServer(getActiveGroupId, id))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject))
             })
         setSelectedCategory(null);
     }
@@ -247,7 +249,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const updateCategory = (category) => {
         dispatch(updateCategoryToServer(getActiveGroupId, category))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformation))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject))
             })
         setSelectedCategory(null);
     }
