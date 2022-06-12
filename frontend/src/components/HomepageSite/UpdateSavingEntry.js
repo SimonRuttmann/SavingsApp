@@ -36,8 +36,6 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
         setEntryUpdateSelectedCategory(category);
     }
 
-
-
     function perpareUpdate(){
         console.log("prepareUpdate")
         console.log(nameRef.current.value)
@@ -70,6 +68,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
         updateEntry(entry);
         handleClose();
     }
+
 //Select default value
     // defaultValue = {{label: selectedEntry.category, value: selectedEntry.category.id, ...selectedEntry.category}}
     return (
@@ -78,7 +77,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                 Eintrag ändern
             </Button>
 
-            <Modal show={show} onHide={handleClose} className ="updateEntryPopUp">
+            <Modal show={show} onHide={handleClose} size="xl">
                 <Modal.Header closeButton>
                     <Modal.Title>Eintrag ändern</Modal.Title>
                 </Modal.Header>
@@ -144,6 +143,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                 </Modal.Body>
                 <Modal.Footer>
                 </Modal.Footer>
+
             </Modal>
         </>
 
