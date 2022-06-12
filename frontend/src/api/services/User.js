@@ -44,6 +44,6 @@ export function getUser(){
     return Get(UserBaseUrl, token())
 }
 export function getUsernames(){
-    return Get(UserBaseUrl + "/usernames", token())
+    return Get(UserBaseUrl + "usernames", token())
 }
 

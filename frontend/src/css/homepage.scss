@@ -43,8 +43,18 @@
 .selectedGroup{
   background-color: lightblue;
 }
-.addGroupButtonDiv{
-  align: "right";
+.addGroupDiv{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+.addGroupButton{
+  float:right;
+}
+
+.rowSpace{
+ row-gap: 2em;
 }
 
 .topMarginText{
