@@ -22,7 +22,7 @@ import {NavigationBar} from "./NavigationBar";
 import {EntryCreationBar} from "./EntryCreationBar";
 import {SearchBar} from "./SearchBar";
 import UpdateSavingEntry from "./UpdateSavingEntry";
-import CategoryCreationBar from "./CategoryCreationBar";
+import CategoryEditingBar from "./CategoryEditingBar";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
@@ -292,28 +292,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
 
 
             <Card className="subHeader">
-                <h4>Eintragserstellung</h4>
-            </Card>
-
-            <EntryCreationBar setSelectedEntry = {setSelectedEntry}
-                              selectedEntry = {selectedEntry}
-                              mappedCategories = {mappedCategories}
-                              AddEntry = {addEntry}
-                              setShowMore = {setShowMore}
-                              showMore = {showMore}
-            />
-
-
-            <Card className="subHeader">
-                <h4>Kategorieerstellung</h4>
-            </Card>
-
-            <CategoryCreationBar addCategory={addCategory}/>
-
-            <Card className="subHeader">
                 <h4>Suchleiste</h4>
             </Card>
-
 
             <SearchBar mappedCategories = {mappedCategories}
                        users = {getUsers()}
@@ -336,6 +316,26 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
                           selectedUsers={currentFilterInformation.filterUser.length === 0 ? getUsers(): currentFilterInformation.filterUser}
                           defaultFilterInformation={currentFilterInformation}/>
             </CardGroup>
+
+            <Card className="subHeader">
+                <h4>Eintragserstellung</h4>
+            </Card>
+
+            <EntryCreationBar setSelectedEntry = {setSelectedEntry}
+                              selectedEntry = {selectedEntry}
+                              mappedCategories = {mappedCategories}
+                              AddEntry = {addEntry}
+                              setShowMore = {setShowMore}
+                              showMore = {showMore}
+            />
+
+
+            <Card className="subHeader">
+                <h4>Kategorieerstellung</h4>
+            </Card>
+
+            <CategoryEditingBar addCategory={addCategory} deleteCategory={deleteCategory} mappedCategories={mappedCategories}/>
+
 
             {/**
                 Table showing all entries
