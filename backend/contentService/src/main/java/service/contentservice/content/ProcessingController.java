@@ -202,14 +202,16 @@ public class ProcessingController {
         Double income = 0d;
         Double outcome = 0d;
         for (SavingEntry filteredAndSortedEntry : filteredAndSortedEntries) {
+
             if (filteredAndSortedEntry.getCostBalance() >= 0)
                 income += filteredAndSortedEntry.getCostBalance();
-            outcome += filteredAndSortedEntry.getCostBalance();
+
+            else outcome += filteredAndSortedEntry.getCostBalance();
         }
         diagram1.setIncome(income);
         diagram1.setOutcome(outcome);
         diagram1.setBalance(income+outcome);
-        diagram1.setFutureBalance(diagram1.getBalance() + diagram1.getBalance() * inflationDto.getInflationValueInPercent());
+        diagram1.setFutureBalance(diagram1.getBalance() - (diagram1.getBalance() * (inflationDto.getInflationValueInPercent()*0.01)));
 
         result.setBalanceProcessResultDTO(diagram1);
 
