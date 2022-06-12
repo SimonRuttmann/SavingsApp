@@ -36,7 +36,7 @@ export const filterInformationAction = {
 }
 
 
-const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGroupId}) => {
+const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
 
 
     /**
@@ -135,6 +135,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         if(!isLoadingCoreInformation) return;
         fetchContentInformation();
         setLoadingCoreInformation(false);
+
+        //Add person group as active group only on first load
+        if(getActiveGroupId == null)
         setActiveGroupId(groupInformationStore.find(group => group.personGroup === true).id);
     },[groupInformationStore])
 
@@ -186,10 +189,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     });
 
 
-    const [selectedGroup = groups[0], setSelectedGroup] = useState()
-    const [selectedSettingsGroup = groups[0], setSelectedSettingsGroup] = useState()
-
-
     /**
      * Crud saving entry
      * -----------------------------------------------------------------------------------------------------------------
@@ -232,14 +231,12 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
      * -----------------------------------------------------------------------------------------------------------------
      */
 
-    const [selectedCategory, setSelectedCategory] = useState()
 
     const addCategory = (category) => {
         dispatch(addCategoryToServer(getActiveGroupId, category))
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             })
-        setSelectedCategory(null);
     }
 
     const deleteCategory = (id) => {
@@ -247,7 +244,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             })
-        setSelectedCategory(null);
     }
 
     const updateCategory = (category) => {
@@ -255,7 +251,6 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             })
-        setSelectedCategory(null);
     }
 
     console.log("CURRENT FILTER INFORMATION")
@@ -283,13 +278,8 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
 
 
              <NavigationBar getActiveGroupId={getActiveGroupId}
-                            groups={groups}
-                            realGroups={groupInformationStore}
-                            setSelectedGroup={setSelectedGroup}
-                            selectedGroup={selectedGroup}
-                            selectedSettingsGroup={selectedSettingsGroup}
-                            AddGroup={AddGroup}
-                            DeleteGroup={DeleteGroup}
+                            setActiveGroupId={setActiveGroupId}
+                            groupInformationStore={groupInformationStore}
                             navToGuestSite={navToGuestSite}
                             />
 
