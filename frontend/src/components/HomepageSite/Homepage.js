@@ -331,10 +331,10 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
 
 
             <Card className="subHeader">
-                <h4>Kategorieerstellung</h4>
+                <h4>Kategoriebearbeitung</h4>
             </Card>
 
-            <CategoryEditingBar addCategory={addCategory} deleteCategory={deleteCategory} mappedCategories={mappedCategories}/>
+            <CategoryEditingBar addCategory={addCategory} deleteCategory={deleteCategory} updateCategory={updateCategory} mappedCategories={mappedCategories}/>
 
 
             {/**
