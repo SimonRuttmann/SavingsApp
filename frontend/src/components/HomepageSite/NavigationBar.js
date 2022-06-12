@@ -38,7 +38,7 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                                 >{group.groupName}
                                 </NavDropdown.Item>)}
                         </NavDropdown>: null}
-                    {/*   <Chat/> */}
+                       <Chat getActiveGroupId = {getActiveGroupId}/>
                 </Nav>
                 <p className="showSelectedGroup">
 

@@ -26,6 +26,7 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                         <th>User</th>
                         <th>Kategorie</th>
                         <th>Zeitpunkt</th>
+                        <th>Beschreibung</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -35,7 +36,8 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                             <td>{entry.costBalance +"€"}</td>
                             <td>{entry.creator}</td>
                             <td>{entry.category.name}</td>
-                            <td>{entry.creationDate}</td>
+                            <td>{new Date(entry.creationDate).toLocaleDateString("de-DE")}</td>
+                            <td>{entry.description}</td>
                         </tr>
                     )}
                     </tbody>

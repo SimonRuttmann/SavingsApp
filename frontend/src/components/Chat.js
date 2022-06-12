@@ -8,112 +8,120 @@ import {
     Form, FormControl,
     InputGroup,
     Offcanvas,
-    Popover
 } from "react-bootstrap";
-import {useDispatch} from "react-redux";
-import {changeTopicOfMessages} from "../reduxStore/MessageSlice";
+import {useSelector} from "react-redux";
+import {getMessages, postMessage, subTopic} from "../api/services/Chat";
+import {selectUserStore} from "../reduxStore/UserSlice";
+import "../css/chat.scss"
 
-function Chat( user ) {
+
+function Chat( getActiveGroupId ) {
+    const userStore             = useSelector(selectUserStore);
+
+    //All saved messages
     const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState([]);
-    const [topic, setTopic] = useState('Test');
-    const [groupId, setGroupId] = useState('Robin Röcker');
-    const [newMessage, setNewMessage] = useState('');
+    //New messages to be send
+    const [message, setMessage] = useState();
+    //Topic equals selected groupID
+    const [topic, setTopic] = useState();
     const [show, setShow] = useState(false);
-    const [data , setData] = useState([])
+
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    const socket = new SockJS('http:localhost:8014/ws/chat')
-    const stompClient = Stomp.over(socket)
 
-    const startup = () => {
-      //  connectToSockJs()
-     //   subscribeToTopic()
-    //    getMessagesForTopic()
+    const handleShow = () => {
+        if(getActiveGroupId.getActiveGroupId != null) {
+            setTopic(getActiveGroupId.getActiveGroupId)
+            console.log("Changing topic to ",topic)
+        }
+        else console.log("Its still null")
+        setShow(true);
     }
+    let stompClient = null;
 
-    const dispatch = useDispatch()
+    useEffect(()=>{
+        if(getActiveGroupId.getActiveGroupId != null)
+            setTopic(getActiveGroupId.getActiveGroupId)
+        console.log("Chat changed topic to ",topic)
+
+        connectToSockJs()
+        subscribeToTopic()
+        getMessagesForTopic()
+    },[getActiveGroupId.getActiveGroupId,topic])
 
     const connectToSockJs = () => {
+        if(stompClient != null)disconnect()
+        const socket = new SockJS('http://localhost:8014/ws/chat')
+        stompClient = Stomp.over(socket)
         stompClient.connect({}, (frame) => {
+            console.log("Connected: ",frame)
             subscribeToGroup()
         })
     }
 
+    //Handles the subscribe to stomp socket
     const subscribeToGroup = () => {
-        stompClient.subscribe(`/sub/chat/rooms/${groupId}`, (message) => {
+        stompClient.subscribe(`/sub/chat/rooms/`+topic, (msg) => {
+            const json =JSON.parse(msg.body)
+            console.log("Message State before: ",messages)
+            console.log("Received message: ",json)
+            setMessages(messages.concat(json))
+            console.log("New messages ",messages)
         })
     }
 
+    //Tells the backend to establish a connection to redis sub/pub
     const subscribeToTopic = () => {
-        fetch(`http://localhost:8014/chat/sub/${topic}`)
-    }
-
-    const unsubscribeToTopic = () => {
-        fetch(`http://localhost:8014/chat/unsub/${topic}`)
+        subTopic(topic)
     }
 
     const getMessagesForTopic = () => {
-        fetch(`http://localhost:8014/chat/rooms/${topic}/messages`)
-            .then(response => response.json())
-            .then(data => {
-                return data
-            })
-    }
-
-    const sendMessage = () => {
-        fetch('http://localhost:8014/chat/message',{
-            body: {
-                'content': message,
-                'sender' : user,
-                'topic' : topic
-            }})
+        console.log("Started fetching with topic: ",topic)
+        getMessages(topic).then((tmp)=> {
+            setMessages(tmp.data)
+        })
     }
 
     const disconnect = () => {
         stompClient.disconnect()
     }
-    const changeTopic = () => {
-        dispatch(changeTopicOfMessages({topic: topic, messages: getMessagesForTopic()}))
+
+    function sendMessage(){
+        const body = {
+            content: message,
+            sender : userStore.username,
+            topic : topic
+        }
+        console.log("Message to send ",body)
+        postMessage(body)
     }
 
-    const popover = (
-        <Popover id='popover-basic'>
-            <Popover.Header as='h3'>Chat</Popover.Header>
-            <Popover.Body>
-                <CardGroup>
-                    <Card>
-                        <Form>
-                            <label>Message :
-                                <input type='text' value={topic}/>
-                                <Button variant="secondary" onClick={sendMessage}></Button>
-                            </label>
-                            <Button>Send</Button>
-                        </Form>
+    function generateShownMessages(){
+        let messageForRender = []
+        console.log("Messages to be shown ",messages)
+        for (let msg of messages){
+            if(msg.sender === userStore.username){
+                messageForRender.push(
+                    <Card  className="myMessageDisplay">
+                        <Card.Title>{msg.sender}</Card.Title>
+                        <Card.Body>{msg.content}</Card.Body>
                     </Card>
-                </CardGroup>
-            </Popover.Body>
-        </Popover>
-    )
+                )
+            }
+            else {
+                messageForRender.push(
+                    <Card className="otherMessageDisplay">
+                        <Card.Title>{msg.sender}</Card.Title>
+                        <Card.Body>{msg.content}</Card.Body>
+                    </Card>
+                )
+            }
+        }
+        return messageForRender
+    }
 
   return (
-/*      <OverlayTrigger trigger='click' placement='right' overlay={popover}>
-          <Badge pill bg="success" onClick={() => {
-              connectToSockJs()
-              subscribeToTopic()
-              getMessagesForTopic()
-          }}>
-              Chat
-          </Badge>
-      </OverlayTrigger>*/
       <>
-          <Button variant="dark" onClick={
-              () => {
-                  handleShow()
-                  startup()
-
-              }
-          }>
+          <Button className="chatButton" variant="dark" onClick={()=>handleShow()}>
               Chat
           </Button>
           <Offcanvas show={show} onHide={handleClose}>
@@ -121,29 +129,16 @@ function Chat( user ) {
                   <Offcanvas.Title>Chat</Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body>
-                  {data.map(m =>
-                      <>
-                      <CardGroup>
-                      <Card>
-                          <Card.Title>{m.sender}</Card.Title>
-                          <Card.Body>{m.content}</Card.Body>
-                      </Card>
-                      </CardGroup>
-                      <br/>
-                      </>
-                      )}
+                  {generateShownMessages()}
               </Offcanvas.Body>
               <InputGroup className="mb-3">
-                  <FormControl value={newMessage} onChange={(e) => {setNewMessage(e.target.value)}}
+                  <FormControl
+                      value={message} onChange={(e) => {setMessage(e.target.value)}}
                       placeholder="Gebe deine Nachricht ein"
                       aria-label="message"
                       aria-describedby="message"
                   />
-                  <Button variant="outline-success" id="button-addon2" onClick={() => {                  setData([...data, {
-                      "content": newMessage,
-                      "sender": "Robin Röcker",
-                      "topic": "Test"
-                  }])}}>
+                  <Button variant="outline-success" id="button-addon2" onClick={sendMessage}>
                       Send
                   </Button>
               </InputGroup>
