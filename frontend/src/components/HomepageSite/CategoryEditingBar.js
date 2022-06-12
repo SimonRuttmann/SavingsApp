@@ -128,9 +128,7 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
                                 <Button onClick={() => prepareUpdate()}>Kategorie editieren</Button>
                             </Form.Group>
                         </Col>
-
                     </Row>
-
                 </Form>
             </Card.Body>
         </Card>
