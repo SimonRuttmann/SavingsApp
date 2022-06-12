@@ -1,6 +1,6 @@
 import {Button, Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import makeAnimated from "react-select/animated";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,7 +8,8 @@ import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 
 
-export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore}) => {
+export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore, clearSelectors}) => {
+
 
     registerLocale('de', de)
 
@@ -20,6 +21,10 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
     const [startDate, setStartDate] = useState(new Date());
 
     const animatedComponents = makeAnimated();
+
+    useEffect( () => {
+        setEntryCreationSelectedCategory(null);
+    }, [clearSelectors])
 
 
     function handleChange(category){
@@ -74,7 +79,10 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
                             <Form.Group className="CategoryArea">
                                 <Form.Label>Kategorien</Form.Label>
                                 <div className="Select">
-                                    <Select options={mappedCategories} components={animatedComponents} onChange={(e) => handleChange(e)}
+                                    <Select options={mappedCategories}
+                                            components={animatedComponents}
+                                            onChange={(e) => handleChange(e)}
+                                            value = {entryCreationSelectedCategory}
                                             />
                                 </div>
                             </Form.Group>

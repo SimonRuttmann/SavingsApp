@@ -1,9 +1,9 @@
 import {Button, Card, Col, Form, Row} from "react-bootstrap";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
-const CategoryEditingBar = ({addCategory, deleteCategory, mappedCategories, updateCategory}) => {
+const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mappedCategories, updateCategory}) => {
 
 
     //Create
@@ -52,6 +52,12 @@ const CategoryEditingBar = ({addCategory, deleteCategory, mappedCategories, upda
         }
 
     }
+
+    useEffect( () => {
+        setDeletionSelectedCategory(null);
+        setUpdateSelectedCategory(null);
+    }, [clearSelectors])
+
 
     return (
         <Card>
