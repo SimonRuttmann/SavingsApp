@@ -18,8 +18,8 @@ export function getGroupEntry(groupId, savingEntryId){
 export function addGroupEntry(groupId, body){
     return Post(savingPath + groupId, body, token())
 }
-export function updateGroupEntry(groupId){
-    return Put(savingPath + groupId, token())
+export function updateGroupEntry(groupId, body){
+    return Put(savingPath + groupId, body, token())
 }
 export function deleteGroupEntry(groupId, savingEntryId){
     return Delete(savingPath + groupId + "/" + savingEntryId, token())
