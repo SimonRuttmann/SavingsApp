@@ -272,6 +272,9 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
      * -----------------------------------------------------------------------------------------------------------------
      */
     useEffect( () => {
+        //Prevent to early loading
+        if(getActiveGroupId == null) return;
+
         dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
     },[currentFilterInformation])
 
