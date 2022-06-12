@@ -15,8 +15,8 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                             if(selectedEntry == null) return;
                             openUpdateEntry(selectedEntry)
                         }}
-                        variant="secondary">Update</Button>
-                    <Button onClick={() => deleteEntry(selectedEntry.id)} variant="secondary">Löschen</Button>
+                        variant="secondary">Eintrag ändern</Button>
+                    <Button onClick={() => deleteEntry(selectedEntry.id)} variant="secondary">Eintrag löschen</Button>
                 </ButtonGroup>
                 <Table className="entryTable" striped bordered hover>
                     <thead>
