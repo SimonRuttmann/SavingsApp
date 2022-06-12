@@ -1,13 +1,13 @@
 import React, {useState} from "react";
 import Homepage from "./components/HomepageSite/Homepage";
 import GuestSite from "./components/GuestSite";
-import {BrowserRouter, Route, Router, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 import PrivateRoute from "./api/helper/PrivateRoute.js";
-import keycloakService, {_kc} from "./api/Auth.js";
+import {_kc} from "./api/Auth.js";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 
 function App() {
-  const [user, setUser] = useState('Robin Röcker')
+
   const [groups, setGroups] = useState([
     {name: 'Ich',
       diagrams: {
@@ -34,7 +34,6 @@ function App() {
       members: ['Robin', 'Ralf', 'Maria']
     },
   ])
-  const [entrys, setEntrys] = useState([])
 
 
   const AddGroup = ({group}) => {
@@ -45,9 +44,7 @@ function App() {
     setGroups(groups.filter((group) => group.name !== name))
   }
 
-  const AddEntry = (newEntry) => {
-    setEntrys([...entrys, {id: entrys.length + 1, name: newEntry.name, costs: newEntry.costs, user: 'Robin01', group: 'WG', timestamp: newEntry.timestamp}])
-  }
+
 
   const [getActiveGroupId, setActiveGroupId] = useState(null);
 
@@ -63,7 +60,6 @@ function App() {
                 <Homepage groups={groups}
                           AddGroup={AddGroup}
                           DeleteGroup={DeleteGroup}
-                          AddEntry={AddEntry}
                           getActiveGroupId={getActiveGroupId}
                           setActiveGroupId={setActiveGroupId}/>
             </PrivateRoute>

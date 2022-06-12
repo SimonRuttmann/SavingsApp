@@ -267,6 +267,13 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
         setOpenUpdateEntryPopup(prevState => !prevState);
     }
 
+    /**
+     * Update processing on search bar changes
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+    useEffect( () => {
+        dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+    },[currentFilterInformation])
 
     return (
         <React.Fragment>
