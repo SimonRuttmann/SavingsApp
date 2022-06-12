@@ -1,4 +1,4 @@
-import {Card, Col, Form, Row} from "react-bootstrap";
+import {Button, Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
 import React from "react";
 import makeAnimated from "react-select/animated";
@@ -52,6 +52,11 @@ export const SearchBar = ({
                                     <Select options={mappedCategories} components={animatedComponents} defaultValue={selectedFilterCategories} onChange={(e) => setSelectedFilterCategories(e)}
                                             isMulti />
                                 </div>
+                            </Form.Group>
+                        </Col>
+                        <Col className="buttonCol">
+                            <Form.Group className="buttonArea">
+                                <Button >Refresh Data</Button>
                             </Form.Group>
                         </Col>
                     </Row>
