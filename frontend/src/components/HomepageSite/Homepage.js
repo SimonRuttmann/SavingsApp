@@ -160,6 +160,23 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
 
     }
 
+    /**
+     * Fetch data on switch group
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+
+    useEffect( () => {
+
+        if(getActiveGroupId == null) return;
+
+        //fetch categories for this group
+        dispatch(fetchCategoriesFromServer(getActiveGroupId));
+        //fetch processing results
+        let dataObject = currentFilterInformationToDataObject();
+        dispatch(fetchProcessingResultsFromServer(getActiveGroupId, dataObject))
+
+        },[getActiveGroupId])
+
 
     /**
      * Update local states
