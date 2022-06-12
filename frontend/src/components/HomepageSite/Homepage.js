@@ -5,7 +5,7 @@ import React, {useEffect, useReducer, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import "../../css/styles.scss"
 import "../../css/homepage.scss"
-import {CardGroup} from 'react-bootstrap'
+import {Card, CardGroup} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
@@ -22,6 +22,7 @@ import {NavigationBar} from "./NavigationBar";
 import {EntryCreationBar} from "./EntryCreationBar";
 import {SearchBar} from "./SearchBar";
 import UpdateSavingEntry from "./UpdateSavingEntry";
+import CategoryCreationBar from "./CategoryCreationBar";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
@@ -290,6 +291,10 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
                     mappedCategories={mappedCategories} /> : null}
 
 
+            <Card className="subHeader">
+                <h4>Eintragserstellung</h4>
+            </Card>
+
             <EntryCreationBar setSelectedEntry = {setSelectedEntry}
                               selectedEntry = {selectedEntry}
                               mappedCategories = {mappedCategories}
@@ -297,6 +302,18 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
                               setShowMore = {setShowMore}
                               showMore = {showMore}
             />
+
+
+            <Card className="subHeader">
+                <h4>Kategorieerstellung</h4>
+            </Card>
+
+            <CategoryCreationBar addCategory={addCategory}/>
+
+            <Card className="subHeader">
+                <h4>Suchleiste</h4>
+            </Card>
+
 
             <SearchBar mappedCategories = {mappedCategories}
                        users = {getUsers()}
