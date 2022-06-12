@@ -2,6 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import {addCategory, deleteCategory, getAllCategorys, updateCategory} from "../api/services/Content";
 
 
+
 /**
  *  Category Schema
  *  String id,
@@ -30,7 +31,7 @@ const categorySlice = createSlice({
             })
         },
         RemoveCategory: (state, action) => {
-            return state.filter(category => category.id !== action.payload.id);
+            return state.filter(category => category.id !== action.payload);
         },
         UpdateCategory: (state, action) => {
             let category = state.find(category => category.id === category.payload.id)
@@ -46,22 +47,45 @@ export default categorySlice.reducer
 export const selectCategoryStore = (state) => state.category;
 
 export const fetchCategoriesFromServer = (groupId) => (dispatch) => {
-    console.log("fetching categories")
-    let response = getAllCategorys(groupId)
-    response.then(response => dispatch(AddCategories(response.data)));
+
+    return new Promise( (resolve, reject) => {
+        let response = getAllCategorys(groupId)
+        response
+            .then(response => dispatch(AddCategories(response.data)))
+            .then(() => resolve(null))
+            .catch(() => reject("Error contacting server, cannot fetch categories"))
+    })
+
 }
 
 export const addCategoryToServer = (groupId, category) => (dispatch) => {
-    let response = addCategory(groupId, category)
-    response.then(response => dispatch(AddCategory(response.data)));
+
+    return new Promise( (resolve, reject) => {
+        let response = addCategory(groupId, category)
+        response
+            .then(response => dispatch(AddCategory(response.data)))
+            .then(() => resolve(null))
+            .catch(() => reject("Error contacting server, add category"))
+    })
 }
 
 export const updateCategoryToServer = (groupId, category) => (dispatch) => {
-    let response = updateCategory(groupId, category)
-    response.then(response => dispatch(UpdateCategory(response.data)));
+
+    return new Promise( (resolve, reject) => {
+        let response = updateCategory(groupId, category)
+        response
+            .then(response => dispatch(UpdateCategory(response.data)))
+            .then(() => resolve(null))
+            .catch(() => reject("Error contacting server, cannot update category"))
+    })
 }
 
 export const deleteCategoryFromServer = (groupId, categoryId) => (dispatch) => {
-    let response = deleteCategory(groupId, categoryId)
-    response.then(response => dispatch(RemoveCategory(response.data)));
+    return new Promise( (resolve, reject) => {
+        let response = deleteCategory(groupId, categoryId)
+        response
+            .then(dispatch(RemoveCategory(categoryId)))
+            .then(() => resolve(null))
+            .catch(() => reject("Error contacting server, cannot remove category"))
+    })
 }

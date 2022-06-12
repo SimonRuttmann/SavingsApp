@@ -237,7 +237,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const addCategory = (category) => {
         dispatch(addCategoryToServer(getActiveGroupId, category))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             })
         setSelectedCategory(null);
     }
@@ -245,7 +245,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const deleteCategory = (id) => {
         dispatch(deleteCategoryFromServer(getActiveGroupId, id))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             })
         setSelectedCategory(null);
     }
@@ -253,7 +253,7 @@ const Homepage = ({groups, AddGroup, DeleteGroup, getActiveGroupId,setActiveGrou
     const updateCategory = (category) => {
         dispatch(updateCategoryToServer(getActiveGroupId, category))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             })
         setSelectedCategory(null);
     }

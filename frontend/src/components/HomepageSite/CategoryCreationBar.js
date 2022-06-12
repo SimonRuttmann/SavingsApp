@@ -8,7 +8,7 @@ const CategoryCreationBar = ({addCategory}) => {
     const prepareCreate = () => {
         let name = nameRef.current.value;
         if(name != null && name.trim() !== "")
-            addCategory(name);
+            addCategory({name: name});
     }
 
     return (
