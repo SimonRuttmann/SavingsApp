@@ -14,32 +14,28 @@ import {selectUserStore} from "../reduxStore/UserSlice";
 import "../css/chat.scss"
 
 
-function Chat( getActiveGroupId ) {
+function ChatComponent(getActiveGroupId ) {
     const socket = useRef(new SockJS('http://localhost:8014/ws/chat'))
     const chatRef = useRef()
+    //Topic equals selected groupID
     const topic = useRef(null);
     const stompClient = useRef(null);
 
     const userStore             = useSelector(selectUserStore);
-
+    const [subscribedTopic, setSubscribedTopic] = useState(null)
     //All saved messages
     const [messages, setMessages] = useState([]);
-    //New messages to be send
-    const [message, setMessage] = useState();
-    //Topic equals selected groupID
-
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
 
     const handleShow = () => setShow(true);
     useEffect( () => {
-
+        console.log("SockJS Instance ",socket)
         if(getActiveGroupId.getActiveGroupId === topic.current || getActiveGroupId.getActiveGroupId == null) return;
         console.log("INIT topic",topic.current)
         console.log("INIT getActiveGroupID ",getActiveGroupId.getActiveGroupId)
         topic.current = getActiveGroupId.getActiveGroupId;
-        connectToSockJs()
         subscribeToTopic()
         getMessagesForTopic()
 
@@ -48,7 +44,6 @@ function Chat( getActiveGroupId ) {
 
     const connectToSockJs = () => {
         console.log("Trying to connect ",stompClient)
-        if(stompClient.current != null) disconnect()
         stompClient.current = Stomp.over(socket.current)
 
         stompClient.current.connect({}, (frame) => {
@@ -56,14 +51,7 @@ function Chat( getActiveGroupId ) {
             subscribeToGroup()
         })
     }
-        if(stompClient !=null && stompClient.current != null)
-            stompClient.current.onDisconnect = async (receipt) => {
-            console.warn("Has been disconnected");
-        };
-        if(stompClient !=null && stompClient.current != null)
-            stompClient.current.onWebSocketClose = async (evt) => {
-            console.warn("Websocket has been closed");
-        };
+
     //Handles the subscribe to stomp socket
     const subscribeToGroup = () => {
         let testindex = 1;
@@ -153,7 +141,6 @@ function Chat( getActiveGroupId ) {
               <InputGroup className="mb-3">
                   <FormControl
                       ref={chatRef}
-                      value={message} onChange={(e) => {setMessage(e.target.value)}}
                       placeholder="Gebe deine Nachricht ein"
                       aria-label="message"
                       aria-describedby="message"
@@ -167,4 +154,4 @@ function Chat( getActiveGroupId ) {
     )
 }
 
-export default Chat
+export default ChatComponent
