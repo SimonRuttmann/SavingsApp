@@ -2,53 +2,61 @@ import SockJS from 'sockjs-client';
 import {Stomp} from "@stomp/stompjs";
 import {subTopic} from "../api/services/Chat";
 
-const socket = new SockJS('http://localhost:8014/ws/chat')
-let topic = null;
-let stompClient = null;
-let isInit = false;
-let subscription;
+const _socket = new SockJS('http://localhost:8014/ws/chat')
+
+let _stompClient = null;
+let _isInit = false;
+let _subscription;
+
+let _onMessage = null;
+let _topic = null;
 
 const init = (initialTopic, onMessage) => {
-    if(isInit || initialTopic === null) return;
-    initializeSocket(initialTopic, onMessage)
-
+    if(_isInit || initialTopic == null) return;
+    _onMessage = onMessage;
+    initializeSocket(initialTopic)
 }
 
 const connectToSockJs = () => {
-    return new Promise( (resolve) => {
-        stompClient = Stomp.over(socket)
-        stompClient.connect({}, () => resolve())
-    })
+    _stompClient = Stomp.over(_socket)
+    _stompClient.connect({}, () => subscribeWs());
 }
 
-const subscribeToRedis = (topic) => subTopic(topic)
+const subscribeToRedis = () => subTopic(_topic)
 
-const subscribeWs = (topic, cb) => {
-    subscription = stompClient.subscribe(`/sub/chat/rooms/`+topic, (msg) => cb(JSON.parse(msg.body)))
+const subscribeWs = () => {
+    _subscription = _stompClient.subscribe(`/sub/chat/rooms/`+_topic, (msg) => _onMessage(JSON.parse(msg.body)))
 }
 
 const disconnect = () => {
-    stompClient.disconnect()
-    isInit = false;
+    _stompClient.disconnect()
+    _isInit = false;
 }
 
-const initializeSocket = (initialTopic, onMessage) => {
-    connectToSockJs().then(() => subscribeWs(initialTopic, onMessage))
-    subscribeToRedis(topic).catch(() => console.log("Subscribe to redis did not work"));
+const initializeSocket = () => {
+    connectToSockJs();
+    subscribeToRedis().catch(() => console.log("Subscribe to redis did not work"));
 }
 
-const changeTopic = (newTopic, onMessage) => {
+const changeTopic = (newTopic) => {
 
-    if(newTopic === topic) return;
+    if(newTopic === _topic) return;
 
-    topic = newTopic;
-    subscription
-        .unsubscribe()
-        .then( () =>  subscribeToRedis(newTopic))
-        .then( () => subscribeWs(newTopic, onMessage))
+    _topic = newTopic;
+
+    if(_subscription != null) {
+        _subscription
+            .unsubscribe()
+            .then(() => subscribeToRedis())
+            .then(() => subscribeWs())
+        return;
+    }
+
+    subscribeToRedis().catch(() => console.log("Subscribe to redis did not work"));
+    subscribeWs()
 }
 
-const getTopic = () => topic;
+const getTopic = () => _topic;
 
 /**
  * @param init        Parameters: initialTopic, the topic to subscribe to
