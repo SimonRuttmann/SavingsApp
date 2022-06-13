@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 import makeAnimated from "react-select/animated";
-import {isNumberOrDecimalString} from "../../util";
+import {isNumberOrDecimalString} from "../../utils/util";
 
 const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpenUpdateEntryPopup}) => {
 
