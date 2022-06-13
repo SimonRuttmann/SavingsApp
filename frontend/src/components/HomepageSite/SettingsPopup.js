@@ -24,8 +24,6 @@ const SettingsPopup = ({getActiveGroupId}) => {
 
     //states
     const groupInformationStore = useSelector(selectGroupInformationStore);
-    const usernames = useSelector(selectUserNamesStore);
-    const invitations = useSelector(selectUserInvitationsStore);
     const userStore   = useSelector(selectUserStore);
     const dispatch = useDispatch()
 
@@ -103,7 +101,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
         </Modal.Header>
         <Modal.Body className = {"settingPopUp"}>
             {showNewGroup &&
-            <div>
+            <div className="mt-2 col-md-12">
                 <h6>Neue Gruppe erstellen:</h6>
                 <div className="row">
                     <Col>
@@ -112,7 +110,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Button  onClick={ () => addGroup()} variant="secondary">Bestätigen</Button>
+                        <Button className={"btn btn-success"} onClick={ () => addGroup()} variant="secondary">Bestätigen</Button>
                     </Col>
                     <Col>
                         <Button onClick={ () => setShowNewGroup(false)} variant="secondary">Abbrechen</Button>
@@ -121,11 +119,11 @@ const SettingsPopup = ({getActiveGroupId}) => {
             </div>
             }
 
-            <div className={"row"}>
+            <div className={"row mt-2 col-md-12"} >
                 { !showNewGroup && <Button className={"addGroupButton"} onClick={ () => setShowNewGroup(true)} variant="secondary">Gruppe hinzufügen</Button>}
             </div>
             {showInvite &&
-            <div>
+            <div className="mt-2 col-md-12" >
                 <h6>In Gruppe "{selectedGroup.groupName}" einladen:</h6>
                 <div className="row">
                     <Col>
@@ -134,7 +132,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Button  onClick={ () => inviteUser()} variant="secondary">Bestätigen</Button>
+                        <Button className={"btn btn-success"}  onClick={ () => inviteUser()} variant="secondary">Bestätigen</Button>
                     </Col>
                     <Col>
                         <Button onClick={ () => setShowInvite(false)} variant="secondary">Abbrechen</Button>
@@ -142,12 +140,17 @@ const SettingsPopup = ({getActiveGroupId}) => {
                 </div>
             </div>
             }
-            <div className={"row"}>
+            <div className={"row mt-2 col-md-12"}>
             { !showInvite && <Button disabled={!!selectedGroup.personGroup} className={"addGroupButton"} onClick={ () => setShowInvite(true)} variant="secondary">Zur Gruppe Einladen</Button>}
             </div>
             { showInvitations &&
-            <div>
-                <h5>Einladungen:</h5>
+            <div className="mt-2 col-md-12" >
+                <Row>
+                    <h5>Einladungen:</h5>
+                    <div className={""} >
+                        <Button className={"mb-2 col-md-12 btn-sm addGroupButton"} onClick={ () => setInvitations(false)} variant="secondary">Einladungen verbergen</Button>
+                    </div>
+                </Row>
                 { userStore.invitations.map(invitation =>
                     <div key={`Settings-Invitation-div-${invitation.groupId}`}>
                         <Row key={`Settings-Invitation-Row-${invitation.groupId}`}>
@@ -155,21 +158,21 @@ const SettingsPopup = ({getActiveGroupId}) => {
                                 <h6 key={`Settings-Invitation-${invitation.groupId}`}>{invitation.groupName}</h6>
                             </Col>
                             <Col  key={`Settings-Invitation-Col2-${invitation.groupId}`}>
-                                <Button key={`Settings-Inv-But-1-${invitation.groupId}`} onClick={ () => acceptThisInvitation(invitation.groupId) } variant="secondary">Akzeptieren</Button>
+                                <Button className={"btn btn-success"} key={`Settings-Inv-But-1-${invitation.groupId}`} onClick={ () => acceptThisInvitation(invitation.groupId) } variant="secondary">Akzeptieren</Button>
                             </Col>
-                            <Col key={`Settings-Invitation-Col3-${invitation.groupId}`}>
-                                <Button key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId)} variant="secondary">Ablehnen</Button>
+                            <Col  key={`Settings-Invitation-Col3-${invitation.groupId}`}>
+                                <Button className={"btn btn-danger"}key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId)} variant="secondary">Ablehnen</Button>
                             </Col>
                         </Row>
                     </div>
                 )}
             </div>
             }
-            <div className={"row"}>
-                { !showInvitations && <Button className={"addGroupButton"} onClick={ () => setInvitations(true)} variant="secondary">Zur Gruppe Einladen</Button>}
+            <div className={"row mt-2 col-md-12"}>
+                { !showInvitations && <Button className={"addGroupButton"} onClick={ () => setInvitations(true)} variant="secondary">Meine Einladungen</Button>}
             </div>
 
-            <h5 styleclass={"topMarginText"} >Meine Gruppen:</h5>
+            <h5 styleclass={"topMarginText"}>Meine Gruppen:</h5>
             { groupInformationStore.map(group =>
                 <h6 className={selectedGroup != null && selectedGroup.id === group.id ? "selectedGroup" : ""} onClick={ () => changeGroup(group)} key={`Settings-Group-${group.id}`}>{group.groupName}</h6>)}
             <h5>Mitglieder:</h5>
