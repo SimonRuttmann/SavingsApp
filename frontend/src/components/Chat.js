@@ -63,8 +63,17 @@ function Chat( getActiveGroupId ) {
             const json =JSON.parse(msg.body)
             console.log("Message State before: ",messages)
             console.log("Received message: ",json)
-            setMessages(messages.concat(json))
+            addMessageToState(json)
             console.log("New messages ",messages)
+        })
+    }
+
+    const addMessageToState = (_messages) =>{
+        setMessages(prevState => {
+            return [
+                ...prevState,
+                _messages
+            ]
         })
     }
 
