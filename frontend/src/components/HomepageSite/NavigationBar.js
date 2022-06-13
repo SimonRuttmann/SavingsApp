@@ -1,4 +1,4 @@
-import Chat from "../Chat";
+import ChatComponent from "../ChatComponent";
 import SettingsPopup from "./SettingsPopup";
 import React from "react";
 import "../../css/styles.scss"
@@ -38,7 +38,7 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                                 >{group.groupName}
                                 </NavDropdown.Item>)}
                         </NavDropdown>: null}
-                       <Chat getActiveGroupId = {getActiveGroupId}/>
+                       <ChatComponent getActiveGroupId = {getActiveGroupId}/>
                 </Nav>
                 <p className="showSelectedGroup">
 
