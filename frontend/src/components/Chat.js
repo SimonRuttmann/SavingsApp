@@ -4,8 +4,7 @@ import {Stomp} from "@stomp/stompjs";
 import {
     Button,
     Card,
-    CardGroup,
-    Form, FormControl,
+    FormControl,
     InputGroup,
     Offcanvas,
 } from "react-bootstrap";
@@ -53,7 +52,7 @@ function Chat( getActiveGroupId ) {
         const socket = new SockJS('http://localhost:8014/ws/chat')
         stompClient = Stomp.over(socket)
         stompClient.connect({}, (frame) => {
-            console.log("Connected: ",frame)
+            //console.log("Connected: ",frame)
             subscribeToGroup()
         })
     }
@@ -98,10 +97,11 @@ function Chat( getActiveGroupId ) {
     function generateShownMessages(){
         let messageForRender = []
         console.log("Messages to be shown ",messages)
+        let index = 0;
         for (let msg of messages){
             if(msg.sender === userStore.username){
                 messageForRender.push(
-                    <Card  className="myMessageDisplay">
+                    <Card key={msg.sender+" "+msg.content+" "+index++} className="myMessageDisplay">
                         <Card.Title>{msg.sender}</Card.Title>
                         <Card.Body>{msg.content}</Card.Body>
                     </Card>
@@ -109,7 +109,7 @@ function Chat( getActiveGroupId ) {
             }
             else {
                 messageForRender.push(
-                    <Card className="otherMessageDisplay">
+                    <Card key={msg.sender+" "+msg.content+" "+index++} className="otherMessageDisplay">
                         <Card.Title>{msg.sender}</Card.Title>
                         <Card.Body>{msg.content}</Card.Body>
                     </Card>

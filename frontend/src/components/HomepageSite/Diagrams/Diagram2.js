@@ -3,7 +3,7 @@
 import {Card} from "react-bootstrap";
 import {Line} from "react-chartjs-2";
 import React from "react";
-import {rainbow, sortByGivenDateType} from "../../../util";
+import {rainbow, sortByGivenDateType} from "../../../utils/util";
 
 /**
  * diagramValues --> Januar         Februar         März
