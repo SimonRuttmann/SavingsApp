@@ -25,8 +25,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     // console.log("set settings in Nav to false")
     // setSettingsFalse()
 
-
-
     //states
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const userStore   = useSelector(selectUserStore);
@@ -66,14 +64,12 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
         if(id === getActiveGroupId) setActiveGroupId(newFokus)
-
     }
     function DeleteGroup(id) {
         onHide()
         dispatch(leaveAGroup(id))
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
-
     }
 
     //check if username valid
@@ -98,9 +94,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         dispatch(declineAInvitation(groupId))
     }
 
-//<Button variant="light" style={buttonStyle} onClick={handleShow}>
-//             Einstellungen
-//         </Button>
+
     return (
 
 
