@@ -220,7 +220,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         return{label: category.name, value: category.id, ...category}
     });
 
-
     /**
      * Crud saving entry
      * -----------------------------------------------------------------------------------------------------------------
