@@ -1,6 +1,7 @@
 package service.chatservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class SubscriptionService {
 
     public ResponseEntity<String> subscribeToChannel(ChannelTopic topic){
         try {
-            redisMessageListener.addMessageListener(redisSubscriber::onMessage, topic);
+            redisMessageListener.addMessageListener(redisSubscriber, topic);
         }catch (Exception e){
             return new ResponseEntity<>(e.toString(),HttpStatus.BAD_REQUEST);
         }
