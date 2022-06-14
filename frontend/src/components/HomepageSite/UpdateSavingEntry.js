@@ -139,7 +139,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                                         <Col>
                                             <Form.Group>
                                                 <Form.Label>Beschreibung</Form.Label>
-                                                <Form.Control ref={descriptionRef} as="textarea" rows={3}/>
+                                                <Form.Control ref={descriptionRef} defaultValue={selectedEntry.description} as="textarea" rows={3}/>
                                             </Form.Group>
                                         </Col>
                                     </Row>

@@ -1,7 +1,6 @@
 package service.chatservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.HttpStatus;
