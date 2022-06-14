@@ -1,6 +1,6 @@
 import ChatComponent from "../ChatComponent";
 import SettingsPopup from "./SettingsPopup";
-import React from "react";
+import React, {useState} from "react";
 import "../../css/styles.scss"
 import "../../css/homepage.scss"
 import {Button, Container, Nav, Navbar, NavDropdown} from 'react-bootstrap'
@@ -18,8 +18,17 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
         dispatch((logout()))
         keycloak.doLogout()
     }
-    console.log("NAVIGATIONBAR")
-    console.log("Screenwidth:",screenSize)
+    const [settings, setSettings] = useState(false)
+    const handleShow = (set) => setSettings(set);
+    //const handleHide = (set) => setSettings(set);
+
+    if(settings == true ){
+        console.log("NAVrereder: true")
+        //setTest(showSettings)
+    } else {
+        console.log("Navrereder: false")
+        //setTest(showSettings)
+    }
 
     function smallScreen(){
         return(
@@ -53,10 +62,14 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                                     >{group.groupName}
                                     </NavDropdown.Item>)}
                             </NavDropdown>: null}
-                        <Button variant="light" className="buttonStyle maxMarginLeft">
+                        <Button variant="light" className="buttonStyle maxMarginLeft"  onClick={ () => handleShow(true)}>
                             Einstellungen
                         </Button>
-                        <SettingsPopup getActiveGroupId={getActiveGroupId}/>
+                        <SettingsPopup setShowSettings={setSettings}
+                                       handelShow={handleShow}
+                                       getActiveGroupId={getActiveGroupId}
+                                       setActiveGroupId={setActiveGroupId}
+                                       settings={settings}/>
                     </Nav>
                 </Container>
             </>
@@ -84,7 +97,14 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                                 <ChatComponent getActiveGroupId = {getActiveGroupId}/>
                             </StompSessionProvider>
                         </Nav>
-                        <SettingsPopup getActiveGroupId={getActiveGroupId}/>
+                        <Button variant="light"  onClick={ () => handleShow(true)}>
+                            Einstellungen
+                        </Button>
+                        <SettingsPopup setShowSettings={setSettings}
+                                       handelShow={handleShow}
+                                       getActiveGroupId={getActiveGroupId}
+                                       setActiveGroupId={setActiveGroupId}
+                                       settings={settings}/>
                         <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
                     </Navbar.Collapse>
                 </Container>
@@ -97,5 +117,4 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
             {screenSize>=500?largeScreen():smallScreen()}
         </Navbar>
     )
-
 }

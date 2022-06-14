@@ -12,9 +12,9 @@ import {
     selectUserStore
 } from "../../reduxStore/UserSlice";
 
-const SettingsPopup = ({getActiveGroupId}) => {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGroupId, setActiveGroupId, setShowSettings}) => {
+    const [show, setShow] = useState();
+    const handleClose = () => { setShow(false); handelShow(false) }
     const handleShow = () => setShow(true);
     const [getGroupId, setGroupId] = useState();
     const [showNewGroup, setShowNewGroup]= useState(false)
@@ -91,6 +91,7 @@ const SettingsPopup = ({getActiveGroupId}) => {
 
     return (
         <>
+
 
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
