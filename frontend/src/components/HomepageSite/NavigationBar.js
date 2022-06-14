@@ -9,8 +9,6 @@ import keycloak from '../../api/Auth'
 import {logout} from "../../reduxStore/UserSlice";
 import {useDispatch} from "react-redux";
 import {StompSessionProvider} from "react-stomp-hooks";
-import {showModal} from "./SettingsPopup";
-
 
 export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite, screenSize}) => {
 

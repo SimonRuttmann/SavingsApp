@@ -90,19 +90,19 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                         <Card.Body>
                             <Form>
                                 <Row className="entryCreationBar">
-                                    <Col>
+                                    <Col xs={"6"} md={"3"} className="mb-2">
                                         <Form.Group>
                                             <Form.Label>Name</Form.Label>
                                             <Form.Control ref={nameRef} id="name" type="text" defaultValue={selectedEntry.name}/>
                                         </Form.Group>
                                     </Col>
-                                    <Col>
+                                    <Col xs={"6"} md={"3"} className="mb-2">
                                         <Form.Group>
                                             <Form.Label>Kosten</Form.Label>
                                             <Form.Control ref={costBalanceRef} type="text" value={costBalance} onChange={(e) => changeCostBalance(e.target.value)}/>
                                         </Form.Group>
                                     </Col>
-                                    <Col>
+                                    <Col xs={"6"} md={"3"} className="mb-2">
                                         <Form.Group className="CategoryArea">
                                             <Form.Label>Kategorien</Form.Label>
                                             <div className="Select">
@@ -115,32 +115,31 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                                             </div>
                                         </Form.Group>
                                     </Col>
-                                    <Col className="buttonCol">
-                                        <Form.Group className="buttonArea">
-                                            <Button onClick={() => perpareUpdate()}>Eintrag ändern</Button>
-
+                                    <Col xs={"6"} md={"3"} className="mb-2">
+                                        <Form.Group>
+                                            <Form.Label>Beschreibung</Form.Label>
+                                            <Form.Control ref={descriptionRef} defaultValue={selectedEntry.description} as="textarea" rows={3}/>
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                <br/>
-                                    <Row>
-                                        <Col>
-                                            <Form.Group>
-                                                <Form.Label>Datum</Form.Label>
-                                                <DatePicker selected={startDate}
-                                                            onChange={(date) => setStartDate(date)}
-                                                            locale="de"
-                                                            dateFormat="dd/MM/yyyy"
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col>
-                                            <Form.Group>
-                                                <Form.Label>Beschreibung</Form.Label>
-                                                <Form.Control ref={descriptionRef} defaultValue={selectedEntry.description} as="textarea" rows={3}/>
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
+                                <Row>
+                                    <Col xs={"6"} md={"3"} className="mb-2">
+                                        <Form.Group>
+                                            <Form.Label>Datum</Form.Label>
+                                            <DatePicker selected={startDate}
+                                                        onChange={(date) => setStartDate(date)}
+                                                        locale="de"
+                                                        dateFormat="dd/MM/yyyy"
+                                            />
+                                        </Form.Group>
+                                    </Col>
+
+                                </Row>
+                                <Col className="buttonCol maxMarginLeft floatRight">
+                                <Form.Group className="buttonArea">
+                                    <Button onClick={() => perpareUpdate()}>Eintrag ändern</Button>
+                                </Form.Group>
+                            </Col>
                             </Form>
                         </Card.Body>
                     </Card>
