@@ -9,7 +9,7 @@ import de from 'date-fns/locale/de';
 import {isNumberOrDecimalString} from "../../utils/util";
 
 
-export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore, clearSelectors}) => {
+export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore, clearSelectors, updateCategorySelector}) => {
 
 
     registerLocale('de', de)
@@ -27,6 +27,17 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
     useEffect( () => {
         setEntryCreationSelectedCategory(null);
     }, [clearSelectors])
+
+    useEffect( () => {
+        if(updateCategorySelector != null &&
+            entryCreationSelectedCategory != null &&
+            entryCreationSelectedCategory.id === updateCategorySelector){
+
+            setEntryCreationSelectedCategory(null);
+        }
+        
+        // eslint-disable-next-line
+    }, [updateCategorySelector])
 
 
     function handleChange(category){

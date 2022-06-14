@@ -1,4 +1,4 @@
-import {Button, Card, Col, Form, Row} from "react-bootstrap";
+import {Card, Col, Form, Row} from "react-bootstrap";
 import Select from "react-select";
 import React, {useEffect, useRef, useState} from "react";
 import makeAnimated from "react-select/animated";
@@ -8,7 +8,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import de from 'date-fns/locale/de';
 
-export const SearchBar = ({   clearSelectors,
+export const SearchBar = ({   clearSearchBarCategorySelector,
+                              clearCategorySelectors,
+                              clearUserSelectors,
                               mappedCategories,
                               users,
                               currentFilterInformation,
@@ -18,12 +20,25 @@ export const SearchBar = ({   clearSelectors,
     const userRef = useRef(null);
 
     useEffect( () => {
+
+        if( categoryRef.current != null &&
+            categoryRef.current.commonProps != null){
+
+            categoryRef.current.commonProps.clearValue();
+        }
+
+
+    },[clearSearchBarCategorySelector])
+
+    useEffect( () => {
         if(categoryRef.current != null)
             categoryRef.current.commonProps.clearValue();
+    },[clearCategorySelectors])
 
+    useEffect( () => {
         if(userRef.current != null)
             userRef.current.commonProps.clearValue();
-    },[clearSelectors])
+    },[clearUserSelectors])
 
     registerLocale('de', de)
 
@@ -64,9 +79,6 @@ export const SearchBar = ({   clearSelectors,
                                                 locale="de"
                                                 dateFormat="dd/MM/yyyy"
                                     />
-{/*
-                                //TODO onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeEndDate, payload:e})}
-*/}
                             </Form.Group>
                         </Col>
                         <Col>
@@ -93,11 +105,6 @@ export const SearchBar = ({   clearSelectors,
                                             onChange={(e) => dispatchFilterInformation({type: filterInformationAction.changeFilterCategories, payload:e})}
                                             isMulti />
                                 </div>
-                            </Form.Group>
-                        </Col>
-                        <Col className="buttonCol">
-                            <Form.Group className="buttonArea">
-                                <Button >Refresh Data</Button>
                             </Form.Group>
                         </Col>
                     </Row>

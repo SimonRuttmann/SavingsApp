@@ -11,7 +11,9 @@ import {useDispatch} from "react-redux";
 import {StompSessionProvider} from "react-stomp-hooks";
 import {showModal} from "./SettingsPopup";
 
-export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite}) => {
+
+export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite, screenSize}) => {
+
 
     const dispatch = useDispatch()
 
@@ -24,48 +26,90 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
     const handelClose= () => setSettings(false);
 
 
-    if(settings == true ){
-        console.log("Settings sind offen, weiß NAVBar: true")
-        //setTest(showSettings)
-    } else {
-        console.log("Settings sind zu, weiß NAVBar: false")
-        //setTest(showSettings)
+
+    function smallScreen(){
+        return(
+            <>
+                <Container>
+                    <Navbar.Toggle/>
+                    <Navbar.Collapse className="justify-content-end">
+                        <Nav>
+                            <StompSessionProvider url={"http://localhost:8014/ws/chat"}>
+                                <ChatComponent getActiveGroupId = {getActiveGroupId}/>
+                            </StompSessionProvider>
+                        </Nav>
+                        <div className="showSelectedGroup">
+
+                            {getActiveGroupId != null ?
+                                groupInformationStore.find(group => group.id === getActiveGroupId).groupName : null}
+                        </div>
+                        <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
+                    </Navbar.Collapse>
+                </Container>
+                <Container>
+                    <Nav className="fullWidth">
+                        {Array.isArray(groupInformationStore) && groupInformationStore.length > 0 ?
+                            <NavDropdown title="Ansicht" id="basic-nav-dropdown">
+                                { groupInformationStore.map(group =>
+                                    <NavDropdown.Item key={`Group-${group.id}`}
+                                                      onClick={(e) => {
+                                                          e.preventDefault()
+                                                          setActiveGroupId(group.id)
+                                                      }}
+                                    >{group.groupName}
+                                    </NavDropdown.Item>)}
+                            </NavDropdown>: null}
+                        <Button variant="light" className="buttonStyle maxMarginLeft"  onClick={ () => handleShow()}>
+                            Einstellungen
+                        </Button>
+                        <SettingsPopup show={settings}
+                                       onHide={handelClose}
+                                       getActiveGroupId={getActiveGroupId}
+                                       setActiveGroupId={setActiveGroupId} />
+                    </Nav>
+                </Container>
+            </>
+        )
     }
-
+    function largeScreen(){
+        return(
+            <>
+                <Container>
+                    <Navbar.Toggle/>
+                    <Navbar.Collapse className="justify-content-end">
+                        <Nav>
+                            {Array.isArray(groupInformationStore) && groupInformationStore.length > 0 ?
+                                <NavDropdown title="Ansicht" id="basic-nav-dropdown">
+                                    { groupInformationStore.map(group =>
+                                        <NavDropdown.Item key={`Group-${group.id}`}
+                                                          onClick={(e) => {
+                                                              e.preventDefault();
+                                                              setActiveGroupId(group.id);
+                                                          }}
+                                        >{group.groupName}
+                                        </NavDropdown.Item>)}
+                                </NavDropdown>: null}
+                            <StompSessionProvider url={"http://localhost:8014/ws/chat"}>
+                                <ChatComponent getActiveGroupId = {getActiveGroupId}/>
+                            </StompSessionProvider>
+                        </Nav>
+                        <Button variant="light"  onClick={ () => handleShow()}>
+                            Einstellungen
+                        </Button>
+                        <SettingsPopup
+                                show={settings}
+                                onHide={handelClose}
+                                getActiveGroupId={getActiveGroupId}
+                                setActiveGroupId={setActiveGroupId} />
+                        <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
+                    </Navbar.Collapse>
+                </Container>
+            </>
+        )
+    }
     return (
-        <Navbar bg="dark" variant="dark">
-        <Container>
-            <Navbar.Brand>Haushalt</Navbar.Brand>
-            <Navbar.Toggle/>
-            <Navbar.Collapse className="justify-content-end">
-                <Nav className="me-auto">
-                    {Array.isArray(groupInformationStore) && groupInformationStore.length > 0 ?
-                        <NavDropdown title="Ansicht" id="basic-nav-dropdown">
-                            { groupInformationStore.map(group =>
-                                <NavDropdown.Item key={`Group-${group.id}`}
-                                                  onClick={(e) => {
-                                                      e.preventDefault()
-                                                      setActiveGroupId(group.id)
-                                                  }}
-                                >{group.groupName}
-                                </NavDropdown.Item>)}
-                        </NavDropdown>: null}
-                    <StompSessionProvider url={"http://localhost:8014/ws/chat"}>
-                        <ChatComponent getActiveGroupId = {getActiveGroupId}/>
-                    </StompSessionProvider>
-                </Nav>
-                <p className="showSelectedGroup">
-
-                    {getActiveGroupId != null ?
-                        groupInformationStore.find(group => group.id === getActiveGroupId).groupName : null}
-                </p>
-                <Button variant="light"  onClick={ () => handleShow()}>
-                    Einstellungen in Nav
-                </Button>
-                <SettingsPopup show={settings} onHide={handelClose} getActiveGroupId={getActiveGroupId} setActiveGroupId={setActiveGroupId} />
-                <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
-            </Navbar.Collapse>
-        </Container>
+        <Navbar className="navBar" bg="dark" variant="dark">
+            {screenSize>=500?largeScreen():smallScreen()}
         </Navbar>
     )
 }

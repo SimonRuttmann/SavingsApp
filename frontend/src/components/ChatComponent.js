@@ -35,7 +35,6 @@ function ChatComponent(getActiveGroupId ) {
 
     const addMessageToState = (_message) =>{
         _message = JSON.parse(_message.body)
-        console.log("Wants to add following messages to state ",_message)
         setMessages(prevState => {
             return [
                 ...prevState,
@@ -45,7 +44,6 @@ function ChatComponent(getActiveGroupId ) {
     }
 
     const getMessagesForTopic = () => {
-        console.log("Started fetching with topic: ",topic.current)
         getMessages(topic.current).then((messageArray)=> {
             setMessages(messageArray.data.reverse())
         })
@@ -57,13 +55,11 @@ function ChatComponent(getActiveGroupId ) {
             sender : userStore.username,
             topic : topic.current
         }
-        console.log("Message to send ",body)
         postMessage(body)
     }
 
     function generateShownMessages(){
         let messageForRender = []
-        //console.log("Messages to be shown ",messages)
         let index = 0;
         for (let msg of messages){
             if(msg.sender === userStore.username){
