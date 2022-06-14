@@ -99,7 +99,7 @@ const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGrou
         </Modal.Header>
         <Modal.Body className = {"settingPopUp"}>
             {showNewGroup &&
-            <div className="mt-2 col-md-12">
+            <Col className="mt-2" md={12}>
                 <h6>Neue Gruppe erstellen:</h6>
                 <div className="row">
                     <Col>
@@ -114,7 +114,7 @@ const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGrou
                         <Button onClick={ () => setShowNewGroup(false)} variant="secondary">Abbrechen</Button>
                     </Col>
                 </div>
-            </div>
+            </Col>
             }
 
             <div className={"row mt-2 col-md-12"} >

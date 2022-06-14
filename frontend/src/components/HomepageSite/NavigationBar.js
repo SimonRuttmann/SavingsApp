@@ -42,7 +42,6 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                             </StompSessionProvider>
                         </Nav>
                         <div className="showSelectedGroup">
-
                             {getActiveGroupId != null ?
                                 groupInformationStore.find(group => group.id === getActiveGroupId).groupName : null}
                         </div>
@@ -81,7 +80,7 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                 <Container>
                     <Navbar.Toggle/>
                     <Navbar.Collapse className="justify-content-end">
-                        <Nav>
+                        <Nav className="fullWidth">
                             {Array.isArray(groupInformationStore) && groupInformationStore.length > 0 ?
                                 <NavDropdown title="Ansicht" id="basic-nav-dropdown">
                                     { groupInformationStore.map(group =>
@@ -96,7 +95,10 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                             <StompSessionProvider url={"http://localhost:8014/ws/chat"}>
                                 <ChatComponent getActiveGroupId = {getActiveGroupId}/>
                             </StompSessionProvider>
-                        </Nav>
+                            <div className="showSelectedGroup">
+                            {getActiveGroupId != null ?
+                                groupInformationStore.find(group => group.id === getActiveGroupId).groupName : null}
+                            </div>
                         <Button variant="light"  onClick={ () => handleShow(true)}>
                             Einstellungen
                         </Button>
@@ -106,6 +108,7 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                                        setActiveGroupId={setActiveGroupId}
                                        settings={settings}/>
                         <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
+                        </Nav>
                     </Navbar.Collapse>
                 </Container>
             </>
