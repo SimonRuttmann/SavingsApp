@@ -1,6 +1,6 @@
 import ChatComponent from "../ChatComponent";
 import SettingsPopup from "./SettingsPopup";
-import React from "react";
+import React, {useState} from "react";
 import "../../css/styles.scss"
 import "../../css/homepage.scss"
 import {Button, Container, Nav, Navbar, NavDropdown} from 'react-bootstrap'
@@ -10,7 +10,7 @@ import {logout} from "../../reduxStore/UserSlice";
 import {useDispatch} from "react-redux";
 import {StompSessionProvider} from "react-stomp-hooks";
 
-export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite}) => {
+export const NavigationBar = ({newLoad,getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite}) => {
 
     const dispatch = useDispatch()
 
@@ -18,8 +18,17 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
         dispatch((logout()))
         keycloak.doLogout()
     }
-    console.log("NAVIGATIONBAR")
-    console.log(groupInformationStore)
+    const [settings, setSettings] = useState(false)
+    const handleShow = (set) => setSettings(set);
+    //const handleHide = (set) => setSettings(set);
+
+    if(settings == true ){
+        console.log("NAVrereder: true")
+        //setTest(showSettings)
+    } else {
+        console.log("Navrereder: false")
+        //setTest(showSettings)
+    }
 
     return (
         <Navbar bg="dark" variant="dark">
@@ -48,8 +57,10 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                     {getActiveGroupId != null ?
                         groupInformationStore.find(group => group.id === getActiveGroupId).groupName : null}
                 </p>
-
-                <SettingsPopup getActiveGroupId={getActiveGroupId}/>
+                <Button variant="light"  onClick={ () => handleShow(true)}>
+                    Einstellungen
+                </Button>
+                <SettingsPopup newLoad={newLoad} setShowSettings={setSettings} handelShow={handleShow}  getActiveGroupId={getActiveGroupId} setActiveGroupId={setActiveGroupId} settings={settings}/>
                 <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
             </Navbar.Collapse>
         </Container>

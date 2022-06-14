@@ -46,6 +46,7 @@ export const filterInformationAction = {
 const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
 
 
+
     /**
      *  Access Redux-Stores
      */
@@ -56,7 +57,18 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     const processingStore       = useSelector(selectProcessingStore);
     const dispatch = useDispatch()
 
-
+    /**
+     * state for rerender after Settingschange
+     */
+    const [rerender, setRerender] = useState(false)
+    const newLoad = (set) => setRerender(set);
+    if(rerender == true ){
+        console.log("---------Homepage rereder side: true")
+        //setTest(showSettings)
+    } else {
+        console.log("----------Homepage rereder side: false")
+        //setTest(showSettings)
+    }
     /**
      * Configure Keycloak
      * -----------------------------------------------------------------------------------------------------------------
@@ -198,7 +210,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
      * -----------------------------------------------------------------------------------------------------------------
      */
 
-    console.log("In Render GroupInformationStore:")
+    console.log("------------------------ Render GroupInformationStore:")
     console.log(groupInformationStore)
 
     console.log("In Render categoryStore:")
@@ -220,7 +232,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     const mappedCategories = categoryStore.map(category =>{
         return{label: category.name, value: category.id, ...category}
     });
-
 
     /**
      * Crud saving entry
@@ -258,6 +269,9 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     }
 
 
+    const changeFromSettings = (bool) => {
+
+    }
 
     /**
      * Crud category
@@ -314,6 +328,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                             setActiveGroupId={setActiveGroupId}
                             groupInformationStore={groupInformationStore}
                             navToGuestSite={navToGuestSite}
+                            newLoad={newLoad}
                             />
 
             {openUpdateEntryPopup ?

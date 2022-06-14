@@ -40,7 +40,7 @@ const groupInformationSlice = createSlice({
             })
         },
         RemoveGroup: (state, action) => {
-            state = state.filter(group => group.id !== action.payload.id);
+            state.filter(group => group.id !== action.payload.id);
         },
 //        AddMember: (state, action) => {
 //            let group = state.find(group => group.id === action.payload.id);
@@ -90,6 +90,7 @@ export const leaveAGroup = (groupId) => (dispatch) => {
     return new Promise((resolve, reject) => {
         let response = leaveGroup(groupId)
         response.then(response => dispatch(RemoveGroup(response.data)))
+                .then(() => resolve(null))
     })
 }
 
@@ -97,5 +98,6 @@ export const deleteAGroup = (groupId) => (dispatch) => {
     return new Promise((resolve, reject) => {
         let response = deleteGroup(groupId)
         response.then(response => dispatch(RemoveGroup(response.data)))
+                .then(() => resolve(null))
     })
 }
