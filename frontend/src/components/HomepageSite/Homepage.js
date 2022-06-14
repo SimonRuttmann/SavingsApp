@@ -350,10 +350,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                           defaultFilterInformation={currentFilterInformation}/>
             </CardGroup>
 
-            <Card className="subHeader">
-                <h4>Eintragserstellung</h4>
-            </Card>
-
             <EntryCreationBar clearSelectors={clearSelectors}
                               setSelectedEntry = {setSelectedEntry}
                               selectedEntry = {selectedEntry}
@@ -362,11 +358,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                               setShowMore = {setShowMore}
                               showMore = {showMore}
             />
-
-
-            <Card className="subHeader">
-                <h4>Kategoriebearbeitung</h4>
-            </Card>
 
             <CategoryEditingBar clearSelectors={clearSelectors}
                                 addCategory={addCategory}

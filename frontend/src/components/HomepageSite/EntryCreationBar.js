@@ -65,23 +65,27 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
     }
 
     return (
+        <>
+        <Card className="subHeader">
+            <h4>Eintragserstellung</h4>
+        </Card>
         <Card>
             <Card.Body>
                 <Form>
                     <Row className="entryCreationBar">
-                        <Col>
+                        <Col xs={4} md={3}>
                             <Form.Group>
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control ref={nameRef} id="name" type="text" placeholder="Eintragsname eintragen"/>
                             </Form.Group>
                         </Col>
-                        <Col>
+                        <Col xs={4} md={3}>
                             <Form.Group>
                                 <Form.Label>Kosten</Form.Label>
                                 <Form.Control ref={costBalanceRef} type="text" placeholder="Kosten eintragen" value={costBalance} onChange={(e)=>changeCostBalance(e.target.value)}/>
                             </Form.Group>
                         </Col>
-                        <Col>
+                        <Col xs={4} md={3}>
                             <Form.Group className="CategoryArea">
                                 <Form.Label>Kategorien</Form.Label>
                                 <div className="Select">
@@ -93,14 +97,15 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
                                 </div>
                             </Form.Group>
                         </Col>
-                        <Col className="buttonCol">
-                            <Form.Group className="buttonArea">
+                        <Col className="buttonCol row mt-2"  xs={12} md={3}>
+                            <Col>
                                 <Button onClick={() => addEntry()}>Eintrag erstellen</Button>
-                                {!showMore &&  <Button variant="link" onClick={() => setShowMore(true)}>Zeig mehr</Button>}
-                            </Form.Group>
+                            </Col>
+                            <Col className="buttonArea" xs={6}>
+                                <Button variant="link" onClick={() => setShowMore(!showMore)}>{showMore?"Zeige weniger":"Zeig mehr"}</Button>
+                            </Col>
                         </Col>
                     </Row>
-                    <br/>
                     { showMore &&
                         <Row>
                             <Col>
@@ -119,14 +124,10 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
                                     <Form.Control ref={descriptionRef} as="textarea" rows={3}/>
                                 </Form.Group>
                             </Col>
-                            <Col>
-                                <Form.Group>
-                                    <Button variant="link" onClick={() => setShowMore(false)}>Zeig weniger</Button>
-                                </Form.Group>
-                            </Col>
                         </Row>}
                 </Form>
             </Card.Body>
         </Card>
+        </>
     )
 }

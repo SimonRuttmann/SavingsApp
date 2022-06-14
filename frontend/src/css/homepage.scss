@@ -1,12 +1,6 @@
 .navBar{
   flex-flow: column;
-}
-.buttonCol{
-  position: relative;
-  .buttonArea{
-    position: absolute;
-    bottom: 0;
-  }
+  width: 100%;
 }
 
 .chartStyle{
@@ -16,8 +10,17 @@
   width: 100%;
 }
 
+.entryCreationBar{
+  align-items: center;
+  .element{
+    margin-bottom: 3rem;
+  }
+}
 table{
   table-layout: fixed;
+}
+.floatRight{
+  float:right;
 }
 
 .maxMarginLeft{

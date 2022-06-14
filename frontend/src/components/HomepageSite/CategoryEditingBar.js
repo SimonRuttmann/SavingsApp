@@ -60,27 +60,27 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
 
 
     return (
+        <>
+        <Card className="subHeader">
+            <h4>Kategoriebearbeitung</h4>
+        </Card>
         <Card>
             <Card.Body>
                 <Form>
                     <Row className="entryCreationBar">
-
-                        <Col>
+                        <Col xs={"6"} md={3} className="element">
                             <Form.Group>
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control ref={nameRef} id="name" type="text" placeholder="Kategoriename eintragen"/>
                             </Form.Group>
                         </Col>
-                        <Col className="buttonCol">
+                        <Col xs={"6"} md={3} className="buttonCol element">
                             <Form.Group className="buttonArea">
                                 <Button onClick={() => prepareCreate()}>Kategorie erstellen</Button>
                             </Form.Group>
                         </Col>
-
-
-
-                        <Col>
-                            <Form.Group className="CategoryArea">
+                        <Col xs={"6"} md={3}>
+                            <Form.Group className="CategoryArea element">
                                 <Form.Label>Kategorien</Form.Label>
                                 <div className="Select">
                                     <Select options={mappedCategories}
@@ -91,26 +91,21 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
                                 </div>
                             </Form.Group>
                         </Col>
-                        <Col className="buttonCol">
+                        <Col xs={"6"} md={3} className="buttonCol element">
                             <Form.Group className="buttonArea">
                                 <Button onClick={() => prepareDelete()}>Kategorie löschen</Button>
                             </Form.Group>
                         </Col>
-
-
                     </Row>
-
                     <br/>
-
                     <Row className="entryCreationBar">
-
-                        <Col>
+                        <Col xs={"6"} md={"4"}>
                             <Form.Group>
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control ref={updateNameRef} id="name" type="text" placeholder="Neuer Kategoriename"/>
                             </Form.Group>
                         </Col>
-                        <Col>
+                        <Col xs={"6"} md={"4"}>
                             <Form.Group className="CategoryArea">
                                 <Form.Label>Kategorien</Form.Label>
                                 <div className="Select">
@@ -122,9 +117,8 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
                                 </div>
                             </Form.Group>
                         </Col>
-                        <Col></Col>
-                        <Col className="buttonCol">
-                            <Form.Group className="buttonArea">
+                        <Col xs={"12"} md={"4"} className="buttonCol">
+                            <Form.Group className="buttonArea mt-2 ">
                                 <Button onClick={() => prepareUpdate()}>Kategorie editieren</Button>
                             </Form.Group>
                         </Col>
@@ -132,6 +126,7 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
                 </Form>
             </Card.Body>
         </Card>
+        </>
     )
 }
 
