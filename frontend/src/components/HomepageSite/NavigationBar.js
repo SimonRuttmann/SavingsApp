@@ -22,13 +22,7 @@ export const NavigationBar = ({newLoad,getActiveGroupId, setActiveGroupId, group
     const handleShow = (set) => setSettings(set);
     //const handleHide = (set) => setSettings(set);
 
-    if(settings == true ){
-        console.log("NAVrereder: true")
-        //setTest(showSettings)
-    } else {
-        console.log("Navrereder: false")
-        //setTest(showSettings)
-    }
+
 
     return (
         <Navbar bg="dark" variant="dark">
