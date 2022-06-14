@@ -1,6 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react'
-import SockJS from 'sockjs-client';
-import {Stomp} from "@stomp/stompjs";
 import {
     Button,
     Card,
@@ -12,83 +10,45 @@ import {useSelector} from "react-redux";
 import {getMessages, postMessage, subTopic} from "../api/services/Chat";
 import {selectUserStore} from "../reduxStore/UserSlice";
 import "../css/chat.scss"
-
+import {useSubscription} from "react-stomp-hooks";
 
 function ChatComponent(getActiveGroupId ) {
-    const socket = useRef(new SockJS('http://localhost:8014/ws/chat'))
     const chatRef = useRef()
-    //Topic equals selected groupID
-    const topic = useRef(null);
-    const stompClient = useRef(null);
+    const userStore = useSelector(selectUserStore);
 
-    const userStore             = useSelector(selectUserStore);
-    const [subscribedTopic, setSubscribedTopic] = useState(null)
     //All saved messages
     const [messages, setMessages] = useState([]);
     const [show, setShow] = useState(false);
+    const topic = useRef(null)
 
     const handleClose = () => setShow(false);
-
     const handleShow = () => setShow(true);
+
     useEffect( () => {
-        console.log("SockJS Instance ",socket)
-        if(getActiveGroupId.getActiveGroupId === topic.current || getActiveGroupId.getActiveGroupId == null) return;
-        console.log("INIT topic",topic.current)
-        console.log("INIT getActiveGroupID ",getActiveGroupId.getActiveGroupId)
-        topic.current = getActiveGroupId.getActiveGroupId;
-        subscribeToTopic()
+        if(getActiveGroupId.getActiveGroupId == null || topic === getActiveGroupId.getActiveGroupId) return;
+        topic.current = (getActiveGroupId.getActiveGroupId);
+        subTopic(topic.current)
         getMessagesForTopic()
+    },[getActiveGroupId.getActiveGroupId])
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[getActiveGroupId.getActiveGroupId,topic])
+    useSubscription(['/sub/chat/rooms/'+topic.current],(msg)=> addMessageToState(msg))
 
-    const connectToSockJs = () => {
-        console.log("Trying to connect ",stompClient)
-        stompClient.current = Stomp.over(socket.current)
-
-        stompClient.current.connect({}, (frame) => {
-            //console.log("Connected: ",frame)
-            subscribeToGroup()
-        })
-    }
-
-    //Handles the subscribe to stomp socket
-    const subscribeToGroup = () => {
-        let testindex = 1;
-        stompClient.current.subscribe(`/sub/chat/rooms/`+topic.current, (msg) => {
-            console.log("I am run ",testindex++)
-            const json =JSON.parse(msg.body)
-            console.log("Message State before: ",messages)
-            console.log("Received message: ",json)
-            addMessageToState(json)
-            console.log("New messages ",messages)
-        })
-    }
-
-    const addMessageToState = (_messages) =>{
-        console.log("Wants to add following messages to state ",_messages)
+    const addMessageToState = (_message) =>{
+        _message = JSON.parse(_message.body)
+        console.log("Wants to add following messages to state ",_message)
         setMessages(prevState => {
             return [
                 ...prevState,
-                _messages
+                _message
             ]
         })
     }
 
-    //Tells the backend to establish a connection to redis sub/pub
-    const subscribeToTopic = () => {
-        subTopic(topic.current)
-    }
-
     const getMessagesForTopic = () => {
         console.log("Started fetching with topic: ",topic.current)
-        getMessages(topic.current).then((tmp)=> {
-            setMessages(tmp.data)
+        getMessages(topic.current).then((messageArray)=> {
+            setMessages(messageArray.data.reverse())
         })
-    }
-
-    const disconnect = () => {
-        stompClient.current.disconnect()
     }
 
     function sendMessage(){
@@ -131,7 +91,7 @@ function ChatComponent(getActiveGroupId ) {
           <Button className="chatButton" variant="dark" onClick={()=>handleShow()}>
               Chat
           </Button>
-          <Offcanvas show={show} onHide={handleClose}>
+          <Offcanvas  show={show} onHide={handleClose}>
               <Offcanvas.Header closeButton>
                   <Offcanvas.Title>Chat</Offcanvas.Title>
               </Offcanvas.Header>
