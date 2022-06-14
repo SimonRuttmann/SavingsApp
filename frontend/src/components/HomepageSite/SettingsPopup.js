@@ -11,19 +11,21 @@ import {
     selectUserNamesStore,
     selectUserStore
 } from "../../reduxStore/UserSlice";
-
-const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGroupId, setActiveGroupId, setShowSettings}) => {
-    const [show, setShow] = useState();
-    const handleClose = () => { setShow(false); handelShow(false) }
-    const handleShow = () => setShow(true);
+//{ getActiveGroupId, setActiveGroupId}
+const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
+    //const [show, setShow] = useState(false);
+    // const handleClose = () => setShow(false);
+    // const handleShow = () => setShow(true);
     const [getGroupId, setGroupId] = useState();
     const [showNewGroup, setShowNewGroup]= useState(false)
     const [showInvite, setShowInvite] = useState(false)
     const [showInvitations, setInvitations] = useState(false)
 
+    // if(settings == true && show == null) {setShow(true); console.log("change")}
+    // console.log("set settings in Nav to false")
+    // setSettingsFalse()
 
 
-    if(show != settings) setShow(settings)
 
     //states
     const groupInformationStore = useSelector(selectGroupInformationStore);
@@ -59,15 +61,16 @@ const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGrou
     }
 
     function LeaveGroup(id) {
+        onHide()
         dispatch(leaveAGroup(id))
-        newLoad(true)
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
+        if(id === getActiveGroupId) setActiveGroupId(newFokus)
 
     }
     function DeleteGroup(id) {
+        onHide()
         dispatch(leaveAGroup(id))
-        newLoad(true)
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
 
@@ -89,8 +92,6 @@ const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGrou
 
     function acceptThisInvitation(groupId) {
         dispatch(acceptAInvitation(groupId))
-
-        newLoad(true)
     }
 
     function declineThisInvitation(groupId) {
@@ -101,10 +102,9 @@ const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGrou
 //             Einstellungen
 //         </Button>
     return (
-        <>
 
 
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={onHide} >
         <Modal.Header closeButton>
             <Modal.Title>Einstellungen</Modal.Title>
         </Modal.Header>
@@ -198,7 +198,7 @@ const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGrou
         <Modal.Footer>
         </Modal.Footer>
     </Modal>
-        </>
+
     );
 };
 
