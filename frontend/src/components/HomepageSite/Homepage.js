@@ -50,11 +50,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     const processingStore       = useSelector(selectProcessingStore);
     const dispatch = useDispatch()
 
-    /**
-     * state for rerender after Settingschange
-     */
-    const [rerender, setRerender] = useState(false)
-    const newLoad = (set) => setRerender(set);
 
     /**
      * Configure Keycloak
@@ -331,7 +326,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                             setActiveGroupId={setActiveGroupId}
                             groupInformationStore={groupInformationStore}
                             navToGuestSite={navToGuestSite}
-                            newLoad={newLoad}
+                            screenSize ={window.innerWidth}
                             />
 
             {openUpdateEntryPopup ?
