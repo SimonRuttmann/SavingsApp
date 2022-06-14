@@ -16,7 +16,7 @@ import {
     fetchUserDataFromServer,
     fetchUserNames,
     login,
-    logout, selectUserInvitationsStore, selectUserNamesStore,
+    logout,
     selectUserStore
 } from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
@@ -44,7 +44,6 @@ export const filterInformationAction = {
 
 
 const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
-
 
     /**
      *  Access Redux-Stores
@@ -314,6 +313,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                             setActiveGroupId={setActiveGroupId}
                             groupInformationStore={groupInformationStore}
                             navToGuestSite={navToGuestSite}
+                            screenSize ={window.innerWidth}
                             />
 
             {openUpdateEntryPopup ?

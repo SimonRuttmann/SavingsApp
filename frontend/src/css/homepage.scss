@@ -1,3 +1,6 @@
+.navBar{
+  flex-flow: column;
+}
 .buttonCol{
   position: relative;
   .buttonArea{
@@ -6,15 +9,24 @@
   }
 }
 
-
-
 .chartStyle{
   border: 0;
   padding: 3%;
   height: 500px;
-  width: 400px;
+  width: 100%;
 }
 
+table{
+  table-layout: fixed;
+}
+
+.maxMarginLeft{
+  margin-left: auto;
+}
+
+.fullWidth{
+  width: 100%;
+}
 .textStyle{
   text-align: center;
   padding-right: 45%;
@@ -23,12 +35,10 @@
 }
 .navbar-collapse{
   .showSelectedGroup{
-      position: absolute;
-      left: 50%;
+      margin: auto;
       font-size: 2rem;
       font-weight: 500;
       color: white;
-      padding-top: 0.5em;
       cursor: default;
   }
 }
@@ -46,7 +56,6 @@
 .addGroupDiv{
   display: block;
   margin-left: auto;
-  margin-right: auto;
 
 }
 .addGroupButton{
@@ -62,9 +71,6 @@
 }
 .settingPopUp{
   margin-top: 0rem;
-}
-.forumSize{
- width: 10rem;
 }
 
 .updateEntryPopUp{
