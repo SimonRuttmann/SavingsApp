@@ -83,7 +83,6 @@ const GuestSite = () => {
         <>
             <Navbar bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand>Haushalt</Navbar.Brand>
                     <Navbar.Toggle/>
                     <Navbar.Collapse className="justify-content-end">
                         <Button variant="light" onClick={() => keycloakService.doRegister()}>Register</Button>

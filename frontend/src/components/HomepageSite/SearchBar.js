@@ -95,11 +95,6 @@ export const SearchBar = ({   clearSelectors,
                                 </div>
                             </Form.Group>
                         </Col>
-                        <Col className="buttonCol">
-                            <Form.Group className="buttonArea">
-                                <Button >Refresh Data</Button>
-                            </Form.Group>
-                        </Col>
                     </Row>
                 </Form>
             </Card.Body>

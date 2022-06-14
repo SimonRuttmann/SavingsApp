@@ -91,9 +91,6 @@ const SettingsPopup = ({getActiveGroupId}) => {
 
     return (
         <>
-        <Button variant="light" style={buttonStyle} onClick={handleShow}>
-            Einstellungen
-        </Button>
 
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

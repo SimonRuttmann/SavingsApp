@@ -4,6 +4,8 @@ import App from './App';
 import {Provider} from "react-redux";
 import store from "./reduxStore/Store";
 import UserService from "./api/Auth";
+import 'bootstrap/dist/css/bootstrap.css';
+
 
 const renderApp = () =>
 ReactDOM.render(
