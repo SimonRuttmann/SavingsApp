@@ -9,8 +9,11 @@ import keycloak from '../../api/Auth'
 import {logout} from "../../reduxStore/UserSlice";
 import {useDispatch} from "react-redux";
 import {StompSessionProvider} from "react-stomp-hooks";
+import {showModal} from "./SettingsPopup";
+
 
 export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite, screenSize}) => {
+
 
     const dispatch = useDispatch()
 
@@ -18,17 +21,11 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
         dispatch((logout()))
         keycloak.doLogout()
     }
-    const [settings, setSettings] = useState(false)
-    const handleShow = (set) => setSettings(set);
-    //const handleHide = (set) => setSettings(set);
+    const [settings, setSettings] = useState()
+    const handleShow = () => setSettings(true);
+    const handelClose= () => setSettings(false);
 
-    if(settings == true ){
-        console.log("NAVrereder: true")
-        //setTest(showSettings)
-    } else {
-        console.log("Navrereder: false")
-        //setTest(showSettings)
-    }
+
 
     function smallScreen(){
         return(
@@ -42,6 +39,7 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                             </StompSessionProvider>
                         </Nav>
                         <div className="showSelectedGroup">
+
                             {getActiveGroupId != null ?
                                 groupInformationStore.find(group => group.id === getActiveGroupId).groupName : null}
                         </div>
@@ -61,14 +59,13 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                                     >{group.groupName}
                                     </NavDropdown.Item>)}
                             </NavDropdown>: null}
-                        <Button variant="light" className="buttonStyle maxMarginLeft"  onClick={ () => handleShow(true)}>
+                        <Button variant="light" className="buttonStyle maxMarginLeft"  onClick={ () => handleShow()}>
                             Einstellungen
                         </Button>
-                        <SettingsPopup setShowSettings={setSettings}
-                                       handelShow={handleShow}
+                        <SettingsPopup show={settings}
+                                       onHide={handelClose}
                                        getActiveGroupId={getActiveGroupId}
-                                       setActiveGroupId={setActiveGroupId}
-                                       settings={settings}/>
+                                       setActiveGroupId={setActiveGroupId} />
                     </Nav>
                 </Container>
             </>
@@ -99,14 +96,14 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                             {getActiveGroupId != null ?
                                 groupInformationStore.find(group => group.id === getActiveGroupId).groupName : null}
                             </div>
-                        <Button variant="light"  onClick={ () => handleShow(true)}>
+                        <Button variant="light"  onClick={ () => handleShow()}>
                             Einstellungen
                         </Button>
-                        <SettingsPopup setShowSettings={setSettings}
-                                       handelShow={handleShow}
-                                       getActiveGroupId={getActiveGroupId}
-                                       setActiveGroupId={setActiveGroupId}
-                                       settings={settings}/>
+                        <SettingsPopup
+                                show={settings}
+                                onHide={handelClose}
+                                getActiveGroupId={getActiveGroupId}
+                                setActiveGroupId={setActiveGroupId} />
                         <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
                         </Nav>
                     </Navbar.Collapse>
@@ -116,7 +113,6 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
     }
     return (
         <Navbar className="navBar" bg="dark" variant="dark">
-
             {screenSize>=500?largeScreen():smallScreen()}
         </Navbar>
     )
