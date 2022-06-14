@@ -14,7 +14,6 @@ const categorySlice = createSlice({
     initialState: [],
     reducers: {
         AddCategories: (state, action) => {
-            console.log("update categories")
             state = [];
             action.payload.forEach(category => {
                 state.push({

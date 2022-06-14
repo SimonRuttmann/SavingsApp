@@ -3,7 +3,7 @@ import axios from 'axios';
 const debug = true;
 
 export function Get(url, auth){
-    console.log("GET URL: ",url)
+
     let request;
     if(auth == null){
         try {
@@ -14,7 +14,7 @@ export function Get(url, auth){
         }
     }
     else {
-        console.log("Running GET with auth")
+
         request = {
             method: 'get',
             url: url,
@@ -26,7 +26,6 @@ export function Get(url, auth){
     }
     if(debug) {
         request
-            .then((value => console.log("GET URL " + url + " worked, it returned ", value)))
             .catch((reason) => console.error("GET URL " + url + " failed with the following reason", reason))
     }
     return request
@@ -34,7 +33,7 @@ export function Get(url, auth){
 
 export function Post(url,body,auth){
     let request;
-    console.log("POST ",url)
+
     try {
         request = {
             method: 'post',
@@ -52,7 +51,6 @@ export function Post(url,body,auth){
     }
     if(debug) {
         request
-            .then((value => console.log("POST URL " + url + " worked, it returned ", value)))
             .catch((reason) => console.error("POST URL " + url + " failed with the following reason", reason))
     }
     return request
@@ -60,7 +58,6 @@ export function Post(url,body,auth){
 
 export function Put(url,body,auth){
     let request;
-    console.log("PUT ",url)
 
     try {
         request = {
@@ -79,7 +76,6 @@ export function Put(url,body,auth){
     }
     if(debug) {
         request
-            .then((value => console.log("PUT URL " + url + " worked, it returned ", value)))
             .catch((reason) => console.error("PUT URL " + url + " failed with the following reason", reason))
     }
     return request
@@ -87,7 +83,6 @@ export function Put(url,body,auth){
 
 export function Delete(url, auth){
     let request;
-    console.log("Delete ",url)
 
     try {
         request = {
@@ -105,7 +100,6 @@ export function Delete(url, auth){
     }
     if(debug) {
         request
-            .then((value => console.log("DELETE URL " + url + " worked, it returned ", value)))
             .catch((reason) => console.error("DELETE URL " + url + " failed with the following reason", reason))
     }
     return request
