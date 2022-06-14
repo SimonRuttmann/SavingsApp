@@ -11,14 +11,7 @@ import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {addCategoryToServer, deleteCategoryFromServer, fetchCategoriesFromServer, selectCategoryStore, updateCategoryToServer} from "../../reduxStore/CategorySlice";
 import {fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
-import {
-    fetchInvitations,
-    fetchUserDataFromServer,
-    fetchUserNames,
-    login,
-    logout,
-    selectUserStore
-} from "../../reduxStore/UserSlice";
+import {fetchInvitations, fetchUserDataFromServer, fetchUserNames, login, logout, selectUserStore} from "../../reduxStore/UserSlice";
 import KeyCloakService from "../../api/Auth";
 import {addSavingEntryToServer, deleteSavingEntryFromServer, fetchProcessingResultsFromServer, selectProcessingStore, updateSavingEntryToServer} from "../../reduxStore/ContentSlice";
 import {Diagram1} from "./Diagrams/Diagram1";
@@ -44,6 +37,8 @@ export const filterInformationAction = {
 
 
 const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
+
+
 
     /**
      *  Access Redux-Stores
@@ -93,8 +88,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             case filterInformationAction.changeFilterCategories:
                 return {...state, filterCategory: action.payload}
             case filterInformationAction.changeStartDate:
-                console.log("CHANGE START DATE")
-                console.log(action.payload)
                 return {...state, startDate: action.payload}
             case filterInformationAction.changeEndDate:
                 return {...state, endDate: action.payload}
@@ -112,14 +105,14 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         "filterCategory": []
     });
 
-    const currentFilterInformationToDataObject = () => {
+    const currentFilterInformationToDataObject = (filterInformation = currentFilterInformation) => {
         return {
-            "sortParameter": currentFilterInformation.sortParameter,
-            "timeInterval": currentFilterInformation.timeInterval,
-            "startDate": currentFilterInformation.startDate,
-            "endDate": currentFilterInformation.endDate,
-            "personIds": currentFilterInformation.filterUser.map(user => user.id),
-            "categoryIds": currentFilterInformation.filterCategory.map(category => category.id)
+            "sortParameter": filterInformation.sortParameter,
+            "timeInterval": filterInformation.timeInterval,
+            "startDate": filterInformation.startDate,
+            "endDate": filterInformation.endDate,
+            "personIds": filterInformation.filterUser.map(user => user.id),
+            "categoryIds": filterInformation.filterCategory.map(category => category.id)
         }
     }
 
@@ -186,25 +179,34 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(fetchProcessingResultsFromServer(getActiveGroupId, dataObject))
 
         //Trigger selector clear
-        setClearSelectors(prevState => !prevState);
+        triggerClearAllSelectors();
 
         },[getActiveGroupId])
 
-    const [clearSelectors, setClearSelectors] = useState(false);
+    const triggerClearCategorySelectors = () => setClearCategorySelectors(prevState => !prevState);
+    const triggerClearUserSelectors = () => setClearUserSelectors(prevState => !prevState);
+
+    const triggerClearAllSelectors = () => {
+        triggerClearCategorySelectors();
+        triggerClearUserSelectors();
+    }
+
+    const [clearCategorySelectors, setClearCategorySelectors] = useState(false);
+    const [clearUserSelectors, setClearUserSelectors] = useState(false);
+
+
+
+    const triggerUpdateCategorySelector = (id) => SetUpdateCategorySelector(id);
+    const [updateCategorySelector, SetUpdateCategorySelector] = useState(null);
+
+    const triggerClearSearchBarCategorySelector = () => SetClearSearchBarCategorySelector(prevState => !prevState);
+    const [clearSearchBarCategorySelector, SetClearSearchBarCategorySelector] = useState(false);
 
     /**
      * Update local states
      * -----------------------------------------------------------------------------------------------------------------
      */
 
-    console.log("In Render GroupInformationStore:")
-    console.log(groupInformationStore)
-
-    console.log("In Render categoryStore:")
-    console.log(categoryStore)
-
-    console.log("In Render processingStore:")
-    console.log(processingStore)
 
 
     const getUsers = () =>{
@@ -246,8 +248,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     }
 
     const updateEntry = (entry) => {
-        console.log("UPDATE ENTRY EFFECTIVE")
-        console.log(entry)
         dispatch(updateSavingEntryToServer(getActiveGroupId, entry))
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
@@ -256,13 +256,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     }
 
 
-
     /**
      * Crud category
      * -----------------------------------------------------------------------------------------------------------------
      */
-
-
     const addCategory = (category) => {
         dispatch(addCategoryToServer(getActiveGroupId, category))
             .then( () => {
@@ -271,21 +268,38 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     }
 
     const deleteCategory = (id) => {
+        let newCategories = currentFilterInformation.filterCategory.filter( cat => cat.id !== id)
+        dispatchFilterInformation({type: filterInformationAction.changeFilterCategories, payload: newCategories});
+
+        triggerUpdateCategorySelector(id);
+
+        if(currentFilterInformation.filterCategory.find( cat => cat.id === id) != null) triggerClearSearchBarCategorySelector();
+
         dispatch(deleteCategoryFromServer(getActiveGroupId, id))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId,
+                    currentFilterInformationToDataObject({...currentFilterInformation, filterCategory: newCategories})))
             })
     }
 
     const updateCategory = (category) => {
+        let updatedCategories = currentFilterInformation.filterCategory.map( cat => {
+            if(cat.id !== category.id) return {...cat};
+            return {id: cat.id, name: category.name};
+        })
+        dispatchFilterInformation({type: filterInformationAction.changeFilterCategories, payload: updatedCategories});
+
+        triggerUpdateCategorySelector(category.id);
+
+        if(currentFilterInformation.filterCategory.find( cat => cat.id === category.id) != null) triggerClearSearchBarCategorySelector();
+
         dispatch(updateCategoryToServer(getActiveGroupId, category))
             .then( () => {
-                dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+                dispatch(fetchProcessingResultsFromServer(getActiveGroupId,
+                    currentFilterInformationToDataObject({...currentFilterInformation, filterCategory: updatedCategories})))
             })
     }
 
-    console.log("CURRENT FILTER INFORMATION")
-    console.log(currentFilterInformation)
 
     const [openUpdateEntryPopup, setOpenUpdateEntryPopup] = useState(false);
 
@@ -327,7 +341,9 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                 <h4>Suchleiste</h4>
             </Card>
 
-            <SearchBar clearSelectors={clearSelectors}
+            <SearchBar clearSearchBarCategorySelector={clearSearchBarCategorySelector}
+                       clearCategorySelectors={clearCategorySelectors}
+                       clearUserSelectors={clearUserSelectors}
                        mappedCategories = {mappedCategories}
                        users = {getUsers()}
                        currentFilterInformation = {currentFilterInformation}
@@ -350,7 +366,8 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                           defaultFilterInformation={currentFilterInformation}/>
             </CardGroup>
 
-            <EntryCreationBar clearSelectors={clearSelectors}
+            <EntryCreationBar clearSelectors={clearCategorySelectors}
+                              updateCategorySelector={updateCategorySelector}
                               setSelectedEntry = {setSelectedEntry}
                               selectedEntry = {selectedEntry}
                               mappedCategories = {mappedCategories}
@@ -359,7 +376,8 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                               showMore = {showMore}
             />
 
-            <CategoryEditingBar clearSelectors={clearSelectors}
+            <CategoryEditingBar clearSelectors={clearCategorySelectors}
+                                updateCategorySelector={updateCategorySelector}
                                 addCategory={addCategory}
                                 deleteCategory={deleteCategory}
                                 updateCategory={updateCategory} mappedCategories={mappedCategories}/>

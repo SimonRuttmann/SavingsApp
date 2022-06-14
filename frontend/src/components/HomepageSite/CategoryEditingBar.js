@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
-const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mappedCategories, updateCategory}) => {
+const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mappedCategories, updateCategory,updateCategorySelector}) => {
 
 
     //Create
@@ -21,6 +21,18 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
     //Delete
     const [deletionSelectedCategory,setDeletionSelectedCategory] = useState(null);
 
+    useEffect( () => {
+        if(updateCategorySelector != null &&
+            deletionSelectedCategory != null &&
+            deletionSelectedCategory.id === updateCategorySelector){
+
+            setDeletionSelectedCategory(null);
+        }
+
+        // eslint-disable-next-line
+    }, [updateCategorySelector])
+
+
     function handleChangeDelete(category){
         setDeletionSelectedCategory(category);
     }
@@ -34,6 +46,19 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
 
     //Update
     const [updateSelectedCategory,setUpdateSelectedCategory] = useState(null);
+
+    useEffect( () => {
+        if(updateCategorySelector != null &&
+            updateSelectedCategory != null &&
+            updateSelectedCategory.id === updateCategorySelector){
+
+            setUpdateSelectedCategory(null);
+        }
+
+
+        // eslint-disable-next-line
+    }, [updateCategorySelector])
+
 
     const updateNameRef = useRef(null);
 

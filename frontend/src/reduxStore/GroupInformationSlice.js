@@ -40,7 +40,7 @@ const groupInformationSlice = createSlice({
             })
         },
         RemoveGroup: (state, action) => {
-            state.filter(group => group.id !== action.payload.id);
+            return state.filter(group => group.id !== action.payload.id);
         },
 //        AddMember: (state, action) => {
 //            let group = state.find(group => group.id === action.payload.id);

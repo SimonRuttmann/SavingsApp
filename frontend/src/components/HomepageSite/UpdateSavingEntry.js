@@ -43,8 +43,6 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
     }
 
     function perpareUpdate(){
-        console.log("prepareUpdate")
-        console.log(nameRef.current.value)
         let name = nameRef.current.value;
         let costBalance = costBalanceRef.current.value;
         let creationDate = startDate;
