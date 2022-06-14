@@ -22,9 +22,6 @@ const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGrou
     const [showInvitations, setInvitations] = useState(false)
 
 
-
-    if(show != settings) setShow(settings)
-
     //states
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const userStore   = useSelector(selectUserStore);
@@ -60,17 +57,13 @@ const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGrou
 
     function LeaveGroup(id) {
         dispatch(leaveAGroup(id))
-        newLoad(true)
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
-
     }
     function DeleteGroup(id) {
         dispatch(leaveAGroup(id))
-        newLoad(true)
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
-
     }
 
     //check if username valid
@@ -89,17 +82,13 @@ const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGrou
 
     function acceptThisInvitation(groupId) {
         dispatch(acceptAInvitation(groupId))
-
-        newLoad(true)
     }
 
     function declineThisInvitation(groupId) {
         dispatch(declineAInvitation(groupId))
     }
 
-//<Button variant="light" style={buttonStyle} onClick={handleShow}>
-//             Einstellungen
-//         </Button>
+
     return (
         <>
 
