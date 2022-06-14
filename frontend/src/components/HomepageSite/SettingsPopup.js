@@ -12,15 +12,18 @@ import {
     selectUserStore
 } from "../../reduxStore/UserSlice";
 
-const SettingsPopup = ({getActiveGroupId}) => {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+const SettingsPopup = ({newLoad, settings, handelShow, handelHide, getActiveGroupId, setActiveGroupId, setShowSettings}) => {
+    const [show, setShow] = useState();
+    const handleClose = () => { setShow(false); handelShow(false) }
     const handleShow = () => setShow(true);
     const [getGroupId, setGroupId] = useState();
     const [showNewGroup, setShowNewGroup]= useState(false)
     const [showInvite, setShowInvite] = useState(false)
     const [showInvitations, setInvitations] = useState(false)
 
+
+
+    if(show != settings) setShow(settings)
 
     //states
     const groupInformationStore = useSelector(selectGroupInformationStore);
@@ -57,13 +60,17 @@ const SettingsPopup = ({getActiveGroupId}) => {
 
     function LeaveGroup(id) {
         dispatch(leaveAGroup(id))
+        newLoad(true)
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
+
     }
     function DeleteGroup(id) {
         dispatch(leaveAGroup(id))
+        newLoad(true)
         let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus)
+
     }
 
     //check if username valid
@@ -82,18 +89,20 @@ const SettingsPopup = ({getActiveGroupId}) => {
 
     function acceptThisInvitation(groupId) {
         dispatch(acceptAInvitation(groupId))
+
+        newLoad(true)
     }
 
     function declineThisInvitation(groupId) {
         dispatch(declineAInvitation(groupId))
     }
 
-
+//<Button variant="light" style={buttonStyle} onClick={handleShow}>
+//             Einstellungen
+//         </Button>
     return (
         <>
-        <Button variant="light" style={buttonStyle} onClick={handleShow}>
-            Einstellungen
-        </Button>
+
 
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
