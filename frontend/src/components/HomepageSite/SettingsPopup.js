@@ -117,7 +117,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
 
     function inviteUser() {
-
         const newInvite = {
             "username": ""+choosenUsername.value,
             "groupId": ""+getGroupId
@@ -128,11 +127,11 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
     function acceptThisInvitation(invitation) {
         dispatch(acceptAInvitation(invitation.groupId))
-        const toAddGroup = [{
+        const toAddGroup = {
             "groupName": ""+invitation.groupName,
-            "groupId" : ""+invitation.groupId,
+            "id" : ""+invitation.groupId,
             "personGroup": false
-        }]
+        }
         dispatch( addGroupFromInvitation(toAddGroup))
         setNewGroupName(invitation.groupName)
         console.log("invitation name"+invitation.groupName)

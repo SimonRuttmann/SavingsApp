@@ -33,6 +33,7 @@ const groupInformationSlice = createSlice({
             group.personDTOList = action.payload.personDTOList;
         },
         AddGroup: (state, action) => {
+            console.log("adding Group to store",action.payload)
             state.push({
                 id: action.payload.id,
                 groupName: action.payload.groupName,
@@ -86,11 +87,18 @@ export const addNewGroup = (groupBody) => (dispatch) =>{
     });
 }
 
+export const addGroupFromInvitation = (groupBody) => (dispatch) =>{
+        console.log("we add group from Invitation")
+         dispatch(AddGroup(groupBody))
+
+}
+
 export const leaveAGroup = (groupId) => (dispatch) => {
     return new Promise((resolve, reject) => {
         let response = leaveGroup(groupId)
         response.then(response => dispatch(RemoveGroup(response.data)))
                 .then(() => resolve(null))
+                .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
     })
 }
 
