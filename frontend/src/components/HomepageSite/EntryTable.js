@@ -6,19 +6,18 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
 
     return (
         <Card>
+            <h4>Einträge</h4>
+            <ButtonGroup className="buttonStyle">
+                <Button
+                    onClick={() => {
+                        if(selectedEntry == null) return;
+                        openUpdateEntry(selectedEntry)
+                    }}
+                    variant="secondary">Eintrag ändern</Button>
+                <Button onClick={() => deleteEntry(selectedEntry.id)} variant="secondary">Eintrag löschen</Button>
+            </ButtonGroup>
             <Card.Body>
-                <h4>Einträge</h4>
-                <br/>
-                <ButtonGroup className="buttonStyle">
-                    <Button
-                        onClick={() => {
-                            if(selectedEntry == null) return;
-                            openUpdateEntry(selectedEntry)
-                        }}
-                        variant="secondary">Eintrag ändern</Button>
-                    <Button onClick={() => deleteEntry(selectedEntry.id)} variant="secondary">Eintrag löschen</Button>
-                </ButtonGroup>
-                <Table className="entryTable" striped bordered hover>
+                <Table responsive={"sm"} size={"sm"} className="entryTable" striped bordered hover>
                     <thead>
                     <tr>
                         <th>Name</th>

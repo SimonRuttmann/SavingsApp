@@ -11,14 +11,12 @@
 }
 
 .entryCreationBar{
-  align-items: center;
+  align-items: end;
   .element{
     margin-bottom: 3rem;
   }
 }
-table{
-  table-layout: fixed;
-}
+
 .floatRight{
   float:right;
 }
