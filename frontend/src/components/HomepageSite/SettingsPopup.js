@@ -60,7 +60,9 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                 "groupName": ""+groupName
             }
             dispatch(addNewGroup(newGroup))
+            document.getElementById("groupName").value = ""
         }
+
     }
 
     function LeaveGroup(id) {
