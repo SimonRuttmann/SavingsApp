@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {addNewGroup, leaveAGroup, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
@@ -11,18 +11,20 @@ import {
     selectUserNamesStore,
     selectUserStore
 } from "../../reduxStore/UserSlice";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 //{ getActiveGroupId, setActiveGroupId}
 const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    //const [show, setShow] = useState(false);
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
     const [getGroupId, setGroupId] = useState();
     const [showNewGroup, setShowNewGroup]= useState(false)
     const [showInvite, setShowInvite] = useState(false)
     const [showInvitations, setInvitations] = useState(false)
+    const [choosenUsername, setChoosenUsername] = useState(false)
 
     console.log("status im popup: "+show)
+
+    const animatedComponents = makeAnimated();
 
     //states
     const groupInformationStore = useSelector(selectGroupInformationStore);
@@ -39,18 +41,12 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
 
     if(!Array.isArray(groupInformationStore) || getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null || userStore == null) return null;
-
-
-
-
-    const buttonStyle = {
-        float: "right",
-        margin: "2px"
-    }
+    
 
     const changeGroup = (nextGroup) => {
-        (groupInformationStore.find(group => group.id === nextGroup.id));
+        let group = (groupInformationStore.find(group => group.id === nextGroup.id));
         setGroupId(nextGroup.id)
+        if(group.personGroup === true){ setShowInvite(false) }
     }
 
     function addGroup(){
@@ -79,17 +75,30 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     }
 
     //check if username valid
-    function inviteUser() {
-        let userName = document.getElementById("InviteUserName").value;
-        if( userStore.usernames.indexOf(userName)> -1){
-            const newInvite = {
-                "username": ""+userName,
-                "groupId": ""+getGroupId
+    function updateUsernameOptions(){
+        let options = []
+        userStore.usernames.map(username =>{
+            if (selectedGroup.personDTOList.find(person => person.username === username) === undefined ){
+                let option = { value: username , label: username }
+                options.push(option)
             }
-            dispatch(invitePerson(newInvite))
-        } else {
-            //show user
+        })
+        return options;
+    }
+
+    function handleChangeUsername(username){
+        setChoosenUsername(username)
+    }
+
+
+    function inviteUser() {
+
+        const newInvite = {
+            "username": ""+choosenUsername.value,
+            "groupId": ""+getGroupId
         }
+        dispatch(invitePerson(newInvite))
+        setChoosenUsername(null)
     }
 
     function acceptThisInvitation(groupId) {
@@ -134,9 +143,17 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
             <div className="mt-2 col-md-12" >
                 <h6>In Gruppe "{selectedGroup.groupName}" einladen:</h6>
                 <div className="row">
-                    <Col>
-                        <Form.Group>
-                            <Form.Control  id="InviteUserName" type="text" placeholder="Username" />
+                    <Col xs={"6"} md={"4"}>
+                        <Form.Group className="CategoryArea">
+                            <Form.Label>Username</Form.Label>
+                            <div className="Select">
+                                <Select
+                                        options={updateUsernameOptions()}
+                                        components={animatedComponents}
+                                        onChange={(e) =>  handleChangeUsername(e)}
+                                        value={choosenUsername}
+                                />
+                            </div>
                         </Form.Group>
                     </Col>
                     <Col>
