@@ -21,10 +21,34 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
         dispatch((logout()))
         keycloak.doLogout()
     }
-    const [settings, setSettings] = useState()
-    const handleShow = () => setSettings(true);
-    const handelClose= () => setSettings(false);
+    const [settings, setSettings] = useState(false)
+    const handleShow = () => {setSettings(true); console.log("---popup öffnen");}
+    const handelClose= () => {setSettings(false);console.log("---popup schließen");}
 
+    if(settings == true){
+        console.log("PopUp should be open: state:"+settings)
+    } else{
+        console.log("PopUp should be closed: state:"+settings)
+    }
+    console.log("selected group in Nav: "+getActiveGroupId)
+
+   /* if(settings == false){
+        setSettings(null)
+    }*/
+
+    function SettingsButton(){
+        console.log("Buttonclick")
+        if(settings == false){
+            handleShow()
+        }
+        if(settings == true){
+            console.log("trick")
+            setSettings(null)
+            let groupName = document.getElementById("SettingsLittle")
+            //groupName.hidden
+
+        }
+    }
 
 
     function smallScreen(){
@@ -59,13 +83,10 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                                     >{group.groupName}
                                     </NavDropdown.Item>)}
                             </NavDropdown>: null}
-                        <Button variant="light" className="buttonStyle maxMarginLeft"  onClick={ () => handleShow()}>
+                        <Button variant="light" className="buttonStyle maxMarginLeft"  onClick={ () =>handleShow()}>
                             Einstellungen
                         </Button>
-                        <SettingsPopup show={settings}
-                                       onHide={handelClose}
-                                       getActiveGroupId={getActiveGroupId}
-                                       setActiveGroupId={setActiveGroupId} />
+
                     </Nav>
                 </Container>
             </>
@@ -99,11 +120,6 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
                         <Button variant="light"  onClick={ () => handleShow()}>
                             Einstellungen
                         </Button>
-                        <SettingsPopup
-                                show={settings}
-                                onHide={handelClose}
-                                getActiveGroupId={getActiveGroupId}
-                                setActiveGroupId={setActiveGroupId} />
                         <Button variant="primary" className="buttonStyle" onClick={() => Redirect()}>Logout</Button>
                         </Nav>
                     </Navbar.Collapse>
@@ -112,8 +128,14 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
         )
     }
     return (
+        <>
         <Navbar className="navBar" bg="dark" variant="dark">
             {screenSize>=500?largeScreen():smallScreen()}
         </Navbar>
+        <SettingsPopup id="SettingsLittle" show={settings}
+                       onHide={handelClose}
+                       getActiveGroupId={getActiveGroupId}
+                       setActiveGroupId={setActiveGroupId} />
+        </>
     )
 }

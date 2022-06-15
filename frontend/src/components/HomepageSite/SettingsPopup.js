@@ -13,6 +13,7 @@ import {
 } from "../../reduxStore/UserSlice";
 //{ getActiveGroupId, setActiveGroupId}
 const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     //const [show, setShow] = useState(false);
     // const handleClose = () => setShow(false);
     // const handleShow = () => setShow(true);
@@ -21,9 +22,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     const [showInvite, setShowInvite] = useState(false)
     const [showInvitations, setInvitations] = useState(false)
 
-    // if(settings == true && show == null) {setShow(true); console.log("change")}
-    // console.log("set settings in Nav to false")
-    // setSettingsFalse()
+    console.log("status im popup: "+show)
 
     //states
     const groupInformationStore = useSelector(selectGroupInformationStore);
@@ -33,19 +32,23 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     //gruppe initialisieren
     let selectedGroup
     if(getGroupId == null){
-        selectedGroup= (groupInformationStore.find(group => group.id === getActiveGroupId));
+        selectedGroup = (groupInformationStore.find(group => group.id === getActiveGroupId));
     } else {
-        selectedGroup= (groupInformationStore.find(group => group.id === getGroupId));
+        selectedGroup = (groupInformationStore.find(group => group.id === getGroupId));
     }
 
+
     if(!Array.isArray(groupInformationStore) || getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null || userStore == null) return null;
+
+
+
 
     const buttonStyle = {
         float: "right",
         margin: "2px"
     }
 
-    function changeGroup(nextGroup){
+    const changeGroup = (nextGroup) => {
         (groupInformationStore.find(group => group.id === nextGroup.id));
         setGroupId(nextGroup.id)
     }
@@ -59,17 +62,26 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     }
 
     function LeaveGroup(id) {
-        onHide()
+        console.log("vor änderunge: "+getActiveGroupId)
+        let newFokus = groupInformationStore.find(group => group.personGroup == true)
+        console.log("neue groupId:"+ newFokus.groupId)
+        if(id == getActiveGroupId) setActiveGroupId(newFokus.groupId)
         dispatch(leaveAGroup(id))
-        let newFokus = (groupInformationStore.find(group => group.personGroup === true))
-        setGroupId(newFokus)
-        if(id === getActiveGroupId) setActiveGroupId(newFokus)
+        //let newFokus = (groupInformationStore.find(group => group.personGroup === true))
+        setGroupId(newFokus.groupId)
+        //if(id === getActiveGroupId) setActiveGroupId(newFokus)
+
+        console.log("NAch änderung: "+getActiveGroupId)
+
     }
     function DeleteGroup(id) {
-        onHide()
+        let newFokus = (groupInformationStore.find(group => group.personGroup == true))
+        if(id === getActiveGroupId) setActiveGroupId(newFokus.groupId)
         dispatch(leaveAGroup(id))
-        let newFokus = (groupInformationStore.find(group => group.personGroup === true))
-        setGroupId(newFokus)
+        //let newFokus = (groupInformationStore.find(group => group.personGroup === true))
+        setGroupId(newFokus.groupId)
+        //if(id === getActiveGroupId) setActiveGroupId(newFokus)
+        console.log("AAA: "+getActiveGroupId)
     }
 
     //check if username valid
@@ -93,7 +105,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     function declineThisInvitation(groupId) {
         dispatch(declineAInvitation(groupId))
     }
-
 
     return (
 
