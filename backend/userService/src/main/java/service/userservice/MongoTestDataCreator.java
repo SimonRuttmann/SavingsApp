@@ -5,14 +5,15 @@ import documentDatabaseModule.service.GroupDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+
+import java.text.DecimalFormat;
+import java.util.*;
+
 import documentDatabaseModule.model.Category;
 import documentDatabaseModule.model.GroupDocument;
 import lombok.extern.slf4j.Slf4j;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
 
 /**
  * Drops the mongo database and then generates testentries for a fresh database.
@@ -30,6 +31,7 @@ public class MongoTestDataCreator {
     private static final int LARGEST_GROUP_ID = 10;
 
     private static final Random random = new Random();
+    private static final  DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
     String[] categoryArray = {"Miete","Lebensmittel","Restaurant","Hund","Katze","Altersversicherung", "Hausversicherung",
                               "Rennrad", "Basketballverein", "Musik Verein", "Zoo","Fastfood","Zocken","Pokern",
@@ -47,6 +49,7 @@ public class MongoTestDataCreator {
     public void createTestData(){
         mongoOps.dropCollection("groupDocuments");
         mongoOps.createCollection("groupDocuments");
+
         addDocuments();
         fillPersonalGroups();
     }
@@ -57,12 +60,16 @@ public class MongoTestDataCreator {
             d.groupId = (long) groupId;
             GroupDocument savedGroupDoc = groupDocumentService.createDocument(d);
 
-            addCategories(savedGroupDoc);
+            addCategories(savedGroupDoc,5);
         }
     }
 
-    private void addCategories(GroupDocument savedGroupDoc){
-        for (String s : categoryArray) {
+    private void addCategories(GroupDocument savedGroupDoc, int categoryAmount){
+        List<String> categoryList = new ArrayList<>(Arrays.asList(categoryArray));
+
+        for (int i =0; i <= categoryAmount-1; i++) {
+            String s = categoryList.remove(random.nextInt(categoryList.size()));
+
             Category aCategory = new Category(s);
             categories.add(groupDocumentService.insertCategory(savedGroupDoc.groupId, aCategory));
         }
@@ -92,7 +99,11 @@ public class MongoTestDataCreator {
             Date creationDate = createRandomizedDate(day, month, random.nextInt(24));
 
             String postingUser = setPostingUser(groupId);
-            Double cost = random.nextDouble() + random.nextInt(1000 + 1000) - 1000;
+            Double cost = random.nextDouble() + random.nextInt(1000) ;
+            String formattedDouble = decimalFormat.format(cost).replace(",",".");
+            cost = Double.valueOf(formattedDouble);
+            if(random.nextInt(2) == 1)
+                cost = cost * -1;
 
             SavingEntry savingEntry = new SavingEntry(name, cost, category, postingUser, creationDate, description);
             groupDocumentService.addSavingEntry(groupId, savingEntry);
