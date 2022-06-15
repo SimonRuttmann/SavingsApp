@@ -33,7 +33,6 @@ const groupInformationSlice = createSlice({
             group.personDTOList = action.payload.personDTOList;
         },
         AddGroup: (state, action) => {
-            console.log("adding Group to store",action.payload)
             state.push({
                 id: action.payload.id,
                 groupName: action.payload.groupName,

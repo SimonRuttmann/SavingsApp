@@ -52,7 +52,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         setGroupId(nextGroup.id)
         if(group.personGroup === true){ setShowInvite(false) }
     }
-
     function addGroup(){
 
         let newGroupNameInput = document.getElementById("groupName").value;
@@ -63,18 +62,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
             dispatch(addNewGroup(newGroup))
             setNewGroupName(newGroupNameInput)
             document.getElementById("groupName").value = ""
-            //setNewGroupName(newGroupNameInput)
-            //let findgroup = groupInformationStore.find(group => group.groupName === newGroupName)
-            //console.log("findegroup", findgroup)
-            //dispatch(fetchGeneralInformationToGroupFromServer(findgroup.groupId))
-
-
-            // //temp set fokus on this new gourp
-            //console.log("groupinfomrationStore",groupInformationStore)
-            //setNewGroupName(newGroupNameInput)
-            // let group = (groupInformationStore.find(group => group.groupName === newGroupName.groupName));
-            // setGroupId(newGroupName.id)
-            // console.log("------------------------Fokus is on: "+group+" "+group)
         }
     }
 
@@ -129,12 +116,11 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         dispatch(acceptAInvitation(invitation.groupId))
         const toAddGroup = {
             "groupName": ""+invitation.groupName,
-            "id" : ""+invitation.groupId,
+            "id" : invitation.groupId,
             "personGroup": false
         }
         dispatch( addGroupFromInvitation(toAddGroup))
-        setNewGroupName(invitation.groupName)
-        console.log("invitation name"+invitation.groupName)
+        setTimeout(() => setNewGroupName(invitation.groupName), 100)
     }
 
     function declineThisInvitation(groupId) {
