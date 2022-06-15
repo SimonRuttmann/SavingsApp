@@ -55,33 +55,25 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
     function addGroup(){
         let groupName = document.getElementById("groupName").value;
-        const newGroup = {
-            "groupName": ""+groupName
+        if(groupName != "Ich" && groupName != "ich"){
+            const newGroup = {
+                "groupName": ""+groupName
+            }
+            dispatch(addNewGroup(newGroup))
         }
-        dispatch(addNewGroup(newGroup))
     }
 
     function LeaveGroup(id) {
-        console.log("vor änderunge: "+getActiveGroupId)
-        let newFokus = groupInformationStore.find(group => group.personGroup == true)
-        console.log("neue groupId:"+ newFokus.groupId)
-        if(id == getActiveGroupId) setActiveGroupId(newFokus.groupId)
-        dispatch(leaveAGroup(id))
-        //let newFokus = (groupInformationStore.find(group => group.personGroup === true))
-        setGroupId(newFokus.groupId)
-        //if(id === getActiveGroupId) setActiveGroupId(newFokus)
-
-        console.log("NAch änderung: "+getActiveGroupId)
-
-    }
-    function DeleteGroup(id) {
-        let newFokus = (groupInformationStore.find(group => group.personGroup == true))
+        let newFokus = groupInformationStore.find(group => group.personGroup === true)
         if(id === getActiveGroupId) setActiveGroupId(newFokus.groupId)
         dispatch(leaveAGroup(id))
-        //let newFokus = (groupInformationStore.find(group => group.personGroup === true))
         setGroupId(newFokus.groupId)
-        //if(id === getActiveGroupId) setActiveGroupId(newFokus)
-        console.log("AAA: "+getActiveGroupId)
+    }
+    function DeleteGroup(id) {
+        let newFokus = groupInformationStore.find(group => group.personGroup === true)
+        if(id === getActiveGroupId) setActiveGroupId(newFokus.groupId)
+        dispatch(leaveAGroup(id))
+        setGroupId(newFokus.groupId)
     }
 
     //check if username valid
