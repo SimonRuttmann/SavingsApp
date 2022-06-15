@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const debug = true;
+const debug = false;
 
 export function Get(url, auth){
 
@@ -26,6 +26,7 @@ export function Get(url, auth){
     }
     if(debug) {
         request
+            .then((value => console.log("GET URL " + url + " worked, it returned ", value)))
             .catch((reason) => console.error("GET URL " + url + " failed with the following reason", reason))
     }
     return request
@@ -33,7 +34,6 @@ export function Get(url, auth){
 
 export function Post(url,body,auth){
     let request;
-
     try {
         request = {
             method: 'post',
@@ -51,6 +51,7 @@ export function Post(url,body,auth){
     }
     if(debug) {
         request
+            .then((value => console.log("POST URL " + url + " worked, it returned ", value)))
             .catch((reason) => console.error("POST URL " + url + " failed with the following reason", reason))
     }
     return request
@@ -76,6 +77,7 @@ export function Put(url,body,auth){
     }
     if(debug) {
         request
+            .then((value => console.log("PUT URL " + url + " worked, it returned ", value)))
             .catch((reason) => console.error("PUT URL " + url + " failed with the following reason", reason))
     }
     return request
@@ -100,6 +102,7 @@ export function Delete(url, auth){
     }
     if(debug) {
         request
+            .then((value => console.log("DELETE URL " + url + " worked, it returned ", value)))
             .catch((reason) => console.error("DELETE URL " + url + " failed with the following reason", reason))
     }
     return request
