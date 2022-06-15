@@ -20,33 +20,9 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
         keycloak.doLogout()
     }
     const [settings, setSettings] = useState(false)
-    const handleShow = () => {setSettings(true); console.log("---popup öffnen");}
-    const handelClose= () => {setSettings(false);console.log("---popup schließen");}
+    const handleShow = () => {setSettings(true);}
+    const handelClose= () => {setSettings(false);}
 
-    if(settings == true){
-        console.log("PopUp should be open: state:"+settings)
-    } else{
-        console.log("PopUp should be closed: state:"+settings)
-    }
-    console.log("selected group in Nav: "+getActiveGroupId)
-
-   /* if(settings == false){
-        setSettings(null)
-    }*/
-
-    function SettingsButton(){
-        console.log("Buttonclick")
-        if(settings == false){
-            handleShow()
-        }
-        if(settings == true){
-            console.log("trick")
-            setSettings(null)
-            let groupName = document.getElementById("SettingsLittle")
-            //groupName.hidden
-
-        }
-    }
 
 
     function smallScreen(){

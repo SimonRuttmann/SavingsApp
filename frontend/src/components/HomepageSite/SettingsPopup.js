@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
-import {addNewGroup, leaveAGroup, selectGroupInformationStore} from "../../reduxStore/GroupInformationSlice";
+import {
+    addGroup, addGroupFromInvitation,
+    addNewGroup,
+    fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer,
+    leaveAGroup,
+    selectGroupInformationStore
+} from "../../reduxStore/GroupInformationSlice";
 import {isDisabled} from "@testing-library/user-event/dist/utils";
 import {
     acceptAInvitation,
@@ -15,14 +21,13 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 //{ getActiveGroupId, setActiveGroupId}
 const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     const [getGroupId, setGroupId] = useState();
     const [showNewGroup, setShowNewGroup]= useState(false)
     const [showInvite, setShowInvite] = useState(false)
     const [showInvitations, setInvitations] = useState(false)
     const [choosenUsername, setChoosenUsername] = useState(false)
+    const [newGroupName, setNewGroupName] = useState(null)
 
-    console.log("status im popup: "+show)
 
     const animatedComponents = makeAnimated();
 
@@ -41,7 +46,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
 
     if(!Array.isArray(groupInformationStore) || getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null || userStore == null) return null;
-    
 
     const changeGroup = (nextGroup) => {
         let group = (groupInformationStore.find(group => group.id === nextGroup.id));
@@ -50,15 +54,36 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     }
 
     function addGroup(){
-        let groupName = document.getElementById("groupName").value;
-        if(groupName != "Ich" && groupName != "ich"){
+
+        let newGroupNameInput = document.getElementById("groupName").value;
+        if(newGroupNameInput !== "Ich" && newGroupNameInput !== "ich"){
             const newGroup = {
-                "groupName": ""+groupName
+                "groupName": ""+newGroupNameInput
             }
             dispatch(addNewGroup(newGroup))
+            setNewGroupName(newGroupNameInput)
             document.getElementById("groupName").value = ""
-        }
+            //setNewGroupName(newGroupNameInput)
+            //let findgroup = groupInformationStore.find(group => group.groupName === newGroupName)
+            //console.log("findegroup", findgroup)
+            //dispatch(fetchGeneralInformationToGroupFromServer(findgroup.groupId))
 
+
+            // //temp set fokus on this new gourp
+            //console.log("groupinfomrationStore",groupInformationStore)
+            //setNewGroupName(newGroupNameInput)
+            // let group = (groupInformationStore.find(group => group.groupName === newGroupName.groupName));
+            // setGroupId(newGroupName.id)
+            // console.log("------------------------Fokus is on: "+group+" "+group)
+        }
+    }
+
+    if(newGroupName != null && groupInformationStore.find(group => group.groupName === newGroupName) === null) return null
+
+    if(groupInformationStore.find(group => group.groupName === newGroupName)){
+        let group = groupInformationStore.find(group => group.groupName === newGroupName)
+        dispatch(fetchGeneralInformationToGroupFromServer(group.id))
+        setNewGroupName(null)
     }
 
     function LeaveGroup(id) {
@@ -101,12 +126,21 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         setChoosenUsername(null)
     }
 
-    function acceptThisInvitation(groupId) {
-        dispatch(acceptAInvitation(groupId))
+    function acceptThisInvitation(invitation) {
+        dispatch(acceptAInvitation(invitation.groupId))
+        const toAddGroup = [{
+            "groupName": ""+invitation.groupName,
+            "groupId" : ""+invitation.groupId,
+            "personGroup": false
+        }]
+        dispatch( addGroupFromInvitation(toAddGroup))
+        setNewGroupName(invitation.groupName)
+        console.log("invitation name"+invitation.groupName)
     }
 
     function declineThisInvitation(groupId) {
         dispatch(declineAInvitation(groupId))
+        //setNewGroupName(groupName)
     }
 
     return (
@@ -145,7 +179,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                 <div className="row">
                     <Col xs={"6"} md={"4"}>
                         <Form.Group className="CategoryArea">
-                            <Form.Label>Username</Form.Label>
                             <div className="Select">
                                 <Select
                                         options={updateUsernameOptions()}
@@ -183,7 +216,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                                 <h6 key={`Settings-Invitation-${invitation.groupId}`}>{invitation.groupName}</h6>
                             </Col>
                             <Col  key={`Settings-Invitation-Col2-${invitation.groupId}`}>
-                                <Button className={"btn btn-success"} key={`Settings-Inv-But-1-${invitation.groupId}`} onClick={ () => acceptThisInvitation(invitation.groupId) } variant="secondary">Akzeptieren</Button>
+                                <Button className={"btn btn-success"} key={`Settings-Inv-But-1-${invitation.groupId}`} onClick={ () => acceptThisInvitation(invitation) } variant="secondary">Akzeptieren</Button>
                             </Col>
                             <Col  key={`Settings-Invitation-Col3-${invitation.groupId}`}>
                                 <Button className={"btn btn-danger"}key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId)} variant="secondary">Ablehnen</Button>
