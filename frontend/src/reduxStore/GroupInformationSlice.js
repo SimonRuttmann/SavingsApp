@@ -34,7 +34,6 @@ const groupInformationSlice = createSlice({
             group.personDTOList = action.payload.personDTOList;
         },
         AddGroup: (state, action) => {
-            console.log("actionpayload",action.payload.id)
             state.push({
                 id: action.payload.id,
                 groupName: action.payload.groupName,
@@ -87,7 +86,6 @@ export const addNewGroup = (groupBody) => (dispatch) =>{
             return response.data;
         })
             .then((data) => {
-                console.log(data);
                 resolve(data.id);
             })
             .catch(()=> reject("Error contacting server, cannot add group"))
