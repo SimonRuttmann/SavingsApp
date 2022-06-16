@@ -75,15 +75,15 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
     function LeaveGroup(id) {
         let newFokus = groupInformationStore.find(group => group.personGroup === true)
-        if(id === getActiveGroupId) setActiveGroupId(newFokus.groupId)
+        if(id === getActiveGroupId) setActiveGroupId(newFokus.id)
         dispatch(leaveAGroup(id))
-        setGroupId(newFokus.groupId)
+        setGroupId(newFokus.id)
     }
     function DeleteGroup(id) {
         let newFokus = groupInformationStore.find(group => group.personGroup === true)
-        if(id === getActiveGroupId) setActiveGroupId(newFokus.groupId)
+        if(id === getActiveGroupId) setActiveGroupId(newFokus.id)
         dispatch(leaveAGroup(id))
-        setGroupId(newFokus.groupId)
+        setGroupId(newFokus.id)
     }
 
     //check if username valid
