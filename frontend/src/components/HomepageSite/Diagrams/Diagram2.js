@@ -37,7 +37,7 @@ export const Diagram2 = ({diagramValues,selectedCategories, defaultFilterInforma
         dataSet.push( {
             label: label,
             data: dataValues,
-            backgroundColor: rainbow(index, selectedCategories.length),
+            backgroundColor: rainbow(selectedCategories.length, index),
         })
 
         index ++;
