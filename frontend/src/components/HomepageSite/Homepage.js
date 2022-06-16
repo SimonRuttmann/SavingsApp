@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // noinspection JSCheckFunctionSignatures
 
-import React, {useEffect, useReducer, useState} from "react";
+import React, {useEffect, useReducer, useRef, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import "../../css/styles.scss"
 import "../../css/homepage.scss"
@@ -127,9 +127,21 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(fetchUserDataFromServer());
         dispatch(fetchGroupCoreInformationFromServer())
             .then(setLoadingCoreInformation(true));
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
+
+    const [isLargeScreen,setIsLargeScreen] = useState(window.innerWidth >= 500)
+
+    useEffect(()=> {
+        function handleResize() {
+            if (window.innerWidth < 500 && isLargeScreen) setIsLargeScreen(false);
+            else if (window.innerWidth >= 500 && !isLargeScreen) setIsLargeScreen(true)
+        }
+        window.addEventListener("resize", handleResize )
+        return () =>{
+            window.removeEventListener("resize",handleResize)
+        }
+    })
 
     // Fetch additional content data
     useEffect( () => {
@@ -328,7 +340,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                             setActiveGroupId={setActiveGroupId}
                             groupInformationStore={groupInformationStore}
                             navToGuestSite={navToGuestSite}
-                            screenSize ={window.innerWidth}
+                            isLargeScreen={isLargeScreen}
                             />
 
             {openUpdateEntryPopup ?
