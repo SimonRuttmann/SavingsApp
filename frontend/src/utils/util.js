@@ -8,12 +8,25 @@ export function sortByGivenDateType(a, b, type){
         switch (type) {
             case "Day":
                 return parseDate(a.dateRepresentation) - parseDate(b.dateRepresentation);
-            case "Week":
-                return a.dateRepresentation - b.dateRepresentation;
             case "Year":
                 return a.dateRepresentation - b.dateRepresentation;
+            case "Week":
             case "Month":
-                return allMonths.indexOf(a.dateRepresentation) - allMonths.indexOf(b.dateRepresentation);
+
+                let aDate = a.dateRepresentation.split(".")
+                let aPrimaryType = aDate[0]
+                let aYear = aDate[1]
+
+                let bDate = b.dateRepresentation.split(".")
+                let bPrimaryType = bDate[0]
+                let bYear = bDate[1]
+
+                let compareByYear = aYear - bYear;
+                if(compareByYear !== 0) return compareByYear;
+
+                if(type === "Week") return aPrimaryType - bPrimaryType;
+                if(type === "Month") return allMonths.indexOf(aPrimaryType) - allMonths.indexOf(bPrimaryType);
+                return 0;
         }
     }
     catch(e){
