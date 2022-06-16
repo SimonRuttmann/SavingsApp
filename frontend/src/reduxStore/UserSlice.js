@@ -56,14 +56,6 @@ export const selectUserNamesStore = (state) => state.usernames;
 
 export const selectUserInvitationsStore = (state) => state.invitations;
 
-export const invitePerson = (body) => (dispatch) => {
-    return new Promise((resolve, reject) => {
-        let response = invite(body)
-        response
-            .then(() => resolve(null))
-            .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
-    })
-}
 
 export const declineAInvitation = (groupId) => (dispatch) => {
     return new Promise((resolve, reject) => {
