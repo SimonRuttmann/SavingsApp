@@ -1,21 +1,16 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useRef, useState} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {
     AddGroup,
-    addGroup, addGroupFromInvitation,
     addNewGroup,
     fetchGeneralInformationToGroupFromServer,
     leaveAGroup,
     selectGroupInformationStore
 } from "../../reduxStore/GroupInformationSlice";
-import {isDisabled} from "@testing-library/user-event/dist/utils";
 import {
     acceptAInvitation,
-    acceptInvitation, declineAInvitation, declineInvitation,
-    invitePerson,
-    selectUserInvitationsStore,
-    selectUserNamesStore,
+    declineAInvitation,
     selectUserStore
 } from "../../reduxStore/UserSlice";
 import Select from "react-select";
@@ -24,7 +19,7 @@ import makeAnimated from "react-select/animated";
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import {invite} from "../../api/services/User";
-//{ getActiveGroupId, setActiveGroupId}
+
 const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     const [getGroupId, setGroupId] = useState();
     const [showNewGroup, setShowNewGroup]= useState(false)
@@ -62,7 +57,10 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     }
     function addGroup(){
 
-        if(groupNameRef.current.value == null || groupNameRef.current.value.trim() === "") return;
+        if(groupNameRef.current.value == null || groupNameRef.current.value.trim() === "") {
+            NotificationManager.warning("Kein neuer Gruppenname angegeben", "Invalide Eingabe",2000 );
+            return;
+        }
         let newGroupNameInput = groupNameRef.current.value;
 
         if(newGroupNameInput.length>10) {
@@ -120,7 +118,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                 options.push(option)
             }
         })
-        console.log("options", options)
         return options;
     }
 
@@ -130,7 +127,10 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
 
     function inviteUser() {
-        if(choosenUsername == null || choosenUsername.value.trim() == null ) return;
+        if(choosenUsername == null || choosenUsername.value.trim() == null ) {
+            NotificationManager.warning("Kein User ausgewählt", "Invalide Eingabe",2000 );
+            return;
+        }
         const newInvite = {
             "username": ""+choosenUsername.value,
             "groupId": ""+getGroupId
@@ -171,7 +171,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
     function declineThisInvitation(groupId, gruppenname) {
         dispatch(declineAInvitation(groupId)).then(() => {
-            console.log("jetzt sind wir raus aus der decline methode");
             NotificationManager.success("für Gruppe '"+gruppenname +"'", "Einladung abgelehnt" ,2000);
             triggerRerender();
         }).catch(() => {

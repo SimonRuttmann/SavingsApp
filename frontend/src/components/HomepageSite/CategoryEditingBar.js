@@ -2,6 +2,7 @@ import {Button, Card, Col, Form, Row} from "react-bootstrap";
 import React, {useEffect, useRef, useState} from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import {NotificationManager} from "react-notifications";
 
 const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mappedCategories, updateCategory,updateCategorySelector}) => {
 
@@ -13,8 +14,11 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
 
     const prepareCreate = () => {
         let name = nameRef.current.value;
-        if(name != null && name.trim() !== "")
+        if(name != null && name.trim() !== ""){
             addCategory({name: name});
+        } else {
+            NotificationManager.warning("Kein Kategoriename angegeben", "Invalide Eingabe",2000 );
+        }
     }
 
 
@@ -41,6 +45,8 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
         if(deletionSelectedCategory != null && deletionSelectedCategory.id != null){
             deleteCategory(deletionSelectedCategory.id,deletionSelectedCategory.name);
             setDeletionSelectedCategory(null);
+        } else {
+            NotificationManager.warning("Kein Kategorie angegeben", "Invalide Eingabe",2000 );
         }
     }
 
@@ -69,11 +75,16 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
     const prepareUpdate = () => {
         let name = updateNameRef.current.value;
 
-        if(name == null || name.trim() === "") return;
+        if(name == null || name.trim() === ""){
+            NotificationManager.warning("Kein neuer Kategoriename angegeben", "Invalide Eingabe",2000 );
+            return;
+        }
 
         if(updateSelectedCategory != null && updateSelectedCategory.id != null) {
             updateCategory({id: updateSelectedCategory.id, name: name});
             setUpdateSelectedCategory(null);
+        } else {
+            NotificationManager.warning("Kein Kategorie zum ändern ausgewählt", "Invalide Eingabe",2000 );
         }
 
     }
