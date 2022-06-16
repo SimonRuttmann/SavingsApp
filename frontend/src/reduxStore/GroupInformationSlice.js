@@ -80,14 +80,20 @@ export const fetchGeneralInformationToGroupFromServer = (groupId) => (dispatch) 
 export const addNewGroup = (groupBody) => (dispatch) =>{
     return new Promise((resolve, reject) => {
         let response = register(groupBody)
-        response.then(response => dispatch(AddGroup(response.data)))
-                .then(() => resolve(null))
-                .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+        response.then(response => {
+            console.log(response.data);
+            dispatch(AddGroup(response.data));
+            return response.data;
+        })
+            .then((data) => {
+                console.log(data);
+                resolve(data.id);
+            })
+            .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
     });
 }
 
 export const addGroupFromInvitation = (groupBody) => (dispatch) =>{
-        console.log("we add group from Invitation")
          dispatch(AddGroup(groupBody))
 
 }
