@@ -17,9 +17,11 @@ function ChatComponent(getActiveGroupId ) {
     const userStore = useSelector(selectUserStore);
 
     //All saved messages
+    const [displayedMessages, setDisplayedMessages] = useState([])
     const [messages, setMessages] = useState([]);
     const [show, setShow] = useState(false);
     const topic = useRef(null)
+    const offcanvasRef = useRef(null)
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -50,12 +52,63 @@ function ChatComponent(getActiveGroupId ) {
     }
 
     function sendMessage(){
+        const chatRefValue = chatRef.current.value;
+
+
+        if(chatRefValue === "" || chatRefValue.trim() === "") return
+
         const body = {
-            content: chatRef.current.value,
+            content: chatRefValue,
             sender : userStore.username,
             topic : topic.current
         }
+        chatRef.current.value = "";
+
         postMessage(body)
+    }
+
+    const fontFamily = "Segoe UI"
+    const fontSize = "16"
+    const textFont = `${fontSize}pt ${fontFamily}`
+
+    function displayMessage(msg){
+        let placeToDisplayStuff
+        if(offcanvasRef.current == null || offcanvasRef.current.clientWidth == null) placeToDisplayStuff = 300;
+        else placeToDisplayStuff = offcanvasRef.current.clientWidth ;
+
+        let stringToDisplay = "";
+        for( let string of msg.split(" ")){
+            let changeableString = string;
+            let slice = changeableString
+            let maxSingleStringLength = 32;
+
+            while ( getTextWidth(slice,textFont) > placeToDisplayStuff){
+                slice = changeableString.slice(0,maxSingleStringLength) + " ";
+                if( getTextWidth(slice,textFont) > placeToDisplayStuff){
+                    console.log("We entered")
+                    maxSingleStringLength--;
+                }
+                else{
+                    stringToDisplay += slice + " ";
+                    changeableString = changeableString.slice(slice.length,changeableString.length)
+                }
+                console.log("Changable String",changeableString)
+                console.log("Slice ",slice)
+            }
+            stringToDisplay += slice + " ";
+        }
+        console.log(stringToDisplay)
+        return stringToDisplay
+    }
+
+    function getTextWidth(text, font) {
+
+        let canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+
+        let context = canvas.getContext("2d");
+        context.font = font;
+
+        return context.measureText(text).width;
     }
 
     function generateShownMessages(){
@@ -66,7 +119,7 @@ function ChatComponent(getActiveGroupId ) {
                 messageForRender.push(
                     <Card key={msg.sender+" "+msg.content+" "+index++} className="myMessageDisplay">
                         <Card.Title>{msg.sender}</Card.Title>
-                        <Card.Body>{msg.content}</Card.Body>
+                        <Card.Body>{displayMessage(msg.content)}</Card.Body>
                     </Card>
                 )
             }
@@ -74,7 +127,7 @@ function ChatComponent(getActiveGroupId ) {
                 messageForRender.push(
                     <Card key={msg.sender+" "+msg.content+" "+index++} className="otherMessageDisplay">
                         <Card.Title>{msg.sender}</Card.Title>
-                        <Card.Body>{msg.content}</Card.Body>
+                        <Card.Body>{displayMessage(msg.content)}</Card.Body>
                     </Card>
                 )
             }
@@ -91,7 +144,7 @@ function ChatComponent(getActiveGroupId ) {
               <Offcanvas.Header closeButton>
                   <Offcanvas.Title>Chat</Offcanvas.Title>
               </Offcanvas.Header>
-              <Offcanvas.Body>
+              <Offcanvas.Body ref={offcanvasRef}>
                   {generateShownMessages()}
               </Offcanvas.Body>
               <InputGroup className="mb-3">
