@@ -195,16 +195,18 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                     </div>
                 </Row>
                 { userStore.invitations.map(invitation =>
-                    <div key={`Settings-Invitation-div-${invitation.groupId}`}>
+                    <div className={"mb-2"} key={`Settings-Invitation-div-${invitation.groupId}`}>
                         <Row key={`Settings-Invitation-Row-${invitation.groupId}`}>
                             <Col  key={`Settings-Invitation-Col1-${invitation.groupId}`}>
                                 <h6 key={`Settings-Invitation-${invitation.groupId}`}>{invitation.groupName}</h6>
                             </Col>
-                            <Col  key={`Settings-Invitation-Col2-${invitation.groupId}`}>
-                                <Button className={"btn btn-success"} key={`Settings-Inv-But-1-${invitation.groupId}`} onClick={ () => acceptThisInvitation(invitation) } variant="secondary">Akzeptieren</Button>
-                            </Col>
-                            <Col  key={`Settings-Invitation-Col3-${invitation.groupId}`}>
-                                <Button className={"btn btn-danger"}key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId)} variant="secondary">Ablehnen</Button>
+                            <Col xs={"6"}>
+                                <Col xs={"12"} md={"6"} key={`Settings-Invitation-Col2-${invitation.groupId}`}>
+                                    <Button className={"btn btn-success"} key={`Settings-Inv-But-1-${invitation.groupId}`} onClick={ () => acceptThisInvitation(invitation) } variant="secondary">Akzeptieren</Button>
+                                </Col>
+                                <Col xs={"12"} md={"6"} key={`Settings-Invitation-Col3-${invitation.groupId}`}>
+                                    <Button className={"btn btn-danger"}key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId)} variant="secondary">Ablehnen</Button>
+                                </Col>
                             </Col>
                         </Row>
                     </div>
