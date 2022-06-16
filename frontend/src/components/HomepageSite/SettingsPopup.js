@@ -30,9 +30,9 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     const [showNewGroup, setShowNewGroup]= useState(false)
     const [showInvite, setShowInvite] = useState(false)
     const [showInvitations, setInvitations] = useState(false)
-    const [choosenUsername, setChoosenUsername] = useState(false)
-    const [newGroupName, setNewGroupName] = useState(null)
-
+    const [choosenUsername, setChoosenUsername] = useState(null)
+    const [rerender, setRerender] = useState(false)
+    const triggerRerender = () => setRerender(prevState => !prevState)
 
     const animatedComponents = makeAnimated();
 
@@ -55,6 +55,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     if(!Array.isArray(groupInformationStore) || getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null || userStore == null) return null;
 
 
+   console.log("userInvitkations",userStore.invitations)
 
     const changeGroup = (nextGroup) => {
         let group = (groupInformationStore.find(group => group.id === nextGroup.id));
@@ -130,6 +131,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
 
     function inviteUser() {
+        if(choosenUsername == null || choosenUsername.value == null ) return;
         const newInvite = {
             "username": ""+choosenUsername.value,
             "groupId": ""+getGroupId
@@ -161,8 +163,14 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
     }
 
-    function declineThisInvitation(groupId) {
-        dispatch(declineAInvitation(groupId))
+    function declineThisInvitation(groupId, gruppenname) {
+        dispatch(declineAInvitation(groupId)).then(() => {
+            console.log("jetzt sind wir raus aus der decline methode");
+            NotificationManager.success("für Gruppe '"+gruppenname +"'", "Einladung abgelehnt" );
+            triggerRerender();
+        }).catch(() => {
+            NotificationManager.error("Einladung konnte nicht abgelehnt werden", "Server konnte nicht erreicht werden");
+        })
         //setNewGroupName(groupName)
     }
 
@@ -242,7 +250,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                                 <Button className={"btn btn-success"} key={`Settings-Inv-But-1-${invitation.groupId}`} onClick={ () => acceptThisInvitation(invitation) } variant="secondary">Akzeptieren</Button>
                             </Col>
                             <Col  key={`Settings-Invitation-Col3-${invitation.groupId}`}>
-                                <Button className={"btn btn-danger"}key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId)} variant="secondary">Ablehnen</Button>
+                                <Button className={"btn btn-danger"}key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId, invitation.groupName)} variant="secondary">Ablehnen</Button>
                             </Col>
                         </Row>
                     </div>
