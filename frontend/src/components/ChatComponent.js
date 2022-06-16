@@ -17,9 +17,11 @@ function ChatComponent(getActiveGroupId ) {
     const userStore = useSelector(selectUserStore);
 
     //All saved messages
+    const [displayedMessages, setDisplayedMessages] = useState([])
     const [messages, setMessages] = useState([]);
     const [show, setShow] = useState(false);
     const topic = useRef(null)
+    const offcanvasRef = useRef(null)
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -50,11 +52,18 @@ function ChatComponent(getActiveGroupId ) {
     }
 
     function sendMessage(){
+        const chatRefValue = chatRef.current.value;
+
+
+        if(chatRefValue === "" || chatRefValue.trim() === "") return
+
         const body = {
-            content: chatRef.current.value,
+            content: chatRefValue,
             sender : userStore.username,
             topic : topic.current
         }
+        chatRef.current.value = "";
+
         postMessage(body)
     }
 
@@ -66,7 +75,7 @@ function ChatComponent(getActiveGroupId ) {
                 messageForRender.push(
                     <Card key={msg.sender+" "+msg.content+" "+index++} className="myMessageDisplay">
                         <Card.Title>{msg.sender}</Card.Title>
-                        <Card.Body>{msg.content}</Card.Body>
+                        <Card.Body className={"fullWidth"}>{msg.content}</Card.Body>
                     </Card>
                 )
             }
@@ -74,7 +83,7 @@ function ChatComponent(getActiveGroupId ) {
                 messageForRender.push(
                     <Card key={msg.sender+" "+msg.content+" "+index++} className="otherMessageDisplay">
                         <Card.Title>{msg.sender}</Card.Title>
-                        <Card.Body>{msg.content}</Card.Body>
+                        <Card.Body className={"fullWidth"}>{msg.content}</Card.Body>
                     </Card>
                 )
             }
@@ -91,7 +100,7 @@ function ChatComponent(getActiveGroupId ) {
               <Offcanvas.Header closeButton>
                   <Offcanvas.Title>Chat</Offcanvas.Title>
               </Offcanvas.Header>
-              <Offcanvas.Body>
+              <Offcanvas.Body ref={offcanvasRef}>
                   {generateShownMessages()}
               </Offcanvas.Body>
               <InputGroup className="mb-3">
