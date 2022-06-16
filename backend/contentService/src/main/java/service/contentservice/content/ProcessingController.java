@@ -227,8 +227,8 @@ public class ProcessingController {
 
                     SimpleDateFormat dateFormat = switch (filterInformation.getTimeInterval()){
                         case Day   -> new SimpleDateFormat("dd.MM.y");  //e.g. 17.03.2022
-                        case Week  -> new SimpleDateFormat("ww");       //e.g. Calendar week 02, 04, 05
-                        case Month -> new SimpleDateFormat("MMMM");     //e.g. September
+                        case Week  -> new SimpleDateFormat("ww.y");       //e.g. Calendar week 02, 04, 05 , 2022
+                        case Month -> new SimpleDateFormat("MMMM.y");     //e.g. September,  2022
                         case Year  -> new SimpleDateFormat("y");        //e.g. 2022
                     };
 
