@@ -74,10 +74,14 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                 "groupName": ""+newGroupNameInput
             }
             dispatch(addNewGroup(newGroup)).then(id => {
-                dispatch(fetchGeneralInformationToGroupFromServer(id))
-            } )
-            groupNameRef.current.value = ""
-            NotificationManager.success("erfolgreich erstellt", "Neue Gruppe '"+newGroupNameInput+"'" );
+                return dispatch(fetchGeneralInformationToGroupFromServer(id))
+            }).then( () => {
+                groupNameRef.current.value = "";
+                NotificationManager.success("erfolgreich erstellt", "Neue Gruppe '" + newGroupNameInput + "'");
+            }).catch(() => {
+                NotificationManager.error("Gruppe konnte nicht erstellt werden", "Server konnte nicht erreicht werden");
+            })
+
             //setTimeout(() => setNewGroupName(newGroupNameInput), 100)
             //dispatch(fetchGeneralInformationToGroupFromServer(group.id))
         } else {
@@ -148,12 +152,12 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         }
 
         dispatch(acceptAInvitation(invitation.groupId)).then( () => {
-            dispatch(AddGroup(toAddGroup));
+            return dispatch(AddGroup(toAddGroup))
+        }).then( () => {
             dispatch(fetchGeneralInformationToGroupFromServer(invitation.groupId));
-
         })
 
-        NotificationManager.success(choosenUsername.value+" wurde eingeladen", "Einladung abgeschickt" );
+        //NotificationManager.success(choosenUsername.value+" wurde eingeladen", "Einladung abgeschickt" );
 
     }
 
