@@ -63,7 +63,7 @@ export const declineAInvitation = (groupId) => (dispatch) => {
         response
             .then(response => dispatch(removeInvitation(response.data)))
             .then(() => resolve(null))
-            .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+            .catch(()=> reject("Error contacting server, cannot decline Invitation"))
     })
 }
 
@@ -73,6 +73,6 @@ export const acceptAInvitation = (groupId) => (dispatch) => {
         response
             .then(response => dispatch(removeInvitation(response.data)))
             .then(() => resolve(null))
-            .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+            .catch(()=> reject("Error contacting server, cannot accept Invtitation"))
     })
 }
