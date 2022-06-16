@@ -39,7 +39,7 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
 
     const prepareDelete = () => {
         if(deletionSelectedCategory != null && deletionSelectedCategory.id != null){
-            deleteCategory(deletionSelectedCategory.id);
+            deleteCategory(deletionSelectedCategory.id,deletionSelectedCategory.name);
             setDeletionSelectedCategory(null);
         }
     }

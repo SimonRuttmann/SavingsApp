@@ -249,14 +249,22 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(addSavingEntryToServer(getActiveGroupId, entry))
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
-            })
-        setSelectedEntry(null);
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich erstellt", "Eintag '"+entry.name+"'",2000 );
+                setSelectedEntry(null);
+            }).catch(() => {
+                NotificationManager.error("Eintrag konnte nocht erstellt werden", "Server konnte nicht erreicht werden",2000 );
+            });
     }
 
-    const deleteEntry = (id) => {
+    const deleteEntry = (id, name) => {
         dispatch(deleteSavingEntryFromServer(getActiveGroupId, id))
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+            }).then(() => {
+                NotificationManager.success("wurde gelöscht", "Eintag '"+name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Eintrag konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
         setSelectedEntry(null);
     }
@@ -265,6 +273,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(updateSavingEntryToServer(getActiveGroupId, entry))
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich geändert", "Eintag '"+entry.name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Eintrag konnte nicht geändert werden", "Server konnte nicht erreicht werden",2000 );
             })
         setSelectedEntry(null);
     }
@@ -278,10 +290,14 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(addCategoryToServer(getActiveGroupId, category))
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich erstellt", "Kategorie '"+category.name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Kategorie konnte nicht erstellt werden", "Server konnte nicht erreicht werden",2000 );
             })
     }
 
-    const deleteCategory = (id) => {
+    const deleteCategory = (id, name) => {
         let newCategories = currentFilterInformation.filterCategory.filter( cat => cat.id !== id)
         dispatchFilterInformation({type: filterInformationAction.changeFilterCategories, payload: newCategories});
 
@@ -293,6 +309,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId,
                     currentFilterInformationToDataObject({...currentFilterInformation, filterCategory: newCategories})))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich gelöscht", "Kategorie '"+name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Kategorie konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
     }
 
@@ -311,6 +331,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId,
                     currentFilterInformationToDataObject({...currentFilterInformation, filterCategory: updatedCategories})))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich umbennant", "Gewählte Kategorie",2000 );
+            }).catch(() => {
+                NotificationManager.error("Kategorie konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
     }
 
