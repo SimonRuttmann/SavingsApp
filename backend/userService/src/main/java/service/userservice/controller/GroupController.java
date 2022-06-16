@@ -28,7 +28,7 @@ public class GroupController {
         return userManagementService.registerGroup( request, registerDto);
     }
 
-    @GetMapping("/group/")
+    @GetMapping("/group")
     public Collection<GroupDTO> getGroups(HttpServletRequest request){
         return userManagementService.getAllGroupsOfPerson(request);
     }

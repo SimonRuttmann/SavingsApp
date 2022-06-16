@@ -18,9 +18,9 @@ public class RedisDatabaseService implements IRedisDatabaseService{
     public RedisDatabaseService(RedisTemplate redisTemplate) {
         RedisConnectionFactory connectionFactory = redisTemplate.getConnectionFactory();
 
-        atomicSendMessages = new RedisAtomicInteger("sendMessages",connectionFactory ,0);
-        atomicRegistItems = new RedisAtomicInteger("registItems", connectionFactory,0);
-        atomicCountUser = new RedisAtomicInteger("countUser", connectionFactory ,0);
+        atomicSendMessages = new RedisAtomicInteger("sendMessages",connectionFactory);
+        atomicRegistItems = new RedisAtomicInteger("registItems", connectionFactory);
+        atomicCountUser = new RedisAtomicInteger("countUser", connectionFactory);
     }
 
     public void incrementValue(AtomicIntegerModel key){
@@ -37,12 +37,5 @@ public class RedisDatabaseService implements IRedisDatabaseService{
             case REGISTEREDITEMS -> atomicRegistItems.get();
             case COUNTUSERS -> atomicCountUser.get();
         };
-    }
-
-    private String removeBracket(String string){
-        string = string.replace("[","");
-        string = string.replace("]","");
-
-        return string;
     }
 }
