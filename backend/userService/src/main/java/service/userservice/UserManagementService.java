@@ -3,14 +3,12 @@ package service.userservice;
 import documentDatabaseModule.model.Category;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.service.IGroupDocumentService;
-import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.user.*;
 import dtoAndValidation.validation.ValidatorFactory;
 import model.AtomicIntegerModel;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -144,7 +142,23 @@ public class UserManagementService implements IUserManagementService {
         // check if person is inviting themself
         UUID registeredUserId = getUserId(request);
         KPerson registeredUser = databaseService.getPersonById(registeredUserId);
-        if(Objects.equals(newInvitation.username, registeredUser.getUsername())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User can't invite themself");
+
+        if(Objects.equals(newInvitation.username, registeredUser.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User can't invite themself");
+        }
+
+        //check if invitation exists already
+        var invitedUser = databaseService.getPersonByUsername(newInvitation.username);
+
+        List<Invitation> invs = databaseService.getAllInvitations(UUID.fromString(invitedUser.getId()));
+        var existingInvitation = invs.stream()
+                .filter(invitation -> Objects.equals(invitation.getRequestedGroup().getId(), newInvitation.groupId))
+                .findFirst();
+
+        if(existingInvitation.isPresent()) {
+            return UserServiceMapper.InvitationToDTO(existingInvitation.get());
+        }
+
         //Check also if userId and groupID exists
         Invitation invitation = databaseService.addInvitation(newInvitation.username, newInvitation.groupId, registeredUserId);
 
