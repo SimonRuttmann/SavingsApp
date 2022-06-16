@@ -39,6 +39,15 @@ public class DatabaseService implements IDatabaseService {
         personRepository.detach(person.get());
         return person.get();
     }
+    @Override
+    @Transactional
+    public KPerson getPersonByUsername(String username){
+        Optional<KPerson> person = personRepository.findPersonByUsername(username);
+        if(person.isEmpty()) return null;
+        personRepository.detach(person.get());
+        return person.get();
+    }
+
 
     @Override
     @Transactional
@@ -48,6 +57,7 @@ public class DatabaseService implements IDatabaseService {
         groupRepository.detach(group.get());
         return group.get();
     }
+
     @Override
     @Transactional
     public Collection<Group> getGroupsOfPersonId(UUID id){

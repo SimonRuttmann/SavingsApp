@@ -56,14 +56,6 @@ export const selectUserNamesStore = (state) => state.usernames;
 
 export const selectUserInvitationsStore = (state) => state.invitations;
 
-export const invitePerson = (body) => (dispatch) => {
-    return new Promise((resolve, reject) => {
-        let response = invite(body)
-        response
-            .then(() => resolve(null))
-            .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
-    })
-}
 
 export const declineAInvitation = (groupId) => (dispatch) => {
     return new Promise((resolve, reject) => {
@@ -71,7 +63,7 @@ export const declineAInvitation = (groupId) => (dispatch) => {
         response
             .then(response => dispatch(removeInvitation(response.data)))
             .then(() => resolve(null))
-            .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+            .catch(()=> reject("Error contacting server, cannot decline Invitation"))
     })
 }
 
@@ -81,6 +73,6 @@ export const acceptAInvitation = (groupId) => (dispatch) => {
         response
             .then(response => dispatch(removeInvitation(response.data)))
             .then(() => resolve(null))
-            .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+            .catch(()=> reject("Error contacting server, cannot accept Invtitation"))
     })
 }

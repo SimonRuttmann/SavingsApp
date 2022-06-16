@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    AddGroup,
     addGroup, addGroupFromInvitation,
     addNewGroup,
     fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer,
@@ -19,15 +20,19 @@ import {
 } from "../../reduxStore/UserSlice";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+//notifications
+import {NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+import {invite} from "../../api/services/User";
 //{ getActiveGroupId, setActiveGroupId}
 const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     const [getGroupId, setGroupId] = useState();
     const [showNewGroup, setShowNewGroup]= useState(false)
     const [showInvite, setShowInvite] = useState(false)
     const [showInvitations, setInvitations] = useState(false)
-    const [choosenUsername, setChoosenUsername] = useState(false)
-    const [newGroupName, setNewGroupName] = useState(null)
-
+    const [choosenUsername, setChoosenUsername] = useState(null)
+    const [rerender, setRerender] = useState(false)
+    const triggerRerender = () => setRerender(prevState => !prevState)
 
     const animatedComponents = makeAnimated();
 
@@ -35,6 +40,8 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     const groupInformationStore = useSelector(selectGroupInformationStore);
     const userStore   = useSelector(selectUserStore);
     const dispatch = useDispatch()
+
+    const groupNameRef = useRef(null)
 
     //gruppe initialisieren
     let selectedGroup
@@ -47,6 +54,9 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
     if(!Array.isArray(groupInformationStore) || getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null || userStore == null) return null;
 
+
+   console.log("userInvitkations",userStore.invitations)
+
     const changeGroup = (nextGroup) => {
         let group = (groupInformationStore.find(group => group.id === nextGroup.id));
         setGroupId(nextGroup.id)
@@ -54,36 +64,53 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     }
     function addGroup(){
 
-        let newGroupNameInput = document.getElementById("groupName").value;
+        let newGroupNameInput = groupNameRef.current.value;
+
+        if(newGroupNameInput.length>10) {
+            NotificationManager.warning("Maximal 10 Zeichen erlaubt", "Gruppenname ist zulang" );
+            return;
+        }
         if(newGroupNameInput !== "Ich" && newGroupNameInput !== "ich"){
             const newGroup = {
                 "groupName": ""+newGroupNameInput
             }
-            dispatch(addNewGroup(newGroup))
-            setNewGroupName(newGroupNameInput)
-            document.getElementById("groupName").value = ""
+            dispatch(addNewGroup(newGroup)).then(id => {
+                return dispatch(fetchGeneralInformationToGroupFromServer(id))
+            }).then( () => {
+                groupNameRef.current.value = "";
+                NotificationManager.success("erfolgreich erstellt", "Neue Gruppe '" + newGroupNameInput + "'");
+            }).catch(() => {
+                NotificationManager.error("Gruppe konnte nicht erstellt werden", "Server konnte nicht erreicht werden");
+            })
+
+            //setTimeout(() => setNewGroupName(newGroupNameInput), 100)
+            //dispatch(fetchGeneralInformationToGroupFromServer(group.id))
+        } else {
+            NotificationManager.warning("'Ich' darf nicht verwendet werden", "Invalider Gruppenname" );
         }
     }
 
-    if(newGroupName != null && groupInformationStore.find(group => group.groupName === newGroupName) === null) return null
+    // if(newGroupName != null && groupInformationStore.find(group => group.groupName === newGroupName) === null) return null
+    //
+    // if(groupInformationStore.find(group => group.groupName === newGroupName)){
+    //     let group = groupInformationStore.find(group => group.groupName === newGroupName)
+    //     dispatch(fetchGeneralInformationToGroupFromServer(group.id))
+    //     setNewGroupName(null)
+    // }
 
-    if(groupInformationStore.find(group => group.groupName === newGroupName)){
-        let group = groupInformationStore.find(group => group.groupName === newGroupName)
-        dispatch(fetchGeneralInformationToGroupFromServer(group.id))
-        setNewGroupName(null)
-    }
-
-    function LeaveGroup(id) {
+    function LeaveGroup(id, gruppenname) {
         let newFokus = groupInformationStore.find(group => group.personGroup === true)
         if(id === getActiveGroupId) setActiveGroupId(newFokus.id)
         dispatch(leaveAGroup(id))
         setGroupId(newFokus.id)
+        NotificationManager.success("und aus der Liste entfernt", "Gruppe '"+gruppenname+"' verlassen" );
     }
-    function DeleteGroup(id) {
+    function DeleteGroup(id, gruppenname) {
         let newFokus = groupInformationStore.find(group => group.personGroup === true)
         if(id === getActiveGroupId) setActiveGroupId(newFokus.id)
         dispatch(leaveAGroup(id))
         setGroupId(newFokus.id)
+        NotificationManager.success("und aus der Liste entfernt", "Gruppe '"+gruppenname+"' gelöscht" );
     }
 
     //check if username valid
@@ -104,27 +131,46 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
 
     function inviteUser() {
+        if(choosenUsername == null || choosenUsername.value == null ) return;
         const newInvite = {
             "username": ""+choosenUsername.value,
             "groupId": ""+getGroupId
         }
-        dispatch(invitePerson(newInvite))
+
+        let response = invite(newInvite)
+        response
+            .catch(()=> console.log("Error contacting server, cannot add GroupEntry"))
+
+        NotificationManager.success(choosenUsername.value+" wurde eingeladen", "Einladung abgeschickt" );
         setChoosenUsername(null)
     }
 
     function acceptThisInvitation(invitation) {
-        dispatch(acceptAInvitation(invitation.groupId))
+
         const toAddGroup = {
             "groupName": ""+invitation.groupName,
             "id" : invitation.groupId,
             "personGroup": false
         }
-        dispatch( addGroupFromInvitation(toAddGroup))
-        setTimeout(() => setNewGroupName(invitation.groupName), 100)
+
+        dispatch(acceptAInvitation(invitation.groupId)).then( () => {
+            return dispatch(AddGroup(toAddGroup))
+        }).then( () => {
+            dispatch(fetchGeneralInformationToGroupFromServer(invitation.groupId));
+        })
+
+        //NotificationManager.success(choosenUsername.value+" wurde eingeladen", "Einladung abgeschickt" );
+
     }
 
-    function declineThisInvitation(groupId) {
-        dispatch(declineAInvitation(groupId))
+    function declineThisInvitation(groupId, gruppenname) {
+        dispatch(declineAInvitation(groupId)).then(() => {
+            console.log("jetzt sind wir raus aus der decline methode");
+            NotificationManager.success("für Gruppe '"+gruppenname +"'", "Einladung abgelehnt" );
+            triggerRerender();
+        }).catch(() => {
+            NotificationManager.error("Einladung konnte nicht abgelehnt werden", "Server konnte nicht erreicht werden");
+        })
         //setNewGroupName(groupName)
     }
 
@@ -142,7 +188,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                 <div className="row">
                     <Col>
                         <Form.Group>
-                            <Form.Control  id="groupName" type="text" placeholder="Gruppenname"/>
+                            <Form.Control ref={groupNameRef}  type="text" placeholder="Gruppenname"/>
                         </Form.Group>
                     </Col>
                     <Col>
@@ -205,7 +251,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                                     <Button className={"btn btn-success"} key={`Settings-Inv-But-1-${invitation.groupId}`} onClick={ () => acceptThisInvitation(invitation) } variant="secondary">Akzeptieren</Button>
                                 </Col>
                                 <Col xs={"12"} md={"6"} key={`Settings-Invitation-Col3-${invitation.groupId}`}>
-                                    <Button className={"btn btn-danger"}key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId)} variant="secondary">Ablehnen</Button>
+                                    <Button className={"btn btn-danger"}key={`Settings-Inv-But-2-${invitation.groupId}`} onClick={ () => declineThisInvitation(invitation.groupId, invitation.groupName)} variant="secondary">Ablehnen</Button>
                                 </Col>
                             </Col>
                         </Row>
@@ -224,17 +270,16 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
             { selectedGroup.personDTOList.map(user => <h6 key={`Settings-Group-${user.username}`}>{user.username}</h6>)}
             <div className="row">
             <Col>
-            <Button disabled={!!selectedGroup.personGroup} onClick={ () => LeaveGroup(selectedGroup.id)} variant="secondary">Gruppe Verlassen</Button>
+            <Button disabled={!!selectedGroup.personGroup} onClick={ () => LeaveGroup(selectedGroup.id, selectedGroup.groupName)} variant="secondary">Gruppe Verlassen</Button>
             </Col>
             <Col>
-                <Button disabled={!!selectedGroup.personGroup} onClick={ () => DeleteGroup(selectedGroup.id)} variant="secondary">Gruppe löschen</Button>
+                <Button disabled={!!selectedGroup.personGroup} onClick={ () => DeleteGroup(selectedGroup.id, selectedGroup.groupName)} variant="secondary">Gruppe löschen</Button>
             </Col>
             </div>
         </Modal.Body>
         <Modal.Footer>
         </Modal.Footer>
-    </Modal>
-
+</Modal>
     );
 };
 

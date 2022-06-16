@@ -33,6 +33,7 @@ const groupInformationSlice = createSlice({
             group.personDTOList = action.payload.personDTOList;
         },
         AddGroup: (state, action) => {
+            console.log("actionpayload",action.payload.id)
             state.push({
                 id: action.payload.id,
                 groupName: action.payload.groupName,
@@ -78,18 +79,21 @@ export const fetchGeneralInformationToGroupFromServer = (groupId) => (dispatch) 
 }
 
 export const addNewGroup = (groupBody) => (dispatch) =>{
+    console.log("groupbody", groupBody)
     return new Promise((resolve, reject) => {
         let response = register(groupBody)
-        response.then(response => dispatch(AddGroup(response.data)))
-                .then(() => resolve(null))
-                .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+        response.then(response => {
+            console.log("responsedata",response.data);
+            dispatch(AddGroup(response.data));
+            console.log("finish adding group to store")
+            return response.data;
+        })
+            .then((data) => {
+                console.log(data);
+                resolve(data.id);
+            })
+            .catch(()=> reject("Error contacting server, cannot add group"))
     });
-}
-
-export const addGroupFromInvitation = (groupBody) => (dispatch) =>{
-        console.log("we add group from Invitation")
-         dispatch(AddGroup(groupBody))
-
 }
 
 export const leaveAGroup = (groupId) => (dispatch) => {
@@ -97,7 +101,7 @@ export const leaveAGroup = (groupId) => (dispatch) => {
         let response = leaveGroup(groupId)
         response.then(response => dispatch(RemoveGroup(response.data)))
                 .then(() => resolve(null))
-                .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+                .catch(()=> reject("Error contacting server, cannot leave Group"))
     })
 }
 
