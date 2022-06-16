@@ -56,7 +56,7 @@ export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, set
         let category = entryCreationSelectedCategory;
 
         if(category == null && mappedCategories.length > 0)
-            category = mappedCategories[0]
+             category = null;
 
         if( descriptionRef.current == null || descriptionRef.current.value === "")
             description = null;
