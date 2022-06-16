@@ -5,7 +5,7 @@ import {
     AddGroup,
     addGroup, addGroupFromInvitation,
     addNewGroup,
-    fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer,
+    fetchGeneralInformationToGroupFromServer,
     leaveAGroup,
     selectGroupInformationStore
 } from "../../reduxStore/GroupInformationSlice";
@@ -130,7 +130,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
 
     function inviteUser() {
-        if(choosenUsername == null || choosenUsername.value.get().trim() == null ) return;
+        if(choosenUsername == null || choosenUsername.value.trim() == null ) return;
         const newInvite = {
             "username": ""+choosenUsername.value,
             "groupId": ""+getGroupId
