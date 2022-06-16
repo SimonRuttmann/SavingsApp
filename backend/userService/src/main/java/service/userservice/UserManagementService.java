@@ -148,7 +148,9 @@ public class UserManagementService implements IUserManagementService {
         }
 
         //check if invitation exists already
-        List<Invitation> invs = databaseService.getAllInvitations(registeredUserId);
+        var invitedUser = databaseService.getPersonByUsername(newInvitation.username);
+
+        List<Invitation> invs = databaseService.getAllInvitations(UUID.fromString(invitedUser.getId()));
         var existingInvitation = invs.stream()
                 .filter(invitation -> Objects.equals(invitation.getRequestedGroup().getId(), newInvitation.groupId))
                 .findFirst();

@@ -56,6 +56,7 @@ public interface IDatabaseService {
 
 
      Collection<KPerson> getPersonsOfGroupId(Long id);
+     KPerson getPersonByUsername(String username);
 
 
      Group saveGroup(Group group);
