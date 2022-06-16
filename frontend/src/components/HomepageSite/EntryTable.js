@@ -14,7 +14,7 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                         openUpdateEntry(selectedEntry)
                     }}
                     variant="secondary">Eintrag ändern</Button>
-                <Button onClick={() => deleteEntry(selectedEntry.id)} variant="secondary">Eintrag löschen</Button>
+                <Button onClick={() => deleteEntry(selectedEntry.id, selectedEntry.name)} variant="secondary">Eintrag löschen</Button>
             </ButtonGroup>
             <Card.Body>
                 <Table responsive={"sm"} size={"sm"} className="entryTable" striped bordered hover>
