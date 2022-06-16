@@ -10,7 +10,7 @@ import {logout} from "../../reduxStore/UserSlice";
 import {useDispatch} from "react-redux";
 import {StompSessionProvider} from "react-stomp-hooks";
 
-export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite, screenSize}) => {
+export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite, isLargeScreen}) => {
 
 
     const dispatch = useDispatch()
@@ -104,7 +104,7 @@ export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformat
     return (
         <>
         <Navbar className="navBar" bg="dark" variant="dark">
-            {screenSize>=500?largeScreen():smallScreen()}
+            {isLargeScreen?largeScreen():smallScreen()}
         </Navbar>
         <SettingsPopup id="SettingsLittle" show={settings}
                        onHide={handelClose}
