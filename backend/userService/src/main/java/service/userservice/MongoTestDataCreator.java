@@ -33,11 +33,29 @@ public class MongoTestDataCreator {
     private static final Random random = new Random();
     private static final  DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-    String[] categoryArray = {"Miete","Lebensmittel","Restaurant","Hund","Katze","Altersversicherung", "Hausversicherung",
-                              "Rennrad", "Basketballverein", "Musik Verein", "Zoo","Fastfood","Zocken","Pokern",
-                              "Glücksspiel","Hausversicherung","Kinder","Kindergarten","Massage","Wellness"};
+    //User 1
+    String[] categoryArray1 = {"Miete", "Lebensmittel", "Restaurant", "Hund", "Katze"};
+    ArrayList<Category> categoryList1 = new ArrayList<>();
 
-    ArrayList<Category> categories = new ArrayList<>();
+    //User 2
+    String[] categoryArray2 = {"Altersversicherung", "Hausversicherung", "Rennrad", "Basketballverein", "Musik Verein"};
+    ArrayList<Category> categoryList2 = new ArrayList<>();
+
+    //User 3
+    String[] categoryArray3 = {"Zoo", "Eltern", "Zocken", "Pokern", "Glücksspiel"};
+    ArrayList<Category> categoryList3 = new ArrayList<>();
+
+    //User 4
+    String[] categoryArray4 = {"Fastfood", "Hausparty", "Grillen", "Paaaaaartey", "Jobben"};
+    ArrayList<Category> categoryList4 = new ArrayList<>();
+
+    //WG
+    String[] categoryArray5 = {"Haustiere", "Allgemein", "Putzen", "Zusatzausgaben", "Wurzelzahnbehandlung"};
+    ArrayList<Category> categoryList5 = new ArrayList<>();
+
+    //Sommerparty
+    String[] categoryArray6 = {"Drinks", "Aufbau", "Nahrung", "Location"};
+    ArrayList<Category> categoryList6 = new ArrayList<>();
 
     @Autowired
     public MongoTestDataCreator(MongoOperations mongoOps, GroupDocumentService groupDocumentService) throws ParseException {
@@ -55,68 +73,127 @@ public class MongoTestDataCreator {
     }
 
     private void addDocuments(){
-        for(int groupId = 1; groupId <= LARGEST_GROUP_ID; groupId++) {
+        for(int groupId = 1; groupId <= 4; groupId++) {
             var d = new GroupDocument();
             d.groupId = (long) groupId;
             GroupDocument savedGroupDoc = groupDocumentService.createDocument(d);
 
-            addCategories(savedGroupDoc,5);
+            addCategories(savedGroupDoc,groupId);
+        }
+
+        for (int groupId = 5; groupId<=LARGEST_GROUP_ID;groupId++){
+            var d = new GroupDocument();
+            d.groupId = (long) groupId;
+
+            if(groupId == 8 || groupId == 10){
+                GroupDocument savedGroupDoc = groupDocumentService.createDocument(d);
+                addCategories(savedGroupDoc,groupId);
+            }
+            else groupDocumentService.createDocument(d);
         }
     }
 
-    private void addCategories(GroupDocument savedGroupDoc, int categoryAmount){
-        List<String> categoryList = new ArrayList<>(Arrays.asList(categoryArray));
-
-        for (int i =0; i <= categoryAmount-1; i++) {
-            String s = categoryList.remove(random.nextInt(categoryList.size()));
-
-            Category aCategory = new Category(s);
-            categories.add(groupDocumentService.insertCategory(savedGroupDoc.groupId, aCategory));
+    private void addCategories(GroupDocument savedGroupDoc,int groupId){
+        switch (groupId){
+            case 1:
+                for (String s : categoryArray1) {
+                    Category aCategory = new Category(s);
+                    categoryList1.add(groupDocumentService.insertCategory(savedGroupDoc.groupId, aCategory));
+                }
+                break;
+            case 2:
+                for (String s : categoryArray2) {
+                    Category aCategory = new Category(s);
+                    categoryList2.add(groupDocumentService.insertCategory(savedGroupDoc.groupId, aCategory));
+                }
+                break;
+            case 3 :
+                for (String s : categoryArray3) {
+                    Category aCategory = new Category(s);
+                    categoryList3.add(groupDocumentService.insertCategory(savedGroupDoc.groupId, aCategory));
+                }
+                break;
+            case 4 :
+                for (String s : categoryArray4) {
+                    Category aCategory = new Category(s);
+                    categoryList4.add(groupDocumentService.insertCategory(savedGroupDoc.groupId, aCategory));
+                }
+                break;
+            case 8:
+                for (String s : categoryArray5) {
+                    Category aCategory = new Category(s);
+                    categoryList5.add(groupDocumentService.insertCategory(savedGroupDoc.groupId, aCategory));
+                }
+                break;
+            case 10:
+                for (String s : categoryArray6) {
+                    Category aCategory = new Category(s);
+                    categoryList6.add(groupDocumentService.insertCategory(savedGroupDoc.groupId, aCategory));
+                }
+                break;
+            default : throw new IllegalStateException("Unexpected value: " + groupId);
         }
     }
 
     private void fillPersonalGroups(){
-        for(int month=1 ; month <= 12; month++) {
-            for (int day = 1; day <= 28; day++) {
-
-                createSavingEntry(month, day);
+        Date date = new Date();
+        int currentYear = date.getYear()+1900;
+        Integer[] usersWithData = {1,2,3,4,8,10};
+        for ( Integer userid : usersWithData) {
+            for (int year = 0; year <= 2; year++) {
+                for (int month = 1; month <= 12; month++) {
+                    for (int day = 1; day <= 28; day += 3) {
+                        createSavingEntry(month, day, currentYear - year, userid);
+                    }
+                }
             }
         }
     }
 
-    private void createSavingEntry(int month, int day){
+    private void createSavingEntry(int month, int day, int year, int userid){
 
-        int repetitionAmount = random.nextInt(49)+1;
+        int repetitionAmount = random.nextInt(2);
         for (int repetitions = 0; repetitions<=repetitionAmount; repetitions++ ) {
-
-            Long groupId = (long) random.nextInt(1 + LARGEST_GROUP_ID) + 1;
-
             int entryNumber = month * 28 + day;
             String name = "Testentry" + entryNumber;
             String description =  "Entry number " + entryNumber;
 
-            Category category = categories.get(random.nextInt(categories.size()));
-            Date creationDate = createRandomizedDate(day, month, random.nextInt(24));
+            ArrayList<Category> usedCategoryList = matchUserToCategoryArray(userid);
 
-            String postingUser = setPostingUser(groupId);
-            Double cost = random.nextDouble() + random.nextInt(1000) ;
+            Category category = usedCategoryList.get(random.nextInt(usedCategoryList.size()));
+            Date creationDate = createDate(year, month, day,random.nextInt(24));
+
+            String postingUser = setPostingUser(userid);
+            Double cost = random.nextDouble() + random.nextInt(50) ;
             String formattedDouble = decimalFormat.format(cost).replace(",",".");
             cost = Double.valueOf(formattedDouble);
             if(random.nextInt(2) == 1)
                 cost = cost * -1;
 
             SavingEntry savingEntry = new SavingEntry(name, cost, category, postingUser, creationDate, description);
-            groupDocumentService.addSavingEntry(groupId, savingEntry);
+            groupDocumentService.addSavingEntry((long) userid, savingEntry);
         }
 
     }
 
-    private String setPostingUser(Long groupId){
-        String[] group8 = {"demo", "annabell", "benni", "chleo"};
-        String[] group9 = {"demo", "emil", "franz", "gabriella" };
-        String[] group10 = {"annabell", "benni", "chleo", "emil", "franz", "gabriella"};
+    private ArrayList<Category> matchUserToCategoryArray(int userid){
+        return switch (userid){
+            case 1 -> categoryList1;
+            case 2 -> categoryList2;
+            case 3 -> categoryList3;
+            case 4 -> categoryList4;
+            case 8 -> categoryList5;
+            case 10 -> categoryList6;
+            default -> throw new IllegalStateException("Unexpected value: " + userid);
+        };
+    }
 
-        return switch (groupId.intValue()) {
+    private String setPostingUser(int groupId){
+        String[] WG = {"demo", "annabell", "benni", "chleo"};
+        String[] group9 = {"demo", "emil", "franz", "gabriella" };
+        String[] Sommerparty = {"annabell", "benni", "chleo", "emil", "franz", "gabriella"};
+
+        return switch (groupId) {
             case 1 -> "demo";
             case 2 -> "annabell";
             case 3 -> "benni";
@@ -124,9 +201,9 @@ public class MongoTestDataCreator {
             case 5 -> "emil";
             case 6 -> "franz";
             case 7 -> "gabriella";
-            case 8 -> group8[random.nextInt(4)];
-            case 9 -> group9[random.nextInt(4)];
-            case 10 -> group10[random.nextInt(6)];
+            case 8 -> WG[random.nextInt(WG.length)]; //WG
+            case 9 -> group9[random.nextInt(group9.length)];
+            case 10 -> Sommerparty[random.nextInt(Sommerparty.length)]; //Sommerparty
             default -> "defautlUser";
         };
     }
@@ -136,16 +213,16 @@ public class MongoTestDataCreator {
         else return String.valueOf(number);
     }
 
-    private Date createRandomizedDate(int day, int month, int datePrefix){
+    private Date createDate(int year, int month, int day, int hour){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         String formattedMonth = createDatePrefixNumber(month);
         String formattedDay = createDatePrefixNumber(day);
-        String formattedHour = createDatePrefixNumber(datePrefix);
+        String formattedHour = createDatePrefixNumber(hour);
         Date creationDate;
 
         try {
-            creationDate = formatter.parse("2022-" + formattedMonth + "-" + formattedDay + " " + formattedHour + ":00:00");
+            creationDate = formatter.parse(year+"-" + formattedMonth + "-" + formattedDay + " " + formattedHour + ":00:00");
         } catch (ParseException e) {
             creationDate = new Date();
         }
