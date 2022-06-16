@@ -125,6 +125,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     useEffect( () => {
         dispatch(login(KeyCloakService.getToken()));
         dispatch(fetchUserDataFromServer());
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         dispatch(fetchGroupCoreInformationFromServer())
             .then(setLoadingCoreInformation(true));
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -245,18 +246,38 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     const [showMore, setShowMore] = useState(false)
 
     const addEntry = (entry) => {
+        if(entry.name == null || entry.name.trim() === "") {
+            NotificationManager.warning("Kein Name angegeben", "Invalide Eingabe",2000 );
+            return;
+        }
+        if(entry.category == null ){
+            NotificationManager.warning("Keine Kategorie angegeben", "Invalide Eingabe",2000 );
+            return;
+        }
         entry.creator = userStore.username;
         dispatch(addSavingEntryToServer(getActiveGroupId, entry))
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
-            })
-        setSelectedEntry(null);
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich erstellt", "Eintrag '"+entry.name+"'",2000 );
+                setSelectedEntry(null);
+            }).catch(() => {
+                NotificationManager.error("Eintrag konnte nocht erstellt werden", "Server konnte nicht erreicht werden",2000 );
+            });
     }
 
-    const deleteEntry = (id) => {
-        dispatch(deleteSavingEntryFromServer(getActiveGroupId, id))
+    const deleteEntry = (entry) => {
+        if(entry == null) {
+            NotificationManager.warning("", "Kein Eintrag ausgewählt",2000 );
+            return;
+        }
+        dispatch(deleteSavingEntryFromServer(getActiveGroupId, entry.id))
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+            }).then(() => {
+                NotificationManager.success("wurde gelöscht", "Eintag '"+entry.name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Eintrag konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
         setSelectedEntry(null);
     }
@@ -265,6 +286,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(updateSavingEntryToServer(getActiveGroupId, entry))
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich geändert", "Eintag '"+entry.name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Eintrag konnte nicht geändert werden", "Server konnte nicht erreicht werden",2000 );
             })
         setSelectedEntry(null);
     }
@@ -278,10 +303,14 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(addCategoryToServer(getActiveGroupId, category))
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich erstellt", "Kategorie '"+category.name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Kategorie konnte nicht erstellt werden", "Server konnte nicht erreicht werden",2000 );
             })
     }
 
-    const deleteCategory = (id) => {
+    const deleteCategory = (id, name) => {
         let newCategories = currentFilterInformation.filterCategory.filter( cat => cat.id !== id)
         dispatchFilterInformation({type: filterInformationAction.changeFilterCategories, payload: newCategories});
 
@@ -293,6 +322,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId,
                     currentFilterInformationToDataObject({...currentFilterInformation, filterCategory: newCategories})))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich gelöscht", "Kategorie '"+name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Kategorie konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
     }
 
@@ -311,6 +344,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId,
                     currentFilterInformationToDataObject({...currentFilterInformation, filterCategory: updatedCategories})))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich umbennant", "Gewählte Kategorie",2000 );
+            }).catch(() => {
+                NotificationManager.error("Kategorie konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
     }
 

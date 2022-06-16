@@ -1,21 +1,16 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useRef, useState} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {
     AddGroup,
-    addGroup, addGroupFromInvitation,
     addNewGroup,
-    fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer,
+    fetchGeneralInformationToGroupFromServer,
     leaveAGroup,
     selectGroupInformationStore
 } from "../../reduxStore/GroupInformationSlice";
-import {isDisabled} from "@testing-library/user-event/dist/utils";
 import {
     acceptAInvitation,
-    acceptInvitation, declineAInvitation, declineInvitation,
-    invitePerson,
-    selectUserInvitationsStore,
-    selectUserNamesStore,
+    declineAInvitation,
     selectUserStore
 } from "../../reduxStore/UserSlice";
 import Select from "react-select";
@@ -24,7 +19,7 @@ import makeAnimated from "react-select/animated";
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import {invite} from "../../api/services/User";
-//{ getActiveGroupId, setActiveGroupId}
+
 const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     const [getGroupId, setGroupId] = useState();
     const [showNewGroup, setShowNewGroup]= useState(false)
@@ -51,11 +46,9 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         selectedGroup = (groupInformationStore.find(group => group.id === getGroupId));
     }
 
-
     if(!Array.isArray(groupInformationStore) || getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null || userStore == null) return null;
 
 
-   console.log("userInvitkations",userStore.invitations)
 
     const changeGroup = (nextGroup) => {
         let group = (groupInformationStore.find(group => group.id === nextGroup.id));
@@ -64,10 +57,14 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     }
     function addGroup(){
 
+        if(groupNameRef.current.value == null || groupNameRef.current.value.trim() === "") {
+            NotificationManager.warning("Kein neuer Gruppenname angegeben", "Invalide Eingabe",2000 );
+            return;
+        }
         let newGroupNameInput = groupNameRef.current.value;
 
         if(newGroupNameInput.length>10) {
-            NotificationManager.warning("Maximal 10 Zeichen erlaubt", "Gruppenname ist zulang" );
+            NotificationManager.warning("Maximal 10 Zeichen erlaubt", "Gruppenname ist zulang",2000 );
             return;
         }
         if(newGroupNameInput !== "Ich" && newGroupNameInput !== "ich"){
@@ -78,43 +75,42 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                 return dispatch(fetchGeneralInformationToGroupFromServer(id))
             }).then( () => {
                 groupNameRef.current.value = "";
-                NotificationManager.success("erfolgreich erstellt", "Neue Gruppe '" + newGroupNameInput + "'");
+                NotificationManager.success("erfolgreich erstellt", "Neue Gruppe '" + newGroupNameInput + "'",2000);
             }).catch(() => {
-                NotificationManager.error("Gruppe konnte nicht erstellt werden", "Server konnte nicht erreicht werden");
+                NotificationManager.error("Gruppe konnte nicht erstellt werden", "Server konnte nicht erreicht werden",2000);
             })
 
             //setTimeout(() => setNewGroupName(newGroupNameInput), 100)
             //dispatch(fetchGeneralInformationToGroupFromServer(group.id))
         } else {
-            NotificationManager.warning("'Ich' darf nicht verwendet werden", "Invalider Gruppenname" );
+            NotificationManager.warning("'Ich' darf nicht verwendet werden", "Invalider Gruppenname",2000 );
         }
     }
-
-    // if(newGroupName != null && groupInformationStore.find(group => group.groupName === newGroupName) === null) return null
-    //
-    // if(groupInformationStore.find(group => group.groupName === newGroupName)){
-    //     let group = groupInformationStore.find(group => group.groupName === newGroupName)
-    //     dispatch(fetchGeneralInformationToGroupFromServer(group.id))
-    //     setNewGroupName(null)
-    // }
 
     function LeaveGroup(id, gruppenname) {
         let newFokus = groupInformationStore.find(group => group.personGroup === true)
         if(id === getActiveGroupId) setActiveGroupId(newFokus.id)
-        dispatch(leaveAGroup(id))
-        setGroupId(newFokus.id)
-        NotificationManager.success("und aus der Liste entfernt", "Gruppe '"+gruppenname+"' verlassen" );
+        dispatch(leaveAGroup(id)).then(() => {
+            setGroupId(newFokus.id)
+            NotificationManager.success("und aus der Liste entfernt", "Gruppe '"+gruppenname+"' verlassen", 2000 );
+        }).catch(() => {
+            NotificationManager.error("Gruppe kann nicht verlassen werden", "Server konnte nicht erreicht werden",2000);
+        })
+
     }
     function DeleteGroup(id, gruppenname) {
         let newFokus = groupInformationStore.find(group => group.personGroup === true)
         if(id === getActiveGroupId) setActiveGroupId(newFokus.id)
-        dispatch(leaveAGroup(id))
-        setGroupId(newFokus.id)
-        NotificationManager.success("und aus der Liste entfernt", "Gruppe '"+gruppenname+"' gelöscht" );
+        dispatch(leaveAGroup(id)).then(() => {
+            setGroupId(newFokus.id)
+            NotificationManager.success("und aus der Liste entfernt", "Gruppe '"+gruppenname+"' gelöscht", 2000 );
+        }).catch(() => {
+            NotificationManager.error("Gruppe kann nicht gelöscht werden", "Server konnte nicht erreicht werden",2000);
+        })
     }
 
     //check if username valid
-    function updateUsernameOptions(){
+    const updateUsernameOptions = () => {
         let options = []
         userStore.usernames.map(username =>{
             if (selectedGroup.personDTOList.find(person => person.username === username) === undefined ){
@@ -131,7 +127,10 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
 
     function inviteUser() {
-        if(choosenUsername == null || choosenUsername.value == null ) return;
+        if(choosenUsername == null || choosenUsername.value.trim() == null ) {
+            NotificationManager.warning("Kein User ausgewählt", "Invalide Eingabe",2000 );
+            return;
+        }
         const newInvite = {
             "username": ""+choosenUsername.value,
             "groupId": ""+getGroupId
@@ -139,10 +138,13 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
         let response = invite(newInvite)
         response
-            .catch(()=> console.log("Error contacting server, cannot add GroupEntry"))
-
-        NotificationManager.success(choosenUsername.value+" wurde eingeladen", "Einladung abgeschickt" );
-        setChoosenUsername(null)
+            .then(() => {
+                NotificationManager.success(choosenUsername.value+" wurde in Grupppe '"+selectedGroup.groupName+"' eingeladen", "Einladung abgeschickt",2000 );
+                setChoosenUsername(null)
+            })
+            .catch(()=>{
+                NotificationManager.error("Einladung kann nicht verschickt werden", "Server konnte nicht erreicht werden",2000)
+            })
     }
 
     function acceptThisInvitation(invitation) {
@@ -156,20 +158,23 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         dispatch(acceptAInvitation(invitation.groupId)).then( () => {
             return dispatch(AddGroup(toAddGroup))
         }).then( () => {
-            dispatch(fetchGeneralInformationToGroupFromServer(invitation.groupId));
+           dispatch(fetchGeneralInformationToGroupFromServer(invitation.groupId));
+        }).then(() => {
+            NotificationManager.success("für Gruppe '"+invitation.groupName +"'", "Einladung angenommen",2000 );
+        }).catch( () => {
+            NotificationManager.error("Einladung konnte nicht angenommen werden", "Server konnte nicht erreicht werden", 2000);
         })
 
-        //NotificationManager.success(choosenUsername.value+" wurde eingeladen", "Einladung abgeschickt" );
+
 
     }
 
     function declineThisInvitation(groupId, gruppenname) {
         dispatch(declineAInvitation(groupId)).then(() => {
-            console.log("jetzt sind wir raus aus der decline methode");
-            NotificationManager.success("für Gruppe '"+gruppenname +"'", "Einladung abgelehnt" );
+            NotificationManager.success("für Gruppe '"+gruppenname +"'", "Einladung abgelehnt" ,2000);
             triggerRerender();
         }).catch(() => {
-            NotificationManager.error("Einladung konnte nicht abgelehnt werden", "Server konnte nicht erreicht werden");
+            NotificationManager.error("Einladung konnte nicht abgelehnt werden", "Server konnte nicht erreicht werden", 2000);
         })
         //setNewGroupName(groupName)
     }
