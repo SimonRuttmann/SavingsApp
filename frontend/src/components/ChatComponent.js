@@ -67,50 +67,6 @@ function ChatComponent(getActiveGroupId ) {
         postMessage(body)
     }
 
-    const fontFamily = "Segoe UI"
-    const fontSize = "16"
-    const textFont = `${fontSize}pt ${fontFamily}`
-
-    function displayMessage(msg){
-        let placeToDisplayStuff
-        if(offcanvasRef.current == null || offcanvasRef.current.clientWidth == null) placeToDisplayStuff = 300;
-        else placeToDisplayStuff = offcanvasRef.current.clientWidth ;
-
-        let stringToDisplay = "";
-        for( let string of msg.split(" ")){
-            let changeableString = string;
-            let slice = changeableString
-            let maxSingleStringLength = 32;
-
-            while ( getTextWidth(slice,textFont) > placeToDisplayStuff){
-                slice = changeableString.slice(0,maxSingleStringLength) + " ";
-                if( getTextWidth(slice,textFont) > placeToDisplayStuff){
-                    console.log("We entered")
-                    maxSingleStringLength--;
-                }
-                else{
-                    stringToDisplay += slice + " ";
-                    changeableString = changeableString.slice(slice.length,changeableString.length)
-                }
-                console.log("Changable String",changeableString)
-                console.log("Slice ",slice)
-            }
-            stringToDisplay += slice + " ";
-        }
-        console.log(stringToDisplay)
-        return stringToDisplay
-    }
-
-    function getTextWidth(text, font) {
-
-        let canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-
-        let context = canvas.getContext("2d");
-        context.font = font;
-
-        return context.measureText(text).width;
-    }
-
     function generateShownMessages(){
         let messageForRender = []
         let index = 0;
@@ -119,7 +75,7 @@ function ChatComponent(getActiveGroupId ) {
                 messageForRender.push(
                     <Card key={msg.sender+" "+msg.content+" "+index++} className="myMessageDisplay">
                         <Card.Title>{msg.sender}</Card.Title>
-                        <Card.Body>{displayMessage(msg.content)}</Card.Body>
+                        <Card.Body className={"fullWidth"}>{msg.content}</Card.Body>
                     </Card>
                 )
             }
@@ -127,7 +83,7 @@ function ChatComponent(getActiveGroupId ) {
                 messageForRender.push(
                     <Card key={msg.sender+" "+msg.content+" "+index++} className="otherMessageDisplay">
                         <Card.Title>{msg.sender}</Card.Title>
-                        <Card.Body>{displayMessage(msg.content)}</Card.Body>
+                        <Card.Body className={"fullWidth"}>{msg.content}</Card.Body>
                     </Card>
                 )
             }
