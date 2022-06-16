@@ -23,6 +23,8 @@ import {EntryCreationBar} from "./EntryCreationBar";
 import {SearchBar} from "./SearchBar";
 import UpdateSavingEntry from "./UpdateSavingEntry";
 import CategoryEditingBar from "./CategoryEditingBar";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
@@ -394,8 +396,9 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                             openUpdateEntry={triggerUpdateEntry}
                 />
             </CardGroup>
-
+            <NotificationContainer/>
         </React.Fragment>
+
     )
 }
 

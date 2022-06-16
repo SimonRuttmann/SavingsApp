@@ -19,6 +19,9 @@ import {
 } from "../../reduxStore/UserSlice";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+//notifications
+import {NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 //{ getActiveGroupId, setActiveGroupId}
 const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     const [getGroupId, setGroupId] = useState();
@@ -47,6 +50,8 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
     if(!Array.isArray(groupInformationStore) || getActiveGroupId == null || selectedGroup == null || selectedGroup.personDTOList == null || userStore == null) return null;
 
+
+
     const changeGroup = (nextGroup) => {
         let group = (groupInformationStore.find(group => group.id === nextGroup.id));
         setGroupId(nextGroup.id)
@@ -61,7 +66,8 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
             }
             dispatch(addNewGroup(newGroup))
             setNewGroupName(newGroupNameInput)
-            document.getElementById("groupName").value = ""
+            document.getElementById("groupName").value = "";
+            NotificationManager.success("erfolgreich erstellt", "Neue Gruppe '"+newGroupNameInput+"'" );
         }
     }
 
@@ -231,8 +237,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         </Modal.Body>
         <Modal.Footer>
         </Modal.Footer>
-    </Modal>
-
+</Modal>
     );
 };
 
