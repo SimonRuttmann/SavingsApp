@@ -20,7 +20,7 @@ public class SubscriptionService {
 
     public ResponseEntity<String> subscribeToChannel(ChannelTopic topic){
         try {
-            redisMessageListener.addMessageListener(redisSubscriber::onMessage, topic);
+            redisMessageListener.addMessageListener(redisSubscriber, topic);
         }catch (Exception e){
             return new ResponseEntity<>(e.toString(),HttpStatus.BAD_REQUEST);
         }

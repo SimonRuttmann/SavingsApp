@@ -1,0 +1,86 @@
+.navBar{
+  flex-flow: column;
+  width: 100%;
+}
+
+.chartStyle{
+  border: 0;
+  padding: 3%;
+  height: 500px;
+  width: 100%;
+}
+
+.entryCreationBar{
+  align-items: end;
+  .element{
+    margin-bottom: 3rem;
+  }
+}
+
+.floatRight{
+  float:right;
+}
+
+.maxMarginLeft{
+  margin-left: auto;
+}
+
+.fullWidth{
+  width: 100%;
+}
+.textStyle{
+  text-align: center;
+  padding-right: 45%;
+  padding-top: 1%;
+  border: 0;
+}
+.navbar-collapse{
+  .showSelectedGroup{
+      margin: auto;
+      font-size: 2rem;
+      font-weight: 500;
+      color: white;
+      cursor: default;
+  }
+}
+
+.entryTable{
+  .selectedEntry{
+    background-color: lightgray;
+  }
+}
+
+//WIP for setting 
+.selectedGroup{
+  background-color: lightblue;
+}
+.addGroupDiv{
+  display: block;
+  margin-left: auto;
+
+}
+.addGroupButton{
+  float:right;
+}
+
+.rowSpace{
+ row-gap: 2em;
+}
+
+.topMarginText{
+  margin-top: 0rem;
+}
+.settingPopUp{
+  margin-top: 0rem;
+}
+
+.updateEntryPopUp{
+  margin-top: 0rem;
+  width: 50%;
+  height: 50%;
+}
+
+.subHeader{
+  margin-left: 1rem;
+  margin-top: 1rem;
+}

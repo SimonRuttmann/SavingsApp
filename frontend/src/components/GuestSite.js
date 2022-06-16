@@ -1,122 +1,115 @@
-import React, {useEffect} from "react";
+// noinspection JSCheckFunctionSignatures
+
+import React, {useEffect, useReducer} from "react";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Button, Card, CardGroup, Container, Navbar} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Gradient from 'rgt'
-import '../styles.css'
+import '../css/styles.scss'
+import '../css/guestsite.scss'
+import keycloakService from "../api/Auth.js";
+import getAdvertisement from "../api/services/Advertisement";
 import {useHistory} from "react-router-dom";
-import {useDispatch} from 'react-redux'
-import { login } from '../features/user'
-import { logout } from '../features/user'
-import {update, updateAdvertismentData} from "../features/advertisment";
-
-
+import keycloak from "../api/Auth.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const writingStyle = {
-    textAlign: "center",
-    padding: "1%",
-    border: "0"
-}
-
-const buttonStyle = {
-    float: "right",
-    margin: "2px"
-}
-
-const statistics = {
-    statistic1: '8946',
-    statistic2: '5632',
-    statistic3: '423'
-}
-
 const slogan = "Ein sauberer Haushalt benötigt ein sauberes Haushaltsbuch!"
-const desc = "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten." +
-    " Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
-const GuestSite = ({setGuestSite}) => {
+const desc =   "HaushaltsApp unterstützt Sie und Ihren Haushalt dabei einen Überblick über Ihre Finanzen zu behalten. " +
+               "Teilen Sie Ihre Ausgaben mit Ihren Mitbewohnern und lassen Sie diese vollkommen kostenfrei analysieren!"
+
+//Reducer action types
+const getAdvertisementDataSuccess = "getAdvertisementDataSuccess";
+const getAdvertisementDataError = "getAdvertisementDataError";
+
+let initialAdvertisementState = {
+    isLoading : false,
+    data : null,
+    isError:false
+};
+const advertisementReducer = (state, action) => {
+    switch (action.type){
+        case getAdvertisementDataSuccess:
+            return {
+                ...state,
+                isError: false,
+                data: action.payload
+            }
+        case getAdvertisementDataError:
+            return {
+                ...state,
+                isError: true,
+                isLoading: false,
+                data: mockData
+            }
+        default:
+            return state;
+    }
+}
+
+//Is inserted into state if new data can't be pulled
+const mockData = {
+    diagram1: '8946',
+    diagram2: '5632',
+    diagram3: '423'
+}
+
+const GuestSite = () => {
+    const [advertisementState, dispatchAdvertisement] = useReducer(advertisementReducer, initialAdvertisementState);
 
     useEffect(() => {
-        getStatisticsData()
-    })
+            Redirect()
+            getAdvertisement().then((response)=> {
+                dispatchAdvertisement({type: getAdvertisementDataSuccess, payload: response.data})
+            }).catch(dispatchAdvertisement({type:getAdvertisementDataError}))
+    },[])
 
-    const dispatch = useDispatch()
 
-    const history = useHistory()
 
-    const navToHomepage = () => {
+    //
+    const history = useHistory();
+    function handleClick() {
+
+        history.push('/homepage');
+
+    }
+    function Redirect() {
+         if (keycloak.isLoggedIn()) {
+            history.push("/homepage")
+        }
     }
 
-    const loginAndNavigateToHomepage = () => {
-        dispatch(login({id: "c01d20e4-3fb4-454f-9a37-c23e6573e5b7", email: "demo@demo", username: "username"}))
-        history.push("/homepage");
 
-}
-
-    const getStatisticsData = () => {
-        fetch('http://localhost:8010/global')
-            .then(response => response.json())
-            .then(data => {
-                dispatch(updateAdvertismentData(data))
-            })
-    }
     return (
         <>
             <Navbar bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand>Haushalt</Navbar.Brand>
                     <Navbar.Toggle/>
                     <Navbar.Collapse className="justify-content-end">
-                        <Button variant="light" style={buttonStyle} className="buttonStyle">Register</Button>
-                        <Button variant="primary"  style={buttonStyle} className="buttonStyle"
-                                onClick={() => {
-                                    loginAndNavigateToHomepage()
-                                }}>Login</Button>
+                        <Button variant="light" onClick={() => keycloakService.doRegister()}>Register</Button>
+                        <Button variant="primary" onClick={() => keycloakService.doLogin()}>Login</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <br/>
-            <br/>
-            <br/>
-            <Card className="writingStyle" style={writingStyle}>
-                <Card.Text>{slogan}</Card.Text>
+            <Card className="slogen">
+                <h2 className="textColorfull"> {slogan}</h2>
             </Card>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <CardGroup>
-                <Card className="writingStyle" style={writingStyle}>
-                    <Gradient dir="top-to-bottom" from="#007CF0" to="#00DFD8">
-                        <h2>{statistics.statistic1}</h2>
-                    </Gradient>
+            <CardGroup className="advertisementGroup">
+                <Card className="writingStyle">
+                    <h2  className="textDiagramm1">{advertisementState.data == null ?"Loading":advertisementState.data.diagram1}</h2>
                     <h6>Nachrichten wurden bereits versendet.</h6>
                 </Card>
-                <Card className="writingStyle" style={writingStyle}>
-                    <Gradient dir="top-to-bottom" from="#7928CA" to="#FF0080">
-                        <h2>{statistics.statistic2}</h2>
-                    </Gradient>
+                <Card className="writingStyle">
+                    <h2  className="textDiagramm2">{advertisementState.data == null ?"Loading":advertisementState.data.diagram2}</h2>
                     <h6>Einträge wurden bereits erstellt.</h6>
                 </Card>
-                <Card className="writingStyle" style={writingStyle}>
-                    <Gradient dir="top-to-bottom" from="#FF4D4D" to="#F9CB28">
-                        <h2>{statistics.statistic3}</h2>
-                    </Gradient>
+                <Card className="writingStyle">
+                    <h2  className="textDiagramm3">{advertisementState.data == null ?"Loading":advertisementState.data.diagram3}</h2>
                     <h6>registrierte User.</h6>
                 </Card>
             </CardGroup>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <Card className="writingStyle" style={writingStyle}>
+            <Card className="writingStyle">
                 <Card.Text>{desc}</Card.Text>
             </Card>
-            <br/>
-            <br/>
-            <br/>
         </>)
 }
 export default GuestSite

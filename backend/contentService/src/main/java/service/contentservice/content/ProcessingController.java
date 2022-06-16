@@ -5,7 +5,6 @@ import documentDatabaseModule.model.DocObjectIdUtil;
 import documentDatabaseModule.model.GroupDocument;
 import documentDatabaseModule.model.SavingEntry;
 import documentDatabaseModule.service.IGroupDocumentService;
-import dtoAndValidation.dto.content.CategoryDTO;
 import dtoAndValidation.dto.content.GeneralGroupInformationDTO;
 import dtoAndValidation.dto.inflation.InflationDto;
 import dtoAndValidation.dto.processing.*;
@@ -92,7 +91,7 @@ public class ProcessingController {
 
         //Resolve categories
         Set<Category> categories;
-        List<Category> categoryList = new ArrayList<>();
+        List<Category> categoryList = new ArrayList();
         GroupDocument groupDocument = groupDocumentService.getGroupDocument(groupId);
 
         if(groupDocument == null)
@@ -131,7 +130,7 @@ public class ProcessingController {
 
         if(filterInformation.getPersonIds().isEmpty()){
             allowedPersons = Set.copyOf(persons);
-            List<UUID> personIds = new ArrayList();
+            List<UUID> personIds = new ArrayList<>();
             for(KPerson person : persons) {
                 personIds.add(UUID.fromString(person.getId()));
             }
@@ -150,15 +149,6 @@ public class ProcessingController {
 
         Set<String> personNames = allowedPersons.stream().map(KPerson::getUsername).collect(Collectors.toSet());
 
-        //test
-       List<SavingEntry> entries = groupDocument.savingEntries;
-       for(SavingEntry entity: entries){
-           Date crationdate = entity.getCreationDate();
-           Date filterInfo = filterInformation.getEndDate();
-           int test =  crationdate.compareTo(filterInfo);
-            int a = 3;
-       }
-
 
         //Apply filter and sorting
         List<SavingEntry> filteredAndSortedEntries = groupDocument.savingEntries.
@@ -166,7 +156,9 @@ public class ProcessingController {
                 filter(savingEntry ->
                         savingEntry.
                         getCreationDate().
-                                compareTo(filterInformation.getStartDate()) > 0).
+                                compareTo(
+                                        filterInformation.getStartDate() == null ?
+                                                new Date(Long.MIN_VALUE): filterInformation.getStartDate()) > 0).
 
                 filter(savingEntry ->
                         savingEntry.
@@ -210,14 +202,16 @@ public class ProcessingController {
         Double income = 0d;
         Double outcome = 0d;
         for (SavingEntry filteredAndSortedEntry : filteredAndSortedEntries) {
+
             if (filteredAndSortedEntry.getCostBalance() >= 0)
                 income += filteredAndSortedEntry.getCostBalance();
-            outcome += filteredAndSortedEntry.getCostBalance();
+
+            else outcome += filteredAndSortedEntry.getCostBalance();
         }
         diagram1.setIncome(income);
         diagram1.setOutcome(outcome);
         diagram1.setBalance(income+outcome);
-        diagram1.setFutureBalance(diagram1.getBalance() + diagram1.getBalance() * inflationDto.getInflationValueInPercent());
+        diagram1.setFutureBalance(diagram1.getBalance() - (diagram1.getBalance() * (inflationDto.getInflationValueInPercent()*0.01)));
 
         result.setBalanceProcessResultDTO(diagram1);
 
@@ -233,8 +227,8 @@ public class ProcessingController {
 
                     SimpleDateFormat dateFormat = switch (filterInformation.getTimeInterval()){
                         case Day   -> new SimpleDateFormat("dd.MM.y");  //e.g. 17.03.2022
-                        case Week  -> new SimpleDateFormat("ww");       //e.g. Calendar week 02, 04, 05
-                        case Month -> new SimpleDateFormat("MMMM");     //e.g. September
+                        case Week  -> new SimpleDateFormat("ww.y");       //e.g. Calendar week 02, 04, 05 , 2022
+                        case Month -> new SimpleDateFormat("MMMM.y");     //e.g. September,  2022
                         case Year  -> new SimpleDateFormat("y");        //e.g. 2022
                     };
 
@@ -263,6 +257,7 @@ public class ProcessingController {
 
                 IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
                 intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndCategory.getKey().getName());
+                intervalBasedEntryValueDTO.setId(DocObjectIdUtil.toHexString(entryByTimeIntervalAndCategory.getKey().getId()));
 
                 Double sum = 0d;
 
@@ -292,7 +287,7 @@ public class ProcessingController {
             intervalGroupDTO.setDateRepresentation(entryByTimeInterval.getKey());
 
             Map<String, List<SavingEntry>> entriesByTimeIntervalAndUser =
-                    filteredAndSortedEntries.stream().
+                    entryByTimeInterval.getValue().stream().
                             collect(Collectors.groupingBy(SavingEntry::getCreator));
 
             //For each group of saving entries (grouped by interval and user) resolve the sum and name of creator
@@ -301,6 +296,11 @@ public class ProcessingController {
 
                 IntervalBasedEntryValueDTO intervalBasedEntryValueDTO = new IntervalBasedEntryValueDTO();
                 intervalBasedEntryValueDTO.setNameDescription(entryByTimeIntervalAndUser.getKey());
+                var name = entryByTimeIntervalAndUser.getKey();
+
+                var person = allowedPersons.stream().filter(searchedPerson -> name.equals(searchedPerson.getUsername())).findFirst();
+                person.ifPresent(kPerson -> intervalBasedEntryValueDTO.setId(kPerson.getId()));
+
                 Double sum = 0d;
 
                 for(SavingEntry savingEntry : entryByTimeIntervalAndUser.getValue()){

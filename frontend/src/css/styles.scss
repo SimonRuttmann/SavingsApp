@@ -1,16 +1,21 @@
-.charts {
-    margin: 900px;
-    font-size: 1rem;
-    font-weight: 1.5;
-    line-height: 1.5;
-    color: #292b2c;
-    background-color: #fff;
-}
 
 .writingStyle {
-    textAlign: center;
-    padding: 1%;
+    text-align: center;
     border: 0;
+}
+
+.card{
+    border:0 !important;
+}
+.advertisementGroup{
+    margin-bottom: 11rem;
+}
+
+.slogen {
+    text-align: center;
+    border: 0;
+    margin-top: 6rem;
+    margin-bottom: 9rem;
 }
 
 .buttonStyle {
