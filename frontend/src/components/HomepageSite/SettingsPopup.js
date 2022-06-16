@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    AddGroup,
     addGroup, addGroupFromInvitation,
     addNewGroup,
     fetchGeneralInformationToGroupFromServer, fetchGroupCoreInformationFromServer,
@@ -22,6 +23,7 @@ import makeAnimated from "react-select/animated";
 //notifications
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import {invite} from "../../api/services/User";
 //{ getActiveGroupId, setActiveGroupId}
 const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     const [getGroupId, setGroupId] = useState();
@@ -128,23 +130,31 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
             "username": ""+choosenUsername.value,
             "groupId": ""+getGroupId
         }
-        dispatch(invitePerson(newInvite))
+
+        let response = invite(newInvite)
+        response
+            .catch(()=> console.log("Error contacting server, cannot add GroupEntry"))
+
         NotificationManager.success(choosenUsername.value+" wurde eingeladen", "Einladung abgeschickt" );
         setChoosenUsername(null)
     }
 
     function acceptThisInvitation(invitation) {
-        dispatch(acceptAInvitation(invitation.groupId))
+
         const toAddGroup = {
             "groupName": ""+invitation.groupName,
             "id" : invitation.groupId,
             "personGroup": false
         }
-        dispatch( addGroupFromInvitation(toAddGroup)).then( () =>
-            dispatch(fetchGeneralInformationToGroupFromServer(invitation.groupId))
-        )
+
+        dispatch(acceptAInvitation(invitation.groupId)).then( () => {
+            dispatch(AddGroup(toAddGroup));
+            dispatch(fetchGeneralInformationToGroupFromServer(invitation.groupId));
+
+        })
+
         NotificationManager.success(choosenUsername.value+" wurde eingeladen", "Einladung abgeschickt" );
-        setTimeout(() => setNewGroupName(invitation.groupName), 100)
+
     }
 
     function declineThisInvitation(groupId) {
