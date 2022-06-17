@@ -16,11 +16,16 @@ public class AdvertisementServiceController {
     /**
      * @return returns the guest homepage index.html
      */
-    @GetMapping("/*")
+    @GetMapping("/")
     public ModelAndView index(){
-       ModelAndView modelAndView= new ModelAndView();
-       modelAndView.setViewName("/build/static/index.html");
-       return modelAndView;
+        try {
+            ModelAndView modelAndView= new ModelAndView();
+            modelAndView.setViewName("index");
+            return modelAndView;
+        } catch (Exception e) {
+            System.out.println("execption"+ e.getMessage());
+        }
+        return null;
     }
 
     /**

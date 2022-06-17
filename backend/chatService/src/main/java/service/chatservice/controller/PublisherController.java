@@ -20,7 +20,7 @@ public class PublisherController {
     private RedisPublisher redisPublisher;
 
     @PostMapping(path = "chat/message", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @CrossOrigin(origins = {"http://localhost:3000"})
+    @CrossOrigin(origins = {"http://localhost:8080"})
     public void sendMessageByApi(@RequestBody ChatMessagePayload message){
         String topic = message.getTopic();
         redisPublisher.publish(ChannelTopic.of(topic), message);
