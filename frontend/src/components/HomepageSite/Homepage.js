@@ -101,7 +101,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     const [currentFilterInformation, dispatchFilterInformation] = useReducer(currentFilterInformationReducer, {
         "sortParameter": "CreationDate",
         "timeInterval": "Day",
-        "startDate": null,
+        "startDate": new Date().setFullYear(new Date().getFullYear() - 1),
         "endDate": null,
         "filterUser": [],
         "filterCategory": []
