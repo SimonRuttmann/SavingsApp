@@ -192,6 +192,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         //fetch processing results
         let dataObject = currentFilterInformationToDataObject();
         dispatch(fetchProcessingResultsFromServer(getActiveGroupId, dataObject))
+            .catch(() => {
+                setActiveGroupId(groupInformationStore.find(group => group.personGroup === true).id)
+                NotificationManager.warning("Gruppendaten können gerade nicht geladen werden", "Ein Fehler ist aufgetreten",2000 );
+            })
 
         //Trigger selector clear
         triggerClearAllSelectors();
