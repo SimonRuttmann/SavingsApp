@@ -19,7 +19,7 @@ public class AdvertisementServiceController {
     @GetMapping("/*")
     public ModelAndView index(){
        ModelAndView modelAndView= new ModelAndView();
-       modelAndView.setViewName("index.html");
+       modelAndView.setViewName("/build/static/index.html");
        return modelAndView;
     }
 
