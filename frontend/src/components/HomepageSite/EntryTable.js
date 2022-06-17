@@ -18,7 +18,7 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
                 <Button onClick={() => deleteEntry(selectedEntry)} variant="secondary">Eintrag löschen</Button>
             </ButtonGroup>
             <Card.Body>
-                <Table responsive={"sm"} size={"sm"} className="entryTable" striped bordered hover>
+                <Table responsive size={"sm"} className="entryTable" striped bordered hover>
                     <thead>
                     <tr>
                         <th>Name</th>
