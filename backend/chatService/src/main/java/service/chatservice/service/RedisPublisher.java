@@ -30,7 +30,7 @@ public class RedisPublisher {
      * Messages is persisted for the given topic.
      * Integer SendMessages is incemented.
      * @param topic to be published on
-     * @param message
+     * @param message the message to publish
      */
     public void publish(ChannelTopic topic, ChatMessagePayload message) {
         ChatMessage publishedMessage = ChatMessage.getBuilder()
