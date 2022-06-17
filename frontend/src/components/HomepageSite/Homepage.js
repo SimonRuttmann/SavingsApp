@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // noinspection JSCheckFunctionSignatures
 
-import React, {useEffect, useReducer, useRef, useState} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import "../../css/styles.scss"
 import "../../css/homepage.scss"
@@ -23,6 +23,8 @@ import {EntryCreationBar} from "./EntryCreationBar";
 import {SearchBar} from "./SearchBar";
 import UpdateSavingEntry from "./UpdateSavingEntry";
 import CategoryEditingBar from "./CategoryEditingBar";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement);
 
@@ -99,7 +101,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     const [currentFilterInformation, dispatchFilterInformation] = useReducer(currentFilterInformationReducer, {
         "sortParameter": "CreationDate",
         "timeInterval": "Day",
-        "startDate": null,
+        "startDate": new Date().setFullYear(new Date().getFullYear() - 1),
         "endDate": null,
         "filterUser": [],
         "filterCategory": []
@@ -189,6 +191,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         //fetch processing results
         let dataObject = currentFilterInformationToDataObject();
         dispatch(fetchProcessingResultsFromServer(getActiveGroupId, dataObject))
+            .catch(() => {
+                setActiveGroupId(groupInformationStore.find(group => group.personGroup === true).id)
+                NotificationManager.warning("Gruppendaten können gerade nicht geladen werden", "Ein Fehler ist aufgetreten",2000 );
+            })
 
         //Trigger selector clear
         triggerClearAllSelectors();
@@ -243,18 +249,38 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     const [showMore, setShowMore] = useState(false)
 
     const addEntry = (entry) => {
+        if(entry.name == null || entry.name.trim() === "") {
+            NotificationManager.warning("Kein Name angegeben", "Invalide Eingabe",2000 );
+            return;
+        }
+        if(entry.category == null ){
+            NotificationManager.warning("Keine Kategorie angegeben", "Invalide Eingabe",2000 );
+            return;
+        }
         entry.creator = userStore.username;
         dispatch(addSavingEntryToServer(getActiveGroupId, entry))
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
-            })
-        setSelectedEntry(null);
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich erstellt", "Eintrag '"+entry.name+"'",2000 );
+                setSelectedEntry(null);
+            }).catch(() => {
+                NotificationManager.error("Eintrag konnte nocht erstellt werden", "Server konnte nicht erreicht werden",2000 );
+            });
     }
 
-    const deleteEntry = (id) => {
-        dispatch(deleteSavingEntryFromServer(getActiveGroupId, id))
+    const deleteEntry = (entry) => {
+        if(entry == null) {
+            NotificationManager.warning("", "Kein Eintrag ausgewählt",2000 );
+            return;
+        }
+        dispatch(deleteSavingEntryFromServer(getActiveGroupId, entry.id))
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+            }).then(() => {
+                NotificationManager.success("wurde gelöscht", "Eintrag '"+entry.name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Eintrag konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
         setSelectedEntry(null);
     }
@@ -263,6 +289,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(updateSavingEntryToServer(getActiveGroupId, entry))
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich geändert", "Eintrag '"+entry.name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Eintrag konnte nicht geändert werden", "Server konnte nicht erreicht werden",2000 );
             })
         setSelectedEntry(null);
     }
@@ -276,10 +306,14 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
         dispatch(addCategoryToServer(getActiveGroupId, category))
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich erstellt", "Kategorie '"+category.name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Kategorie konnte nicht erstellt werden", "Server konnte nicht erreicht werden",2000 );
             })
     }
 
-    const deleteCategory = (id) => {
+    const deleteCategory = (id, name) => {
         let newCategories = currentFilterInformation.filterCategory.filter( cat => cat.id !== id)
         dispatchFilterInformation({type: filterInformationAction.changeFilterCategories, payload: newCategories});
 
@@ -291,6 +325,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId,
                     currentFilterInformationToDataObject({...currentFilterInformation, filterCategory: newCategories})))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich gelöscht", "Kategorie '"+name+"'",2000 );
+            }).catch(() => {
+                NotificationManager.error("Kategorie konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
     }
 
@@ -309,6 +347,10 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId,
                     currentFilterInformationToDataObject({...currentFilterInformation, filterCategory: updatedCategories})))
+            }).then(() => {
+                NotificationManager.success("wurde erfolgreich umbennant", "Gewählte Kategorie",2000 );
+            }).catch(() => {
+                NotificationManager.error("Kategorie konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
     }
 
@@ -381,7 +423,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             <EntryCreationBar clearSelectors={clearCategorySelectors}
                               updateCategorySelector={updateCategorySelector}
                               setSelectedEntry = {setSelectedEntry}
-                              selectedEntry = {selectedEntry}
                               mappedCategories = {mappedCategories}
                               AddEntry = {addEntry}
                               setShowMore = {setShowMore}
@@ -406,8 +447,9 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
                             openUpdateEntry={triggerUpdateEntry}
                 />
             </CardGroup>
-
+            <NotificationContainer/>
         </React.Fragment>
+
     )
 }
 

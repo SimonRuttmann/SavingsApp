@@ -1,5 +1,6 @@
 import {Button, ButtonGroup, Card, Table} from "react-bootstrap";
 import React from "react";
+import {NotificationManager} from "react-notifications";
 
 
 export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntry, openUpdateEntry}) => {
@@ -10,11 +11,11 @@ export const EntryTable = ({entries, selectedEntry, setSelectedEntry, deleteEntr
             <ButtonGroup className="buttonStyle">
                 <Button
                     onClick={() => {
-                        if(selectedEntry == null) return;
+                        if(selectedEntry == null) {NotificationManager.warning("", "Kein Eintrag ausgewählt",2000 ); return;}
                         openUpdateEntry(selectedEntry)
                     }}
                     variant="secondary">Eintrag ändern</Button>
-                <Button onClick={() => deleteEntry(selectedEntry.id)} variant="secondary">Eintrag löschen</Button>
+                <Button onClick={() => deleteEntry(selectedEntry)} variant="secondary">Eintrag löschen</Button>
             </ButtonGroup>
             <Card.Body>
                 <Table responsive={"sm"} size={"sm"} className="entryTable" striped bordered hover>

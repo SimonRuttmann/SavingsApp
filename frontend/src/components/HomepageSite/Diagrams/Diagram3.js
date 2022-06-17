@@ -30,7 +30,7 @@ export const Diagram3 = ({diagramValues, selectedUsers, defaultFilterInformation
         dataSet.push( {
             label: label,
             data: dataValues,
-            backgroundColor: rainbow(index, selectedUsers.length),
+            backgroundColor: rainbow(selectedUsers.length,index),
         })
 
         index ++;

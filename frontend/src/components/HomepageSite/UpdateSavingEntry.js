@@ -73,8 +73,6 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
         handleClose();
     }
 
-//Select default value
-    // defaultValue = {{label: selectedEntry.category, value: selectedEntry.category.id, ...selectedEntry.category}}
     return (
         <>
             <Button variant="light" style={buttonStyle} onClick={handleShow}>
@@ -85,7 +83,7 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
                 <Modal.Header closeButton>
                     <Modal.Title>Eintrag ändern</Modal.Title>
                 </Modal.Header>
-                <Modal.Body >
+                <Modal.Body>
                     <Card>
                         <Card.Body>
                             <Form>
@@ -136,17 +134,15 @@ const UpdateSavingEntry = ({selectedEntry, updateEntry, mappedCategories, setOpe
 
                                 </Row>
                                 <Col className="buttonCol maxMarginLeft floatRight">
-                                <Form.Group className="buttonArea">
-                                    <Button onClick={() => perpareUpdate()}>Eintrag ändern</Button>
-                                </Form.Group>
-                            </Col>
+                                    <Form.Group className="buttonArea">
+                                        <Button onClick={() => perpareUpdate()}>Eintrag ändern</Button>
+                                    </Form.Group>
+                                </Col>
                             </Form>
                         </Card.Body>
                     </Card>
                 </Modal.Body>
-                <Modal.Footer>
-                </Modal.Footer>
-
+                <Modal.Footer/>
             </Modal>
         </>
 
