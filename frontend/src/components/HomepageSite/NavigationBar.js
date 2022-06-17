@@ -10,7 +10,7 @@ import {logout} from "../../reduxStore/UserSlice";
 import {useDispatch} from "react-redux";
 import {StompSessionProvider} from "react-stomp-hooks";
 
-export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, navToGuestSite, isLargeScreen}) => {
+export const NavigationBar = ({getActiveGroupId, setActiveGroupId, groupInformationStore, isLargeScreen}) => {
 
 
     const dispatch = useDispatch()

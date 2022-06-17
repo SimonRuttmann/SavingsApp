@@ -9,7 +9,7 @@ import de from 'date-fns/locale/de';
 import {isNumberOrDecimalString} from "../../utils/util";
 
 
-export const EntryCreationBar = ({selectedEntry, mappedCategories, AddEntry, setShowMore, showMore, clearSelectors, updateCategorySelector}) => {
+export const EntryCreationBar = ({ mappedCategories, AddEntry, setShowMore, showMore, clearSelectors, updateCategorySelector}) => {
 
 
     registerLocale('de', de)

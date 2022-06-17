@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // noinspection JSCheckFunctionSignatures
 
-import React, {useEffect, useReducer, useRef, useState} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js';
 import "../../css/styles.scss"
 import "../../css/homepage.scss"
@@ -125,7 +125,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
     useEffect( () => {
         dispatch(login(KeyCloakService.getToken()));
         dispatch(fetchUserDataFromServer());
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         dispatch(fetchGroupCoreInformationFromServer())
             .then(setLoadingCoreInformation(true));
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -279,7 +278,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             .then(() => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             }).then(() => {
-                NotificationManager.success("wurde gelöscht", "Eintag '"+entry.name+"'",2000 );
+                NotificationManager.success("wurde gelöscht", "Eintrag '"+entry.name+"'",2000 );
             }).catch(() => {
                 NotificationManager.error("Eintrag konnte nicht gelöscht werden", "Server konnte nicht erreicht werden",2000 );
             })
@@ -291,7 +290,7 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             .then( () => {
                 dispatch(fetchProcessingResultsFromServer(getActiveGroupId, currentFilterInformationToDataObject()))
             }).then(() => {
-                NotificationManager.success("wurde erfolgreich geändert", "Eintag '"+entry.name+"'",2000 );
+                NotificationManager.success("wurde erfolgreich geändert", "Eintrag '"+entry.name+"'",2000 );
             }).catch(() => {
                 NotificationManager.error("Eintrag konnte nicht geändert werden", "Server konnte nicht erreicht werden",2000 );
             })
@@ -424,7 +423,6 @@ const Homepage = ({getActiveGroupId,setActiveGroupId}) => {
             <EntryCreationBar clearSelectors={clearCategorySelectors}
                               updateCategorySelector={updateCategorySelector}
                               setSelectedEntry = {setSelectedEntry}
-                              selectedEntry = {selectedEntry}
                               mappedCategories = {mappedCategories}
                               AddEntry = {addEntry}
                               setShowMore = {setShowMore}
