@@ -1,4 +1,3 @@
-import { useKeycloak } from "@react-keycloak/web";
 import keycloak from "../Auth"
 import {useHistory} from "react-router-dom";
 
