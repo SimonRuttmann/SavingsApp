@@ -14,11 +14,19 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
 
     const prepareCreate = () => {
         let name = nameRef.current.value;
-        if(name != null && name.trim() !== ""){
-            addCategory({name: name});
-        } else {
+
+        if(name == null || name.trim() === ""){
             NotificationManager.warning("Kein Kategoriename angegeben", "Invalide Eingabe",2000 );
+            return;
         }
+
+        if(name.length>20) {
+            NotificationManager.warning("Maximal 20 Zeichen erlaubt", "Kategoriename ist zulang",2000 );
+            return;
+        }
+
+        addCategory({name: name});
+
     }
 
 
@@ -77,6 +85,11 @@ const CategoryEditingBar = ({clearSelectors, addCategory, deleteCategory, mapped
 
         if(name == null || name.trim() === ""){
             NotificationManager.warning("Kein neuer Kategoriename angegeben", "Invalide Eingabe",2000 );
+            return;
+        }
+
+        if(name.length>20) {
+            NotificationManager.warning("Maximal 20 Zeichen erlaubt", "Kategoriename ist zulang",2000 );
             return;
         }
 
