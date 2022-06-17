@@ -25,7 +25,7 @@ public class SubscriberController {
     private IRedisChatPersistenceService redisChatPersistenceService;
 
     @GetMapping(path = "/rooms/{topic}/messages")
-    @CrossOrigin(origins = {"http://localhost:3000"})
+    @CrossOrigin(origins = {"http://localhost:8080"})
     public ResponseEntity<?> getChatMessages(@PathVariable("topic") String topic) {
         try {
             if (topic != null) {
@@ -39,7 +39,7 @@ public class SubscriberController {
     }
 
     @GetMapping("/sub/{topic}")
-    @CrossOrigin(origins = {"http://localhost:3000"})
+    @CrossOrigin(origins = {"http://localhost:8080"})
     public ResponseEntity<?> subChannel(@PathVariable("topic") String topic){
         return subscriptionService.subscribeToChannel(new ChannelTopic(topic));
     }
