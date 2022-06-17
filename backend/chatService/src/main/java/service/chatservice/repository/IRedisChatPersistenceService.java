@@ -2,7 +2,6 @@ package service.chatservice.repository;
 
 import service.chatservice.model.ChatMessage;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public interface IRedisChatPersistenceService {

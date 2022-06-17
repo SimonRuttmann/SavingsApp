@@ -40,8 +40,8 @@ public class SubscriberController {
 
     @GetMapping("/sub/{topic}")
     @CrossOrigin(origins = {"http://localhost:3000"})
-    public void subChannel(@PathVariable("topic") String topic){
-        subscriptionService.subscribeToChannel(new ChannelTopic(topic));
+    public ResponseEntity<?> subChannel(@PathVariable("topic") String topic){
+        return subscriptionService.subscribeToChannel(new ChannelTopic(topic));
     }
 
     @GetMapping("/unsub/{topic}")
