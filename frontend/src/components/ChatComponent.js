@@ -17,7 +17,6 @@ function ChatComponent(getActiveGroupId ) {
     const userStore = useSelector(selectUserStore);
 
     //All saved messages
-    const [displayedMessages, setDisplayedMessages] = useState([])
     const [messages, setMessages] = useState([]);
     const [show, setShow] = useState(false);
     const topic = useRef(null)

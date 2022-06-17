@@ -2,12 +2,6 @@ import {createSlice} from "@reduxjs/toolkit";
 import {getGroupInfo} from "../api/services/Content";
 import {deleteGroup, getGroup, leaveGroup, register} from "../api/services/User";
 
-/**
- * Long id,
- * String groupName,
- * boolean personGroup,
- * [] persons      string  id, string username, string email
- */
 
 const groupInformationSlice = createSlice({
     name: 'groupInformation',
@@ -26,7 +20,7 @@ const groupInformationSlice = createSlice({
             })
 
         },
-        //Based on ContentService - ProcessingController /content/processing/{groupId} TODO id must be added on calling function
+        //Based on ContentService - ProcessingController /content/processing/{groupId}
         //List<PersonDTO> personDTOList, StringGroupName
         AddGeneralInformationToGroup: (state, action) => {
             let group = state.find(group => group.id === action.payload.id)
@@ -43,15 +37,6 @@ const groupInformationSlice = createSlice({
         RemoveGroup: (state, action) => {
             return state.filter(group => group.id !== action.payload.id);
         },
-//        AddMember: (state, action) => {
-//            let group = state.find(group => group.id === action.payload.id);
-//            group.personDTOList.push({
-//                person.
-//            })
-//        },
-//        RemoveMember: (state, action) => {
-//
-//        }
     }
 })
 

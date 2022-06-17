@@ -1,6 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {acceptInvitation, declineInvitation, getUser, getUsernames, invite, receive} from "../api/services/User";
-import {AddGroupCoreInformation} from "./GroupInformationSlice";
+import {acceptInvitation, declineInvitation, getUser, getUsernames, receive} from "../api/services/User";
 
 export const userSlice = createSlice({
     name: "user",
@@ -51,10 +50,6 @@ export const fetchInvitations = () => (dispatch) => {
 export default userSlice.reducer
 
 export const selectUserStore = (state) => state.user;
-
-export const selectUserNamesStore = (state) => state.usernames;
-
-export const selectUserInvitationsStore = (state) => state.invitations;
 
 
 export const declineAInvitation = (groupId) => (dispatch) => {

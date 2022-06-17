@@ -38,7 +38,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
 
     const groupNameRef = useRef(null)
 
-    //gruppe initialisieren
+    //initialize group
     let selectedGroup
     if(getGroupId == null){
         selectedGroup = (groupInformationStore.find(group => group.id === getActiveGroupId));
@@ -55,6 +55,8 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         setGroupId(nextGroup.id)
         if(group.personGroup === true){ setShowInvite(false) }
     }
+
+    // Group functions
     function addGroup(){
 
         if(groupNameRef.current.value == null || groupNameRef.current.value.trim() === "") {
@@ -71,6 +73,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
             const newGroup = {
                 "groupName": ""+newGroupNameInput
             }
+
             dispatch(addNewGroup(newGroup)).then(id => {
                 return dispatch(fetchGeneralInformationToGroupFromServer(id))
             }).then( () => {
@@ -78,10 +81,8 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
                 NotificationManager.success("erfolgreich erstellt", "Neue Gruppe '" + newGroupNameInput + "'",2000);
             }).catch(() => {
                 NotificationManager.error("Gruppe konnte nicht erstellt werden", "Server konnte nicht erreicht werden",2000);
-            })
+            });
 
-            //setTimeout(() => setNewGroupName(newGroupNameInput), 100)
-            //dispatch(fetchGeneralInformationToGroupFromServer(group.id))
         } else {
             NotificationManager.warning("'Ich' darf nicht verwendet werden", "Invalider Gruppenname",2000 );
         }
@@ -90,6 +91,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     function LeaveGroup(id, gruppenname) {
         let newFokus = groupInformationStore.find(group => group.personGroup === true)
         if(id === getActiveGroupId) setActiveGroupId(newFokus.id)
+
         dispatch(leaveAGroup(id)).then(() => {
             setGroupId(newFokus.id)
             NotificationManager.success("und aus der Liste entfernt", "Gruppe '"+gruppenname+"' verlassen", 2000 );
@@ -101,6 +103,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
     function DeleteGroup(id, gruppenname) {
         let newFokus = groupInformationStore.find(group => group.personGroup === true)
         if(id === getActiveGroupId) setActiveGroupId(newFokus.id)
+
         dispatch(leaveAGroup(id)).then(() => {
             setGroupId(newFokus.id)
             NotificationManager.success("und aus der Liste entfernt", "Gruppe '"+gruppenname+"' gelöscht", 2000 );
@@ -109,7 +112,9 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         })
     }
 
-    //check if username valid
+    //invitations
+
+    //check if usernames valid
     const updateUsernameOptions = () => {
         let options = []
         userStore.usernames.map(username =>{
@@ -164,9 +169,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         }).catch( () => {
             NotificationManager.error("Einladung konnte nicht angenommen werden", "Server konnte nicht erreicht werden", 2000);
         })
-
-
-
     }
 
     function declineThisInvitation(groupId, gruppenname) {
@@ -176,7 +178,6 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         }).catch(() => {
             NotificationManager.error("Einladung konnte nicht abgelehnt werden", "Server konnte nicht erreicht werden", 2000);
         })
-        //setNewGroupName(groupName)
     }
 
     return (
@@ -267,24 +268,23 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
             <div className={"row mt-2 col-md-12"}>
                 { !showInvitations && <Button className={"addGroupButton"} onClick={ () => setInvitations(true)} variant="secondary">Meine Einladungen</Button>}
             </div>
-
-            <h5 styleclass={"topMarginText"}>Meine Gruppen:</h5>
-            { groupInformationStore.map(group =>
-                <h6 className={selectedGroup != null && selectedGroup.id === group.id ? "selectedGroup" : ""} onClick={ () => changeGroup(group)} key={`Settings-Group-${group.id}`}>{group.groupName}</h6>)}
-            <h5>Mitglieder:</h5>
-            { selectedGroup.personDTOList.map(user => <h6 key={`Settings-Group-${user.username}`}>{user.username}</h6>)}
+                <h5 styleclass={"topMarginText"}>Meine Gruppen:</h5>
+                { groupInformationStore.map(group =>
+                    <h6 className={selectedGroup != null && selectedGroup.id === group.id ? "selectedGroup" : ""} onClick={ () => changeGroup(group)} key={`Settings-Group-${group.id}`}>{group.groupName}</h6>)}
+                <h5>Mitglieder:</h5>
+                { selectedGroup.personDTOList.map(user => <h6 key={`Settings-Group-${user.username}`}>{user.username}</h6>)}
             <div className="row">
-            <Col>
-            <Button disabled={!!selectedGroup.personGroup} onClick={ () => LeaveGroup(selectedGroup.id, selectedGroup.groupName)} variant="secondary">Gruppe Verlassen</Button>
-            </Col>
-            <Col>
-                <Button disabled={!!selectedGroup.personGroup} onClick={ () => DeleteGroup(selectedGroup.id, selectedGroup.groupName)} variant="secondary">Gruppe löschen</Button>
-            </Col>
+                <Col>
+                    <Button disabled={!!selectedGroup.personGroup} onClick={ () => LeaveGroup(selectedGroup.id, selectedGroup.groupName)} variant="secondary">Gruppe Verlassen</Button>
+                </Col>
+                <Col>
+                    <Button disabled={!!selectedGroup.personGroup} onClick={ () => DeleteGroup(selectedGroup.id, selectedGroup.groupName)} variant="secondary">Gruppe löschen</Button>
+                </Col>
             </div>
         </Modal.Body>
         <Modal.Footer>
         </Modal.Footer>
-</Modal>
+    </Modal>
     );
 };
 
