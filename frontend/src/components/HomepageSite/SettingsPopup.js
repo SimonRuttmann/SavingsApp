@@ -3,7 +3,7 @@ import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {
     AddGroup,
-    addNewGroup,
+    addNewGroup, deleteAGroup,
     fetchGeneralInformationToGroupFromServer,
     leaveAGroup,
     selectGroupInformationStore
@@ -104,7 +104,7 @@ const SettingsPopup = ({ getActiveGroupId, setActiveGroupId, onHide,show}) => {
         let newFokus = groupInformationStore.find(group => group.personGroup === true)
         if(id === getActiveGroupId) setActiveGroupId(newFokus.id)
 
-        dispatch(leaveAGroup(id)).then(() => {
+        dispatch(deleteAGroup(id)).then(() => {
             setGroupId(newFokus.id)
             NotificationManager.success("und aus der Liste entfernt", "Gruppe '"+gruppenname+"' gelöscht", 2000 );
         }).catch(() => {

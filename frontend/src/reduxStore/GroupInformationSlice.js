@@ -91,5 +91,6 @@ export const deleteAGroup = (groupId) => (dispatch) => {
         let response = deleteGroup(groupId)
         response.then(response => dispatch(RemoveGroup(response.data)))
                 .then(() => resolve(null))
+                .catch(()=> reject("Error contacting server, cannot delete Group"))
     })
 }
