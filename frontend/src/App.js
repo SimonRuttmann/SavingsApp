@@ -8,9 +8,6 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 
 function App() {
 
-
-
-
   const [getActiveGroupId, setActiveGroupId] = useState(null);
 
   return (

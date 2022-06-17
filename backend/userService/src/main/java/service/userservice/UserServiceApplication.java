@@ -25,11 +25,7 @@ public class UserServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
-        if(MigrateTestData.equals(System.getenv("test"))) {
-            mongoTestDataCreator.createTestData();
-        }
-
+        mongoTestDataCreator.createTestData();
     }
 
 

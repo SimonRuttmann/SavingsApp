@@ -55,7 +55,7 @@ export const ContentSlice = createSlice({
 
 export const fetchProcessingResultsFromServer = (groupId, filterInformation) => (dispatch) => {
     let response = getSavingEntriesProcessed(groupId, filterInformation)
-    response.then(response => dispatch(updateProcessingData(response.data)));
+    return response.then(response => dispatch(updateProcessingData(response.data)))
 }
 
 export const addSavingEntryToServer = (groupId, savingEntry) => (dispatch) => {

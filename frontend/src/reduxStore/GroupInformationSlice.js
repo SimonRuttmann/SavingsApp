@@ -2,12 +2,6 @@ import {createSlice} from "@reduxjs/toolkit";
 import {getGroupInfo} from "../api/services/Content";
 import {deleteGroup, getGroup, leaveGroup, register} from "../api/services/User";
 
-/**
- * Long id,
- * String groupName,
- * boolean personGroup,
- * [] persons      string  id, string username, string email
- */
 
 const groupInformationSlice = createSlice({
     name: 'groupInformation',
@@ -16,16 +10,17 @@ const groupInformationSlice = createSlice({
         //Based on UserService - GroupController userservice/group/
         //Long id, String groupName, boolean personGroup
         AddGroupCoreInformation: (state, action) => {
-            action.payload.forEach( group =>
+            action.payload.forEach( group => {
+                if( state.find(g => g.id === group.id) != null) return
                 state.push({
                     id: group.id,
                     groupName: group.groupName,
                     personGroup: group.personGroup
                 })
-            )
+            })
 
         },
-        //Based on ContentService - ProcessingController /content/processing/{groupId} TODO id must be added on calling function
+        //Based on ContentService - ProcessingController /content/processing/{groupId}
         //List<PersonDTO> personDTOList, StringGroupName
         AddGeneralInformationToGroup: (state, action) => {
             let group = state.find(group => group.id === action.payload.id)
@@ -42,15 +37,6 @@ const groupInformationSlice = createSlice({
         RemoveGroup: (state, action) => {
             return state.filter(group => group.id !== action.payload.id);
         },
-//        AddMember: (state, action) => {
-//            let group = state.find(group => group.id === action.payload.id);
-//            group.personDTOList.push({
-//                person.
-//            })
-//        },
-//        RemoveMember: (state, action) => {
-//
-//        }
     }
 })
 
@@ -80,16 +66,15 @@ export const fetchGeneralInformationToGroupFromServer = (groupId) => (dispatch) 
 export const addNewGroup = (groupBody) => (dispatch) =>{
     return new Promise((resolve, reject) => {
         let response = register(groupBody)
-        response.then(response => dispatch(AddGroup(response.data)))
-                .then(() => resolve(null))
-                .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+        response.then(response => {
+            dispatch(AddGroup(response.data));
+            return response.data;
+        })
+            .then((data) => {
+                resolve(data.id);
+            })
+            .catch(()=> reject("Error contacting server, cannot add group"))
     });
-}
-
-export const addGroupFromInvitation = (groupBody) => (dispatch) =>{
-        console.log("we add group from Invitation")
-         dispatch(AddGroup(groupBody))
-
 }
 
 export const leaveAGroup = (groupId) => (dispatch) => {
@@ -97,7 +82,7 @@ export const leaveAGroup = (groupId) => (dispatch) => {
         let response = leaveGroup(groupId)
         response.then(response => dispatch(RemoveGroup(response.data)))
                 .then(() => resolve(null))
-                .catch(()=> reject("Error contacting server, cannot add GroupEntry"))
+                .catch(()=> reject("Error contacting server, cannot leave Group"))
     })
 }
 
@@ -106,5 +91,6 @@ export const deleteAGroup = (groupId) => (dispatch) => {
         let response = deleteGroup(groupId)
         response.then(response => dispatch(RemoveGroup(response.data)))
                 .then(() => resolve(null))
+                .catch(()=> reject("Error contacting server, cannot delete Group"))
     })
 }
