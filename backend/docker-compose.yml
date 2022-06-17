@@ -35,7 +35,7 @@ services:
       context: ./advertisementservice
       dockerfile: Dockerfile
     ports:
-      - "8010:8080"
+      - "8080:8080"
   userservice:
     container_name: cAndD_user_service
     #restart: on-failure
