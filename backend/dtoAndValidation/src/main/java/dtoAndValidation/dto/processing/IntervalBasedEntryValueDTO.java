@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Used as entries inside a given time interval
+ * Used for entries inside a given time interval
  * Can represent a user or category with the sum of corresponding entries
  */
 @Data
