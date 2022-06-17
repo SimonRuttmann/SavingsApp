@@ -3,6 +3,7 @@ package dtoAndValidation.validation;
 import dtoAndValidation.dto.user.InviteDTO;
 
 public class InviteValidator implements IValidator<InviteDTO> {
+
     @Override
     public boolean validate(InviteDTO toValidate, boolean withId) {
 

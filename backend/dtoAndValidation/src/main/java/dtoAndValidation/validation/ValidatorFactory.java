@@ -8,7 +8,13 @@ import dtoAndValidation.dto.user.InviteDTO;
 
 import java.util.Map;
 
+/**
+ *  Singleton factory to receive a validator for a given validatable type
+ * @see IValidator
+ * @see IValidatable
+ */
 public class ValidatorFactory{
+
     private static ValidatorFactory instance;
     private final Map<Class<? extends IValidatable>, IValidator<?>> registry;
 

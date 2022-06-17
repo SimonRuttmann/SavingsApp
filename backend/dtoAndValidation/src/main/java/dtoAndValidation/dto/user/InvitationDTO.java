@@ -12,8 +12,11 @@ import java.util.Date;
 public class InvitationDTO {
 
     private Long groupId;
+
     private String groupName;
+
     private Date date = null;
+
     private String status = null;
 
     public InvitationDTO(String invitationStatus, Long id, String groupName, Date date) {

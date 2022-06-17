@@ -17,8 +17,6 @@ public class UserServiceApplication implements CommandLineRunner {
     @Autowired
     private MongoTestDataCreator mongoTestDataCreator;
 
-    private static final String MigrateTestData = "migrate";
-
     public static void main(String[] args)  {
         SpringApplication.run(UserServiceApplication.class, args);
     }

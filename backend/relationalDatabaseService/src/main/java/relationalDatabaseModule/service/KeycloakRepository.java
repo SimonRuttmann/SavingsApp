@@ -7,7 +7,6 @@ import relationalDatabaseModule.model.KPerson;
 
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public interface KeycloakRepository extends JpaRepository<KPerson,String>, RepositoryDetachAdapterCustom<KPerson>{

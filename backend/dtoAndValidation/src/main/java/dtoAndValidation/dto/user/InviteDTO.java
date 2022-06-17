@@ -5,6 +5,7 @@ import dtoAndValidation.validation.IValidatable;
 public class InviteDTO implements IValidatable {
 
     public String username;
+
     public Long groupId;
 
     public InviteDTO(String username, Long groupId) {

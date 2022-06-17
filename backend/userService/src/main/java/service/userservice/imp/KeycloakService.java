@@ -23,7 +23,7 @@ public class KeycloakService {
     public String getPersonById(String id){
         Optional<KPerson> person = keycloakRepository.findById(id);
         if(person.isEmpty()) return null;
-        //keycloakRepository.detach(person.get());
+
         return person.get().getId();
     }
 }
