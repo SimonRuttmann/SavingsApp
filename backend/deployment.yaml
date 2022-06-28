@@ -1,0 +1,69 @@
+# docker compose up --build
+# snippet
+
+# docker build -t simonRuttmann/DockerName <PfadDockerFile>
+# docker push repositoryName/nameVonContainer
+
+# kubectl delete -f deployment.yaml
+# kubectl create -f deployment.yaml
+# kubectl create -f service.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: haushaltsapp
+spec:
+  selector:
+    matchLabels:
+      app: haushaltsapp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: haushaltsapp
+    spec:
+      containers:
+        - name: mongodb
+          image: sruttmann/cnd_mongo
+          ports:
+            - containerPort: 27017
+        - name: redis
+          image: sruttmann/cnd_redis
+          ports:
+            - containerPort: 6379
+        - name: postgres
+          image: sruttmann/cnd_postgres
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: db0
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: password
+        - name: advertismentservice
+          image: sruttmann/cnd_advert
+          ports:
+            - containerPort: 8080
+        - name: userservice
+          image: sruttmann/cnd_user
+          ports:
+            - containerPort: 8011
+        - name: contentservice
+          image: sruttmann/cnd_content
+          ports:
+            - containerPort: 8012
+        - name: inflationservice
+          image: sruttmann/cnd_inflation
+          ports:
+            - containerPort: 8013
+        - name: chatservice
+          image: sruttmann/cnd_chat
+          ports:
+            - containerPort: 8014
+        - name: keycloak
+          image: sruttmann/cnd_keycloak
+          ports:
+            - containerPort: 8090
+
