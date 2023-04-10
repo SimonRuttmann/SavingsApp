@@ -1,3 +1,7 @@
+# Additional Info *
+The content of the directory src is split into the folders 
+backend and frontend.
+
 # Indication of Authorship #
 
 In the following, each person is assigned a list of files.
