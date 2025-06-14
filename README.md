@@ -20,6 +20,7 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
 - Shared group data
 - Real-time communication features
 - Data visualization and projections
+- Full Mobile and desktop-sized Webbrowser support
 - Scalability in mind
 
 ---
