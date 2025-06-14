@@ -1,8 +1,7 @@
 # 💰 SparApp – Save Smart. Spend Smarter.
 
-**SparApp** is a modern full-stack budgeting tool – designed with students, roommates, and small groups in mind.
-
-From creating personal and group savings entries to visualizing trends and chatting in real-time – this app does it all.
+**SparApp** is a full-stack budgeting and savings application – designed for students, roommates, and small groups.  
+Track entries, collaborate with others, and visualize trends – all in real time, across devices.
 
 <p align="center">
   <img src="media/gifs/crop/savingentry-visualization-crop.gif" width="65%"/>
@@ -12,21 +11,21 @@ From creating personal and group savings entries to visualizing trends and chatt
 ---
 
 <!-- TOC -->
- [💰 SparApp – Save Smart. Spend Smarter.](#-sparapp--save-smart-spend-smarter)
-  * [🎓 Project & Context](#-project--context)
-  * [🌐 Core Features](#-core-features)
-  * [🔨 Technical Overview](#-technical-overview)
-  * [🔧 Architectural Overview](#-architectural-overview)
-  * [🎞️ Feature Highlights](#-feature-highlights)
-    * [🔐 User Management](#-user-management)
-    * [📊 Visualizing Entries](#-visualizing-entries)
-    * [✏️ Managing Entries and 🗂️ Categories](#-managing-entries-and--categories)
-    * [👥 Managing Groups](#-managing-groups)
-    * [💬 Real-Time Group Chat](#-real-time-group-chat)
-    * [📱 Mobile Visualization](#-mobile-visualization)
-  * [🧑‍💻 Teamwork Makes the Dream Work](#-teamwork-makes-the-dream-work)
-  * [📜 License](#-license)
-  * [🖼️ Videos](#-videos)
+[💰 SparApp – Save Smart. Spend Smarter.](#-sparapp--save-smart-spend-smarter)
+* [🎓 Project & Context](#-project--context)
+* [🌐 Core Features](#-core-features)
+* [🔨 Technical Overview](#-technical-overview)
+* [🔧 Architectural Overview](#-architectural-overview)
+* [🎞️ Feature Highlights](#-feature-highlights)
+  * [🔐 User Management](#-user-management)
+  * [📊 Visualizing Entries](#-visualizing-entries)
+  * [✏️ Managing Entries and 🗂️ Categories](#-managing-entries-and--categories)
+  * [👥 Managing Groups](#-managing-groups)
+  * [💬 Real-Time Group Chat](#-real-time-group-chat)
+  * [📱 Mobile Visualization](#-mobile-visualization)
+* [🧑‍💻 Teamwork Makes the Dream Work](#-teamwork-makes-the-dream-work)
+* [📜 License](#-license)
+* [🖼️ Videos](#-videos)
 <!-- TOC -->
 
 ---
@@ -57,8 +56,7 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
 | 🤝 Groups               | Create, join, leave groups; invite users                                 |
 | 💬 Chat                 | Real-time group chat with WebSocket & Redis                              |
 | 🔍 Filters              | Search and filter entries in flexible dashboards                         |
-| 📉 Inflation Support    | Adjust savings and forecasts using real inflation data                   |
-
+| 📉 Inflation Support    | Adjust savings and forecasts using real inflation data
 ---
 
 ## 🔨 Technical Overview
@@ -68,23 +66,22 @@ technologies in order to gain a broad overview. These are the technologies we us
 
 ![](media/screenshots/design/technologies.png)
 
-- **Frontend:** 
-  - React.js 
+- **Frontend:**
+  - React.js
   - Redux Store
-  - REST API integration 
+  - REST API integration
   - Keycloak Auth integration
-- **Backend:** 
+- **Backend:**
   - Multiple Java Spring Boot Microservices
-- **Auth:** 
+- **Auth:**
   - Keycloak
-- **Databases:** 
+- **Databases:**
   - PostgreSQL
   - MongoDB
   - Redis (Sub/Pub Plugin)
-- **Deployment:** 
-  - Docker 
+- **Deployment:**
+  - Docker
   - Kubernetes
-
 ---
 
 ## 🔧 Architectural Overview
@@ -104,7 +101,7 @@ for example, to the persistence of objects or validation of shared Data Transfer
 ![](media/screenshots/design/package-diagram.png)
 
 The application is designed in a cloud-ready manner.
-For our non-production operation, we operated the databases directly in 
+For our non-production operation, we operated the databases directly in
 kubernetes in pods. The remaining applications are provided via deployments
 and exposed with services.
 
@@ -116,15 +113,14 @@ and exposed with services.
 ### 🔐 User Management
 
 The application is secured by an **OIDC Authorization Code Flow** implemented by **Keycloak**.
-
-
-<div align="center">
-<img src="media/gifs/crop/user-management-login-crop.gif" />
-</div>
+Users can register, log in, and join multiple groups.
 
 <div align="center">
-<img src="media/gifs/crop/user-management-registration-crop.gif" />
+  <img src="media/gifs/crop/user-management-login-crop.gif"/>
+  <img src="media/gifs/crop/user-management-registration-crop.gif"/>
 </div>
+
+---
 
 ### 📊 Visualizing Entries
 
@@ -135,42 +131,43 @@ The dashboard visualizes:
 - User-specific and group-based trends
 - Historical + future budget projections (with inflation!)
 
----
-
 <div align="center">
-<img src="media/gifs/crop/savingentry-visualization-crop.gif" />
+  <img src="media/gifs/crop/savingentry-visualization-crop.gif"/>
 </div>
+
+---
 
 ### ✏️ Managing Entries and 🗂️ Categories
 
 Well what would you expect from a saving app? 😅
 
-We support:
-- Full CRUD for entries
-- Full CRUD for categories
+SparApp offers full:
+- 📝 Entry CRUD (create, read, update, delete)
+- 🗂️ Category CRUD (personal & group-wide)
 
 <div align="center">
-<img src="media/gifs/crop/savingentry-creation-crop.gif" />
+  <img src="media/gifs/crop/savingentry-creation-crop.gif"/>
+  <img src="media/gifs/crop/savingentry-edit-delete-crop.gif"/>
+  <img src="media/gifs/crop/category-creation-crop.gif"/>
 </div>
 
-<div align="center">
-<img src="media/gifs/crop/savingentry-edit-delete-crop.gif" />
-</div>
-
-<div align="center">
-<img src="media/gifs/crop/category-creation-crop.gif" />
-</div>
+---
 
 ### 👥 Managing Groups
 
-Everyone can create groups and invite people.
-People accept those invitations. Of course they can also leave the groups.
-People within the same group can chat to each other via the real-time chat.
-Groups also enable filtering of expenses based on the individual members.
+Users can:
+
+- Create new groups
+- Send and accept invitations
+- Leave groups at any time
+
+Groups enable member-specific filtering and communication through integrated chat.
 
 <div align="center">
-<img src="media/gifs/crop/group-management-crop.gif" />
+  <img src="media/gifs/crop/group-management-crop.gif"/>
 </div>
+
+---
 
 ### 💬 Real-Time Group Chat
 
@@ -180,18 +177,17 @@ Stay in sync with your group through an integrated chat system – powered by:
 - Pub/Sub channels powered by a Redis-Plugin
 - Message history persistence
 
-
 <div align="center">
-<img src="media/gifs/crop/group-chat-send-crop.gif"/>
+  <img src="media/gifs/crop/group-chat-send-crop.gif"/>
+  <img src="media/gifs/crop/group-chat-receive-crop.gif"/>
 </div>
 
-<div align="center">
-<img src="media/gifs/crop/group-chat-receive-crop.gif"/>
-</div>
+---
 
 ### 📱 Mobile Visualization
 
-The whole app is designed with mobile devices in mind!
+All features are fully mobile-compatible.  
+Even on smaller screens, charts, filters, and controls remain accessible and intuitive.
 
 <p align="center">
   <img src="media/gifs/crop/mobile-slide-to-bottom-crop.gif" width="200"/>
@@ -199,7 +195,6 @@ The whole app is designed with mobile devices in mind!
 </p>
 
 ---
-
 
 ## 🧑‍💻 Teamwork Makes the Dream Work
 
@@ -214,12 +209,14 @@ Developed by:
 
 ## 📜 License
 
-This project is licensed under the [Apache 2.0 License](LICENSE).
-Feel free to use or remix it – just give proper credit. 🤝
+Licensed under the [Apache 2.0 License](LICENSE).  
+Feel free to fork, adapt, and use it – just give credit. 🤝
+
+---
 
 ## 🖼️ Videos
 
-🎬 [Watch Desktop-Walkthrough (MP4)](media/video/Desktop-Walkthrough.mp4)
+🎬 [Watch Desktop Walkthrough (MP4)](media/video/Desktop-Walkthrough.mp4)  
+🎬 [Watch Mobile Walkthrough (MP4)](media/video/Mobile-Walkthrough.mp4)
 
-🎬 [Watch Mobile-Walkthrough (MP4)](media/video/Mobile-Walkthrough.mp4)
-
+---
