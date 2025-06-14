@@ -1,342 +1,105 @@
-# Additional Info *
-The content of the directory src is split into the folders 
-backend and frontend.
+# 💰 SparApp – Save Smart. Spend Smarter.
 
-# Indication of Authorship #
+**SparApp** is a modern full-stack budgeting tool – designed with students, roommates, and small groups in mind.
 
-In the following, each person is assigned a list of files.
-In general most files were created in collaboration. 
-Therefor only the main contributions are shown in the list below.
+From creating personal and group savings entries to visualizing trends and chatting in real-time – this app does it all.
 
-Note that due to the contribution withing the project some files occur at multiple contributors.
-
-This applies fully to the "Frontend" component, as this was developed completely together 
-by Michael Ulrich, Simon Ruttmann and Veronika Scheller after the disappearance of Robin Roecker.
-
-### Simon Ruttmann ###
-
-#### ContentService ####
-* GroupAuthorizationInterceptor
-* GroupAuthorizationInterceptorConfig
-* KeycloakConfiguration
-* SecurityConfig
-* SwaggerConfiguration
-* CategoryController
-* ProcessingController
-* SavingEntryController
-* ContentServiceMapper
-
-#### DocumentDatabaseService ####
-* Category
-* DocObjectIdUtil
-* GroupDocument
-* IGroupDocumentRepository
-* EmbeddedDocumentIdentifier
-* GroupDocumentService
-* IEmbeddedDocumentIdentifier
-* IGroupDocumentService
-
-#### DtoAndValidation ####
-* CategoryDTO
-* GeneralGroupInformationDTO
-* SavingEntryDTO
-* InflationDTO
-* BalanceProcessResultDTO
-* FilterInformationDTO
-* IntervalGroupDTO
-* ProcessResultContainerDTO
-* SortParameter
-* TimeInterval
-* GroupDTO
-* InvitationDTO
-* InviteDTO
-* PersonDTO
-* Pair
-* CategoryValidator
-* FilterInformationValidator
-* GroupValidator
-* InviteValidator
-* IValidatable
-* IValidator
-* SavingEntryValidator
-* ValidatedValue
-* ValidatorFactory
-
-#### RelationDatabaseModule ####
-* Group
-* Invitation
-* InvitationCompoundId
-* InvitationStatus
-* KPerson
-* Pair
-* DatabaseService
-* GroupRepository
-* IDatabaseService
-* InvitationRepository
-* KeycloakRepository
-* RepositoryDetachAdapterCustom
-* RepositoryDetachAdapterCustomImpl
-
-#### Frontend ####
-
-Java Script Files:
-* PrivateRoute
-* Advertisement
-* Chat
-* Content
-* User
-* Auth
-* Axios
-* Diagram1
-* Diagram2
-* Diagram3
-* CategoryEditingBar
-* EntryCreationBar
-* EntryTable
-* Homepage
-* NavigationBar
-* SearchBar
-* SettingsPopup
-* UpdateSavingEntry
-* ChatComponent
-* GuestSite
-* CategorySlice
-* ContentSlice
-* GroupInformationSlice
-* Store
-* UserSlice
-* Util
-* App
-* Index
-
-Sassy Cascading Style Sheets:
-* chat.scss
-* guestsite.scss
-* homepage.scss
-* styles.scss
-
-#### Configurations ####
-
-* Advertisementservice POM
-* Chatservice POM
-* Contentservice POM
-* DocumentDatabaseService POM
-* DtoAndValidation POM
-* InflationService POM
-* InMemoryDatabaseService POM
-* RelationalDatabaseService POM
-* UserService POM
-* Keycloak.json
-* gitIgnore
-* package.json
-* docker-compose.yml
-* Userservice Dockerfile.yml
-* Inflationservice Dockerfile.yml
-* Advertisementservice Dockerfile.yml
-* Contentservice Dockerfile.yml
-* Chatservice Dockerfile.yml
-* Mongo Dockerfile.yml
-* Redis Dockerfile.yml
-* PostgreSql Dockerfile.yml
-
-### Veronika Scheller ###
-
-#### ContentService ####
-* GroupAuthorizationInterceptor
-* GroupAuthorizationInterceptorConfig
-
-#### RelationDatabaseModule ####
-* Group
-* Invitation
-* KPerson
-* DatabaseService
-* KeycloakRepository
-
-#### UserService ####
-* KeycloakConfiguration
-* SecurityConfig
-* SwaggerConfiguration
-* GroupController
-* InvitationController
-* UserController
-* KeycloakService
-* UserServiceMapper
-* IUserManagementService
-* MongoTestDataCreator
-* UserManagementService
-* UserServiceApplication
-
-#### Frontend ####
-
-Java Script Files:
-* PrivateRoute
-* Advertisement
-* Chat
-* Content
-* User
-* Auth
-* Axios
-* Diagram1
-* Diagram2
-* Diagram3
-* CategoryEditingBar
-* EntryCreationBar
-* EntryTable
-* Homepage
-* NavigationBar
-* SearchBar
-* SettingsPopup
-* UpdateSavingEntry
-* ChatComponent
-* GuestSite
-* CategorySlice
-* ContentSlice
-* GroupInformationSlice
-* Store
-* UserSlice
-* Util
-* App
-* Index
-
-Sassy Cascading Style Sheets:
-* chat.scss
-* guestsite.scss
-* homepage.scss
-* styles.scss
-
-#### Configurations ####
-
-* Advertisementservice POM
-* Chatservice POM
-* Contentservice POM
-* DocumentDatabaseService POM
-* DtoAndValidation POM
-* InflationService POM
-* InMemoryDatabaseService POM
-* RelationalDatabaseService POM
-* UserService POM
-* Keycloak.json
-* gitIgnore
-* package.json
-* docker-compose.yml
-* Userservice Dockerfile.yml
-* Inflationservice Dockerfile.yml
-* Advertisementservice Dockerfile.yml
-* Contentservice Dockerfile.yml
-* Chatservice Dockerfile.yml
-* Mongo Dockerfile.yml
-* Redis Dockerfile.yml
-* PostgreSql Dockerfile.yml
+![Homepage Top](media/img/HomepageTop.png)
+![Homepage Bottom](media/img/HomepageBottom.png)
 
 
-### Michel Ulrich ###
+---
 
-#### AdvertisementService ####
-* AdvertisementServiceController
-* AdvertisementDto
-* AdvertisementServiceService
-* AdvertisementServiceApplication
+## 🎓 Project & Context
 
-#### ChatService ####
-* RedisConfig
-* WebsocketConfig
-* PublisherController
-* SubscriberController
-* ChatMessage
-* ChatMessagePayload
-* IRedisChatPersistenceService
-* RedisChatPersistenceService
-* RedisPublisher
-* RedisSubscriber
-* SubscriptionService
-* ChatServiceApplication
+This application was developed as part of our studies at **Aalen University** during the **Cloud and Distributed Computing** course.  
+Our goal was to build a **secure, scalable, cloud-ready** app with:
 
-#### InflationService ####
-* InflationServiceController
-* InflationServiceService
-* InflationServiceApplication
+- Authenticated personal spaces
+- Extensive Group & User Management
+- Shared group data
+- Real-time communication features
+- Data visualization and projections
+- Scalability in mind
 
-#### InMemoryDatabaseService ####
-* RedisConfig
-* AtomicIntegerModel
-* IRedisDatabaseService
-* RedisDatabaseService
+---
 
-#### Frontend ####
+## 🔧 Architecture Overview
 
-Java Script Files:
-* PrivateRoute
-* Advertisement
-* Chat
-* Content
-* User
-* Auth
-* Axios
-* Diagram1
-* Diagram2
-* Diagram3
-* CategoryEditingBar
-* EntryCreationBar
-* EntryTable
-* Homepage
-* NavigationBar
-* SearchBar
-* SettingsPopup
-* UpdateSavingEntry
-* ChatComponent
-* GuestSite
-* CategorySlice
-* ContentSlice
-* GroupInformationSlice
-* Store
-* UserSlice
-* Util
-* App
-* Index
+- **Frontend:** 
+  - React.js 
+  - Redux Store
+  - REST API integration 
+  - Keycloak Auth integration
+- **Backend:** 
+  - Multiple Java Spring Boot Microservices
+- **Auth:** 
+  - Keycloak
+- **Databases:** 
+  - PostgreSQL
+  - MongoDB
+  - Redis (Sub/Pub Plugin)
+- **Deployment:** 
+  - Docker 
+  - Kubernetes
 
-Sassy Cascading Style Sheets:
-* chat.scss
-* guestsite.scss
-* homepage.scss
-* styles.scss
+---
 
-#### Configurations ####
+## 🌐 Core Features
 
-* Advertisementservice POM
-* Chatservice POM
-* Contentservice POM
-* DocumentDatabaseService POM
-* DtoAndValidation POM
-* InflationService POM
-* InMemoryDatabaseService POM
-* RelationalDatabaseService POM
-* UserService POM
-* Keycloak.json
-* gitIgnore
-* package.json
-* docker-compose.yml
-* Userservice Dockerfile.yml
-* Inflationservice Dockerfile.yml
-* Advertisementservice Dockerfile.yml
-* Contentservice Dockerfile.yml
-* Chatservice Dockerfile.yml
-* Mongo Dockerfile.yml
-* Redis Dockerfile.yml
-* PostgreSql Dockerfile.yml
+| Feature                  | Description                                                             |
+|--------------------------|-------------------------------------------------------------------------|
+| 🔐 Auth                 | Login, logout, register via Keycloak                                     |
+| 📚 Entries              | Create, update, delete savings entries                                   |
+| 🗂️ Categories           | Manage personal and group categories                                     |
+| 📈 Visualization        | Charts by user, category, and time                                       |
+| 🤝 Groups               | Create, join, leave groups; invite users                                 |
+| 💬 Chat                 | Real-time group chat with WebSocket & Redis                              |
+| 🔍 Filters              | Search and filter entries in flexible dashboards                         |
+| 📉 Inflation Support    | Adjust savings and forecasts using real inflation data                   |
 
-### Robin Röcker ###
+---
 
-#### Frontend ####
+## 🖥️ UI Highlights
 
-Java Script Files:
-* EntryTable
-* Homepage
-* NavigationBar
-* GuestSite
-* App
-* Index
-* ChatComponent
+### Homepage View
+The main interface features:
 
-#### Configurations ####
-* gitIgnore
-* package.json
+- Entry table with full CRUD
+- Category manager (create/edit/delete)
+- Search & filter by user, date, and category
+- Financial charts and projections
+
+> Fully responsive, mobile-ready design.
+
+---
+
+### Charts & Analytics
+
+The dashboard visualizes:
+
+- Income vs Expenses
+- Category distribution over time
+- User-specific and group-based trends
+- Historical + future budget projections
+
+---
+
+### 💬 Real-Time Group Chat
+
+Stay in sync with your group through an integrated chat system – powered by:
+
+- WebSocket connections
+- Redis Pub/Sub channels
+- Message history persistence
+
+---
+
+## 🛠️ Getting Started
+
+### Requirements
+
+- Docker + Docker Compose
+- Java 17
+- Node.js 16+
+- Kubernetes (optional for deployment)
