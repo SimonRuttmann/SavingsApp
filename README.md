@@ -4,8 +4,12 @@
 
 From creating personal and group savings entries to visualizing trends and chatting in real-time – this app does it all.
 
-![Homepage Top](media/img/HomepageTop.png)
-![Homepage Bottom](media/img/HomepageBottom.png)
+
+| ![](media/gifs/crop/savingentry-visualization-crop.gif) | ![](media/gifs/crop/mobile-savingentry-visualization-crop.gif) |
+|---------------------------------------------------------|----------------------------------------------------------------|
+
+![Homepage Top](media/gifs/crop/savingentry-visualization-crop.gif)
+![Homepage Top](media/gifs/crop/mobile-savingentry-visualization-crop.gif)
 
 
 ---
@@ -59,6 +63,44 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
 | 🔍 Filters              | Search and filter entries in flexible dashboards                         |
 | 📉 Inflation Support    | Adjust savings and forecasts using real inflation data                   |
 
+---
+
+## 🎞️ Feature Highlights
+
+<div align="center">
+### 🔐 Logging In
+<img src="media/gifs/crop/user-management-login-crop.gif" width="400"/>
+
+### 🆕 Registering
+<img src="media/gifs/crop/user-management-registration-crop.gif" width="400"/>
+
+### 📊 Visualizing Entries
+<img src="media/gifs/crop/savingentry-visualization-crop.gif" width="400"/>
+
+### ✏️ Creating, Editing and Deleting Entries
+#### Creating a Saving Entry
+<img src="media/gifs/crop/savingentry-creation-crop.gif" width="400"/>
+
+#### Editing and Deleting Entries
+<img src="media/gifs/crop/savingentry-edit-delete-crop.gif" width="400"/>
+
+### 🗂️ Managing Categories
+<img src="media/gifs/crop/category-creation-crop.gif" width="400"/>
+
+### 👥 Managing Groups
+<img src="media/gifs/crop/group-management-crop.gif" width="400"/>
+
+### 💬 Group Chat – Sending
+#### Sending
+<img src="media/gifs/crop/group-chat-send-crop.gif" width="400"/>
+
+#### Receiving
+<img src="media/gifs/crop/group-chat-receive-crop.gif" width="400"/>
+
+### 📱 Mobile Visualization
+<img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif" width="200"/>
+
+</div>
 ---
 
 ## 🖥️ UI Highlights
