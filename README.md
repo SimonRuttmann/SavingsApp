@@ -68,7 +68,9 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
 ## 🎞️ Feature Highlights
 
 <div align="center">
+
 ### 🔐 Logging In
+
 <img src="media/gifs/crop/user-management-login-crop.gif" width="400"/>
 
 ### 🆕 Registering
