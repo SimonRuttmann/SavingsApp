@@ -190,8 +190,8 @@ All features are fully mobile-compatible.
 Even on smaller screens, charts, filters, and controls remain accessible and intuitive.
 
 <p align="center">
-  <img src="media/gifs/crop/mobile-slide-to-bottom-crop.gif" width="200"/>
-  <img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif" width="200"/>
+  <img src="media/gifs/crop/mobile-slide-to-bottom-crop.gif"/>
+  <img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif"/>
 </p>
 
 ---
