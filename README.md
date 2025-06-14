@@ -4,13 +4,10 @@
 
 From creating personal and group savings entries to visualizing trends and chatting in real-time – this app does it all.
 
-
-| ![](media/gifs/crop/savingentry-visualization-crop.gif) | ![](media/gifs/crop/mobile-savingentry-visualization-crop.gif) |
-|---------------------------------------------------------|----------------------------------------------------------------|
-
-![Homepage Top](media/gifs/crop/savingentry-visualization-crop.gif)
-![Homepage Top](media/gifs/crop/mobile-savingentry-visualization-crop.gif)
-
+<p align="center">
+  <img src="media/gifs/crop/savingentry-visualization-crop.gif" width="360"/>
+  <img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif" width="140"/>
+</p>
 
 ---
 
@@ -148,3 +145,6 @@ Stay in sync with your group through an integrated chat system – powered by:
 - Java 17
 - Node.js 16+
 - Kubernetes (optional for deployment)
+
+## 🎞️ Feature Highlights – Scrollable GIF Carousel
+
