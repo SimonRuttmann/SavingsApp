@@ -26,6 +26,21 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
 
 ---
 
+## 🌐 Core Features
+
+| Feature                  | Description                                                             |
+|--------------------------|-------------------------------------------------------------------------|
+| 🔐 Auth                 | Login, logout, register via Keycloak                                     |
+| 📚 Entries              | Create, update, delete savings entries                                   |
+| 🗂️ Categories           | Manage personal and group categories                                     |
+| 📈 Visualization        | Charts by user, category, and time                                       |
+| 🤝 Groups               | Create, join, leave groups; invite users                                 |
+| 💬 Chat                 | Real-time group chat with WebSocket & Redis                              |
+| 🔍 Filters              | Search and filter entries in flexible dashboards                         |
+| 📉 Inflation Support    | Adjust savings and forecasts using real inflation data                   |
+
+---
+
 ## 🔧 Technical Overview
 
 One aspect of this project was to familiarize ourselves with a wide range of
@@ -76,104 +91,103 @@ and exposed with services.
 ![](media/screenshots/design/deployment-diagram.png)
 ---
 
-## 🌐 Core Features
-
-| Feature                  | Description                                                             |
-|--------------------------|-------------------------------------------------------------------------|
-| 🔐 Auth                 | Login, logout, register via Keycloak                                     |
-| 📚 Entries              | Create, update, delete savings entries                                   |
-| 🗂️ Categories           | Manage personal and group categories                                     |
-| 📈 Visualization        | Charts by user, category, and time                                       |
-| 🤝 Groups               | Create, join, leave groups; invite users                                 |
-| 💬 Chat                 | Real-time group chat with WebSocket & Redis                              |
-| 🔍 Filters              | Search and filter entries in flexible dashboards                         |
-| 📉 Inflation Support    | Adjust savings and forecasts using real inflation data                   |
-
----
-
 ## 🎞️ Feature Highlights
 
+### 🔐 User Management
+
+The application is secured by an **OIDC Authorization Code Flow** implemented by **Keycloak**.
+
+
 <div align="center">
-
-### 🔐 Logging In
-
 <img src="media/gifs/crop/user-management-login-crop.gif" width="400"/>
+</div>
 
-### 🆕 Registering
+<div align="center">
 <img src="media/gifs/crop/user-management-registration-crop.gif" width="400"/>
+</div>
 
 ### 📊 Visualizing Entries
-<img src="media/gifs/crop/savingentry-visualization-crop.gif" width="400"/>
-
-### ✏️ Creating, Editing and Deleting Entries
-#### Creating a Saving Entry
-<img src="media/gifs/crop/savingentry-creation-crop.gif" width="400"/>
-
-#### Editing and Deleting Entries
-<img src="media/gifs/crop/savingentry-edit-delete-crop.gif" width="400"/>
-
-### 🗂️ Managing Categories
-<img src="media/gifs/crop/category-creation-crop.gif" width="400"/>
-
-### 👥 Managing Groups
-<img src="media/gifs/crop/group-management-crop.gif" width="400"/>
-
-### 💬 Group Chat – Sending
-#### Sending
-<img src="media/gifs/crop/group-chat-send-crop.gif" width="400"/>
-
-#### Receiving
-<img src="media/gifs/crop/group-chat-receive-crop.gif" width="400"/>
-
-### 📱 Mobile Visualization
-<img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif" width="200"/>
-
-</div>
----
-
-## 🖥️ UI Highlights
-
-### Homepage View
-The main interface features:
-
-- Entry table with full CRUD
-- Category manager (create/edit/delete)
-- Search & filter by user, date, and category
-- Financial charts and projections
-
-> Fully responsive, mobile-ready design.
-
----
-
-### Charts & Analytics
 
 The dashboard visualizes:
 
 - Income vs Expenses
 - Category distribution over time
 - User-specific and group-based trends
-- Historical + future budget projections
+- Historical + future budget projections (with inflation!)
 
 ---
+
+<div align="center">
+<img src="media/gifs/crop/savingentry-visualization-crop.gif" width="400"/>
+</div>
+
+### ✏️ Creating, Editing and Deleting Entries
+#### Creating a Saving Entry
+<div align="center">
+<img src="media/gifs/crop/savingentry-creation-crop.gif" width="400"/>
+</div>
+
+#### Editing and Deleting Entries
+<div align="center">
+<img src="media/gifs/crop/savingentry-edit-delete-crop.gif" width="400"/>
+</div>
+
+### 🗂️ Managing Categories
+<div align="center">
+<img src="media/gifs/crop/category-creation-crop.gif" width="400"/>
+</div>
+
+### 👥 Managing Groups
+<div align="center">
+<img src="media/gifs/crop/group-management-crop.gif" width="400"/>
+</div>
 
 ### 💬 Real-Time Group Chat
 
 Stay in sync with your group through an integrated chat system – powered by:
 
-- WebSocket connections
-- Redis Pub/Sub channels
+- WebSocket connections to a dedicated chat-service
+- Pub/Sub channels powered by a Redis-Plugin
 - Message history persistence
+
+#### Sending
+<div align="center">
+<img src="media/gifs/crop/group-chat-send-crop.gif" width="400"/>
+</div>
+
+#### Receiving
+<div align="center">
+<img src="media/gifs/crop/group-chat-receive-crop.gif" width="400"/>
+</div>
+
+### 📱 Mobile Visualization
+
+<div align="center">
+<img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif" width="200"/>
+</div>
 
 ---
 
-## 🛠️ Getting Started
 
-### Requirements
+## 🧑‍💻 Teamwork Makes the Dream Work
 
-- Docker + Docker Compose
-- Java 17
-- Node.js 16+
-- Kubernetes (optional for deployment)
+Developed by:
 
-## 🎞️ Feature Highlights – Scrollable GIF Carousel
+- Simon Ruttmann
+- Veronika Scheller
+- Michael Ulrich
+- Robin Röcker
+
+---
+
+## 📜 License
+
+This project is licensed under the [Apache 2.0 License](LICENSE).
+Feel free to use or remix it – just give proper credit. 🤝
+
+## 🖼️ Videos
+
+🎬 [Watch Desktop-Walkthrough (MP4)](media/video/Desktop-Walkthrough.mp4)
+
+🎬 [Watch Mobile-Walkthrough (MP4)](media/video/Mobile-Walkthrough.mp4)
 
