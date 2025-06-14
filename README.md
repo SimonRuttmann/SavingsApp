@@ -28,6 +28,11 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
 
 ## 🔧 Technical Overview
 
+One aspect of this project was to familiarize ourselves with a wide range of
+technologies in order to gain a broad overview. These are the technologies we used.
+
+![](media/screenshots/design/technologies.png)
+
 - **Frontend:** 
   - React.js 
   - Redux Store
@@ -45,6 +50,30 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
   - Docker 
   - Kubernetes
 
+---
+
+## 🔧 Architectural Overview
+
+The system essentially consists of **microservices**, **shared modules**, **databases**,
+the reverse proxy **Keycloak** and the **client app**.
+
+![](media/screenshots/design/top-level-architecture.png)
+
+The client makes requests to the microservices. These pass through the reverse proxy,
+which authenticates or rejects the requests. The microservices accept the incoming
+requests and execute their business logic by using the implemented modules.
+
+The modules offer functionality that is used by several microservices. This applies,
+for example, to the persistence of objects or validation of shared Data Transfer Objects.
+
+![](media/screenshots/design/package-diagram.png)
+
+The application is designed in a cloud-ready manner.
+For our non-production operation, we operated the databases directly in 
+kubernetes in pods. The remaining applications are provided via deployments
+and exposed with services.
+
+![](media/screenshots/design/deployment-diagram.png)
 ---
 
 ## 🌐 Core Features
