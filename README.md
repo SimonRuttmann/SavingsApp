@@ -11,21 +11,21 @@ Track entries, collaborate with others, and visualize trends – all in real tim
 ---
 
 <!-- TOC -->
-[💰 SparApp – Save Smart. Spend Smarter.](#-sparapp--save-smart-spend-smarter)
-* [🎓 Project & Context](#-project--context)
-* [🌐 Core Features](#-core-features)
-* [🔨 Technical Overview](#-technical-overview)
-* [🔧 Architectural Overview](#-architectural-overview)
-* [🎞️ Feature Highlights](#-feature-highlights)
-  * [🔐 User Management](#-user-management)
-  * [📊 Visualizing Entries](#-visualizing-entries)
-  * [✏️ Managing Entries and 🗂️ Categories](#-managing-entries-and--categories)
-  * [👥 Managing Groups](#-managing-groups)
-  * [💬 Real-Time Group Chat](#-real-time-group-chat)
-  * [📱 Mobile Visualization](#-mobile-visualization)
-* [🧑‍💻 Teamwork Makes the Dream Work](#-teamwork-makes-the-dream-work)
-* [📜 License](#-license)
-* [🖼️ Videos](#-videos)
+* [💰 SparApp – Save Smart. Spend Smarter.](#-sparapp--save-smart-spend-smarter)
+  * [🎓 Project & Context](#-project--context)
+  * [🌐 Core Features](#-core-features)
+  * [🔨 Technical Overview](#-technical-overview)
+  * [🔧 Architectural Overview](#-architectural-overview)
+  * [🎞️ Feature Highlights](#-feature-highlights)
+    * [🔐 User Management](#-user-management)
+    * [📊 Visualizing Entries](#-visualizing-entries)
+    * [✏️ Managing Entries & 🗂️ Categories](#-managing-entries---categories)
+    * [👥 Managing Groups](#-managing-groups)
+    * [💬 Real-Time Group Chat](#-real-time-group-chat)
+    * [📱 Mobile Visualization](#-mobile-visualization)
+  * [🧑‍💻 Teamwork makes the Dream Work](#-teamwork-makes-the-dream-work)
+  * [📜 License](#-license)
+  * [🖼️ Videos](#-videos)
 <!-- TOC -->
 
 ---
@@ -137,7 +137,7 @@ The dashboard visualizes:
 
 ---
 
-### ✏️ Managing Entries and 🗂️ Categories
+### ✏️ Managing Entries & 🗂️ Categories
 
 Well what would you expect from a saving app? 😅
 
@@ -196,7 +196,7 @@ Even on smaller screens, charts, filters, and controls remain accessible and int
 
 ---
 
-## 🧑‍💻 Teamwork Makes the Dream Work
+## 🧑‍💻 Teamwork makes the Dream Work
 
 Developed by:
 
