@@ -11,7 +11,7 @@ Track entries, collaborate with others, and visualize trends – all in real tim
 ---
 
 <!-- TOC -->
-* [💰 SparApp – Save Smart. Spend Smarter.](#-sparapp--save-smart-spend-smarter)
+[💰 SparApp – Save Smart. Spend Smarter.](#-sparapp--save-smart-spend-smarter)
   * [🎓 Project & Context](#-project--context)
   * [🌐 Core Features](#-core-features)
   * [🔨 Technical Overview](#-technical-overview)
