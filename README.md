@@ -26,7 +26,7 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
 
 ---
 
-## 🔧 Architecture Overview
+## 🔧 Technical Overview
 
 - **Frontend:** 
   - React.js 
