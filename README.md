@@ -11,6 +11,26 @@ From creating personal and group savings entries to visualizing trends and chatt
 
 ---
 
+<!-- TOC -->
+ [💰 SparApp – Save Smart. Spend Smarter.](#-sparapp--save-smart-spend-smarter)
+  * [🎓 Project & Context](#-project--context)
+  * [🌐 Core Features](#-core-features)
+  * [🔨 Technical Overview](#-technical-overview)
+  * [🔧 Architectural Overview](#-architectural-overview)
+  * [🎞️ Feature Highlights](#-feature-highlights)
+    * [🔐 User Management](#-user-management)
+    * [📊 Visualizing Entries](#-visualizing-entries)
+    * [✏️ Managing Entries and 🗂️ Categories](#-managing-entries-and--categories)
+    * [👥 Managing Groups](#-managing-groups)
+    * [💬 Real-Time Group Chat](#-real-time-group-chat)
+    * [📱 Mobile Visualization](#-mobile-visualization)
+  * [🧑‍💻 Teamwork Makes the Dream Work](#-teamwork-makes-the-dream-work)
+  * [📜 License](#-license)
+  * [🖼️ Videos](#-videos)
+<!-- TOC -->
+
+---
+
 ## 🎓 Project & Context
 
 This application was developed as part of our studies at **Aalen University** during the **Cloud and Distributed Computing** course.  
@@ -41,7 +61,7 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
 
 ---
 
-## 🔧 Technical Overview
+## 🔨 Technical Overview
 
 One aspect of this project was to familiarize ourselves with a wide range of
 technologies in order to gain a broad overview. These are the technologies we used.
@@ -99,11 +119,11 @@ The application is secured by an **OIDC Authorization Code Flow** implemented by
 
 
 <div align="center">
-<img src="media/gifs/crop/user-management-login-crop.gif" width="400"/>
+<img src="media/gifs/crop/user-management-login-crop.gif" />
 </div>
 
 <div align="center">
-<img src="media/gifs/crop/user-management-registration-crop.gif" width="400"/>
+<img src="media/gifs/crop/user-management-registration-crop.gif" />
 </div>
 
 ### 📊 Visualizing Entries
@@ -118,28 +138,38 @@ The dashboard visualizes:
 ---
 
 <div align="center">
-<img src="media/gifs/crop/savingentry-visualization-crop.gif" width="400"/>
+<img src="media/gifs/crop/savingentry-visualization-crop.gif" />
 </div>
 
-### ✏️ Creating, Editing and Deleting Entries
-#### Creating a Saving Entry
+### ✏️ Managing Entries and 🗂️ Categories
+
+Well what would you expect from a saving app? 😅
+
+We support:
+- Full CRUD for entries
+- Full CRUD for categories
+
 <div align="center">
-<img src="media/gifs/crop/savingentry-creation-crop.gif" width="400"/>
+<img src="media/gifs/crop/savingentry-creation-crop.gif" />
 </div>
 
-#### Editing and Deleting Entries
 <div align="center">
-<img src="media/gifs/crop/savingentry-edit-delete-crop.gif" width="400"/>
+<img src="media/gifs/crop/savingentry-edit-delete-crop.gif" />
 </div>
 
-### 🗂️ Managing Categories
 <div align="center">
-<img src="media/gifs/crop/category-creation-crop.gif" width="400"/>
+<img src="media/gifs/crop/category-creation-crop.gif" />
 </div>
 
 ### 👥 Managing Groups
+
+Everyone can create groups and invite people.
+People accept those invitations. Of course they can also leave the groups.
+People within the same group can chat to each other via the real-time chat.
+Groups also enable filtering of expenses based on the individual members.
+
 <div align="center">
-<img src="media/gifs/crop/group-management-crop.gif" width="400"/>
+<img src="media/gifs/crop/group-management-crop.gif" />
 </div>
 
 ### 💬 Real-Time Group Chat
@@ -150,21 +180,23 @@ Stay in sync with your group through an integrated chat system – powered by:
 - Pub/Sub channels powered by a Redis-Plugin
 - Message history persistence
 
-#### Sending
+
 <div align="center">
-<img src="media/gifs/crop/group-chat-send-crop.gif" width="400"/>
+<img src="media/gifs/crop/group-chat-send-crop.gif"/>
 </div>
 
-#### Receiving
 <div align="center">
-<img src="media/gifs/crop/group-chat-receive-crop.gif" width="400"/>
+<img src="media/gifs/crop/group-chat-receive-crop.gif"/>
 </div>
 
 ### 📱 Mobile Visualization
 
-<div align="center">
-<img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif" width="200"/>
-</div>
+The whole app is designed with mobile devices in mind!
+
+<p align="center">
+  <img src="media/gifs/crop/mobile-slide-to-bottom-crop.gif" width="200"/>
+  <img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif" width="200"/>
+</p>
 
 ---
 
