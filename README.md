@@ -5,8 +5,8 @@
 From creating personal and group savings entries to visualizing trends and chatting in real-time – this app does it all.
 
 <p align="center">
-  <img src="media/gifs/crop/savingentry-visualization-crop.gif" width="360"/>
-  <img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif" width="140"/>
+  <img src="media/gifs/crop/savingentry-visualization-crop.gif" width="65%"/>
+  <img src="media/gifs/crop/mobile-savingentry-visualization-crop.gif" width="25%"/>
 </p>
 
 ---
