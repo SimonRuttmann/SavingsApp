@@ -1,6 +1,6 @@
-# 💰 SparApp – Save Smart. Spend Smarter.
+# 💰 Haushaltsapp – Save Smart. Spend Smarter.
 
-**SparApp** is a full-stack budgeting and savings application – designed for students, roommates, and small groups.  
+**Haushaltsapp** is a full-stack budgeting and savings application – designed for students, roommates, and small groups.  
 Track entries, collaborate with others, and visualize trends – all in real time, across devices.
 
 <p align="center">
@@ -11,7 +11,7 @@ Track entries, collaborate with others, and visualize trends – all in real tim
 ---
 
 <!-- TOC -->
-[💰 SparApp – Save Smart. Spend Smarter.](#-sparapp--save-smart-spend-smarter)
+* [💰 Haushaltsapp – Save Smart. Spend Smarter.](#-haushaltsapp--save-smart-spend-smarter)
   * [🎓 Project & Context](#-project--context)
   * [🌐 Core Features](#-core-features)
   * [🔨 Technical Overview](#-technical-overview)
@@ -42,6 +42,10 @@ Our goal was to build a **secure, scalable, cloud-ready** app with:
 - Data visualization and projections
 - Full Mobile and desktop-sized Webbrowser support
 - Scalability in mind
+
+This readme only gives a brief overview. 
+A detailed description in the form of a 
+software architecture document (SWAD) in german can be found [here](doc/SWAD.pdf).
 
 ---
 
@@ -141,7 +145,7 @@ The dashboard visualizes:
 
 Well what would you expect from a saving app? 😅
 
-SparApp offers full:
+Haushaltsapp offers full:
 - 📝 Entry CRUD (create, read, update, delete)
 - 🗂️ Category CRUD (personal & group-wide)
 
